@@ -45,11 +45,14 @@ class DatabaseSeeder extends Seeder
         Permission::create(['name' => UserPermissions::READ_USERS]);
         Permission::create(['name' => UserPermissions::WRITE_USERS]);
         Permission::create(['name' => UserPermissions::DELETE_USERS]);
+        Permission::create(['name' => UserPermissions::READ_VACATION_DAYS]);
+        Permission::create(['name' => UserPermissions::WRITE_VACATION_DAYS]);
+        Permission::create(['name' => UserPermissions::DELETE_VACATION_DAYS]);
 
         // Create three roles and assign created permissions
         $roleAdmin = Role::create(['name' => UserRoles::ADMIN])->givePermissionTo(Permission::all());
         $roleEditor = Role::create(['name' => UserRoles::EDITOR])->givePermissionTo([UserPermissions::READ_USERS, UserPermissions::WRITE_USERS]);
-        $roleCollaborator = Role::create(['name' => UserRoles::COLLABORATOR])->givePermissionTo(UserPermissions::READ_USERS);
+        $roleCollaborator = Role::create(['name' => UserRoles::COLLABORATOR])->givePermissionTo([UserPermissions::READ_VACATION_DAYS, UserPermissions::WRITE_VACATION_DAYS]);
 
         $roles = [$roleAdmin->id, $roleEditor->id, $roleCollaborator->id];
 
@@ -77,15 +80,16 @@ class DatabaseSeeder extends Seeder
             $user->roles()->attach($faker->randomElement($roles));
         }
 
-        // $dayTypes = [
-        //     ['slug' => 'sick_day_paid', 'name' => 'Sick Day (Paid)', 'is_paid' => true],
-        //     ['slug' => 'sick_day_unpiad', 'name' => 'Sick Day (Unpiad)', 'is_paid' => false],
-        //     ['slug' => 'day_off_paid', 'name' => 'Day Off (Paid)', 'is_paid' => true],
-        //     ['slug' => 'day_off_unpiad', 'name' => 'Day Off (Unpaid)', 'is_paid' => false],
-        // ];
+        $dayTypes = [
+            ['slug' => 'sick_day_paid', 'name' => 'Sick Day (Paid)', 'is_paid' => true],
+            ['slug' => 'sick_day_unpiad', 'name' => 'Sick Day (Unpiad)', 'is_paid' => false],
+            ['slug' => 'day_off_paid', 'name' => 'Day Off (Paid)', 'is_paid' => true],
+            ['slug' => 'day_off_unpiad', 'name' => 'Day Off (Unpaid)', 'is_paid' => false],
+            ['slug' => 'holiday', 'name' => 'Holiday', 'is_paid' => true],
+        ];
 
-        // foreach ($dayTypes as $dayType) {
-        //     DayType::firstOrCreate(['name' => $dayType['name']], $dayType);
-        // }
+        foreach ($dayTypes as $dayType) {
+            DayType::firstOrCreate(['name' => $dayType['name']], $dayType);
+        }
     }
 }

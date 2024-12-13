@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('vacation_days', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id');
+            $table->integer('day_type_id');
             $table->date('date_from'); 
             $table->date('date_to')->nullable(); 
             $table->integer('year')->nullable(); 
-            $table->integer('day_type_id');
             $table->timestamps();
         });
     }

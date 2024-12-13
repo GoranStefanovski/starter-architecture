@@ -5,5 +5,10 @@
     "admin": "Admin Users",
     "public": "Public Users",
     "add": "Add user"
+  },
+  "vacationDays": {
+    "main": "Vacation Days Requests",
+    "calendar": "Request Vacation Day",
+    "add": "Add Vacation Day"
   }
 }

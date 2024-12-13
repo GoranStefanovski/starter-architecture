@@ -1,9 +1,9 @@
 <script setup lang="ts">
   import { computed } from "vue";
-  import { useUsersTable } from "../composables";
+  import { useVacationDaysTable } from "../composables";
   import { USERS_DATATABLE_COLUMNS } from "../constants";
-  import UsersTableHeader from "./UsersTableHeader.vue";
-  import UsersTableRow from "./UsersTableRow.vue";
+  import VacationDayTableHeader from "./VacationDayTableHeader.vue";
+  import VacationDayTableRow from "./VacationDayTableRow.vue";
   import {
     useDatatable,
     DatatableComponent,
@@ -14,10 +14,10 @@
 
   const { query, onPaginationChange } = useDatatable();
 
-  const { data, isLoading, isFetching, error } = useUsersTable(query);
+  const { data, isLoading, isFetching, error } = useVacationDaysTable(query);
 
   const pagination = computed(() => data.value?.pagination ?? null);
-  const users = computed(() => data.value?.data ?? null);
+  const vacationDays = computed(() => data.value?.data ?? null);
 </script>
 <template>
   <DatatableComponent
@@ -27,17 +27,17 @@
     :error="error?.message"
   >
     <template #header>
-      <DatatableHeader title="Users">
-        <UsersTableHeader />
+      <DatatableHeader title="Vacation Days">
+        <VacationDayTableHeader />
       </DatatableHeader>
       <DatatableFilters />
     </template>
-    <template v-if="users" #default>
-      <UsersTableRow
-        v-for="(user, index) in users"
-        :key="user.id"
+    <template v-if="vacationDays" #default>
+      <VacationDayTableRow
+        v-for="(vacationDay, index) in vacationDays"
+        :key="vacationDay.id"
         :columns="USERS_DATATABLE_COLUMNS"
-        :user="user"
+        :user="vacationDay"
         :is-even-row="index % 2 === 0"
       />
     </template>

@@ -34,6 +34,12 @@ class HomeController extends Controller
                 'link' => 'users',
                 'permission' => UserPermissions::READ_USERS, // Change to dashboard_view
             ],
+            [
+                'label' => 'admin.vacationDays.main',
+                'name' => 'item_vacation_days',
+                'link' => 'vacationDays',
+                'permission' => UserPermissions::READ_VACATION_DAYS, // Change to dashboard_view
+            ],
         ];
 
         $pagesItems = [
