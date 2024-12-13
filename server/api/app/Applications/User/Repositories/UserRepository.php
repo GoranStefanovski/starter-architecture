@@ -72,11 +72,7 @@ class UserRepository implements UserRepositoryInterface
 
     public function draw($data): StarterPaginator
     {
-        //        $paginatedUsers = $this->prepareDatatableQuery($data, [User::ADMIN, User::EDITOR, User::COLLABORATOR]);
-
         $query = $this->user->query();
-
-        // $query->whereIn('roles.name', $roles);
 
         if (array_key_exists($data['column'], self::COLUMNS_MAP)) {
             $query->orderBy(self::COLUMNS_MAP[$data['column']], $data['dir']);

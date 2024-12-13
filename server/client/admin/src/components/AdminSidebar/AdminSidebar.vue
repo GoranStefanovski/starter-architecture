@@ -42,12 +42,6 @@
   <!--<button class="aside-close " id="kt_aside_close_btn"><i class="la la-close"></i></button>-->
   <div
     class="aside"
-    :class="{
-      'aside--minimize': isSidebarMinimized,
-      'aside--minimize-hover': sidebarState.minimizeHover
-    }"
-    @mouseover="sidebarHover(true)"
-    @mouseleave="sidebarHover(false)"
   >
     <AsideBrand @toggleSidebar="toggleSidebar" />
 
@@ -55,14 +49,10 @@
       <div
         class="aside__menu"
         :class="{
-          'aside__menu--minimize':
-            isSidebarMinimized && !sidebarState.minimizeHover,
-          'aside__menu--minimize-hover': sidebarState.minimizeHover
         }"
       >
         <NavMenu
           :data="mainMenu"
-          :is-minimized="isSidebarMinimized && !sidebarState.minimizeHover"
           type="vertical"
         />
       </div>

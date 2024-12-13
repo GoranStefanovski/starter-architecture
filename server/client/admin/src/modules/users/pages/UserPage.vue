@@ -80,8 +80,8 @@
   <PageWrapper>
     <template #[PAGE_WRAPPER_SLOTS.subheaderMain]>
       <SubheaderTitle
-        title="Edit user"
-        :description="`${firstName} ${lastName}`"
+        :title="isEditPage ? 'Edit user' : 'Add User'"
+        :description="isEditPage ? `${firstName} ${lastName}`"
       />
     </template>
     <template #[PAGE_WRAPPER_SLOTS.subheaderToolbox]>

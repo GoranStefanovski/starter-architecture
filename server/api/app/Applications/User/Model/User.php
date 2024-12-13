@@ -12,6 +12,7 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use App\Applications\VacationDay\Model\VacationDay;
 
 class User extends Authenticatable implements HasMedia
 {
@@ -119,4 +120,5 @@ class User extends Authenticatable implements HasMedia
         // Return the URL of the first media item in the 'avatars' collection
         return $this->getFirstMediaUrl('avatars', 'thumb') ?: null;
     }
+
 }

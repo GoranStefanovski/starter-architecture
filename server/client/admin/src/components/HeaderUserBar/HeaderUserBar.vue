@@ -44,7 +44,7 @@
         <!--use below badge element instead the user avatar to display username's first letter(remove kt-hidden class to display it) -->
         <span
           class="kt-badge kt-badge--username kt-badge--unified-success kt-badge--lg kt-badge--rounded kt-badge--bold"
-          >S</span
+          >{{ user.first_name.charAt(0) }}</span
         >
       </div>
       <div
@@ -63,15 +63,15 @@
             <!--use below badge element instead the user avatar to display username's first letter(remove kt-hidden class to display it) -->
             <span
               class="kt-badge kt-badge--lg kt-badge--rounded kt-badge--bold kt-font-success"
-              >S</span
+              >{{ user.first_name.charAt(0) }}</span
             >
           </div>
           <div class="kt-user-card__name">
             {{ user.first_name }}
           </div>
-          <div class="kt-user-card__badge">
+          <div v-if="user.role === 1" class="kt-user-card__badge">
             <span class="btn btn-success btn-sm btn-bold btn-font-md"
-              >23 messages</span
+              >23 requests</span
             >
           </div>
         </div>
@@ -81,55 +81,18 @@
         <!--begin: Navigation -->
         <div class="kt-notification">
           <HeaderUserBarListItem
+            v-if="user.role === 1"
             :icon="IconUser"
             :to="{ name: 'myprofile' }"
             title="My Profile"
             subtitle="Account settings and more"
           />
-          <HeaderUserBarListItem
-            :icon="IconMail"
-            to="#"
-            title="My Messages"
-            subtitle="Inbox and tasks"
-          />
-          <HeaderUserBarListItem
-            :icon="IconPuzzle"
-            to="#"
-            title="My Activities"
-            subtitle="Logs and notifications"
-          />
-          <HeaderUserBarListItem
-            :icon="IconTerminal"
-            to="#"
-            title="My Tasks"
-            subtitle="latest tasks and projects"
-          />
-          <a href="#" class="kt-notification__item">
-            <div class="kt-notification__item-icon">
-              <i class="flaticon2-cardiogram kt-font-warning" />
-            </div>
-            <div class="kt-notification__item-details">
-              <div class="kt-notification__item-title kt-font-bold">
-                Billing
-              </div>
-              <div class="kt-notification__item-time">
-                billing & statements
-                <span
-                  class="kt-badge kt-badge--danger kt-badge--inline kt-badge--pill kt-badge--rounded"
-                  >2 pending</span
-                >
-              </div>
-            </div>
-          </a>
           <div class="kt-notification__custom kt-space-between">
             <a
               @click.prevent="logout"
               class="btn btn-label btn-label-brand btn-sm btn-bold"
               >Sign Out</a
             >
-            <DashLink :to="{ name: 'dashboard' }" size="sm" is-clean>
-              Upgrade Plan
-            </DashLink>
           </div>
         </div>
 

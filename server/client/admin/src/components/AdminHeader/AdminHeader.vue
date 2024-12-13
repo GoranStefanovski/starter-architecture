@@ -22,7 +22,6 @@
         id="kt_header_menu"
         class="kt-header-menu kt-header-menu-mobile kt-header-menu--layout-default"
       >
-        <NavMenu :data="data.navMenu" type="horizontal" />
       </div>
     </div>
     <HeaderTopBar />

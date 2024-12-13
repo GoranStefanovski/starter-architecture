@@ -49,7 +49,7 @@
             </PortletHeadLabel>
           </PortletHead>
           <PortletBody>
-            <ContentLoader />
+            <ContentLoader v-if="!isLoading"/>
           </PortletBody>
         </PortletComponent>
       </div>

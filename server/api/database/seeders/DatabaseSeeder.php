@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Applications\User\Model\User;
+use App\Applications\DayType\Model\DayType;
 use App\Constants\UserPermissions;
 use App\Constants\UserRoles;
 use Illuminate\Database\Seeder;
@@ -75,5 +76,16 @@ class DatabaseSeeder extends Seeder
             // Assign a random role to the user
             $user->roles()->attach($faker->randomElement($roles));
         }
+
+        // $dayTypes = [
+        //     ['slug' => 'sick_day_paid', 'name' => 'Sick Day (Paid)', 'is_paid' => true],
+        //     ['slug' => 'sick_day_unpiad', 'name' => 'Sick Day (Unpiad)', 'is_paid' => false],
+        //     ['slug' => 'day_off_paid', 'name' => 'Day Off (Paid)', 'is_paid' => true],
+        //     ['slug' => 'day_off_unpiad', 'name' => 'Day Off (Unpaid)', 'is_paid' => false],
+        // ];
+
+        // foreach ($dayTypes as $dayType) {
+        //     DayType::firstOrCreate(['name' => $dayType['name']], $dayType);
+        // }
     }
 }

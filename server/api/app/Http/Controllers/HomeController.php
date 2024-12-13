@@ -32,17 +32,8 @@ class HomeController extends Controller
                 'label' => 'admin.users.main',
                 'name' => 'item_users',
                 'link' => 'users',
-                'expanded' => false,
-                'permission' => UserPermissions::READ_USERS,
-                'subcategories' => [
-                    [
-                        'label' => 'admin.users.admin',
-                        'name' => 'item_users',
-                        'link' => 'users',
-                        'permission' => UserPermissions::READ_USERS,
-                    ]
-                ]
-            ]
+                'permission' => UserPermissions::READ_USERS, // Change to dashboard_view
+            ],
         ];
 
         $pagesItems = [

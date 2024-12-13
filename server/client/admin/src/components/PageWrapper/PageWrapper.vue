@@ -13,10 +13,7 @@
   });
 
   const [block, element] = useBEMBuilder(
-    "page-wrapper",
-    ref({
-      "sidebar-minimized": true,
-    }),
+    "page-wrapper"
   );
 </script>
 <template>
