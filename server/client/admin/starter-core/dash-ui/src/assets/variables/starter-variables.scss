@@ -1,29 +1,16 @@
 @import 'sidebar';
+@import 'colors';
+@import 'footer';
+@import 'brand';
 
 :root {
   --dui-transition: all .3s ease;
 
-  // Colors
-  --dui-color-primary: #3699FF;
-  --dui-color-secondary: #E4E6EF;
-  --dui-color-success: #1BC5BD;
-  --dui-color-danger: #F64E60;
-  --dui-color-info: #8950FC;
-  --dui-color-light: #F3F6F9;
-  --dui-color-dark: #181C32;
-
-  --dui-color-base-1: #adb1c7;
-  --dui-color-base-2: #a7abc3;
-  --dui-color-base-3: #6c7293;
-  --dui-color-base-4: #464457;
-
-  --dui-color-text-dark: var(--dui-color-dark);
-  --dui-color-text-link: #5d78ff;
-  --dui-color-text-dark-bg: #9096b8;
-
   // Fonts
+  --dui-font-size: 1rem;
   --dui-font-weight-normal: 400;
   --dui-font-weight-bold: 500;
+  --dui-line-height: 1.5;
 
   // Spacing
   --dui-spacing-1: 0.5rem;
@@ -32,10 +19,15 @@
   --dui-spacing-4: 2rem;
 
   // Borders
-  --dui-border: 1px solid var(--dui-color-base-4);
-  --dui-border-light: 1px solid var(--dui-color-secondary);
+  --dui-border: 1px solid #e2e5ec;
+  --dui-border-radius: .375rem;
 
   //Box shadows
   --dui-elevate-shadow: 0px 0px 13px 0px rgba(82, 63, 105, 0.05);
   --dui-elevate-shadow-2: 0px 0px 13px 0px rgba(82, 63, 105, 0.1);
+  --dui-focus-ring-box-shadow: 0 0 0 .2rem rgba(var(--dui-color-primary), .25);
+
+  //Layers
+  --dui-layers-base: 1;
+  --dui-layers-over: 2;
 }
