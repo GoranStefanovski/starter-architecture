@@ -32,8 +32,8 @@ class VacationDayService implements VacationDayServiceInterface
     {
         $vacationDay = $this->vacationDayRepository->create($vacationDayData);
 
-        $roleIds = [$vacationDayData->role];
-        $vacationDay->roles()->attach($roleIds);
+        // $roleIds = [$vacationDayData->role];
+        // $vacationDay->roles()->attach($roleIds);
 
         return VacationDayDTO::fromModel($vacationDay);
     }

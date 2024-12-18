@@ -22,6 +22,11 @@ interface UserRepositoryInterface
     public function getAll(): array;
 
     /**
+     * @return array
+     */
+    public function getHandlers(): array;
+    
+    /**
      * @param integer $id
      * @return User
      */

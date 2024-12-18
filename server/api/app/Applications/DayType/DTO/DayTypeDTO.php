@@ -7,16 +7,16 @@ use Illuminate\Http\Request;
 
 class DayTypeDTO
 {
-    public string $label;
+    public string $slug;
     public string $name;
     public bool $is_paid;
 
     public function __construct(
-        string $label,
+        string $slug,
         string $name,
         bool $is_paid = false,
     ) {
-        $this->label = $label;
+        $this->slug = $slug;
         $this->name = $name;
         $this->is_paid = $is_paid;
     }
@@ -24,7 +24,7 @@ class DayTypeDTO
     public static function fromRequest(Request $request): self
     {
         return new self(
-            $request->input('label'),
+            $request->input('slug'),
             $request->input('name'),
             (bool) $request->input('is_paid', false),
         );
@@ -33,7 +33,7 @@ class DayTypeDTO
     public static function fromRequestForCreate(Request $request): self
     {
         return new self(
-            $request->input('label'),
+            $request->input('slug'),
             $request->input('name'),
             is_paid: false,
         );
@@ -42,7 +42,7 @@ class DayTypeDTO
     public static function fromModel(DayType $dayType): self
     {
         return new self(
-            $dayType->label,
+            $dayType->slug,
             $dayType->name,
             (bool) $dayType->is_paid,
         );
@@ -56,7 +56,7 @@ class DayTypeDTO
     public function toArray(): array
     {
         return [
-            'label' => $this->label,
+            'slug' => $this->slug,
             'name' => $this->name,
             'is_paid' => $this->is_paid,
         ];

@@ -36,7 +36,11 @@ class UserController extends Controller
         $userDTOs = $this->userService->getAll();
         return response()->json($userDTOs);
     }
-
+    public function getHandlers(): JsonResponse
+    {
+        $userDTOs = $this->userService->getHandlers();
+        return response()->json($userDTOs);
+    }
     /**
      * Get a JSON with a user by ID
      *

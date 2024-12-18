@@ -45,6 +45,14 @@ class UserRepository implements UserRepositoryInterface
         return $this->user::findOrFail($id);
     }
 
+    public function getHandlers(): array {
+        $users = $this->user::with('roles')->whereHas('roles', function ($query) {
+            $query->whereIn('id', [1, 2]);
+        })->get();
+        
+        return UserDTO::fromCollection($users);
+    }
+
     public function create(UserDTO $userDTO, string $password): User
     {
         $attributes = $userDTO->toArray();

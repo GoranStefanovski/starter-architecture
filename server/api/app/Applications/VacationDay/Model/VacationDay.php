@@ -11,7 +11,11 @@ use App\Applications\DayType\Model\DayType;
 class VacationDay extends Model
 {
     use SoftDeletes, HasFactory;
-
+    const SICK_DAY_PAID = 1;
+    const SICK_DAY_UNPAID = 2;
+    const DAY_OFF_PAID = 3;
+    const DAY_OFF_UNPAID = 4;
+    const HOLIDAY = 5;
     /**
      * The attributes that are mass assignable.
      *
@@ -23,6 +27,7 @@ class VacationDay extends Model
         'date_to',
         'year',
         'day_type_id',
+        'handler_id',
         'uuid',
     ];
 
@@ -57,7 +62,19 @@ class VacationDay extends Model
     ];
 
     /**
-     * Get the user that owns the vacation day.
+     * Relationship with User
      */
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    /**
+     * Relationship with DayType
+     */
+    public function dayType()
+    {
+        return $this->belongsTo(DayType::class, 'day_type_id');
+    }
  
 }

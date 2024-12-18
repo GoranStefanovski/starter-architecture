@@ -171,6 +171,8 @@ return [
 
         // Load module service providers before the RouteServiceProvider
         App\Applications\User\Providers\UserServiceProvider::class,
+        App\Applications\VacationDay\Providers\VacationDayServiceProvider::class,
+        App\Applications\DayType\Providers\DayTypeServiceProvider::class,
 
         // Load the RouteServiceProvider last because it has the any route redirect
         App\Providers\RouteServiceProvider::class,

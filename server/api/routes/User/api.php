@@ -21,6 +21,7 @@ Route::group([
         'prefix' => 'user',
     ], function () {
         Route::get('all', [UserController::class, 'getAll']);
+        Route::get('handlers', [UserController::class, 'getHandlers']);
         Route::get('draw', [UserController::class, 'draw']);
         Route::get('roles/get', [UserController::class, 'getUserRoles']);
 

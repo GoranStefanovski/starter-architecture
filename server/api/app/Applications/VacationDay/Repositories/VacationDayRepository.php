@@ -4,23 +4,30 @@ namespace App\Applications\VacationDay\Repositories;
 
 use App\Applications\VacationDay\DTO\VacationDayDTO;
 use App\Applications\Pagination\StarterPaginator;
+use App\Applications\User\Model\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\UploadedFile;
 use App\Applications\VacationDay\Model\VacationDay;
+use App\Mail\DayOffRequestMail;
+use App\Mail\SickDayNotificationMail;
+use Illuminate\Support\Facades\Mail;
 use Spatie\Permission\Models\Role;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 
 /**
  * @property VacationDay $vacationDay
+ * @property User $user
  */
 class VacationDayRepository implements VacationDayRepositoryInterface
 {
     public function __construct(
         VacationDay $vacationDay,
+        User $user
     ) {
         $this->vacationDay = $vacationDay;
+        $this->user = $user;
     }
 
     private const COLUMNS_MAP = [
@@ -42,12 +49,22 @@ class VacationDayRepository implements VacationDayRepositoryInterface
         return $this->vacationDay::findOrFail($id);
     }
 
+
+
     public function create(VacationDayDTO $vacationDayDTO): VacationDay
     {
         $attributes = $vacationDayDTO->toArray();
 
         $vacationDay = new VacationDay($attributes);
         $vacationDay->save();
+
+        // Send emails based on the day type
+        $requestHandler = User::findOrFail($attributes['handler_id']);
+        if (in_array($attributes['day_type_id'], [VacationDay::DAY_OFF_PAID, VacationDay::DAY_OFF_UNPAID])) {
+            Mail::to($requestHandler->email)->send(new DayOffRequestMail($vacationDay));
+        } elseif (in_array($attributes['day_type_id'], [VacationDay::SICK_DAY_PAID, VacationDay::SICK_DAY_UNPAID])) {
+            Mail::to($requestHandler->email)->send(new SickDayNotificationMail($vacationDay));
+        }
 
         return $vacationDay;
     }

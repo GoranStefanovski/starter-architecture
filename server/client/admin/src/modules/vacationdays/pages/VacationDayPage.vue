@@ -2,7 +2,7 @@
   import { DashButton, DashLink } from "@starter-core/dash-ui/src";
   import { IconSave, IconArrowleft } from "@starter-core/icons";
   import { useForm } from "vee-validate";
-  import { watch, computed } from "vue";
+  import { watch, computed, ref } from "vue";
   import { useI18n } from "vue-i18n";
   import { useRoute } from "vue-router";
   import {
@@ -32,17 +32,36 @@
     isLoading,
     data: formData,
     requestVacationDay,
+    dayTypes,
+    handlers
   } = useVacationDaysForm(vacationDayId);
+
+  const selectedDayTypeId = ref<number | null>(null);
+  const selectedHandlerId = ref<number | null>(null);
 
   const { handleSubmit, errors, setValues, defineField } =
     useForm<VacationDayFormItem>({
       validationSchema,
     });
+  
+  const submitHandler = async () => {
+    const testValues = {
+      id: vacationDayId || 0,
+      user_id: 1, // Replace with a valid user ID
+      handler_id: 1,
+      day_type_id: 1, // Example day type ID
+      date_from: new Date('2024-01-01'), // Example date
+      date_to: new Date("2024-01-05"), // Example date
+      year: 2024, // Example year
+    };
 
-  const submitHandler = handleSubmit((values) => {
-      requestVacationDay(values);
-  });
-
+    try {
+      const response = await requestVacationDay(testValues);
+      console.log("API Response:", response);
+    } catch (error) {
+      console.error("API Error:", error);
+    }
+  };
 
   watch(() => {
     if (formData.value) {
@@ -67,39 +86,34 @@
 <template>
   <PageWrapper>
     <template #[PAGE_WRAPPER_SLOTS.subheaderMain]>
-      <SubheaderTitle
-        title='Request A Vacation Day'
-      />
+      <SubheaderTitle title="Request A Vacation Day" />
     </template>
     <template #[PAGE_WRAPPER_SLOTS.subheaderToolbox]>
       <DashLink to="/admin/vacationDays" :icon="IconArrowleft" theme="clean">
         {{ t("buttons.back") }}
       </DashLink>
-      <DashButton
-        type="submit"
-        :loading="isLoading"
-        @click="submitHandler"
-      >
+
+      <!-- Dropdown for Vacation Day Type -->
+      <select v-model="selectedDayTypeId" class="dropdown">
+        <option disabled value="">Select Vacation Day Type</option>
+        <option v-for="type in dayTypes" :key="type.id" :value="type.id">
+          {{ type.name }}
+        </option>
+      </select>
+
+      <!-- Dropdown for Handler -->
+      <select v-model="selectedHandlerId" class="dropdown">
+        <option disabled value="">Select Handler</option>
+        <option v-for="handler in handlers" :key="handler.id" :value="handler.id">
+          {{ handler.first_name + ' ' + handler.last_name }}
+        </option>
+      </select>
+
+      <DashButton :loading="isLoading" @click="submitHandler">
         Submit
       </DashButton>
     </template>
-    <form
-      autocomplete="off"
-      enctype="multipart/form-data"
-      @submit.prevent="submitHandler"
-    >
-      <TabbedContent :isLoading="isLoading">
-        <TabbedContentTab :label="basicInfoLabeel" id="basic-info">
-          <CalendarFormBasicInfoTab
-            v-model:userId="userId"
-            v-model:dayTypeId="dayTypeId"
-            v-model:dateFrom="dateFrom"
-            v-model:dateTo="dateTo"
-            v-model:year="year"
-            :errors="errors"
-          />
-        </TabbedContentTab>
-      </TabbedContent>
-    </form>
   </PageWrapper>
 </template>
+
+

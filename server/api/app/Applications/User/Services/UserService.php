@@ -27,6 +27,10 @@ class UserService implements UserServiceInterface
     {
         return $this->userRepository->getAll();
     }
+    public function getHandlers(): array
+    {
+        return $this->userRepository->getHandlers();
+    }
 
     public function get($id): UserDTO
     {

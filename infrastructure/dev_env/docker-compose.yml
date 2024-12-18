@@ -8,7 +8,7 @@ services:
     build:
       context: ./bin/app
       dockerfile: Dockerfile
-    container_name: app
+    container_name: vacation_app
     restart: always
     # The external port mapping to internal port mapping
     ports:
@@ -32,7 +32,7 @@ services:
   database:
     build:
       context: ./bin/db
-    container_name: database
+    container_name: vacation_database
     restart: unless-stopped
     command: mysqld --log_error=/var/log/mysql/error.log --general_log_file=/var/log/mysql/error.log --general_log=1 --slow_query_log=1 --slow_query_log_file=/var/log/mysql/error.log --long_query_time=2 --log_queries_not_using_indexes=1
     ports:
@@ -54,7 +54,7 @@ services:
   node:
     build:
       context: ./bin/node
-    container_name: node
+    container_name: vacation_node
     restart: always
     tty: true
     ports:
@@ -71,7 +71,7 @@ services:
 
   # This container has redis dependencies used for caching
   redis:
-    container_name: redis
+    container_name: vacation_redis
     image: redis:alpine
     ports:
       - ${HOST_MACHINE_REDIS_PORT}:6379

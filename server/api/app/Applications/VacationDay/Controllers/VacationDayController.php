@@ -7,91 +7,84 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Applications\VacationDay\Services\VacationDayServiceInterface;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-/**
- * @property VacationDayServiceInterface $vacationDayService
- */
 class VacationDayController extends Controller
 {
-    public function __construct(
-        VacationDayServiceInterface $vacationDayService
-    ) {
+    private VacationDayServiceInterface $vacationDayService;
+
+    public function __construct(VacationDayServiceInterface $vacationDayService)
+    {
         $this->vacationDayService = $vacationDayService;
     }
 
     /**
      * Get a JSON with all the vacationDays
-     *
-     * @return JsonResponse
      */
     public function getAll(): JsonResponse
     {
         $vacationDayDTOs = $this->vacationDayService->getAll();
-        return response()->json($vacationDayDTOs);
+        return response()->json($vacationDayDTOs, 200);
     }
 
     /**
      * Get a JSON with a vacationDay by ID
-     *
-     * @param  integer  $id
-     * @return JsonResponse
      */
     public function get(int $id): JsonResponse
     {
         $vacationDayDTO = $this->vacationDayService->get($id);
-        return response()->json($vacationDayDTO);
+
+        if (!$vacationDayDTO) {
+            return response()->json(['error' => 'Vacation Day not found'], 404);
+        }
+
+        return response()->json($vacationDayDTO, 200);
     }
 
     /**
      * Store vacationDay and get JSON with a vacationDay response
-     *
-     * @param  Request  $request
-     * @return JsonResponse
      */
     public function create(Request $request): JsonResponse
-    {
-        $vacationDayDTO = VacationDayDTO::fromRequestForCreate($request);
+    {   
+        $validated = $this->validateRequest($request);
+        $vacationDayDTO = VacationDayDTO::fromRequestForCreate($validated);
         $newVacationDayDTO = $this->vacationDayService->create($vacationDayDTO);
 
-        return response()->json($newVacationDayDTO);
+        return response()->json($newVacationDayDTO, 201); // 201 for resource created
     }
 
     /**
      * Update vacationDay
-     *
-     * @param  Request  $request
-     * @return JsonResponse
      */
     public function update(Request $request): JsonResponse
     {
         $vacationDayId = Route::current()->parameter('id');
-        $dto = VacationDayDTO::fromRequest($request);
-        $vacationDayDTO = $this->vacationDayService->update(
-            $vacationDayId,
-            $dto
-        );
-        return response()->json($vacationDayDTO);
+        $validated = $this->validateRequest($request);
+
+        $dto = VacationDayDTO::fromRequest($validated);
+        $updatedVacationDayDTO = $this->vacationDayService->update($vacationDayId, $dto);
+
+        return response()->json($updatedVacationDayDTO, 200);
     }
 
     /**
      * Delete vacationDay
-     *
-     * @return string
      */
-    public function delete()
+    public function delete(): JsonResponse
     {
         $vacationDayId = Route::current()->parameter('id');
-        return $this->vacationDayService->delete($vacationDayId);
+
+        $result = $this->vacationDayService->delete($vacationDayId);
+
+        if (!$result) {
+            return response()->json(['error' => 'Failed to delete vacation day'], 400);
+        }
+
+        return response()->json(['message' => 'Vacation day deleted successfully'], 200);
     }
 
     /**
-     * Get a paginated, filtered and sorted array of VacationDays.
-     * This endpoint requires some data in the request.
-     *
-     * @param  Request  $request
-     * @return JsonResponse
+     * Get a paginated, filtered and sorted array of VacationDays
      */
     public function draw(Request $request): JsonResponse
     {
@@ -99,26 +92,26 @@ class VacationDayController extends Controller
             $data = $request->all();
             $vacationDaysDTO = $this->vacationDayService->draw($data);
 
-            return response()->json($vacationDaysDTO);
+            return response()->json($vacationDaysDTO, 200);
         } catch (\InvalidArgumentException $e) {
-            // Handle specific exceptions like InvalidArgumentException
-            return response()->json([
-                'error' => 'Invalid Argument',
-                'message' => $e->getMessage(),
-            ], 400); // Bad Request status code
-        } catch (\ValidationException $e) {
-            // Handle validation exceptions
-            return response()->json([
-                'error' => 'Validation Error',
-                'message' => $e->getMessage(),
-                'errors' => $e->errors(),
-            ], 422); // Unprocessable Entity status code
+            return response()->json(['error' => 'Invalid Argument', 'message' => $e->getMessage()], 400);
         } catch (\Exception $e) {
-            // Handle any other general exceptions
-            return response()->json([
-                'error' => 'Server Error',
-                'message' => $e->getMessage(),
-            ], 500); // Internal Server Error status code
+            return response()->json(['error' => 'Server Error', 'message' => $e->getMessage()], 500);
         }
+    }
+
+    /**
+     * Validate the incoming request for VacationDay
+     */
+    private function validateRequest(Request $request): array
+    {
+        return $request->validate([
+            'user_id' => 'required|integer|exists:users,id',
+            'date_from' => 'required|date',
+            'date_to' => 'required|date|after_or_equal:date_from',
+            'year' => 'required|integer|min:2000|max:' . date('Y'),
+            'day_type_id' => 'required|integer|in:1,2,3,4,5',
+            'handler_id' => 'required|integer|exists:users,id',
+        ]);
     }
 }
