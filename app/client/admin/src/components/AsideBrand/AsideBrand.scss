@@ -4,7 +4,7 @@
   align-items: center;
   flex-direction: row;
   padding: 0 kt-get($page-padding, desktop);
-  height: kt-get($header-config, base, desktop, default, height);
+  height: var(--dui-header-height-desktop);
 
   .kt-aside__brand-logo {
     display: flex;
@@ -40,9 +40,6 @@
         margin-right: -2px;
       }
     }
-
-    //@include kt-burger-icon-build(kt-aside__brand-aside-toggler, kt-get($brand-config, aside-toggler));
-    //@include kt-burger-icon-skin(kt-aside__brand-aside-toggler,  kt-get($brand-config, aside-toggler, color));
   }
 }
 
@@ -59,7 +56,7 @@
       top: 0;
       left: 0;
       width: var(--dui-aside-default-width);
-      z-index: kt-get($header-config, base, desktop, fixed, zindex);
+      z-index: var(--dui-layers-fixed-header);
     }
 
     // Aside minimize mode
@@ -124,14 +121,6 @@
 
     // Toolbar
     .kt-header-mobile__toolbar {
-      @include kt-burger-icon-skin(
-        kt-header-mobile__toggler,
-        (
-          default: #484f66,
-          hover: #ffffff,
-          active: #ffffff,
-        )
-      );
 
       .kt-header-mobile__topbar-toggler {
         i {

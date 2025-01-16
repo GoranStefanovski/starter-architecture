@@ -3,10 +3,10 @@
 //
 
 $dropdown-menu-widths: (
-  sm: 240px,
-  md: 260px,
-  lg: 320px,
-  xl: 380px,
+        sm: 240px,
+        md: 260px,
+        lg: 320px,
+        xl: 380px,
 );
 
 // Base
@@ -69,11 +69,11 @@ $dropdown-menu-widths: (
     padding: 0.7rem 1.2rem;
 
     @include kt-icons-size(
-      (
-        lineawesome: 1.4rem,
-        fontawesome: 1.4rem,
-        flaticon: 1.3rem,
-      )
+                    (
+                            lineawesome: 1.4rem,
+                            fontawesome: 1.4rem,
+                            flaticon: 1.3rem,
+                    )
     );
 
     > i {
@@ -107,16 +107,16 @@ $dropdown-menu-widths: (
   // Animations
   &.dropdown-menu-anim {
     animation:
-      dropdown-menu-fade-in 0.3s ease 1,
-      dropdown-menu-move-up 0.3s ease-out 1;
+            dropdown-menu-fade-in 0.3s ease 1,
+            dropdown-menu-move-up 0.3s ease-out 1;
   }
 
   .dropup &,
   .dropdown-menu-anim-down {
     &.dropdown-menu-anim {
       animation:
-        dropdown-menu-fade-in 0.3s ease 1,
-        dropdown-menu-move-down 0.3s ease-out 1;
+              dropdown-menu-fade-in 0.3s ease 1,
+              dropdown-menu-move-down 0.3s ease-out 1;
     }
   }
 
