@@ -28,9 +28,6 @@ provide(isMenuMinimizedKey, computed(() => isMinimized));
       'kt-menu__nav',
       `kt-menu__nav--${type}`,
       'kt-menu--layout-default',
-      {
-        'kt-menu__nav--minimized': isMinimized
-      }
     ]"
   >
     <slot />

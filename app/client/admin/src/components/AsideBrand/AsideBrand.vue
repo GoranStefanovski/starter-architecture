@@ -29,20 +29,6 @@
         />
       </router-link>
     </div>
-    <div class="kt-aside__brand-tools">
-      <button
-        class="kt-aside__brand-aside-toggler"
-        @click="$emit('toggleSidebar')"
-      >
-        <IconAngledoubleright v-if="isSidebarMinimized" size="26" />
-        <IconAngledoubleleft v-else size="26" />
-      </button>
-      <button
-        class="kt-aside__brand-aside-toggler kt-aside__brand-aside-toggler--left"
-        @click="$emit('toggleSidebar')"
-      >
-        <span />
-      </button>
-    </div>
+    
   </div>
 </template>

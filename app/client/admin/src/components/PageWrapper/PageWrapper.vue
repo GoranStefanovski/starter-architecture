@@ -15,9 +15,6 @@
 
   const [block, element] = useBEMBuilder(
     "page-wrapper",
-    ref({
-      "sidebar-minimized": true,
-    }),
   );
 </script>
 <template>

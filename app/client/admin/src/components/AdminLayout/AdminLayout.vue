@@ -19,9 +19,6 @@
 
   const [block, element] = useBEMBuilder(
     "admin-layout",
-    ref({
-      "aside-minimized": isSidebarMinimized,
-    }),
   );
 
   provide(layoutConfigKey, layoutConfig);
@@ -40,7 +37,6 @@
             'has-subheader': layoutConfig.hasSubHeader,
             'fixed-subheader':
               layoutConfig.hasSubHeader && layoutConfig.hasSubHeaderFixed,
-            'aside-minimized': isSidebarMinimized,
           }),
         ).value
       "

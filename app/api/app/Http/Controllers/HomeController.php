@@ -33,14 +33,6 @@ class HomeController extends Controller
                 'name' => 'item_users',
                 'route' => 'users',
                 'permission' => UserPermissions::READ_USERS,
-                'submenu' => [
-                    [
-                        'label' => 'admin.users.admin',
-                        'name' => 'item_users',
-                        'route' => 'users',
-                        'permission' => UserPermissions::READ_USERS,
-                    ]
-                ]
             ]
         ];
 

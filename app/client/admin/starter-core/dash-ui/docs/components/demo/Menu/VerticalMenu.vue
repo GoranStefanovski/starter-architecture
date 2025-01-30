@@ -20,7 +20,7 @@
 </script>
 <template>
   <div @mouseover="mouseOverHandler" @mouseleave="mouseLeaveHandler">
-    <div :class="['aside', { 'aside--minimized': !isHover && props.isMinimizedMenu }]">
+    <div :class="['aside']">
       <NavMenu
         :items="navMenu.map((item) => ({ ...item, icon: briefcaseIcon }))"
         :style="'icons'"
