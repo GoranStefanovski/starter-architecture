@@ -5,5 +5,9 @@
     "admin": "Admin Users",
     "public": "Public Users",
     "add": "Add user"
+  },
+  "requests": {
+    "main": "Requests",
+    "add": "New Request"
   }
 }

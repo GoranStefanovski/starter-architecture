@@ -26,13 +26,19 @@ class HomeController extends Controller
                 'label' => 'admin.dashboard',
                 'name' => 'item_dashboard',
                 'route' => 'dashboard',
-                'permission' => UserPermissions::READ_USERS, // Change to dashboard_view
+                'permission' => UserPermissions::DASHBOARD_VIEW,
             ],
             [
                 'label' => 'admin.users.main',
                 'name' => 'item_users',
                 'route' => 'users',
                 'permission' => UserPermissions::READ_USERS,
+            ],
+            [
+                'label' => 'admin.requests.main',
+                'name' => 'item_requests',
+                'route' => 'requests',
+                'permission' => UserPermissions::READ_REQUESTS,
             ]
         ];
 
