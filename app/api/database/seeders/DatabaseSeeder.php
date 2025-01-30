@@ -10,6 +10,8 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Faker\Factory as Faker;
 
 class DatabaseSeeder extends Seeder
@@ -92,5 +94,15 @@ class DatabaseSeeder extends Seeder
             // Assign a random role to the user
             $user->roles()->attach($faker->randomElement($roles));
         }
+
+        // Leave Types
+        $leaveTypes = [
+            ['name' => 'Sick (unpaid)', 'slug' => Str::slug('Sick unpaid'), 'is_paid' => false],
+            ['name' => 'Sick (paid)', 'slug' => Str::slug('Sick paid'), 'is_paid' => true],
+            ['name' => 'Vacation Day (paid)', 'slug' => Str::slug('Vacation Day paid'), 'is_paid' => true],
+            ['name' => 'Vacation Day (unpaid)', 'slug' => Str::slug('Vacation Day unpaid'), 'is_paid' => false],
+        ];
+
+        DB::table('leave_types')->insert($leaveTypes);
     }
 }
