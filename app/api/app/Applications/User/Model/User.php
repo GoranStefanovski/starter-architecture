@@ -21,7 +21,8 @@ class User extends Authenticatable implements HasMedia
     use InteractsWithMedia;
 
     const ADMIN = 'admin';
-    const EDITOR = 'editor';
+    const MANAGER = 'manager';
+    const DEVELOPER = 'developer';
     const COLLABORATOR = 'collaborator';
 
     /**
