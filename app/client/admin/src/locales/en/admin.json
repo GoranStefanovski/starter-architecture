@@ -9,5 +9,9 @@
   "requests": {
     "main": "Requests",
     "add": "New Request"
+  },
+  "leave_types": {
+    "main": "Leave Types",
+    "add": "New Leave Type"
   }
 }
