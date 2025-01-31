@@ -76,7 +76,6 @@
       :class="element('text', ref({
         [`${menuType}`]: !!menuType,
         active: isActive || isExpanded,
-        minimized: !!isMinimized
       })).value"
     >
       {{ label }}
@@ -94,8 +93,6 @@
           `kt-menu__link-arrow--${menuType}`,
           'la la-angle-right',
           {
-            'kt-menu__link-arrow--active': isActive || isExpanded,
-            'kt-menu__link-arrow--expanded': isExpanded,
           },
         ]"
       />
