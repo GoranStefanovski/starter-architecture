@@ -22,11 +22,7 @@
   <div class="kt-aside__brand">
     <div class="kt-aside__brand-logo">
       <router-link to="/admin/dashboard">
-        <img
-          v-if="isLogoVisible"
-          alt="Logo"
-          src="@/../assets/images/sm_logo_white.png"
-        />
+        BreakPoint
       </router-link>
     </div>
     

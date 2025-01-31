@@ -110,36 +110,10 @@
     >
       <PortletComponent :has-sticky-header="true" :is-loading="loading">
         <PortletBody>
-          <div class="kt-section kt-section--first">
-            <div class="kt-section__body">
-              <h3 class="kt-section__title kt-section__title-lg">
-                {{ t("users.user_status") }}:
-              </h3>
-              <FormDropdown
-                :label="t('users.roles.label')"
-                v-if="!isFetchingRoles"
-                v-model="form.role"
-                :options="roles"
-                :value="form.role"
-              />
-              <!--                        <FormInputRadio-->
-              <!--                            :id="'enabled'"-->
-              <!--                            :label="t('users.status')"-->
-              <!--                            v-model="form.is_disabled"-->
-              <!--                            :options="[{'id': 0, 'name':'Enabled'},{'id': 1, 'name':'Disabled'}]"-->
-              <!--                            :value="form.is_disabled"-->
-              <!--                        />-->
-            </div>
-          </div>
-
-          <div
-            class="kt-separator kt-separator--border-dashed kt-separator--space-lg"
-          ></div>
-
           <div class="kt-section">
             <div class="kt-section__body">
               <h3 class="kt-section__title kt-section__title-lg">
-                Customer Info:
+                Profile Info:
               </h3>
               <file-upload
                 :label="t('users.avatar')"
@@ -162,14 +136,7 @@
                 :label="t('users.email.label')"
                 v-model="form.email"
                 id="email"
-              >
-                <template v-slot:prependContent>
-                  <IconMail />
-                </template>
-              </FormInput>
-              <span class="form-text text-muted"
-                >We'll never share your email with anyone else.</span
-              >
+              />
             </div>
           </div>
 
