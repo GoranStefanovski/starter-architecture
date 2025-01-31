@@ -3,13 +3,13 @@ import { DatatableColumns } from "@starter-core/dash-ui/src";
 export const LEAVE_TYPES_DATATABLE_COLUMNS: DatatableColumns = [
   {
     id: 0,
-    label: "leaveTypes.datatable.slug",
+    label: "Slug",
     name: "slug",
     sortable: false,
   },
   {
     id: 1,
-    label: "leaveTypes.datatable.name",
+    label: "Name",
     name: "name",
     sortable: true,
   },

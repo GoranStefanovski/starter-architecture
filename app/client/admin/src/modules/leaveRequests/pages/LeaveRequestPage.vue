@@ -58,6 +58,10 @@
       userId.value = user.id;
     }
   });
+  const formatDate = (date: string | Date | null): string => {
+    if (!date) return "";
+    return new Date(date).toISOString().split("T")[0]; // Extracts only YYYY-MM-DD
+  };
 
   watch(() => {
     if (formData.value) {
@@ -65,6 +69,8 @@
         id: formData.value.id,
         user_id: formData.value.user_id,
         leave_type_id: formData.value.leave_type_id,
+        start_date: formatDate(formData.value.start_date),
+        end_date: formatDate(formData.value.end_date),
         reason: formData.value.reason,
         request_to: formData.value.request_to,
       });

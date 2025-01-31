@@ -3,14 +3,16 @@
   import { ref, onMounted, computed } from "vue";
   import { useI18n } from "vue-i18n";
   import { FormInput } from "@starter-core/dash-ui/src";
+  import LeaveRequestsDropdown from "./LeaveRequestsDropdown.vue";
+  import LeaveRequestsDropdownTypes from "./LeaveRequestsDropdownTypes.vue";
 
   const { t } = useI18n();
   const leaveTypes = ref([]);
   const managers = ref([]);
   const userId = defineModel("userId", { required: true, type: Number });
   const leaveTypeId = defineModel("leaveTypeId", { required: true, type: Number });
-  const startDate = defineModel("startDate", { required: true, type: Date });
-  const endDate = defineModel("endDate", { required: true, type: Date });
+  const startDate = defineModel("startDate", { required: true, type: String });                    
+  const endDate = defineModel("endDate", { required: true, type: String });
   const reason = defineModel("reason", { required: true, type: String });
   const requestTo = defineModel("requestTo", { required: true, type: String });
 
@@ -42,51 +44,40 @@
   });
 </script>
 <template>
-<div class="kt-section kt-section--first">
-    <div class="kt-section__body">
-      <h3 class="kt-section__title kt-section__title-lg">
-        {{ t("leaveRequests.leaveRequest_status") }}:
-      </h3>
-    </div>
-  </div>
-
-  <div
-    class="kt-separator kt-separator--border-dashed kt-separator--space-lg"
-  ></div>
-
   <div class="kt-section">
     <div class="kt-section__body">
-      <h3 class="kt-section__title kt-section__title-lg">Request:</h3>
+      <leave-requests-dropdown v-model:model="requestTo" :optionsData="managers"/>
+      
+      <leave-requests-dropdown-types v-model:model="leaveTypeId" :optionsData="leaveTypes"/>
+
       <form-input
         v-model="reason"
         name="reason"
-        :label="t('leaveRequests.reason.label')"
+        label="Reason (optional)"
         is-inline
       />
-      <div>
-        <label for="startDate">Start date:</label>
-        <input type="date" id="startDate" name="startDate" v-model="startDate" />
-      </div>  
-      <div>
-        <label for="endDate">End date:</label>
-        <input type="date" id="endDate" name="endDate" v-model="endDate" />
-      </div>  
-      <div>
-        <label for="leaveType">Leave Type:</label>
-        <select id="leaveType" v-model="leaveTypeId" placeholder="Select leave type">
-          <option v-for="(type, index) in leaveTypes" :key="index" :value="type.id">
-            {{ type.name }}
-          </option>
-        </select>
-      </div>
-      <div>
-        <label for="manager">Assign to Manager:</label>
-        <select id="manager" v-model="requestTo">
-          <option v-for="(manager, index) in managers" :key="index" :value="manager.id">
-            {{ manager.first_name }} {{ manager.last_name }}
-          </option>
-        </select>
+      <div class="dates_wrapper">
+        <div class="dates_from">
+          <label class="form-group__label" for="startDate">Start date:</label>
+          <input type="date" id="startDate" name="startDate" v-model="startDate" />
+        </div>
+
+        <div>
+          <label class="form-group__label" for="endDate">End date:</label>
+          <input type="date" id="endDate" name="endDate" v-model="endDate" />
+        </div>  
       </div>
     </div>
   </div>
 </template>
+
+<style scoped lang="scss">
+  .dates_wrapper {
+    display: flex;
+    align-items: flex-start;
+
+    .dates_from {
+      margin-right: 100px;
+    }
+  }
+</style>

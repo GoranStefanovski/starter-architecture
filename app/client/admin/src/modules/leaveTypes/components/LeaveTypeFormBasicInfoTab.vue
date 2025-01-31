@@ -9,40 +9,27 @@
   const isPaid = defineModel("isPaid", { required: true, type: Boolean });
 </script>
 <template>
-<div class="kt-section kt-section--first">
-    <div class="kt-section__body">
-      <h3 class="kt-section__title kt-section__title-lg">
-        {{ t("leaveTypes.user_status") }}:
-      </h3>
-      <form-switch
-        v-model="isPaid"
-        id="enabled"
-        :theme="isPaid ? 'success' : 'danger'"
-        type="outline"
-        :label="t('users.status.label')"
-        :helper-text="`Leave Type is  ${isPaid ? 'Paid' : 'Unpaid'}`"
-      />
-    </div>
-  </div>
-
-  <div
-    class="kt-separator kt-separator--border-dashed kt-separator--space-lg"
-  ></div>
-
   <div class="kt-section">
     <div class="kt-section__body">
-      <h3 class="kt-section__title kt-section__title-lg">Leave Type Info:</h3>
       <form-input
         v-model="slug"
         name="slug"
-        :label="t('leaveTleaveTypes.last_name.label')"
+        label="Slug"
         is-inline
       />
       <form-input
         v-model="name"
         name="name"
-        :label="t('leaveTleaveTypes.first_name.label')"
+        label="Name"
         is-inline
+      />
+      <form-switch
+        v-model="isPaid"
+        id="enabled"
+        :theme="isPaid ? 'success' : 'danger'"
+        type="outline"
+        label="Paid"
+        :helper-text="`Leave Type is  ${isPaid ? 'Paid' : 'Unpaid'}`"
       />
     </div>
   </div>
