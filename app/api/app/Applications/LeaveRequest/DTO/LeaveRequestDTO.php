@@ -43,9 +43,9 @@ class LeaveRequestDTO
             $request->input('leave_type_id'),
             $request->input('start_date'),
             $request->input('end_date'),
-            $request->input('reqson'),
+            $request->input('reason'),
             $request->input('request_to'),
-            $request->input('status'),
+            $request->input('status', 0),
             $request->input('id', 0),
         );
     }

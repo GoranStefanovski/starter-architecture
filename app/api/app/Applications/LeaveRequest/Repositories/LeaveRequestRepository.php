@@ -22,7 +22,6 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
         'first_name' => 'leave_requests.first_name',
         'last_name' => 'leave_requests.last_name',
         'email' => 'leave_requests.email',
-        'roles' => 'roles.id',
         'status' => 'leave_requests.is_disabled'
     ];
 
@@ -46,10 +45,10 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
         return $leaveRequest;
     }
 
-    public function update(int $userId, LeaveRequestDTO $userData): LeaveRequest
+    public function update(int $leaveRequestId, LeaveRequestDTO $leaveRequestData): LeaveRequest
     {
-        $leaveRequest = $this->leaveRequest->findOrFail($userId);
-        $attributes = $userData->toArray();
+        $leaveRequest = $this->leaveRequest->findOrFail($leaveRequestId);
+        $attributes = $leaveRequestData->toArray();
         $leaveRequest->update($attributes);
         return $leaveRequest;
     }

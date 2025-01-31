@@ -17,8 +17,8 @@ return new class extends Migration
             $table->integer('leave_type_id');
             $table->string('start_date');
             $table->string('end_date')->nullable();
-            $table->integer('status')->nullable()->default(1);
-            $table->text('reason')->nullable();
+            $table->integer('status')->nullable()->default(0);
+            $table->string('reason')->nullable();
             $table->string('request_to');
             $table->integer('approved_by')->nullable()->default(null);
             $table->softDeletes();
