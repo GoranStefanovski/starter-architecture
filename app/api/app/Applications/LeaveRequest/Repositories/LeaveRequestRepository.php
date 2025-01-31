@@ -74,10 +74,7 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
         $search = $data['search'];
         if ($search) {
             $query->where(function ($subquery) use ($search) {
-                $subquery->where('users.first_name', 'like', '%' . $search . '%');
-                $subquery->orWhere('users.last_name', 'like', '%' . $search . '%');
-                $subquery->orWhere('users.email', 'like', '%' . $search . '%');
-                $subquery->orWhere('roles.name', 'like', '%' . $search . '%');
+                $subquery->where('leave_requests.reason', 'like', '%' . $search . '%');
             });
         }
 

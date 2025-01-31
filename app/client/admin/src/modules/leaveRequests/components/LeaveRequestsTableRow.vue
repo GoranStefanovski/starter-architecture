@@ -38,10 +38,6 @@
     </TableColumn>
 
     <TableColumn>
-      {{ leaveRequest.status }}
-    </TableColumn>
-
-    <TableColumn>
       <dash-link
         v-if="auth.user().permissions_array.includes('write_requests')"
         :to="{ name: 'edit.leave_request', params: { leaveRequestId: leaveRequest.id } }"
@@ -51,6 +47,17 @@
       >
         {{ $t("buttons.edit") }}
       </dash-link>
+    </TableColumn>
+    <TableColumn>
+      <DashButton
+        v-if="auth.user().permissions_array.includes('delete_requests')"
+        :icon="IconTrash"
+        theme="danger"
+        size="sm"
+        onclick="deleteRequest(user, user.id)"
+        is-pill
+        is-icon
+      />
     </TableColumn>
   </TableRow>
 </template>
