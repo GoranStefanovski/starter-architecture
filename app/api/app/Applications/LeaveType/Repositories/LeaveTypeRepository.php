@@ -72,10 +72,8 @@ class LeaveTypeRepository implements LeaveTypeRepositoryInterface
         $search = $data['search'];
         if ($search) {
             $query->where(function ($subquery) use ($search) {
-                $subquery->where('users.first_name', 'like', '%' . $search . '%');
-                $subquery->orWhere('users.last_name', 'like', '%' . $search . '%');
-                $subquery->orWhere('users.email', 'like', '%' . $search . '%');
-                $subquery->orWhere('roles.name', 'like', '%' . $search . '%');
+                $subquery->where('leave_types.slug', 'like', '%' . $search . '%');
+                $subquery->orWhere('leave_types.name', 'like', '%' . $search . '%');
             });
         }
 

@@ -27,7 +27,7 @@
     :error="error?.message"
   >
     <template #header>
-      <DatatableHeader title="Leave Types">
+      <DatatableHeader title="Leave Requests">
         <LeaveRequestsTableHeader />
       </DatatableHeader>
       <DatatableFilters />

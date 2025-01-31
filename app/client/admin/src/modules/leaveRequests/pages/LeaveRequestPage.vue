@@ -42,6 +42,7 @@
     });
 
   const submitHandler = handleSubmit((values) => {
+    console.log('asdasdas', values)
     if (isEditPage.value) {
       updateLeaveRequest(values);
     } else {
@@ -53,33 +54,29 @@
     if (formData.value) {
       setValues({
         id: formData.value.id,
-        user_id: formData.value.user_id,
         leave_type_id: formData.value.leave_type_id,
         start_date: formData.value.start_date,
         end_date: formData.value.end_date,
         status: formData.value.status,
         reason: formData.value.reason,
         request_to: formData.value.request_to,
-        approved_by: formData.value.approved_by,
       });
     }
   }, [formData]);
 
-  const [userId] = defineField("user_id");
   const [leaveTypeId] = defineField("leave_type_id");
   const [startDate] = defineField("start_date");
   const [endDate] = defineField("end_date");
   const [status] = defineField("status");
   const [reason] = defineField("reason");
   const [requestTo] = defineField("request_to");
-  const [approvedBy] = defineField("approved_by");
 </script>
 
 <template>
   <PageWrapper>
     <template #[PAGE_WRAPPER_SLOTS.subheaderMain]>
       <SubheaderTitle
-        title="Leave Type"
+        title="Request"
       />
     </template>
     <template #[PAGE_WRAPPER_SLOTS.subheaderToolbox]>
@@ -98,19 +95,17 @@
     <form
       autocomplete="off"
       enctype="multipart/form-data"
-      @submit.prevent="submitHandler"
+      @submit="submitHandler"
     >
       <TabbedContent :isLoading="isLoading">
         <TabbedContentTab :label="basicInfoLabeel" id="basic-info">
           <LeaveRequestsFormBasicInfoTab
-            v-model:userId="userId"
             v-model:leaveTypeId="leaveTypeId"
             v-model:startDate="startDate"
             v-model:endDate="endDate"
             v-model:status="status"
             v-model:reason="reason"
             v-model:requestTo="requestTo"
-            v-model:approvedBy="approvedBy"
             :errors="errors"
           />
         </TabbedContentTab>

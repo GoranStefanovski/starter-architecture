@@ -26,7 +26,7 @@ export const useLeaveRequestsForm = (leaveRequestId?: number) => {
       return data.data;
     },
     onSuccess: async () => {
-      toast.success("User saved!");
+      toast.success("Leave Request saved!");
     },
     onError: (error) => {
       toast.error(error.message);
@@ -43,7 +43,7 @@ export const useLeaveRequestsForm = (leaveRequestId?: number) => {
     },
     onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: [LEAVE_REQUEST_CACHE_KEY, leaveRequestId] });
-      toast.success("Leave Type updated!");
+      toast.success("Leave Request updated!");
     },
     onError: (error) => {
       toast.error(error.message);

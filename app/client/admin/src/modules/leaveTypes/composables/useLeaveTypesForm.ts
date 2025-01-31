@@ -26,7 +26,7 @@ export const useLeaveTypesForm = (leaveTypeId?: number) => {
       return data.data;
     },
     onSuccess: async () => {
-      toast.success("User saved!");
+      toast.success("Leave Type saved!");
     },
     onError: (error) => {
       toast.error(error.message);

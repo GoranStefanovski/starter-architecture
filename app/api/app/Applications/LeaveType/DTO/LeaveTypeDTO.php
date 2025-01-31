@@ -65,7 +65,7 @@ class LeaveTypeDTO
         return [
             'name' => $this->name,
             'slug' => $this->slug,
-            'is_disabled' => $this->is_paid,
+            'is_paid' => $this->is_paid,
             'id' => $this->id,
         ];
     }

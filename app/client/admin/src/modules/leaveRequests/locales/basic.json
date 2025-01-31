@@ -1,7 +1,7 @@
 {
   "user_status": "User status",
   "status": {
-    "label": "Disable Leave Type",
+    "label": "Disable Request Type",
     "enabled": "Enabled",
     "disabled": "Disabled"
   },

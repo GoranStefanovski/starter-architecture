@@ -7,6 +7,8 @@ import { axios, auth } from "./plugins";
 import { i18n } from "./plugins/i18n";
 import router from "./router";
 import "vue-toastification/dist/index.css";
+import VCalendar from 'v-calendar';
+import 'v-calendar/style.css';
 
 const pinia = createPinia();
 const app = createApp(App);
@@ -16,6 +18,7 @@ app.use(i18n);
 app.use(axios);
 app.use(auth);
 app.use(VueQueryPlugin);
+app.use(VCalendar, {})
 app.use(Toast, {
   position: POSITION.TOP_RIGHT,
 });

@@ -16,11 +16,11 @@ return new class extends Migration
             $table->foreignId('user_id');
             $table->integer('leave_type_id');
             $table->date('start_date');
-            $table->date('end_date');
+            $table->date('end_date')->nullable();
             $table->string('status')->default('pending');
             $table->text('reason')->nullable();
             $table->string('request_to');
-            $table->foreignId('approved_by');
+            $table->foreignId('approved_by')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
