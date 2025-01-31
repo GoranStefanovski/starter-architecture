@@ -13,14 +13,14 @@ return new class extends Migration
     {
         Schema::create('leave_requests', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id');
+            $table->integer('user_id')->nullable();
             $table->integer('leave_type_id');
-            $table->date('start_date');
-            $table->date('end_date')->nullable();
-            $table->string('status')->default('pending');
+            $table->string('start_date');
+            $table->string('end_date')->nullable();
+            $table->integer('status')->nullable()->default(1);
             $table->text('reason')->nullable();
             $table->string('request_to');
-            $table->foreignId('approved_by')->nullable();
+            $table->integer('approved_by')->nullable()->default(null);
             $table->softDeletes();
             $table->timestamps();
         });

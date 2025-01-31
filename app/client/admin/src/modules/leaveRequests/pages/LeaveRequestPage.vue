@@ -1,7 +1,8 @@
 <script lang="ts" setup>
   import { IconSave, IconArrowleft } from "@starter-core/icons";
+  import { useAuth } from "@websanova/vue-auth/src/v3.js";
   import { useForm } from "vee-validate";
-  import { watch, computed } from "vue";
+  import { watch, computed, onMounted } from "vue";
   import { useI18n } from "vue-i18n";
   import { useRoute } from "vue-router";
   import {
@@ -23,11 +24,13 @@
   const leaveRequestId = Number(route.params.leaveRequestId);
 
   const validationSchema = {
-    name(value: string) {
+    reason(value: string) {
       if (value?.length >= 5) return true;
       return "Name needs to be at least 5 characters.";
     },
   };
+
+  const auth = useAuth();
 
   const {
     isLoading,
@@ -36,13 +39,12 @@
     updateLeaveRequest,
   } = useLeaveRequestsForm(leaveRequestId);
 
-  const { handleSubmit, errors, setValues, defineField } =
+  const { handleSubmit, setValues, defineField } =
     useForm<LeaveRequestFormItem>({
       validationSchema,
     });
 
   const submitHandler = handleSubmit((values) => {
-    console.log('asdasdas', values)
     if (isEditPage.value) {
       updateLeaveRequest(values);
     } else {
@@ -50,24 +52,29 @@
     }
   });
 
+  onMounted(() => {
+    const user = auth.user();
+    if (user && user.id) {
+      userId.value = user.id;
+    }
+  });
+
   watch(() => {
     if (formData.value) {
       setValues({
         id: formData.value.id,
+        user_id: formData.value.user_id,
         leave_type_id: formData.value.leave_type_id,
-        start_date: formData.value.start_date,
-        end_date: formData.value.end_date,
-        status: formData.value.status,
         reason: formData.value.reason,
         request_to: formData.value.request_to,
       });
     }
   }, [formData]);
 
+  const [userId] = defineField("user_id");
   const [leaveTypeId] = defineField("leave_type_id");
   const [startDate] = defineField("start_date");
   const [endDate] = defineField("end_date");
-  const [status] = defineField("status");
   const [reason] = defineField("reason");
   const [requestTo] = defineField("request_to");
 </script>
@@ -95,18 +102,17 @@
     <form
       autocomplete="off"
       enctype="multipart/form-data"
-      @submit="submitHandler"
+      @submit.prevent="submitHandler"
     >
       <TabbedContent :isLoading="isLoading">
         <TabbedContentTab :label="basicInfoLabeel" id="basic-info">
           <LeaveRequestsFormBasicInfoTab
+            v-model:userId="userId"
             v-model:leaveTypeId="leaveTypeId"
             v-model:startDate="startDate"
             v-model:endDate="endDate"
-            v-model:status="status"
             v-model:reason="reason"
             v-model:requestTo="requestTo"
-            :errors="errors"
           />
         </TabbedContentTab>
       </TabbedContent>

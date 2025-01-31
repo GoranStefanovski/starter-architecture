@@ -1,10 +1,8 @@
 <script lang="ts" setup>
-  import { IconMail } from "@starter-core/icons";
-  import { useI18n } from "vue-i18n";
-  import { FormInput, FormSwitch } from "@starter-core/dash-ui/src";
-  import { ref, onMounted } from "vue";
   import axios from "axios";
-  import 'v-calendar/style.css';
+  import { ref, onMounted, computed } from "vue";
+  import { useI18n } from "vue-i18n";
+  import { FormInput } from "@starter-core/dash-ui/src";
 
   const { t } = useI18n();
   const leaveTypes = ref([]);
@@ -13,7 +11,6 @@
   const leaveTypeId = defineModel("leaveTypeId", { required: true, type: Number });
   const startDate = defineModel("startDate", { required: true, type: Date });
   const endDate = defineModel("endDate", { required: true, type: Date });
-  const status = defineModel("status", { required: true, type: String });
   const reason = defineModel("reason", { required: true, type: String });
   const requestTo = defineModel("requestTo", { required: true, type: String });
 
@@ -60,12 +57,6 @@
   <div class="kt-section">
     <div class="kt-section__body">
       <h3 class="kt-section__title kt-section__title-lg">Request:</h3>
-      <form-input
-        v-model="status"
-        name="status"
-        :label="t('leaveRequests.status.label')"
-        is-inline
-      />
       <form-input
         v-model="reason"
         name="reason"

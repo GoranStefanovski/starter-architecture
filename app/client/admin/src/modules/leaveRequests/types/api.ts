@@ -7,10 +7,10 @@ export interface GetLeaveRequestResponse {
   leave_type_id: number;
   start_date: Date;
   end_date: Date;
-  status: string;
+  status: number;
   reason: string;
-  request_to: string;
-  approved_by: string;
+  request_to: number;
+  approved_by: number;
 }
 
 export interface UsersTableResponse {

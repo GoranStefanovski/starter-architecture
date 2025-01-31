@@ -3,40 +3,36 @@
 namespace App\Applications\LeaveRequest\DTO;
 
 use App\Applications\LeaveRequest\Model\LeaveRequest;
-use Date;
 use Illuminate\Http\Request;
 
 class LeaveRequestDTO
 {
     public int $user_id;
     public int $leave_type_id;
-    public Date $start_date;
-    public ?Date $end_date;
-    public string $status;
+    public string $start_date;
+    public ?string $end_date;
     public ?string $reason;
     public int $request_to;
-    public ?int $approved_by;
+    public int $status;
     public int $id;
 
     public function __construct(
         int $user_id = 0,
         int $leave_type_id = 0,
-        Date $start_date,
-        ?Date $end_date,
-        string $status,
+        string $start_date,
+        ?string $end_date,
         ?string $reason,
         int $request_to,
-        int $approved_by,
+        int $status = 0,
         int $id = 0
     ) {
         $this->user_id = $user_id;
         $this->leave_type_id = $leave_type_id;
         $this->start_date = $start_date;
         $this->end_date = $end_date;
-        $this->status = $status;
         $this->reason = $reason;
         $this->request_to = $request_to;
-        $this->approved_by = $approved_by;
+        $this->status = $status;
         $this->id = $id;
     }
 
@@ -47,10 +43,9 @@ class LeaveRequestDTO
             $request->input('leave_type_id'),
             $request->input('start_date'),
             $request->input('end_date'),
-            $request->input('status'),
             $request->input('reqson'),
             $request->input('request_to'),
-            $request->input('approved_by'),
+            $request->input('status'),
             $request->input('id', 0),
         );
     }
@@ -62,10 +57,9 @@ class LeaveRequestDTO
             $request->input('leave_type_id'),
             $request->input('start_date'),
             $request->input('end_date'),
-            $request->input('status'),
             $request->input('reason'),
             $request->input('request_to'),
-            $request->input('approved_by'),
+            status: 0,
             id: 0,
         );
     }
@@ -77,11 +71,10 @@ class LeaveRequestDTO
             $leaveRequest->leave_type_id,
             $leaveRequest->start_date,
             $leaveRequest->end_date,
-            $leaveRequest->status,
             $leaveRequest->reason,
             $leaveRequest->request_to,
-            $leaveRequest->leaveRequest,
-
+            $leaveRequest->status,
+            $leaveRequest->id
         );
     }
 
@@ -93,14 +86,13 @@ class LeaveRequestDTO
     public function toArray(): array
     {
         return [
-            'id' => $this->id,
             'leave_type_id' => $this->leave_type_id,
             'start_date' => $this->start_date,
             'end_date' => $this->end_date,
-            'status' => $this->status,
             'reason' => $this->reason,
             'request_to' => $this->request_to,
-            'approved_by' => $this->approved_by,
+            'status' => $this->status,
+            'id' => $this->id,
         ];
     }
 

@@ -54,21 +54,4 @@ class LeaveRequest extends Model
     protected $appends = [
     ];
 
-    // Link to the user who made the request
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-
-    // Link to the leave type
-    public function leaveType()
-    {
-        return $this->belongsTo(LeaveType::class);
-    }
-
-    // Link to the approver (optional, if an admin approves requests)
-    public function approver()
-    {
-        return $this->belongsTo(User::class, 'approved_by');
-    }
 }

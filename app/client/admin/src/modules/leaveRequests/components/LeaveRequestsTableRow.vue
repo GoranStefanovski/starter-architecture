@@ -26,15 +26,19 @@
     <!--kt-datatable__row&#45;&#45;even-->
 
     <TableColumn>
-      {{ leaveRequest.slug }}
+      {{ leaveRequest.reason }}
     </TableColumn>
 
     <TableColumn>
-      {{ leaveRequest.name }}
+      {{ leaveRequest.start_date }}
     </TableColumn>
 
     <TableColumn>
-      <UserStatusBadge :is-paid="leaveRequest.is_paid" />
+      {{ leaveRequest.end_date ? leaveRequest.end_date : 'Single Day' }}
+    </TableColumn>
+
+    <TableColumn>
+      {{ leaveRequest.status }}
     </TableColumn>
 
     <TableColumn>

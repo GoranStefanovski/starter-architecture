@@ -40,7 +40,6 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
     public function create(LeaveRequestDTO $leaveRequestDTO): LeaveRequest
     {
         $attributes = $leaveRequestDTO->toArray();
-
         $leaveRequest = new LeaveRequest($attributes);
         $leaveRequest->save();
 
