@@ -1,0 +1,50 @@
+<?php
+
+namespace App\Applications\LeaveRequest\Services;
+
+use App\Applications\LeaveRequest\DTO\LeaveRequestDTO;
+use Illuminate\Http\Request;
+
+/**
+ * Interface LeaveRequestServiceInterface
+ * @package App\Applications\LeaveRequest
+ */
+
+interface LeaveRequestServiceInterface
+{
+    /**
+     * @return array
+     */
+    public function getAll(): array;
+
+    /**
+     * @param integer $id
+     * @return LeaveRequestDTO
+     */
+    public function get(int $id): LeaveRequestDTO;
+
+    /**
+     * @param LeaveRequestDTO $leaveRequestData
+     * @return LeaveRequestDTO
+     */
+    public function create(LeaveRequestDTO $leaveRequestData): LeaveRequestDTO;
+
+    /**
+     * @param int $leaveTypeId
+     * @param LeaveRequestDTO $leaveRequestData
+     * @return LeaveRequestDTO
+     */
+    public function update(int $leaveTypeId, LeaveRequestDTO $leaveRequestData): LeaveRequestDTO;
+
+    /**
+     * @param integer $id
+     * @return boolean
+     */
+    public function delete(int $id);
+
+    /**
+     * @param array $data
+     * @return array
+     */
+    public function draw(array $data): array;
+}

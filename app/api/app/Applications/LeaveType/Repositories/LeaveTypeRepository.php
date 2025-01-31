@@ -19,11 +19,9 @@ class LeaveTypeRepository implements LeaveTypeRepositoryInterface
     }
 
     private const COLUMNS_MAP = [
-        'first_name' => 'users.first_name',
-        'last_name' => 'users.last_name',
-        'email' => 'users.email',
-        'roles' => 'roles.id',
-        'status' => 'users.is_disabled'
+        'slug' => 'leave_types.slug',
+        'name' => 'leave_types.name',
+        'is_paid' => 'leave_types.is_paid'
     ];
 
     public function getAll(): array

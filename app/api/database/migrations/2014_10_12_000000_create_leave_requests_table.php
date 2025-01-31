@@ -19,6 +19,7 @@ return new class extends Migration
             $table->date('end_date');
             $table->string('status')->default('pending');
             $table->text('reason')->nullable();
+            $table->string('request_to');
             $table->foreignId('approved_by');
             $table->softDeletes();
             $table->timestamps();
