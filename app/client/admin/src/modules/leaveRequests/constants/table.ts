@@ -1,16 +1,22 @@
 import { DatatableColumns } from "@starter-core/dash-ui/src";
 
-export const LEAVE_TYPES_DATATABLE_COLUMNS: DatatableColumns = [
+export const LEAVE_REQUESTS_DATATABLE_COLUMNS: DatatableColumns = [
   {
     id: 0,
-    label: "leaveTypes.datatable.slug",
+    label: "leaveRequests.datatable.slug",
     name: "slug",
     sortable: false,
   },
   {
     id: 1,
-    label: "leaveTypes.datatable.name",
+    label: "leaveRequests.datatable.name",
     name: "name",
+    sortable: true,
+  },
+  {
+    id: 2,
+    label: "leaveRequests.datatable.is_paid",
+    name: "is_paid",
     sortable: true,
   },
   {

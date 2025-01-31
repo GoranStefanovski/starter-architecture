@@ -12,12 +12,6 @@
           </a>
         </div>
         <router-view />
-        <div class="auth-base__account">
-          <span class="auth-base__account-msg">
-            Don't have an account yet ?
-          </span>
-          <a class="auth-base__account-link">Sign Up!</a>
-        </div>
       </div>
     </div>
   </div>

@@ -2,8 +2,9 @@
   import { IconTrash, IconEdit } from "@starter-core/icons";
   import { useAuth } from "@websanova/vue-auth/src/v3.js";
   import { computed } from "vue";
-  import type { GetLeaveTypeResponse } from "../types";
-
+  import type { GetLeaveRequestResponse } from "../types";
+  import UserRoleBadge from "./UserRoleBadge.vue";
+  import UserStatusBadge from "./UserStatusBadge.vue";
   import {
     DashButton,
     DashLink,
@@ -11,12 +12,12 @@
     TableRow,
   } from "@starter-core/dash-ui/src";
 
-  interface LeaveTypesTableRowProps {
-    leaveType: GetLeaveTypeResponse;
+  interface LeaveRequestsTableRowProps {
+    leaveRequest: GetLeaveRequestResponse;
     isEvenRow: boolean;
   }
 
-  const { leaveType, isEvenRow } = defineProps<LeaveTypesTableRowProps>();
+  const { leaveRequest, isEvenRow } = defineProps<LeaveRequestsTableRowProps>();
   const auth = useAuth();
 </script>
 
@@ -25,35 +26,27 @@
     <!--kt-datatable__row&#45;&#45;even-->
 
     <TableColumn>
-      {{ leaveType.slug }}
+      {{ leaveRequest.slug }}
     </TableColumn>
 
     <TableColumn>
-      {{ leaveType.name }}
+      {{ leaveRequest.name }}
+    </TableColumn>
+
+    <TableColumn>
+      <UserStatusBadge :is-paid="leaveRequest.is_paid" />
     </TableColumn>
 
     <TableColumn>
       <dash-link
-        v-if="auth.user().permissions_array.includes('write_users')"
-        :to="{ name: 'edit.leave_type', params: { leaveTypeId: leaveType.id } }"
+        v-if="auth.user().permissions_array.includes('write_requests')"
+        :to="{ name: 'edit.leave_request', params: { leaveRequestId: leaveRequest.id } }"
         theme="primary"
         theme-mod="outline-hover"
         :icon="IconEdit"
       >
         {{ $t("buttons.edit") }}
       </dash-link>
-    </TableColumn>
-
-    <TableColumn>
-      <DashButton
-        v-if="auth.user().permissions_array.includes('delete_users')"
-        :icon="IconTrash"
-        theme="danger"
-        size="sm"
-        onclick="deleteLeaveType(leaveType, leaveType.id)"
-        is-pill
-        is-icon
-      />
     </TableColumn>
   </TableRow>
 </template>

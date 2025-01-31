@@ -171,6 +171,8 @@ return [
 
         // Load module service providers before the RouteServiceProvider
         App\Applications\User\Providers\UserServiceProvider::class,
+        App\Applications\LeaveType\Providers\LeaveTypeServiceProvider::class,
+        App\Applications\LeaveRequest\Providers\LeaveRequestServiceProvider::class,
         App\Applications\Navigation\Providers\NavigationServiceProvider::class,
 
         // Load the RouteServiceProvider last because it has the any route redirect

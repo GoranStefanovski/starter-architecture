@@ -10,16 +10,18 @@ class LeaveTypeDTO
     public string $name;
     public string $slug;
     public bool $is_paid;
-
+    public int $id;
 
     public function __construct(
         string $name,
         string $slug,
         bool $is_paid = false,
+        int $id = 0,
     ) {
         $this->name = $name;
         $this->slug = $slug;
         $this->is_paid = $is_paid;
+        $this->id = $id;
     }
 
     public static function fromRequest(Request $request): self
@@ -28,6 +30,7 @@ class LeaveTypeDTO
             $request->input('name'),
             $request->input('slug'),
             (bool) $request->input('is_paid', false),
+            $request->input('id', 0),
         );
     }
 
@@ -36,7 +39,8 @@ class LeaveTypeDTO
         return new self(
             $request->input('name'),
             $request->input('slug'),
-            is_paid: false
+            is_paid: false,
+            id: 0,
         );
     }
 
@@ -46,6 +50,7 @@ class LeaveTypeDTO
             $leaveType->name,
             $leaveType->slug,
             (bool) $leaveType->is_paid,
+            $leaveType->id,
 
         );
     }
@@ -61,6 +66,7 @@ class LeaveTypeDTO
             'name' => $this->name,
             'slug' => $this->slug,
             'is_disabled' => $this->is_paid,
+            'id' => $this->id,
         ];
     }
 

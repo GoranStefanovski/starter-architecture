@@ -11,16 +11,16 @@
     PAGE_WRAPPER_SLOTS,
     SubheaderTitle,
   } from "../../../components";
-  import { LeaveTypeFormBasicInfoTab } from "../components";
-  import { useLeaveTypesForm } from "../composables";
-  import type { LeaveTypeFormItem } from "../types";
+  import { LeaveRequestsFormBasicInfoTab } from "../components";
+  import { useLeaveRequestsForm } from "../composables";
+  import type { LeaveRequestFormItem } from "../types";
   import { DashButton, DashLink } from "@starter-core/dash-ui/src";
 
   const { t } = useI18n();
   const basicInfoLabeel = t("users.basic.information");
   const route = useRoute();
-  const isEditPage = computed(() => route.name == "edit.leave_type");
-  const leaveTypeId = Number(route.params.leaveTypeId);
+  const isEditPage = computed(() => route.name == "edit.leave_request");
+  const leaveRequestId = Number(route.params.leaveRequestId);
 
   const validationSchema = {
     name(value: string) {
@@ -32,20 +32,20 @@
   const {
     isLoading,
     data: formData,
-    createLeaveType,
-    updateLeaveType,
-  } = useLeaveTypesForm(leaveTypeId);
+    createLeaveRequest,
+    updateLeaveRequest,
+  } = useLeaveRequestsForm(leaveRequestId);
 
   const { handleSubmit, errors, setValues, defineField } =
-    useForm<LeaveTypeFormItem>({
+    useForm<LeaveRequestFormItem>({
       validationSchema,
     });
 
   const submitHandler = handleSubmit((values) => {
     if (isEditPage.value) {
-      updateLeaveType(values);
+      updateLeaveRequest(values);
     } else {
-      createLeaveType(values);
+      createLeaveRequest(values);
     }
   });
 
@@ -53,16 +53,26 @@
     if (formData.value) {
       setValues({
         id: formData.value.id,
-        slug: formData.value.slug,
-        name: formData.value.name,
-        is_paid: formData.value.is_paid,
+        user_id: formData.value.user_id,
+        leave_type_id: formData.value.leave_type_id,
+        start_date: formData.value.start_date,
+        end_date: formData.value.end_date,
+        status: formData.value.status,
+        reason: formData.value.reason,
+        request_to: formData.value.request_to,
+        approved_by: formData.value.approved_by,
       });
     }
   }, [formData]);
 
-  const [slug] = defineField("slug");
-  const [name] = defineField("name");
-  const [isPaid] = defineField("is_paid");
+  const [userId] = defineField("user_id");
+  const [leaveTypeId] = defineField("leave_type_id");
+  const [startDate] = defineField("start_date");
+  const [endDate] = defineField("end_date");
+  const [status] = defineField("status");
+  const [reason] = defineField("reason");
+  const [requestTo] = defineField("request_to");
+  const [approvedBy] = defineField("approved_by");
 </script>
 
 <template>
@@ -73,7 +83,7 @@
       />
     </template>
     <template #[PAGE_WRAPPER_SLOTS.subheaderToolbox]>
-      <DashLink to="/admin/leave_types" :icon="IconArrowleft" theme="clean">
+      <DashLink to="/admin/leave_requests" :icon="IconArrowleft" theme="clean">
         {{ t("buttons.back") }}
       </DashLink>
       <DashButton
@@ -92,10 +102,15 @@
     >
       <TabbedContent :isLoading="isLoading">
         <TabbedContentTab :label="basicInfoLabeel" id="basic-info">
-          <LeaveTypeFormBasicInfoTab
-            v-model:isPaid="isPaid"
-            v-model:name="name"
-            v-model:slug="slug"
+          <LeaveRequestsFormBasicInfoTab
+            v-model:userId="userId"
+            v-model:leaveTypeId="leaveTypeId"
+            v-model:startDate="startDate"
+            v-model:endDate="endDate"
+            v-model:status="status"
+            v-model:reason="reason"
+            v-model:requestTo="requestTo"
+            v-model:approvedBy="approvedBy"
             :errors="errors"
           />
         </TabbedContentTab>

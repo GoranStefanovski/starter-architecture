@@ -11,7 +11,7 @@
       is-pill
     >
       {{
-        isPaid ? 'Unpaid' : 'Paid'
+        isPaid ? $t("users.status.disabled") : $t("users.status.enabled")
       }}
     </BadgeComponent>
   </span>

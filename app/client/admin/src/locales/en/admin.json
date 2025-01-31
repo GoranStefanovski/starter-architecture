@@ -6,12 +6,12 @@
     "public": "Public Users",
     "add": "Add user"
   },
-  "requests": {
-    "main": "Requests",
-    "add": "New Request"
-  },
   "leave_types": {
     "main": "Leave Types",
     "add": "New Leave Type"
+  },
+  "leave_requests": {
+    "main": "Leave Requests",
+    "add": "New Request"
   }
 }

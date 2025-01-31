@@ -36,8 +36,14 @@ class HomeController extends Controller
             ],
             [
                 'label' => 'admin.leave_types.main',
-                'name' => 'item_requests',
+                'name' => 'item_types',
                 'route' => 'leave_types',
+                'permission' => UserPermissions::WRITE_USERS,
+            ],
+            [
+                'label' => 'admin.leave_requests.main',
+                'name' => 'item_requests',
+                'route' => 'leave_requests',
                 'permission' => UserPermissions::READ_REQUESTS,
             ]
         ];

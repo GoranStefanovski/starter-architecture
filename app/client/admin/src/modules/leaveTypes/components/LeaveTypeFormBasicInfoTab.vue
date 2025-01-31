@@ -35,13 +35,13 @@
       <form-input
         v-model="slug"
         name="slug"
-        :label="t('leaveTpyes.last_name.label')"
+        :label="t('leaveTleaveTypes.last_name.label')"
         is-inline
       />
       <form-input
         v-model="name"
         name="name"
-        :label="t('leaveTpyes.first_name.label')"
+        :label="t('leaveTleaveTypes.first_name.label')"
         is-inline
       />
     </div>

@@ -5,9 +5,9 @@ import { useToast } from "vue-toastification";
 import { LEAVE_TYPE_API_ENDPOINTS } from "../constants";
 import type { LeaveTypeFormItem, GetLeaveTypeResponse } from "../types";
 
-const LEAVE_TYPE_CACHE_KEY = "user";
+const LEAVE_TYPE_CACHE_KEY = "leave_type";
 
-export const useUsersForm = (leaveTypeId?: number) => {
+export const useLeaveTypesForm = (leaveTypeId?: number) => {
   const queryClient = useQueryClient();
   const toast = useToast();
 

@@ -11,6 +11,7 @@ export const useUsersForm = (userId?: number) => {
   const queryClient = useQueryClient();
   const toast = useToast();
 
+  console.log(userId)
   const { isLoading: isFetching, data: queryData } = useQuery({
     queryKey: [USER_CACHE_KEY, userId],
     queryFn: async (): Promise<GetUserResponse> => {

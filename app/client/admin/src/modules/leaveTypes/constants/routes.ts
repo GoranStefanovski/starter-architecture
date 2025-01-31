@@ -21,7 +21,7 @@ export const LEAVE_TYPE_ROUTES_DATA: ModulesRoutesData<LeaveTypesRoutes> = {
   },
   edit: {
     path: "leave_type/:leaveTypeId",
-    name: "edit.leaveType",
+    name: "edit.leave_type",
     translationKey: "leave_types.edit_leave_types",
   },
 
