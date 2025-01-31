@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('slug');
-            $table->boolean('is_paid');
+            $table->boolean('is_paid')->default(0);
             $table->softDeletes();
             $table->timestamps();
         });

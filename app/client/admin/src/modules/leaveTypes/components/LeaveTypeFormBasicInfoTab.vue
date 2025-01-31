@@ -6,7 +6,7 @@
   const { t } = useI18n();
   const slug = defineModel("slug", { required: true, type: String });
   const name = defineModel("name", { required: true, type: String });
-  const isPaid = defineModel("is_paid", { required: true, type: Boolean });
+  const isPaid = defineModel("isPaid", { required: true, type: Boolean });
 </script>
 <template>
 <div class="kt-section kt-section--first">
@@ -17,10 +17,10 @@
       <form-switch
         v-model="isPaid"
         id="enabled"
-        theme="danger"
+        :theme="isPaid ? 'success' : 'danger'"
         type="outline"
         :label="t('users.status.label')"
-        :helper-text="`Leave Type is  ${isPaid ? 'disabled' : 'enabled'}`"
+        :helper-text="`Leave Type is  ${isPaid ? 'Paid' : 'Unpaid'}`"
       />
     </div>
   </div>

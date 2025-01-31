@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
-use App\Applications\LeaveType\Controllers\LeaveTypeController;
+use App\Applications\LeaveRequest\Controllers\LeaveRequestController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,13 +20,13 @@ Route::group([
     Route::group([
         'prefix' => 'leave_request',
     ], function () {
-        Route::get('all', [LeaveTypeController::class, 'getAll']);
-        Route::get('draw', [LeaveTypeController::class, 'draw']);
+        Route::get('all', [LeaveRequestController::class, 'getAll']);
+        Route::get('draw', [LeaveRequestController::class, 'draw']);
 
         // CRUD ROUTES
-        Route::post('create', [LeaveTypeController::class, 'create']);
-        Route::get('{id}', [LeaveTypeController::class, 'get']);
-        Route::patch('{id}', [LeaveTypeController::class, 'update']);
-        Route::delete('{id}', [LeaveTypeController::class, 'delete']);
+        Route::post('create', [LeaveRequestController::class, 'create']);
+        Route::get('{id}', [LeaveRequestController::class, 'get']);
+        Route::patch('{id}', [LeaveRequestController::class, 'update']);
+        Route::delete('{id}', [LeaveRequestController::class, 'delete']);
     });
 });

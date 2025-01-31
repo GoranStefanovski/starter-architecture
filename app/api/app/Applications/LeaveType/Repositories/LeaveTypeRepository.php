@@ -41,7 +41,6 @@ class LeaveTypeRepository implements LeaveTypeRepositoryInterface
 
         $user = new LeaveType($attributes);
         $user->save();
-
         return $user;
     }
 
