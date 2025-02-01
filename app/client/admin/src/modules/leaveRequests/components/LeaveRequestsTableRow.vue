@@ -19,6 +19,18 @@
 
   const { leaveRequest, isEvenRow } = defineProps<LeaveRequestsTableRowProps>();
   const auth = useAuth();
+
+  const isConfrirmed = (() => {
+    if (leaveRequest.is_confirmed) {
+      if (leaveRequest.is_confirmed == 2) {
+        return "Approved"
+      } else if (leaveRequest.is_confirmed == 1) {
+        return "Declined"
+      } else {
+        return "Pending"
+      }
+    } 
+  });
 </script>
 
 <template>
@@ -26,7 +38,7 @@
     <!--kt-datatable__row&#45;&#45;even-->
 
     <TableColumn>
-      {{ leaveRequest.reason ? leaveRequest.reason : '-' }}
+      {{ isConfrirmed() }}
     </TableColumn>
 
     <TableColumn>

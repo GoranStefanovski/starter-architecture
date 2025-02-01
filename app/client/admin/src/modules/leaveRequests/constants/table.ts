@@ -3,8 +3,8 @@ import { DatatableColumns } from "@starter-core/dash-ui/src";
 export const LEAVE_REQUESTS_DATATABLE_COLUMNS: DatatableColumns = [
   {
     id: 0,
-    label: "Reason",
-    name: "reason",
+    label: "Status",
+    name: "status",
     sortable: false,
   },
   {

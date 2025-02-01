@@ -11,6 +11,7 @@ use App\Applications\LeaveRequest\Mail\LeaveRequestDeclining;
 use App\Applications\Pagination\StarterPaginator;
 use App\Applications\LeaveRequest\Model\LeaveRequest;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * @property LeaveRequest $leaveRequest
@@ -79,11 +80,8 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
 
     public function draw($data): StarterPaginator
     {
-        //        $paginatedUsers = $this->prepareDatatableQuery($data, [User::ADMIN, User::EDITOR, User::COLLABORATOR]);
-
+        $user = Auth::user();
         $query = $this->leaveRequest->query();
-
-        // $query->whereIn('roles.name', $roles);
 
         if (array_key_exists($data['column'], self::COLUMNS_MAP)) {
             $query->orderBy(self::COLUMNS_MAP[$data['column']], $data['dir']);
