@@ -43,7 +43,7 @@
           :value="option.id"
           :disabled="option.isDisabled"
         >
-          {{ option.first_name }}
+          {{ option.first_name + ' ' + option.last_name }}
         </option>
       </select>
       <div v-if="errors?.length" class="form-dropdown__error">

@@ -76,6 +76,43 @@ class LeaveRequestController extends Controller
     }
 
     /**
+     * Approve request
+     *
+     * @param  Request  $request
+     * @return JsonResponse
+     */
+    public function approve(Request $request): JsonResponse
+    { 
+        $leaveRequestId = Route::current()->parameter('id');
+        $statusConfirmed = 2;
+        $dto = LeaveRequestDTO::fromRequest($request);
+        $leaveRequestDTO = $this->leaveRequestService->approve(
+            $leaveRequestId,
+            leaveRequestData: $dto,
+            isConfirmed: $statusConfirmed
+        );
+        return response()->json($leaveRequestDTO);
+    }
+
+    /**
+     * Decline Request
+     *
+     * @param  Request  $request
+     * @return JsonResponse
+     */
+    public function decline(Request $request): JsonResponse
+    { 
+        $leaveRequestId = Route::current()->parameter('id');
+        $statusConfirmed = 1;
+        $dto = LeaveRequestDTO::fromRequest($request);
+        $leaveRequestDTO = $this->leaveRequestService->decline(
+            $leaveRequestId,
+            leaveRequestData: $dto,
+            isConfirmed: $statusConfirmed
+        );
+        return response()->json($leaveRequestDTO);
+    }
+    /**
      * Delete user
      *
      * @return string

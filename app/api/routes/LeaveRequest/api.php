@@ -25,6 +25,8 @@ Route::group([
 
         // CRUD ROUTES
         Route::post('create', [LeaveRequestController::class, 'create']);
+        Route::post('{id}/approve', [LeaveRequestController::class, 'approve']);
+        Route::post('{id}/decline', [LeaveRequestController::class, 'decline']);
         Route::get('{id}', [LeaveRequestController::class, 'get']);
         Route::patch('{id}', [LeaveRequestController::class, 'update']);
         Route::delete('{id}', [LeaveRequestController::class, 'delete']);

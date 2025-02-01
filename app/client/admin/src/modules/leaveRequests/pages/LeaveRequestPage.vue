@@ -31,6 +31,8 @@
     data: formData,
     createLeaveRequest,
     updateLeaveRequest,
+    approveLeaveRequest,
+    declineLeaveRequest,
   } = useLeaveRequestsForm(leaveRequestId);
 
   const { handleSubmit, setValues, defineField } =
@@ -43,6 +45,14 @@
     } else {
       createLeaveRequest(values);
     }
+  });
+
+  const approve = handleSubmit((values) => {
+      approveLeaveRequest(values);
+  });
+
+  const decline = handleSubmit((values) => {
+      declineLeaveRequest(values);
   });
 
   onMounted(() => {
@@ -66,6 +76,7 @@
         end_date: formatDate(formData.value.end_date),
         reason: formData.value.reason,
         request_to: formData.value.request_to,
+        is_confirmed: formData.value.is_confirmed
       });
     }
   }, [formData]);
@@ -76,6 +87,7 @@
   const [endDate] = defineField("end_date");
   const [reason] = defineField("reason");
   const [requestTo] = defineField("request_to");
+  const [isConfirmed] = defineField("is_confirmed");
 </script>
 
 <template>
@@ -85,26 +97,17 @@
         title="Request"
       />
     </template>
-    <template #[PAGE_WRAPPER_SLOTS.subheaderToolbox]>
+    <template v-if="!isApprovePage" #[PAGE_WRAPPER_SLOTS.subheaderToolbox]>
       <DashLink v-if="!isApprovePage" to="/admin/leave_requests" :icon="IconArrowleft" theme="clean">
         {{ t("buttons.back") }}
       </DashLink>
       <DashButton
-        v-if="isApprovePage"
         type="submit"
         :icon="IconSave"
         :loading="isLoading"
         @click="submitHandler"
       >
-        {{ "Decline" }}
-      </DashButton>
-      <DashButton
-        type="submit"
-        :icon="IconSave"
-        :loading="isLoading"
-        @click="submitHandler"
-      >
-        {{ !isApprovePage ? t("buttons.save") : "Approve" }}
+        {{ t("buttons.save") }}
       </DashButton>
     </template>
     <form
@@ -133,7 +136,39 @@
             v-model:requestTo="requestTo"
           />
         </TabbedContentTab>
+        <div v-if="(isConfirmed == 0 || isConfirmed == 1) && isApprovePage" class="confirmation_btn_wrapper">
+          <span class="req_btn approve" @click="approve">
+            Approve
+          </span>
+          <span class="req_btn decline" @click="decline">
+            Decline
+          </span>
+        </div>
       </TabbedContent>
     </form>
   </PageWrapper>
 </template>
+<style scoped lang="scss">
+  .confirmation_btn_wrapper {
+    display: flex;
+  }
+  .req_btn {
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 10px 15px;
+
+    &:hover{
+      cursor: pointer;
+    }
+  }
+
+  .approve {
+    background-color: green;
+    margin-right: 8px;
+  }
+
+  .decline {
+    background-color: red;
+  }
+</style>

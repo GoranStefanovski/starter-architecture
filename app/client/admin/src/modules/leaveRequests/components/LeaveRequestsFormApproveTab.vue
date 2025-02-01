@@ -46,17 +46,19 @@
 <template>
   <div class="kt-section">
     <div class="kt-section__body">
-      <leave-requests-dropdown v-model:model="requestTo" :optionsData="managers" :readonly="true"/>
+      <leave-requests-dropdown class="noClick" v-model:model="requestTo" :optionsData="managers" :readonly="true"/>
       
-      <leave-requests-dropdown-types v-model:model="leaveTypeId" :optionsData="leaveTypes" :readonly="true"/>
+      <leave-requests-dropdown-types class="noClick" v-model:model="leaveTypeId" :optionsData="leaveTypes" :readonly="true"/>
 
-      <form-input
-        aria-readonly="true"
-        v-model="reason"
-        name="reason"
-        label="Reason (optional)"
-        is-inline
-      />
+      <div class="form-group form-input form-group--inline" readonly>
+        <div class="form-group__column form-group__column--left form-group__column--inline">
+          <label class="form-group__label" for="reason">Reason (optional)</label>
+        </div>
+        <div class="form-group__column form-group__column--right form-group__column--inline">
+          <input name="reason" readonly class="form-input__input form-input__input--inline" type="text" v-model="reason">
+        </div>
+      </div>
+      
       <div class="dates_wrapper">
         <div class="dates_from">
           <label class="form-group__label" for="startDate">Start date:</label>
@@ -80,5 +82,9 @@
     .dates_from {
       margin-right: 100px;
     }
+  }
+
+  .noClick {
+    pointer-events: none;
   }
 </style>

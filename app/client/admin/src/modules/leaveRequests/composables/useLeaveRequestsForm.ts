@@ -50,6 +50,40 @@ export const useLeaveRequestsForm = (leaveRequestId?: number) => {
     },
   });
 
+  const { mutate: approveLeaveRequest, isPending: isConfrirming } = useMutation({
+    mutationFn: async (data: LeaveRequestFormItem): Promise<GetLeaveRequestResponse> => {
+      const response = await axios.post(
+        LEAVE_REQUEST_API_ENDPOINTS.approve(leaveRequestId ?? 0),
+        data,
+      );
+      return response.data;
+    },
+    onSuccess: async () => {
+      queryClient.invalidateQueries({ queryKey: [LEAVE_REQUEST_CACHE_KEY, leaveRequestId] });
+      toast.success("Leave Request updated!");
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+
+  const { mutate: declineLeaveRequest, isPending: isDeclining } = useMutation({
+    mutationFn: async (data: LeaveRequestFormItem): Promise<GetLeaveRequestResponse> => {
+      const response = await axios.post(
+        LEAVE_REQUEST_API_ENDPOINTS.decline(leaveRequestId ?? 0),
+        data,
+      );
+      return response.data;
+    },
+    onSuccess: async () => {
+      queryClient.invalidateQueries({ queryKey: [LEAVE_REQUEST_CACHE_KEY, leaveRequestId] });
+      toast.success("Leave Request updated!");
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+
 
   const data = computed(() => queryData.value);
 
@@ -57,6 +91,8 @@ export const useLeaveRequestsForm = (leaveRequestId?: number) => {
     data,
     createLeaveRequest,
     updateLeaveRequest,
-    isLoading: isFetching || isUpdating || isCreating,
+    approveLeaveRequest,
+    declineLeaveRequest,
+    isLoading: isFetching || isUpdating || isCreating || isConfrirming || isDeclining,
   };
 };
