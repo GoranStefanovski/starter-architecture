@@ -54,6 +54,7 @@ class DatabaseSeeder extends Seeder
         Permission::create(['name' => UserPermissions::WRITE_USERS]);
         Permission::create(['name' => UserPermissions::DELETE_USERS]);
         Permission::create(['name' => UserPermissions::READ_REQUESTS]);
+        Permission::create(['name' => UserPermissions::APPROVE_REQUESTS]);
         Permission::create(['name' => UserPermissions::WRITE_REQUESTS]);
         Permission::create(['name' => UserPermissions::DELETE_REQUESTS]);
         Permission::create(['name' => UserPermissions::DASHBOARD_VIEW]);
@@ -62,7 +63,7 @@ class DatabaseSeeder extends Seeder
 
         $roleAdmin = Role::create(['name' => UserRoles::ADMIN])->givePermissionTo(Permission::all());
         
-        $roleManager = Role::create(['name' => UserRoles::MANAGER])->givePermissionTo([UserPermissions::DASHBOARD_VIEW, UserPermissions::READ_USERS, UserPermissions::READ_REQUESTS, UserPermissions::WRITE_REQUESTS]);
+        $roleManager = Role::create(['name' => UserRoles::MANAGER])->givePermissionTo([UserPermissions::DASHBOARD_VIEW, UserPermissions::READ_USERS, UserPermissions::READ_REQUESTS, UserPermissions::WRITE_REQUESTS, UserPermissions::APPROVE_REQUESTS]);
         
         $roleDeveloper = Role::create(['name' => UserRoles::DEVELOPER])->givePermissionTo([UserPermissions::DASHBOARD_VIEW, UserPermissions::READ_REQUESTS, UserPermissions::WRITE_REQUESTS, UserPermissions::DELETE_REQUESTS]);
         

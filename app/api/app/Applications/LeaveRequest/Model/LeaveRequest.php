@@ -26,7 +26,8 @@ class LeaveRequest extends Model
         'status',
         'reason',
         'request_to',
-        'approved_by',
+        'confirmed_by',
+        'is_confirmed'
     ];
 
     /**

@@ -18,9 +18,10 @@ return new class extends Migration
             $table->string('start_date');
             $table->string('end_date')->nullable();
             $table->integer('status')->nullable()->default(0);
-            $table->string('reason')->nullable();
+            $table->string('reason')->nullable()->default("-");
             $table->string('request_to');
-            $table->integer('approved_by')->nullable()->default(null);
+            $table->integer('confirmed_by')->nullable();
+            $table->integer('is_confirmed')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

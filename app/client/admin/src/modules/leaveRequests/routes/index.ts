@@ -17,7 +17,7 @@ const LeaveRequestPage = () =>
     "../pages/LeaveRequestPage.vue"
   );
 
-const { add, main, edit } = LEAVE_REQUEST_ROUTES_DATA;
+const { add, main, edit, approve } = LEAVE_REQUEST_ROUTES_DATA;
 
 export const LeaveRequestsRoutes: RouteRecordRaw[] = [
   {
@@ -49,6 +49,17 @@ export const LeaveRequestsRoutes: RouteRecordRaw[] = [
       title: t(edit.translationKey, null),
       auth: {
         roles: [USER_PERMISSIONS.writeRequests],
+      },
+    },
+  },
+  {
+    path: approve.path,
+    name: approve.name,
+    component: LeaveRequestPage,
+    meta: {
+      title: t(edit.translationKey, null),
+      auth: {
+        roles: [USER_PERMISSIONS.approveRequests],
       },
     },
   },

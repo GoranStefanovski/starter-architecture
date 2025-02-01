@@ -7,5 +7,6 @@ export interface UserRecord {
   status: number;
   reason: string;
   request_to: number;
-  approved_by: number;
+  confirmed_by: number;
+  is_confirmed: number;
 }

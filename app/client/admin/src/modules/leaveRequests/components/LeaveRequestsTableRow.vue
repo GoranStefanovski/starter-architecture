@@ -26,7 +26,7 @@
     <!--kt-datatable__row&#45;&#45;even-->
 
     <TableColumn>
-      {{ leaveRequest.reason }}
+      {{ leaveRequest.reason ? leaveRequest.reason : '-' }}
     </TableColumn>
 
     <TableColumn>

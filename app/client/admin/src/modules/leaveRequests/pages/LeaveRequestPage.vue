@@ -12,7 +12,7 @@
     PAGE_WRAPPER_SLOTS,
     SubheaderTitle,
   } from "../../../components";
-  import { LeaveRequestsFormBasicInfoTab } from "../components";
+  import { LeaveRequestsFormBasicInfoTab, LeaveRequestsFormApproveTab } from "../components";
   import { useLeaveRequestsForm } from "../composables";
   import type { LeaveRequestFormItem } from "../types";
   import { DashButton, DashLink } from "@starter-core/dash-ui/src";
@@ -21,14 +21,8 @@
   const basicInfoLabeel = t("users.basic.information");
   const route = useRoute();
   const isEditPage = computed(() => route.name == "edit.leave_request");
+  const isApprovePage = computed(() => route.name == "approve.leave_request");
   const leaveRequestId = Number(route.params.leaveRequestId);
-
-  const validationSchema = {
-    reason(value: string) {
-      if (value?.length >= 5) return true;
-      return "Name needs to be at least 5 characters.";
-    },
-  };
 
   const auth = useAuth();
 
@@ -41,7 +35,6 @@
 
   const { handleSubmit, setValues, defineField } =
     useForm<LeaveRequestFormItem>({
-      validationSchema,
     });
 
   const submitHandler = handleSubmit((values) => {
@@ -93,16 +86,25 @@
       />
     </template>
     <template #[PAGE_WRAPPER_SLOTS.subheaderToolbox]>
-      <DashLink to="/admin/leave_requests" :icon="IconArrowleft" theme="clean">
+      <DashLink v-if="!isApprovePage" to="/admin/leave_requests" :icon="IconArrowleft" theme="clean">
         {{ t("buttons.back") }}
       </DashLink>
+      <DashButton
+        v-if="isApprovePage"
+        type="submit"
+        :icon="IconSave"
+        :loading="isLoading"
+        @click="submitHandler"
+      >
+        {{ "Decline" }}
+      </DashButton>
       <DashButton
         type="submit"
         :icon="IconSave"
         :loading="isLoading"
         @click="submitHandler"
       >
-        {{ t("buttons.save") }}
+        {{ !isApprovePage ? t("buttons.save") : "Approve" }}
       </DashButton>
     </template>
     <form
@@ -111,8 +113,18 @@
       @submit.prevent="submitHandler"
     >
       <TabbedContent :isLoading="isLoading">
-        <TabbedContentTab :label="basicInfoLabeel" id="basic-info">
+        <TabbedContentTab v-if="!isApprovePage" :label="basicInfoLabeel" id="basic-info">
           <LeaveRequestsFormBasicInfoTab
+            v-model:userId="userId"
+            v-model:leaveTypeId="leaveTypeId"
+            v-model:startDate="startDate"
+            v-model:endDate="endDate"
+            v-model:reason="reason"
+            v-model:requestTo="requestTo"
+          />
+        </TabbedContentTab>
+        <TabbedContentTab v-else :label="basicInfoLabeel" id="basic-info">
+          <LeaveRequestsFormApproveTab
             v-model:userId="userId"
             v-model:leaveTypeId="leaveTypeId"
             v-model:startDate="startDate"

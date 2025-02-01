@@ -9,6 +9,7 @@ class UserPermissions
     public const DELETE_USERS = 'delete_users';
     public const READ_REQUESTS = 'read_requests';
     public const WRITE_REQUESTS = 'write_requests';
+    public const APPROVE_REQUESTS = 'approve_requests';
     public const DELETE_REQUESTS = 'delete_requests';
     public const DASHBOARD_VIEW = 'dashboard_view';
 

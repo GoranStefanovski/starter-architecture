@@ -4,6 +4,7 @@ export const LEAVE_REQUESTS_ROUTES = {
   main: "main",
   add: "add",
   edit: "edit",
+  approve: "approve",
 } as const;
 
 type LeaveRequestsRoutes = (typeof LEAVE_REQUESTS_ROUTES)[keyof typeof LEAVE_REQUESTS_ROUTES];
@@ -23,6 +24,11 @@ export const LEAVE_REQUEST_ROUTES_DATA: ModulesRoutesData<LeaveRequestsRoutes> =
     path: "leave_request/:leaveRequestId",
     name: "edit.leave_request",
     translationKey: "leave_requests.edit_leave_requests",
+  },
+  approve: {
+    path: "leave_request/:leaveRequestId/confirmation",
+    name: "approve.leave_request",
+    translationKey: "leave_requests.approve_leave_requests",
   },
 
 };

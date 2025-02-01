@@ -4,7 +4,7 @@
   import FormGroup from "../FormGroup/FormGroup.vue";
   import "./FormDropdown.scss";
 
-  const { label, id, isInline, errors, isDisabled, options } =
+  const { label, id, isInline, errors, isDisabled, options, readonly } =
     defineProps<FormDropdownProps>();
 
   const model = defineModel({
@@ -24,6 +24,7 @@
     </template>
     <template v-slot:input>
       <select
+        :readonly="readonly"
         :id="id"
         :name="id"
         :class="[

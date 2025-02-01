@@ -46,11 +46,12 @@
 <template>
   <div class="kt-section">
     <div class="kt-section__body">
-      <leave-requests-dropdown v-model:model="requestTo" :optionsData="managers" :readonly="false"/>
+      <leave-requests-dropdown v-model:model="requestTo" :optionsData="managers" :readonly="true"/>
       
-      <leave-requests-dropdown-types v-model:model="leaveTypeId" :optionsData="leaveTypes" :readonly="false"/>
+      <leave-requests-dropdown-types v-model:model="leaveTypeId" :optionsData="leaveTypes" :readonly="true"/>
 
       <form-input
+        aria-readonly="true"
         v-model="reason"
         name="reason"
         label="Reason (optional)"
@@ -59,12 +60,12 @@
       <div class="dates_wrapper">
         <div class="dates_from">
           <label class="form-group__label" for="startDate">Start date:</label>
-          <input type="date" id="startDate" name="startDate" v-model="startDate" />
+          <input readonly type="date" id="startDate" name="startDate" v-model="startDate" />
         </div>
 
         <div>
           <label class="form-group__label" for="endDate">End date:</label>
-          <input type="date" id="endDate" name="endDate" v-model="endDate" />
+          <input readonly type="date" id="endDate" name="endDate" v-model="endDate" />
         </div>  
       </div>
     </div>

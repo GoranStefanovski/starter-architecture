@@ -13,6 +13,8 @@ class LeaveRequestDTO
     public ?string $end_date;
     public ?string $reason;
     public int $request_to;
+    public int $confirmed_by;
+    public int $is_confirmed;
     public int $status;
     public int $id;
 
@@ -21,8 +23,10 @@ class LeaveRequestDTO
         int $leave_type_id = 0,
         string $start_date,
         ?string $end_date,
-        ?string $reason,
+        ?string $reason = '',
         int $request_to,
+        int $confirmed_by,
+        int $is_confirmed,
         int $status = 0,
         int $id = 0
     ) {
@@ -32,6 +36,8 @@ class LeaveRequestDTO
         $this->end_date = $end_date;
         $this->reason = $reason;
         $this->request_to = $request_to;
+        $this->confirmed_by = $confirmed_by;
+        $this->is_confirmed = $is_confirmed;
         $this->status = $status;
         $this->id = $id;
     }
@@ -43,8 +49,10 @@ class LeaveRequestDTO
             $request->input('leave_type_id'),
             $request->input('start_date'),
             $request->input('end_date'),
-            $request->input('reason'),
+            $request->input('reason', ''),
             $request->input('request_to'),
+            $request->input('confirmed_by', 0),
+            $request->input('is_confirmed', 0),
             $request->input('status', 0),
             $request->input('id', 0),
         );
@@ -59,6 +67,8 @@ class LeaveRequestDTO
             $request->input('end_date'),
             $request->input('reason'),
             $request->input('request_to'),
+            confirmed_by: 0,
+            is_confirmed: 0,
             status: 0,
             id: 0,
         );
@@ -67,12 +77,14 @@ class LeaveRequestDTO
     public static function fromModel(LeaveRequest $leaveRequest): self
     {
         return new self(
-            $leaveRequest->id,
+            $leaveRequest->user_id,
             $leaveRequest->leave_type_id,
             $leaveRequest->start_date,
             $leaveRequest->end_date,
             $leaveRequest->reason,
             $leaveRequest->request_to,
+            $leaveRequest->confirmed_by,
+            $leaveRequest->is_confirmed,
             $leaveRequest->status,
             $leaveRequest->id
         );
@@ -86,11 +98,14 @@ class LeaveRequestDTO
     public function toArray(): array
     {
         return [
+            'user_id' => $this->user_id,
             'leave_type_id' => $this->leave_type_id,
             'start_date' => $this->start_date,
             'end_date' => $this->end_date,
             'reason' => $this->reason,
             'request_to' => $this->request_to,
+            'confirmed_by' => $this->confirmed_by,
+            'is_confirmed' => $this->is_confirmed,
             'status' => $this->status,
             'id' => $this->id,
         ];
