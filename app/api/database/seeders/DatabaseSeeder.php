@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Applications\User\Model\User;
 use App\Constants\UserPermissions;
 use App\Constants\UserRoles;
@@ -12,7 +11,6 @@ use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use Faker\Factory as Faker;
 
 class DatabaseSeeder extends Seeder
 {
@@ -21,17 +19,18 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        // Create Users
         $admin = User::create([
             'first_name' => 'Admin',
             'last_name' => 'Userot',
-            'email' => 'admin@example.com',
+            'email' => 'tevidma@gmail.com',
             'password' => Hash::make('password')
         ]);
 
         $manager = User::create([
-            'first_name' => 'Editor',
+            'first_name' => 'Manager',
             'last_name' => 'Userot',
-            'email' => 'manager@example.com',
+            'email' => 'tevidma@example.com',
             'password' => Hash::make('password')
         ]);
 
@@ -49,54 +48,57 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('password')
         ]);
 
-        // Create permissions
-        Permission::create(['name' => UserPermissions::READ_USERS]);
-        Permission::create(['name' => UserPermissions::WRITE_USERS]);
-        Permission::create(['name' => UserPermissions::DELETE_USERS]);
-        Permission::create(['name' => UserPermissions::READ_REQUESTS]);
-        Permission::create(['name' => UserPermissions::APPROVE_REQUESTS]);
-        Permission::create(['name' => UserPermissions::WRITE_REQUESTS]);
-        Permission::create(['name' => UserPermissions::DELETE_REQUESTS]);
-        Permission::create(['name' => UserPermissions::DASHBOARD_VIEW]);
+        // Create Permissions
+        $permissions = [
+            UserPermissions::READ_USERS,
+            UserPermissions::WRITE_USERS,
+            UserPermissions::DELETE_USERS,
+            UserPermissions::READ_REQUESTS,
+            UserPermissions::APPROVE_REQUESTS,
+            UserPermissions::WRITE_REQUESTS,
+            UserPermissions::DELETE_REQUESTS,
+            UserPermissions::DASHBOARD_VIEW,
+        ];
 
-        // Create three roles and assign created permissions
+        foreach ($permissions as $permission) {
+            Permission::create(['name' => $permission]);
+        }
 
-        $roleAdmin = Role::create(['name' => UserRoles::ADMIN])->givePermissionTo(Permission::all());
-        
-        $roleManager = Role::create(['name' => UserRoles::MANAGER])->givePermissionTo([UserPermissions::DASHBOARD_VIEW, UserPermissions::READ_USERS, UserPermissions::READ_REQUESTS, UserPermissions::WRITE_REQUESTS, UserPermissions::APPROVE_REQUESTS]);
-        
-        $roleDeveloper = Role::create(['name' => UserRoles::DEVELOPER])->givePermissionTo([UserPermissions::DASHBOARD_VIEW, UserPermissions::READ_REQUESTS, UserPermissions::WRITE_REQUESTS, UserPermissions::DELETE_REQUESTS]);
-        
-        $roleCollaborator = Role::create(['name' => UserRoles::COLLABORATOR])->givePermissionTo([UserPermissions::DASHBOARD_VIEW, UserPermissions::READ_USERS, UserPermissions::READ_REQUESTS]);
+        // Create Roles and Assign Permissions
+        $roleAdmin = Role::create(['name' => UserRoles::ADMIN])
+            ->givePermissionTo(Permission::all());
 
-        $roles = [$roleAdmin->id, $roleManager->id, $roleDeveloper->id, $roleCollaborator->id];
+        $roleManager = Role::create(['name' => UserRoles::MANAGER])
+            ->givePermissionTo([
+                UserPermissions::DASHBOARD_VIEW,
+                UserPermissions::READ_USERS,
+                UserPermissions::READ_REQUESTS,
+                UserPermissions::WRITE_REQUESTS,
+                UserPermissions::APPROVE_REQUESTS,
+            ]);
 
-        // Adding permissions via a role
+        $roleDeveloper = Role::create(['name' => UserRoles::DEVELOPER])
+            ->givePermissionTo([
+                UserPermissions::DASHBOARD_VIEW,
+                UserPermissions::READ_REQUESTS,
+                UserPermissions::WRITE_REQUESTS,
+                UserPermissions::DELETE_REQUESTS,
+            ]);
+
+        $roleCollaborator = Role::create(['name' => UserRoles::COLLABORATOR])
+            ->givePermissionTo([
+                UserPermissions::DASHBOARD_VIEW,
+                UserPermissions::READ_USERS,
+                UserPermissions::READ_REQUESTS,
+            ]);
+
+        // Assign Roles to Users
         $admin->assignRole(UserRoles::ADMIN);
         $manager->assignRole(UserRoles::MANAGER);
         $developer->assignRole(UserRoles::DEVELOPER);
         $collaborator->assignRole(UserRoles::COLLABORATOR);
 
-        $faker = Faker::create();
-
-        // Common password for all users, hashed
-        $password = Hash::make('password');
-
-        for ($i = 0; $i < 100; $i++) {
-            // Create a new user with random data
-            $user = User::create([
-                'first_name' => $faker->name,
-                'last_name' => $faker->name,
-                'email' => $faker->unique()->safeEmail,
-                'password' => $password,
-                // Other fields like 'first_name', 'last_name', etc., can be added here
-            ]);
-
-            // Assign a random role to the user
-            $user->roles()->attach($faker->randomElement($roles));
-        }
-
-        // Leave Types
+        // Seed Leave Types
         $leaveTypes = [
             ['name' => 'Sick (unpaid)', 'slug' => Str::slug('Sick unpaid'), 'is_paid' => false],
             ['name' => 'Sick (paid)', 'slug' => Str::slug('Sick paid'), 'is_paid' => true],

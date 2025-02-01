@@ -2,10 +2,12 @@
 
 namespace App\Applications\LeaveRequest\Repositories;
 
+use App\Applications\User\Model\User;
 use App\Applications\LeaveRequest\DTO\LeaveRequestDTO;
+use App\Applications\LeaveRequest\Mail\LeaveRequestNotification;
 use App\Applications\Pagination\StarterPaginator;
 use App\Applications\LeaveRequest\Model\LeaveRequest;
-
+use Illuminate\Support\Facades\Mail;
 
 /**
  * @property LeaveRequest $leaveRequest
@@ -41,7 +43,7 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
         $attributes = $leaveRequestDTO->toArray();
         $leaveRequest = new LeaveRequest($attributes);
         $leaveRequest->save();
-
+        $this->sendRequestEmail($leaveRequest);
         return $leaveRequest;
     }
 
@@ -80,5 +82,23 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
         $query->whereNull('deleted_at');
 
         return $query->paginate($data['length']);
+    }
+
+    public function sendRequestEmail($leaveRequestData) {
+        $manager = User::find($leaveRequestData['request_to']);
+
+        $recipients = [];
+
+        if ($manager && $manager->email) {
+            $recipients[] = $manager->email;
+        }
+
+        $adminUsers = User::whereHas('roles', function ($query) {
+            $query->where('name', 'admin');
+        })->pluck('email')->toArray();
+
+        $recipients = array_merge($recipients, $adminUsers);
+
+        Mail::to($recipients)->send(new LeaveRequestNotification($leaveRequestData));
     }
 }

@@ -18,24 +18,30 @@
     AccordionContent,
     AccordionItem,
   } from "@starter-core/dash-ui/src";
+  import axios from "axios";
 
   // const categories = ref([]);
+  const leaveTypes = ref([]);
   const isLoading = ref(false);
   const { setActiveClasses } = useRootStore();
   onMounted(() => {
+    fetchLeaveTypes();
     isLoading.value = true;
     setActiveClasses({
       main: "item_dashboard",
       sub: "item_dashboard",
       title: "strings.dashboard",
     });
-
-    // get('/common/dashboard/get')
-    //     .then((response) => {
-    //         isLoading.value = false;
-    //         categories.value = response.data;
-    //     })
   });
+
+  const fetchLeaveTypes = async () => {
+    try {
+      const response = await axios.get("/leave_type/all");
+      leaveTypes.value = response.data;
+    } catch (error) {
+      console.error("Error fetching leave types:", error);
+    }
+  };
 </script>
 <template>
   <PageWrapper>
@@ -44,18 +50,26 @@
         <PortletComponent isBordered>
           <PortletHead>
             <PortletHeadLabel>
-              Content loader
-              <IconAirpods size="32" />
+              Leave Types
             </PortletHeadLabel>
           </PortletHead>
           <PortletBody>
-            <ContentLoader />
+            <table>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+              </tr>
+              <tr v-for="type, index in leaveTypes" :key="index">
+                <td>{{ type.id }}.</td>
+                <td>{{ type.name }}</td>
+              </tr>
+            </table>
           </PortletBody>
         </PortletComponent>
       </div>
       <div class="col-md-4"></div>
       <div class="col-md-4"></div>
-      <div class="col-md-3">
+      <!-- <div class="col-md-3">
         <AccordionContent>
           <AccordionItem
             label="Product inventory"
@@ -83,7 +97,7 @@
             molestiae.
           </AccordionItem>
         </AccordionContent>
-      </div>
+      </div> -->
     </div>
   </PageWrapper>
 </template>
