@@ -1,0 +1,12 @@
+{
+  "main": "Navigation",
+  "plural": "Navigations",
+  "external": "External navigation",
+  "internal": "Internal navigation",
+  "add-to-menu": "Add to menu",
+  "external-url": "External url",
+  "external-navigation-label": "External navigation label",
+  "add": "Add navigation",
+  "save": "Save navigation",
+  "parent": "Parent navigation"
+}

@@ -2,6 +2,8 @@ import {
   IconLayout4blocks,
   IconUser,
   IconArrowright,
+  IconRoute,
+  IconLibrary,
 } from "@starter-core/icons";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
@@ -22,8 +24,12 @@ const getItemIcon = (link: string) => {
   switch (link) {
     case "dashboard":
       return IconLayout4blocks;
-    case "users":
+    case "users.trigger":
       return IconUser;
+    case "navigations.trigger":
+      return IconRoute;
+    case "navigations.menus":
+      return IconLibrary;
     default:
       return IconArrowright;
   }
@@ -41,7 +47,19 @@ function findActiveCategory(
     }
 
     if (category.submenu) {
-      return findActiveCategory(category.submenu, routeName, activePath);
+      const submenuActiveCategories = findActiveCategory(
+        category.submenu,
+        routeName,
+        activePath,
+      );
+      if (submenuActiveCategories.length > 0) {
+        activePath = [
+          category.route,
+          ...activePath,
+          ...submenuActiveCategories,
+        ];
+        return activePath;
+      }
     }
   }
 
