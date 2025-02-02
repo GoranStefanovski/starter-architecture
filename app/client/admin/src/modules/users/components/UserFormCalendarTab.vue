@@ -6,21 +6,31 @@
   const { t } = useI18n();
   const props = defineProps(["userId"]);
   const leaveDays = ref([]);
+  const leaveTypes = ref([]);
 
   const fetchApprovedLeaveDays = async () => {
     try {
       const response = await axios.get("/leave_request/draw", {
         params: { userId: props.userId },
       });
-      leaveDays.value = response.data;
-      console.log(leaveDays)
+      leaveDays.value = response.data.data;
     } catch (error) {
-      console.error("Error fetching managers:", error);
+      console.error("Error fetching leave requests:", error);
+    }
+  };
+
+  const fetchLeaveTypes = async () => {
+    try {
+      const response = await axios.get("/leave_type/all");
+      leaveTypes.value = response.data;
+    } catch (error) {
+      console.error("Error fetching leave types:", error);
     }
   };
 
   onMounted(() => {
     fetchApprovedLeaveDays();
+    fetchLeaveTypes();
   });
 </script>
 <template>
@@ -29,7 +39,6 @@
       <h3 class="kt-section__title kt-section__title-lg">
         Leave Days:
       </h3>
-
     </div>
   </div>
 </template>
