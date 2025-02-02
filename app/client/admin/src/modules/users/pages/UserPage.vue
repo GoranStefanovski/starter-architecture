@@ -11,7 +11,7 @@
     PAGE_WRAPPER_SLOTS,
     SubheaderTitle,
   } from "../../../components";
-  import { UserFormBasicInfoTab, UserFormPasswordTab } from "../components";
+  import { UserFormBasicInfoTab, UserFormPasswordTab, UserFormCalendarTab } from "../components";
   import { useUsersForm } from "../composables";
   import type { UserFormItem } from "../types";
   import { DashButton, DashLink } from "@starter-core/dash-ui/src";
@@ -117,6 +117,9 @@
         </TabbedContentTab>
         <TabbedContentTab :label="changePasswordLabel" id="change-password">
           <UserFormPasswordTab v-model:password="password" />
+        </TabbedContentTab>
+        <TabbedContentTab :label="'Calednar'" id="calendar">
+          <UserFormCalendarTab v-model:password="password" />
         </TabbedContentTab>
       </TabbedContent>
     </form>
