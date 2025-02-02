@@ -1,10 +1,8 @@
 <script setup lang="ts">
   import { IconTrash, IconEdit } from "@starter-core/icons";
   import { useAuth } from "@websanova/vue-auth/src/v3.js";
-  import { computed } from "vue";
   import type { GetLeaveRequestResponse } from "../types";
-  import UserRoleBadge from "./UserRoleBadge.vue";
-  import UserStatusBadge from "./UserStatusBadge.vue";
+  import LeaveRequestStatusBadge from "./LeaveRequestStatusBadge.vue";
   import {
     DashButton,
     DashLink,
@@ -20,17 +18,6 @@
   const { leaveRequest, isEvenRow } = defineProps<LeaveRequestsTableRowProps>();
   const auth = useAuth();
 
-  const isConfrirmed = (() => {
-    if (leaveRequest.is_confirmed) {
-      if (leaveRequest.is_confirmed == 2) {
-        return "Approved"
-      } else if (leaveRequest.is_confirmed == 1) {
-        return "Declined"
-      } else {
-        return "Pending"
-      }
-    } 
-  });
 </script>
 
 <template>
@@ -38,7 +25,7 @@
     <!--kt-datatable__row&#45;&#45;even-->
 
     <TableColumn>
-      {{ isConfrirmed() }}
+      <LeaveRequestStatusBadge :status="leaveRequest.is_confirmed"/>
     </TableColumn>
 
     <TableColumn>
