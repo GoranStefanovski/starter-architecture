@@ -64,6 +64,7 @@ class LeaveRequestService implements LeaveRequestServiceInterface
         $data['column'] = $data['column'] ?? 'users.first_name';
         $data['dir'] = $data['dir'] ?? 'asc';
         $data['search'] = $data['search'] ?? '';
+        $data['userId'] = $data['userId'] ?? '';
         $data['draw'] = $data['draw'] ?? 1;
 
         $usersCollection = $this->leaveRequestRepository->draw($data);

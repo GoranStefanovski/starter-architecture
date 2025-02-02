@@ -68,6 +68,7 @@
     }
   }, [formData]);
 
+  const [id] = defineField("id");
   const [lastName] = defineField("last_name");
   const [firstName] = defineField("first_name");
   const [email] = defineField("email");
@@ -119,7 +120,7 @@
           <UserFormPasswordTab v-model:password="password" />
         </TabbedContentTab>
         <TabbedContentTab :label="'Calednar'" id="calendar">
-          <UserFormCalendarTab v-model:password="password" />
+          <UserFormCalendarTab :userId="id" />
         </TabbedContentTab>
       </TabbedContent>
     </form>

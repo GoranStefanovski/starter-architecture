@@ -1,9 +1,27 @@
 <script lang="ts" setup>
   import { useI18n } from "vue-i18n";
-  import { FormInput } from "@starter-core/dash-ui/src";
+  import axios from "axios";
+  import { ref, onMounted, computed } from "vue";
 
   const { t } = useI18n();
-  const password = defineModel("password", { required: true });
+  const props = defineProps(["userId"]);
+  const leaveDays = ref([]);
+
+  const fetchApprovedLeaveDays = async () => {
+    try {
+      const response = await axios.get("/leave_request/draw", {
+        params: { userId: props.userId },
+      });
+      leaveDays.value = response.data;
+      console.log(leaveDays)
+    } catch (error) {
+      console.error("Error fetching managers:", error);
+    }
+  };
+
+  onMounted(() => {
+    fetchApprovedLeaveDays();
+  });
 </script>
 <template>
   <div class="kt-section">
