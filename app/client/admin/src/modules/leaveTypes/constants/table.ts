@@ -14,12 +14,18 @@ export const LEAVE_TYPES_DATATABLE_COLUMNS: DatatableColumns = [
     sortable: true,
   },
   {
-    id: 6,
+    id: 2,
+    label: "Color",
+    name: "color",
+    sortable: true,
+  },
+  {
+    id: 3,
     label: "strings.actions",
     name: "actions",
   },
   {
-    id: 7,
+    id: 4,
     label: "strings.delete",
     name: "delete",
   },

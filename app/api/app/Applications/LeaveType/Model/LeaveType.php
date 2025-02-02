@@ -19,7 +19,8 @@ class LeaveType extends Model
     protected $fillable = [
         'name',
         'slug',
-        'is_paid'
+        'is_paid',
+        'color'
     ];
 
     /**

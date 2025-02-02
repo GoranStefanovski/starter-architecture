@@ -33,6 +33,17 @@
     </TableColumn>
 
     <TableColumn>
+      <input
+        style="border: none;"
+        readonly
+          type="color"
+          id="colorPicker"
+          :value="leaveType.color"
+          class="color-input noClick"
+        />
+    </TableColumn>
+
+    <TableColumn>
       <dash-link
         v-if="auth.user().permissions_array.includes('write_users')"
         :to="{ name: 'edit.leave_type', params: { leaveTypeId: leaveType.id } }"
@@ -57,3 +68,8 @@
     </TableColumn>
   </TableRow>
 </template>
+<style cloped>
+.noClick {
+    pointer-events: none;
+  }
+</style>

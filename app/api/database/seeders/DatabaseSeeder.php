@@ -100,10 +100,10 @@ class DatabaseSeeder extends Seeder
 
         // Seed Leave Types
         $leaveTypes = [
-            ['name' => 'Sick (unpaid)', 'slug' => Str::slug('Sick unpaid'), 'is_paid' => false],
-            ['name' => 'Sick (paid)', 'slug' => Str::slug('Sick paid'), 'is_paid' => true],
-            ['name' => 'Vacation Day (paid)', 'slug' => Str::slug('Vacation Day paid'), 'is_paid' => true],
-            ['name' => 'Vacation Day (unpaid)', 'slug' => Str::slug('Vacation Day unpaid'), 'is_paid' => false],
+            ['name' => 'Sick (unpaid)', 'slug' => Str::slug('Sick unpaid'), 'is_paid' => false, 'color' => '#FF6B6B'],
+            ['name' => 'Sick (paid)', 'slug' => Str::slug('Sick paid'), 'is_paid' => true, 'color' => '#FFA726'],
+            ['name' => 'Vacation Day (paid)', 'slug' => Str::slug('Vacation Day paid'), 'is_paid' => true, 'color' => '#4CAF50'],
+            ['name' => 'Vacation Day (unpaid)', 'slug' => Str::slug('Vacation Day unpaid'), 'is_paid' => false, 'color' => '#90A4AE'],
         ];
 
         DB::table('leave_types')->insert($leaveTypes);

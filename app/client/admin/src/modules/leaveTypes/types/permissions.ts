@@ -9,4 +9,5 @@ export interface UserRole {
   guard_name: string;
   id: UserRoleId;
   name: string;
+  color: string;
 }

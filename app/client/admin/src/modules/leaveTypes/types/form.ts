@@ -3,4 +3,5 @@ export interface LeaveTypeFormItem {
   slug?: string;
   name?: string;
   is_paid?: boolean;
+  color?: string;
 }

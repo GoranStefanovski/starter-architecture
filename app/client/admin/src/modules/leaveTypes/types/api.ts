@@ -6,6 +6,7 @@ export interface GetLeaveTypeResponse {
   slug: string;
   name: string;
   is_paid: boolean;
+  color: string;
 }
 
 export interface UsersTableResponse {

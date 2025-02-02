@@ -3,4 +3,5 @@ export interface UserRecord {
   slug: string;
   name: string;
   is_paid: boolean;
+  color: String;
 }

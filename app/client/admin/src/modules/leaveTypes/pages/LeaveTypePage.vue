@@ -56,6 +56,7 @@
         slug: formData.value.slug,
         name: formData.value.name,
         is_paid: formData.value.is_paid,
+        color: formData.value.color,
       });
     }
   }, [formData]);
@@ -63,6 +64,7 @@
   const [slug] = defineField("slug");
   const [name] = defineField("name");
   const [isPaid] = defineField("is_paid");
+  const [color] = defineField("color");
 </script>
 
 <template>
@@ -96,6 +98,7 @@
             v-model:isPaid="isPaid"
             v-model:name="name"
             v-model:slug="slug"
+            v-model:color="color"
             :errors="errors"
           />
         </TabbedContentTab>

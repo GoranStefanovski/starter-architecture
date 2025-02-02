@@ -21,6 +21,7 @@ class LeaveTypeRepository implements LeaveTypeRepositoryInterface
     private const COLUMNS_MAP = [
         'slug' => 'leave_types.slug',
         'name' => 'leave_types.name',
+        'color' => 'leave_types.color',
         'is_paid' => 'leave_types.is_paid'
     ];
 
@@ -38,7 +39,6 @@ class LeaveTypeRepository implements LeaveTypeRepositoryInterface
     public function create(LeaveTypeDTO $leaveTypeDTO): LeaveType
     {
         $attributes = $leaveTypeDTO->toArray();
-
         $user = new LeaveType($attributes);
         $user->save();
         return $user;

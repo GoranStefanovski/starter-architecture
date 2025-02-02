@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('slug');
             $table->boolean('is_paid')->default(0);
+            $table->string('color')->default('#FFFFFF');
             $table->softDeletes();
             $table->timestamps();
         });

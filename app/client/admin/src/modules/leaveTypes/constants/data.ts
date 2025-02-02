@@ -5,6 +5,7 @@ const leaveType: LeaveTypeFormItem = {
   slug: "",
   name: "",
   is_paid: false,
+  color: "",
 };
 
 export { leaveType };
