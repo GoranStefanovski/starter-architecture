@@ -1,6 +1,7 @@
 <script lang="ts" setup>
   import { IconSave, IconArrowleft } from "@starter-core/icons";
   import { useForm } from "vee-validate";
+  import { useAuth } from "@websanova/vue-auth/src/v3.js";
   import { watch, computed } from "vue";
   import { useI18n } from "vue-i18n";
   import { useRoute } from "vue-router";
@@ -11,7 +12,7 @@
     PAGE_WRAPPER_SLOTS,
     SubheaderTitle,
   } from "../../../components";
-  import { UserFormBasicInfoTab, UserFormPasswordTab, UserFormCalendarTab } from "../components";
+  import { UserFormBasicInfoTab, UserFormPasswordTab, UserFormCalendarTab, UserFormLeaveDaysTab } from "../components";
   import { useUsersForm } from "../composables";
   import type { UserFormItem } from "../types";
   import { DashButton, DashLink } from "@starter-core/dash-ui/src";
@@ -23,6 +24,8 @@
   const isEditPage = computed(() => route.name == "edit.user");
   const userId = Number(route.params.userId);
 
+  const auth = useAuth();
+  const isUserWriter = auth.user().permissions_array.includes("write_users") ? true : false;
   const validationSchema = {
     last_name(value: string) {
       if (value?.length >= 5) return true;
@@ -64,6 +67,8 @@
         last_name: formData.value.last_name,
         role: formData.value.role,
         is_disabled: formData.value.is_disabled,
+        paid_leaves_max: formData.value.paid_leaves_max,
+        paid_leaves_left: formData.value.paid_leaves_left,
       });
     }
   }, [formData]);
@@ -75,6 +80,8 @@
   const [isDisabled] = defineField("is_disabled");
   const [role] = defineField("role");
   const [password] = defineField("password");
+  const [paidLeavesMax] = defineField("paid_leaves_max");
+  const [paidLeavesLeft] = defineField("paid_leaves_left");
 </script>
 
 <template>
@@ -121,6 +128,9 @@
         </TabbedContentTab>
         <TabbedContentTab :label="'Calednar'" id="calendar">
           <UserFormCalendarTab :userId="id" />
+        </TabbedContentTab>
+        <TabbedContentTab v-if="isUserWriter" :label="'Leave Days'" id="leave-days">
+          <UserFormLeaveDaysTab v-model:paidLeavesMax="paidLeavesMax" :daysLeft="paidLeavesLeft" />
         </TabbedContentTab>
       </TabbedContent>
     </form>

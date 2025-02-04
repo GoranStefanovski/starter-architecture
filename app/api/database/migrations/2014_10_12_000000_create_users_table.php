@@ -20,6 +20,8 @@ return new class extends Migration
             $table->string('password');
             $table->string('activation_code')->nullable();
             $table->boolean('is_disabled')->nullable()->default(0);
+            $table->integer('paid_leaves_max')->nullable()->default(20);
+            $table->integer('paid_leaves_left')->nullable()->default(20);
             $table->rememberToken();
             $table->softDeletes();
             $table->timestamps();
