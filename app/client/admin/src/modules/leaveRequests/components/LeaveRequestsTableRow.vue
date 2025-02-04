@@ -13,16 +13,38 @@
   interface LeaveRequestsTableRowProps {
     leaveRequest: GetLeaveRequestResponse;
     isEvenRow: boolean;
+    leaveTypes: Array<any[]>;
+    users: Array<any[]>;
   }
 
-  const { leaveRequest, isEvenRow } = defineProps<LeaveRequestsTableRowProps>();
+  const { leaveRequest, isEvenRow, leaveTypes, users } = defineProps<LeaveRequestsTableRowProps>();
   const auth = useAuth();
+
+
+
+  const getNameLeaveType = (id: number) => {
+    const leaveType = leaveTypes.find((type) => type.id === id);
+    return leaveType ? leaveType.name : "Unknown Leave Type";
+  };
+
+  const getNameUser = (id: number) => {
+    const user = users.find((type) => type.id === id);
+    return user ? user.first_name + ' ' + user.last_name : "Unknown User";
+  };
 
 </script>
 
 <template>
   <TableRow :section="'body'" :is-even="isEvenRow">
     <!--kt-datatable__row&#45;&#45;even-->
+
+    <TableColumn>
+      {{ getNameLeaveType(leaveRequest.leave_type_id) }}
+    </TableColumn>
+
+    <TableColumn>
+      {{ getNameUser(leaveRequest.user_id) }}
+    </TableColumn>
 
     <TableColumn>
       <LeaveRequestStatusBadge :status="leaveRequest.is_confirmed"/>

@@ -57,7 +57,7 @@
 
     <TableColumn>
       <DashButton
-        v-if="auth.user().permissions_array.includes('delete_users')"
+        v-if="auth.user().permissions_array.includes('delete_users') && leaveType.id >= 5"
         :icon="IconTrash"
         theme="danger"
         size="sm"
@@ -65,6 +65,9 @@
         is-pill
         is-icon
       />
+      <span v-else>
+        -
+      </span>
     </TableColumn>
   </TableRow>
 </template>

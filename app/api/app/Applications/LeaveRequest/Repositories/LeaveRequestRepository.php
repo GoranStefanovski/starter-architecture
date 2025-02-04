@@ -12,6 +12,7 @@ use App\Applications\Pagination\StarterPaginator;
 use App\Applications\LeaveRequest\Model\LeaveRequest;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Auth;
+use DateTime;
 
 /**
  * @property LeaveRequest $leaveRequest
@@ -67,6 +68,20 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
         $attributes = $leaveRequestData->toArray();
         $attributes['is_confirmed'] = $isConfirmed;
         $leaveRequest->update($attributes);
+        $userRequested = User::find($leaveRequestData->user_id);
+        if($isConfirmed == 2 && $userRequested && $leaveRequestData->leave_type_id == 3) {
+            $startDate = new DateTime($leaveRequestData->start_date);
+            $endDate = $leaveRequestData->end_date 
+                ? new DateTime($leaveRequestData->end_date) 
+                : $startDate; // If no end_date, consider only one day
+
+            $interval = $startDate->diff($endDate);
+            $leaveDays = $interval->days + 1; // Add 1 to include the start date
+
+            // Deduct the leave days from paid_leaves_left
+            $userRequested->paid_leaves_left = max(0, $userRequested->paid_leaves_left - $leaveDays);
+            $userRequested->save();
+        }
 
         $this->sendRequestConfirmationEmail($leaveRequestData);
 
