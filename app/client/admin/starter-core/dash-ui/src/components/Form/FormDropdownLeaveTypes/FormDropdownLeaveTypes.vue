@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { useAuth } from "@websanova/vue-auth/src/v3.js";
   import { computed } from "vue";
   import type { FormDropdownProps } from "../types";
   import FormGroup from "../FormGroup/FormGroup.vue";
@@ -15,6 +16,9 @@
   const hasDefaultOption = computed(() => !options.some(
     (option) => option.id === String(model.value)
   ));
+
+  const auth = useAuth();
+
 </script>
 
 <template>
@@ -41,7 +45,7 @@
           v-for="option in options"
           :key="option.id"
           :value="option.id"
-          :disabled="option.isDisabled"
+          :disabled="option.isDisabled || (auth.user().paid_leaves_left == 0 && option.id == 3)"
         >
           {{ option.name }}
         </option>
