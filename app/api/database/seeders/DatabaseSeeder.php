@@ -104,6 +104,7 @@ class DatabaseSeeder extends Seeder
             ['name' => 'Sick (paid)', 'slug' => Str::slug('Sick paid'), 'is_paid' => true, 'color' => '#FFA726'],
             ['name' => 'Vacation Day (paid)', 'slug' => Str::slug('Vacation Day paid'), 'is_paid' => true, 'color' => '#4CAF50'],
             ['name' => 'Vacation Day (unpaid)', 'slug' => Str::slug('Vacation Day unpaid'), 'is_paid' => false, 'color' => '#90A4AE'],
+            ['name' => 'National Holiday (paid)', 'slug' => Str::slug('National Holiday paid'), 'is_paid' => true, 'color' => '#6326F2'],
         ];
 
         DB::table('leave_types')->insert($leaveTypes);

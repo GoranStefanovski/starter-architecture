@@ -14,6 +14,7 @@ export interface GetUserResponse {
   updated_at: string;
   paid_leaves_max: number;
   paid_leaves_left: number;
+  country: number;
 }
 
 export interface UsersTableResponse {

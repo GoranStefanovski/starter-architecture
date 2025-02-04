@@ -3,6 +3,7 @@
   import { useI18n } from "vue-i18n";
   import UserFormAvatar from "./UserFormAvatar.vue";
   import UserRolesDropdown from "./UserRolesDropdown.vue";
+  import UserCountriesDropdown from "./UserCountriesDropdown.vue";
   import { FormInput, FormSwitch } from "@starter-core/dash-ui/src";
 
   type EmitsType = {
@@ -17,6 +18,7 @@
   const role = defineModel("role", { required: true, type: Number });
   const lastName = defineModel("lastName", { required: true, type: String });
   const firstName = defineModel("firstName", { required: true, type: String });
+  const country = defineModel("country", { required: true, type: Number });
   const email = defineModel("email", { required: true, type: String });
   const { errors = {}, avatar } = defineProps<{
     errors: any;
@@ -35,6 +37,9 @@
         {{ t("users.user_status") }}:
       </h3>
       <user-roles-dropdown v-model:role="role" />
+
+      <UserCountriesDropdown v-model:country="country" />
+
       <form-switch
         v-model="isDisabled"
         id="enabled"

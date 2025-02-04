@@ -39,7 +39,8 @@ class User extends Authenticatable implements HasMedia
         'is_disabled',
         'activation_code',
         'paid_leaves_max',
-        'paid_leaves_left'
+        'paid_leaves_left',
+        'country'
     ];
 
     /**

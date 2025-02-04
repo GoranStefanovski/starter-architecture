@@ -6,8 +6,9 @@
     "license": "MIT",
     "require": {
         "php": "^8.3",
+        "azuyalabs/yasumi": "^2.7",
         "fakerphp/faker": "^1.9.1",
-        "guzzlehttp/guzzle": "^7.2",
+        "guzzlehttp/guzzle": "^7.9",
         "laravel/framework": "^v11.0",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.8",

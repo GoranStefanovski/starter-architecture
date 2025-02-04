@@ -69,6 +69,7 @@
         is_disabled: formData.value.is_disabled,
         paid_leaves_max: formData.value.paid_leaves_max,
         paid_leaves_left: formData.value.paid_leaves_left,
+        country: formData.value.country
       });
     }
   }, [formData]);
@@ -82,6 +83,8 @@
   const [password] = defineField("password");
   const [paidLeavesMax] = defineField("paid_leaves_max");
   const [paidLeavesLeft] = defineField("paid_leaves_left");
+  const [country] = defineField("country");
+
 </script>
 
 <template>
@@ -118,6 +121,7 @@
             v-model:lastName="lastName"
             v-model:email="email"
             v-model:firstName="firstName"
+            v-model:country="country"
             :errors="errors"
             :avatar="formData?.avatar_thumbnail"
             @upload-avatar="uploadAvatarHandler"

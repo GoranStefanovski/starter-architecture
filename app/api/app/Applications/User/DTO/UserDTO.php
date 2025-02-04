@@ -18,6 +18,7 @@ class UserDTO
     public array $permissions_array;
     public int $paid_leaves_max;
     public int $paid_leaves_left;
+    public int $country;
 
     public function __construct(
         string $first_name,
@@ -30,7 +31,8 @@ class UserDTO
         bool $is_disabled = false,
         array $permissions_array = [],
         int $paid_leaves_max,
-        int $paid_leaves_left
+        int $paid_leaves_left,
+        int $country
     ) {
         $this->first_name = $first_name;
         $this->last_name = $last_name;
@@ -43,6 +45,7 @@ class UserDTO
         $this->permissions_array = $permissions_array;
         $this->paid_leaves_max = $paid_leaves_max;
         $this->paid_leaves_left = $paid_leaves_left;
+        $this->country = $country;
     }
 
     public static function fromRequest(Request $request): self
@@ -59,6 +62,7 @@ class UserDTO
             $request->input('permissions_array', []),
             $request->input('paid_leaves_max'),
             $request->input('paid_leaves_left'),
+            $request->input('country')
         );
     }
 
@@ -75,7 +79,8 @@ class UserDTO
             is_disabled: false,
             permissions_array: $request->input('permissions_array', []),
             paid_leaves_max: 0,
-            paid_leaves_left: 0
+            paid_leaves_left: 0,
+            country: $request->input('country')
         );
     }
 
@@ -92,7 +97,8 @@ class UserDTO
             (bool) $user->is_disabled,
             $user->permissions_array,
             $user->paid_leaves_max,
-            $user->paid_leaves_left
+            $user->paid_leaves_left,
+            $user->country
         );
     }
 
@@ -114,7 +120,8 @@ class UserDTO
             'is_disabled' => $this->is_disabled,
             'permissions_array' => $this->permissions_array,
             'paid_leaves_max' => $this->paid_leaves_max,
-            'paid_leaves_left' => $this->paid_leaves_left
+            'paid_leaves_left' => $this->paid_leaves_left,
+            'country' => $this->country
         ];
     }
 
