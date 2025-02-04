@@ -10,9 +10,12 @@ use App\Applications\LeaveRequest\Mail\LeaveRequestConfirmation;
 use App\Applications\LeaveRequest\Mail\LeaveRequestDeclining;
 use App\Applications\Pagination\StarterPaginator;
 use App\Applications\LeaveRequest\Model\LeaveRequest;
+use App\Applications\NationalHoliday\Model\NationalHoliday;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Auth;
 use DateTime;
+use DateInterval;
+use DatePeriod;
 
 /**
  * @property LeaveRequest $leaveRequest
@@ -63,28 +66,18 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
 
     public function confirm(int $leaveRequestId, LeaveRequestDTO $leaveRequestData, int $isConfirmed): LeaveRequest
     {
-        
         $leaveRequest = $this->leaveRequest->findOrFail($leaveRequestId);
         $attributes = $leaveRequestData->toArray();
         $attributes['is_confirmed'] = $isConfirmed;
         $leaveRequest->update($attributes);
         $userRequested = User::find($leaveRequestData->user_id);
-        if($isConfirmed == 2 && $userRequested && $leaveRequestData->leave_type_id == 3) {
-            $startDate = new DateTime($leaveRequestData->start_date);
-            $endDate = $leaveRequestData->end_date 
-                ? new DateTime($leaveRequestData->end_date) 
-                : $startDate; // If no end_date, consider only one day
-
-            $interval = $startDate->diff($endDate);
-            $leaveDays = $interval->days + 1; // Add 1 to include the start date
-
-            // Deduct the leave days from paid_leaves_left
-            $userRequested->paid_leaves_left = max(0, $userRequested->paid_leaves_left - $leaveDays);
-            $userRequested->save();
+        
+        if ($isConfirmed == 2 && $userRequested && $leaveRequestData->leave_type_id == 3) {
+            $this->deductPaidLeaves($userRequested, $leaveRequestData);
         }
-
+    
         $this->sendRequestConfirmationEmail($leaveRequestData);
-
+    
         return $leaveRequest;
     }
 
@@ -189,5 +182,40 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
                 Mail::to($recipients)->send(new LeaveRequestConfirmation($leaveRequest));
             }
         }
+    }
+
+    private function deductPaidLeaves(User $userRequested, LeaveRequestDTO $leaveRequestData): void {
+        $startDate = new DateTime($leaveRequestData->start_date);
+        $endDate = $leaveRequestData->end_date
+            ? new DateTime($leaveRequestData->end_date)
+            : $startDate; // If no end_date, consider only one day
+
+        $selectedCountry = $userRequested->country == 1 ? 'Macedonia' : 'Bulgaria';
+
+        // Get national holidays for the relevant year and country
+        $nationalHolidays = NationalHoliday::where('year', $startDate->format('Y'))
+            ->where('country', $selectedCountry)
+            ->pluck('date')
+            ->toArray();
+
+        $leaveDays = 0;
+        $period = new DatePeriod(
+            $startDate,
+            new DateInterval('P1D'),
+            $endDate->modify('+1 day') // Include the end date
+        );
+
+        foreach ($period as $date) {
+            $isWeekend = in_array($date->format('N'), [6, 7]); // 6 = Saturday, 7 = Sunday
+            $isHoliday = in_array($date->format('Y-m-d'), $nationalHolidays);
+
+            if (!$isWeekend && !$isHoliday) {
+                $leaveDays++;
+            }
+        }
+
+        // Deduct the leave days from paid_leaves_left
+        $userRequested->paid_leaves_left = max(0, $userRequested->paid_leaves_left - $leaveDays);
+        $userRequested->save();
     }
 }

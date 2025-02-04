@@ -72,6 +72,7 @@ class DatabaseSeeder extends Seeder
             ->givePermissionTo([
                 UserPermissions::DASHBOARD_VIEW,
                 UserPermissions::READ_USERS,
+                UserPermissions::WRITE_USERS,
                 UserPermissions::READ_REQUESTS,
                 UserPermissions::WRITE_REQUESTS,
                 UserPermissions::APPROVE_REQUESTS,
