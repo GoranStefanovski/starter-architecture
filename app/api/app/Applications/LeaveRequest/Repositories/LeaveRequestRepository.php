@@ -109,19 +109,26 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
             });
         }
 
+        $isApproved = $data['isApproved'];
+        if($isApproved) {
+            $query->where('leave_requests.is_confirmed', '=', 2);
+        }
+
         $calendarUserId = $data['userId'];
         $userId = $user->getRoleAttribute();
         
-        if (!$calendarUserId) {
-            if ($userId == 3) {
-                $query->where('leave_requests.user_id', '=', $user->id);
-            } else if ($userId == 2) {
-                $query->where('leave_requests.user_id', '=', $user->id);
-                $query->orWhere('leave_requests.request_to', '=', $user->id);
+        if (!$isApproved) {
+            if (!$calendarUserId) {
+                if ($userId == 3) {
+                    $query->where('leave_requests.user_id', '=', $user->id);
+                } else if ($userId == 2) {
+                    $query->where('leave_requests.user_id', '=', $user->id);
+                    $query->orWhere('leave_requests.request_to', '=', $user->id);
+                }
+            } else {
+                $query->where('leave_requests.user_id', '=', $calendarUserId);
+                $query->where('leave_requests.is_confirmed', '=', 2);
             }
-        } else {
-            $query->where('leave_requests.user_id', '=', $calendarUserId);
-            $query->where('leave_requests.is_confirmed', '=', 2);
         }
         
         $query->whereNull('deleted_at');

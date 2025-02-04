@@ -10,6 +10,13 @@ const LeaveRequests = () =>
     "../pages/LeaveRequestsList.vue"
   );
 
+const LeavesCalendar = () =>
+  import(
+    /* webpackChunkName: "users" */
+    /* webpackPrefetch: true */
+    "../pages/LeaveCalendarPage.vue"
+  );
+
 const LeaveRequestPage = () =>
   import(
     /* webpackChunkName: "user-page" */
@@ -17,7 +24,7 @@ const LeaveRequestPage = () =>
     "../pages/LeaveRequestPage.vue"
   );
 
-const { add, main, edit, approve } = LEAVE_REQUEST_ROUTES_DATA;
+const { add, main, edit, approve, vacationDays } = LEAVE_REQUEST_ROUTES_DATA;
 
 export const LeaveRequestsRoutes: RouteRecordRaw[] = [
   {
@@ -60,6 +67,16 @@ export const LeaveRequestsRoutes: RouteRecordRaw[] = [
       title: t(edit.translationKey, null),
       auth: {
         roles: [USER_PERMISSIONS.approveRequests],
+      },
+    },
+  },
+  {
+    path: vacationDays.path,
+    name: vacationDays.name,
+    component: LeavesCalendar,
+    meta: {
+      auth: {
+        roles: [USER_PERMISSIONS.readRequests],
       },
     },
   },

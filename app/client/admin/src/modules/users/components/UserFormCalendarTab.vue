@@ -4,7 +4,12 @@ import axios from "axios";
 import { ref, onMounted, computed } from "vue";
 import FullCalendar from "@fullcalendar/vue3";
 import dayGridPlugin from "@fullcalendar/daygrid";
-
+import {
+    PortletComponent,
+    PortletBody,
+    PortletHead,
+    PortletHeadLabel,
+  } from "@starter-core/dash-ui/src";
 // Internationalization
 const { t } = useI18n();
 
@@ -77,8 +82,25 @@ onMounted(() => {
 <template>
   <div class="kt-section">
     <div class="kt-section__body">
-      <div style="width: 65%; height: 70%;">
-        <FullCalendar :options="calendarOptions" />
+      <div>
+        <table>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Color</th>
+          </tr>
+          <tr v-for="type, index in leaveTypes" :key="index">
+            <td>{{ type.id }}.</td>
+            <td>{{ type.name }}</td>
+            <td><div :style="`background-color: ${type.color}; width: 20px; height: 20px;`"></div></td>
+          </tr>
+        </table>
+        <div
+          class="kt-separator kt-separator--border-dashed kt-separator--space-lg"
+        ></div>
+        <div style="width: 65%; height: 70%;">
+          <FullCalendar :options="calendarOptions" />
+        </div>
       </div>
     </div>
   </div>

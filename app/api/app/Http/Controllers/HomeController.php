@@ -45,7 +45,13 @@ class HomeController extends Controller
                 'name' => 'item_requests',
                 'route' => 'leave_requests',
                 'permission' => UserPermissions::READ_REQUESTS,
-            ]
+            ],
+            [
+                'label' => 'Vacation Days',
+                'name' => 'item_types',
+                'route' => 'vacation_days',
+                'permission' => UserPermissions::READ_REQUESTS,
+            ],
         ];
 
         $pagesItems = [

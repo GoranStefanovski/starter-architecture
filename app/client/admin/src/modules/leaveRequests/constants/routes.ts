@@ -5,6 +5,7 @@ export const LEAVE_REQUESTS_ROUTES = {
   add: "add",
   edit: "edit",
   approve: "approve",
+  vacationDays: "vacationDays"
 } as const;
 
 type LeaveRequestsRoutes = (typeof LEAVE_REQUESTS_ROUTES)[keyof typeof LEAVE_REQUESTS_ROUTES];
@@ -30,5 +31,10 @@ export const LEAVE_REQUEST_ROUTES_DATA: ModulesRoutesData<LeaveRequestsRoutes> =
     name: "approve.leave_request",
     translationKey: "leave_requests.approve_leave_requests",
   },
+  vacationDays: {
+    path: "vacation_days",
+    name: "vacation_days",
+    translationKey: "vacation_days",
+  }
 
 };
