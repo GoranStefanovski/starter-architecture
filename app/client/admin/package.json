@@ -15,6 +15,9 @@
     "stylelint:fix": "stylelint \"./src/**/*.scss\" --fix"
   },
   "dependencies": {
+    "@fullcalendar/core": "^6.1.15",
+    "@fullcalendar/daygrid": "^6.1.15",
+    "@fullcalendar/vue3": "^6.1.15",
     "@popperjs/core": "^2.11.8",
     "@starter-core/dash-ui": "1.0.2",
     "@starter-core/icons": "^1.0.1",
