@@ -45,7 +45,7 @@
           v-for="option in options"
           :key="option.id"
           :value="option.id"
-          :disabled="option.isDisabled || (auth.user().paid_leaves_left == 0 && option.id == 3)"
+          :disabled="option.isDisabled || (auth.user().paid_leaves_left == 0 && option.id == 3) || (option.id == 5)"
         >
           {{ option.name }}
         </option>
