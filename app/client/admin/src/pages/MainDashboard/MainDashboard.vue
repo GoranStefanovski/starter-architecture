@@ -20,12 +20,21 @@
   } from "@starter-core/dash-ui/src";
   import axios from "axios";
 
+  import {
+    DashLink,
+  } from "@starter-core/dash-ui/src";
+import { leaveRequest } from "@/modules/leaveRequests/constants";
+
   // const categories = ref([]);
   const leaveTypes = ref([]);
+  const users = ref([]);
+  const leaveRequests = ref([]);
   const isLoading = ref(false);
   const { setActiveClasses } = useRootStore();
   onMounted(() => {
     fetchLeaveTypes();
+    fetchUsers();
+    fetchRequests();
     isLoading.value = true;
     setActiveClasses({
       main: "item_dashboard",
@@ -33,6 +42,26 @@
       title: "strings.dashboard",
     });
   });
+
+  const fetchUsers = async () => {
+    try {
+      const response = await axios.get("/user/all");
+      users.value = response.data;
+    } catch (error) {
+      console.error("Error fetching leave types:", error);
+    }
+  };
+
+  const fetchRequests = async () => {
+    try {
+      const response = await axios.get("/leave_request/draw", {
+        params: { isPending: true }
+      });
+      leaveRequests.value = response.data.data;
+    } catch (error) {
+      console.error("Error fetching leave types:", error);
+    }
+  };
 
   const fetchLeaveTypes = async () => {
     try {
@@ -42,6 +71,11 @@
       console.error("Error fetching leave types:", error);
     }
   };
+
+  const getUserFullName = (userId: number) => {
+    const user = users.value.find((u: any) => u.id === userId);
+    return user ? `${user.first_name} ${user.last_name}` : "Unknown User";
+};
 </script>
 <template>
   <PageWrapper>
@@ -67,37 +101,54 @@
           </PortletBody>
         </PortletComponent>
       </div>
-      <div class="col-md-4"></div>
-      <div class="col-md-4"></div>
-      <!-- <div class="col-md-3">
-        <AccordionContent>
-          <AccordionItem
-            label="Product inventory"
-            id="product-inventory"
-            :icon="IconChartpie"
-          >
-            Vero laborum esse debitis libero veniam ullam placeat molestias
-            deleniti distinctio magnam? In, odio alias? Possimus labore delectus
-            recusandae.
-          </AccordionItem>
-          <AccordionItem
-            label="Order statistics"
-            id="order-statistics"
-            :icon="IconLibrary"
-          >
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae, aut
-            molestiae.
-          </AccordionItem>
-          <AccordionItem
-            label="eCommerce reports"
-            id="ecommerce-reports"
-            :icon="IconDollar"
-          >
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae, aut
-            molestiae.
-          </AccordionItem>
-        </AccordionContent>
-      </div> -->
+      <div class="col-md-4">
+        <PortletComponent isBordered>
+          <PortletHead>
+            <PortletHeadLabel>
+              Paid Leaves Left
+            </PortletHeadLabel>
+          </PortletHead>
+          <PortletBody>
+            <table>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Days Left</th>
+              </tr>
+              <tr v-for="user, index in users" :key="index">
+                <td>{{ index + 1 }}.</td>
+                <td>{{ user.first_name }}</td>
+                <td>{{ user.paid_leaves_left }}</td>
+              </tr>
+            </table>
+          </PortletBody>
+        </PortletComponent>
+      </div>
+      <div class="col-md-4">
+        <PortletComponent isBordered>
+          <PortletHead>
+            <PortletHeadLabel>
+              Pending Leave Requests
+            </PortletHeadLabel>
+          </PortletHead>
+          <PortletBody>
+            <table>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Link To Approval</th>
+              </tr>
+              <tr v-for="leave, index in leaveRequests" :key="index">
+                <td>{{ index + 1}}.</td>
+                <td>{{ getUserFullName(leave.user_id) }}</td>
+                <td>
+                  <a :href="`/admin/leave_request/${leave.id}/confirmation`">Edit</a>
+                </td>
+              </tr>
+            </table>
+          </PortletBody>
+        </PortletComponent>
+      </div>
     </div>
   </PageWrapper>
 </template>

@@ -107,6 +107,11 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
             $query->where('leave_requests.is_confirmed', '=', 2);
         }
 
+        $isPending = $data['isPending'];
+        if($isPending) {
+            $query->where('leave_requests.is_confirmed', '=', 0);
+        }
+
         $calendarUserId = $data['userId'];
         $userId = $user->getRoleAttribute();
         
