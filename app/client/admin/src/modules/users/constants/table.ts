@@ -21,27 +21,33 @@ export const USERS_DATATABLE_COLUMNS: DatatableColumns = [
   },
   {
     id: 3,
-    label: "users.datatable.email",
+    label: "users.datatable.days_left",
     name: "email",
     sortable: true,
   },
   {
     id: 4,
+    label: "users.datatable.email",
+    name: "email",
+    sortable: true,
+  },
+  {
+    id: 5,
     label: "users.datatable.user_role",
     name: "roles",
   },
   {
-    id: 5,
+    id: 6,
     label: "users.datatable.status",
     name: "status",
   },
   {
-    id: 6,
+    id: 7,
     label: "strings.actions",
     name: "actions",
   },
   {
-    id: 7,
+    id: 8,
     label: "strings.delete",
     name: "delete",
   },

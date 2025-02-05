@@ -48,6 +48,10 @@
     </TableColumn>
 
     <TableColumn>
+      {{ user.paid_leaves_left }}
+    </TableColumn>
+
+    <TableColumn>
       {{ user.email }}
     </TableColumn>
 
