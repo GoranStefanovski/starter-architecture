@@ -39,7 +39,7 @@ class NationalHolidayRepository implements NationalHolidayRepositoryInterface
     public function create(NationalHolidayDTO $leaveTypeDTO): NationalHoliday
     {
         $attributes = $leaveTypeDTO->toArray();
-        $user = new LeaveType($attributes);
+        $user = new NationalHoliday($attributes);
         $user->save();
         return $user;
     }
@@ -76,8 +76,6 @@ class NationalHolidayRepository implements NationalHolidayRepositoryInterface
                 $subquery->orWhere('leave_types.name', 'like', '%' . $search . '%');
             });
         }
-
-        $query->whereNull('deleted_at');
 
         return $query->paginate($data['length']);
     }

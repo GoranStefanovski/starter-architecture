@@ -24,17 +24,17 @@ interface NationalHolidayServiceInterface
     public function get(int $id): NationalHolidayDTO;
 
     /**
-     * @param NationalHolidayDTO $leaveTypeData
+     * @param NationalHolidayDTO $nationalHolidayData
      * @return NationalHolidayDTO
      */
-    public function create(NationalHolidayDTO $leaveTypeData): NationalHolidayDTO;
+    public function create(NationalHolidayDTO $nationalHolidayData): NationalHolidayDTO;
 
     /**
      * @param int $leaveTypeId
-     * @param NationalHolidayDTO $leaveTypeData
+     * @param NationalHolidayDTO $nationalHolidayData
      * @return NationalHolidayDTO
      */
-    public function update(int $leaveTypeId, NationalHolidayDTO $leaveTypeData): NationalHolidayDTO;
+    public function update(int $leaveTypeId, NationalHolidayDTO $nationalHolidayData): NationalHolidayDTO;
 
     /**
      * @param integer $id

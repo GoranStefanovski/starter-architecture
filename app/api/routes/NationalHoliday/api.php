@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
-use App\Applications\LeaveType\Controllers\LeaveTypeController;
+use App\Applications\NationalHoliday\Controllers\NationalHolidayController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,13 +20,13 @@ Route::group([
     Route::group([
         'prefix' => 'national_holiday',
     ], function () {
-        Route::get('all', [LeaveTypeController::class, 'getAll']);
-        Route::get('draw', [LeaveTypeController::class, 'draw']);
+        Route::get('all', [NationalHolidayController::class, 'getAll']);
+        Route::get('draw', [NationalHolidayController::class, 'draw']);
 
         // CRUD ROUTES
-        Route::post('create', [LeaveTypeController::class, 'create']);
-        Route::get('{id}', [LeaveTypeController::class, 'get']);
-        Route::patch('{id}', [LeaveTypeController::class, 'update']);
-        Route::delete('{id}', [LeaveTypeController::class, 'delete']);
+        Route::post('create', [NationalHolidayController::class, 'create']);
+        Route::get('{id}', [NationalHolidayController::class, 'get']);
+        Route::patch('{id}', [NationalHolidayController::class, 'update']);
+        Route::delete('{id}', [NationalHolidayController::class, 'delete']);
     });
 });

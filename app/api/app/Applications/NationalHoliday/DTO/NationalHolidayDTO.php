@@ -7,33 +7,33 @@ use Illuminate\Http\Request;
 
 class NationalHolidayDTO
 {
-    public string $name;
-    public string $slug;
-    public string $color;
-    public bool $is_paid;
+    public string $date;
+    public string $country;
+    public int $year;
+    public int $leave_type_id;
     public int $id;
 
     public function __construct(
-        string $name,
-        string $slug,
-        string $color,
-        bool $is_paid = false,
+        string $date,
+        string $country,
+        int $year,
+        int $leave_type_id,
         int $id = 0,
     ) {
-        $this->name = $name;
-        $this->slug = $slug;
-        $this->color = $color;
-        $this->is_paid = $is_paid;
+        $this->date = $date;
+        $this->country = $country;
+        $this->year = $year;
+        $this->leave_type_id = $leave_type_id;
         $this->id = $id;
     }
 
     public static function fromRequest(Request $request): self
     {
         return new self(
-            $request->input('name'),
-            $request->input('slug'),
-            $request->input('color'),
-            (bool) $request->input('is_paid', false),
+            $request->input('date'),
+            $request->input('country'),
+            $request->input('year'),
+            $request->input('leave_type_id'),
             $request->input('id', 0),
         );
     }
@@ -41,10 +41,10 @@ class NationalHolidayDTO
     public static function fromRequestForCreate(Request $request): self
     {
         return new self(
-            $request->input('name'),
-            $request->input('slug'),
-            $request->input('color'),
-            is_paid: false,
+            $request->input('date'),
+            $request->input('country'),
+            $request->input('year'),
+            leave_type_id: 5,
             id: 0,
         );
     }
@@ -52,10 +52,10 @@ class NationalHolidayDTO
     public static function fromModel(NationalHoliday $leaveType): self
     {
         return new self(
-            $leaveType->name,
-            $leaveType->slug,
-            $leaveType->color,
-            (bool) $leaveType->is_paid,
+            $leaveType->date,
+            $leaveType->country,
+            $leaveType->year,
+            $leaveType->leave_type_id,
             $leaveType->id,
 
         );
@@ -69,17 +69,17 @@ class NationalHolidayDTO
     public function toArray(): array
     {
         return [
-            'name' => $this->name,
-            'slug' => $this->slug,
-            'color' => $this->color,
-            'is_paid' => $this->is_paid,
+            'name' => $this->date,
+            'slug' => $this->country,
+            'color' => $this->year,
+            'is_paid' => $this->leave_type_id,
             'id' => $this->id,
         ];
     }
 
     public static function fromCollection(iterable $leaveTypes): array
     {
-        return array_map(function (LeaveType $leaveType) {
+        return array_map(function (NationalHoliday $leaveType) {
             return self::fromModel($leaveType);
         }, $leaveTypes->all());
     }

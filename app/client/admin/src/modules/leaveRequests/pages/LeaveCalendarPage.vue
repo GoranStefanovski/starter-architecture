@@ -16,7 +16,9 @@ onMounted(() => {
 
 // Reactive References
 const leaveDays = ref([]);
+const nationalHolidays = ref([]);
 const users = ref([]);
+const leaveTypes = ref([]);
 
 // Fetch Leave Days for All Users (Only Approved)
 const fetchAllApprovedLeaveDays = async () => {
@@ -30,6 +32,15 @@ const fetchAllApprovedLeaveDays = async () => {
   }
 };
 
+const fetchAllNationalHolidays = async () => {
+  try {
+    const response = await axios.get("/national_holiday/all");
+    nationalHolidays.value = response.data;
+  } catch (error) {
+    console.error("Error fetching national holidays:", error);
+  }
+};
+
 // Fetch Users
 const fetchUsers = async () => {
   try {
@@ -40,23 +51,45 @@ const fetchUsers = async () => {
   }
 };
 
-// Helper function to get user's full name
+const fetchLeaveTypes = async () => {
+    try {
+      const response = await axios.get("/leave_type/all");
+      leaveTypes.value = response.data;
+    } catch (error) {
+      console.error("Error fetching leave types:", error);
+    }
+  };
+
+
 const getUserFullName = (userId: number) => {
   const user = users.value.find((u: any) => u.id === userId);
   return user ? `${user.first_name} ${user.last_name}` : "Unknown User";
 };
 
-// Map Leave Days to Calendar Events
-const calendarEvents = computed(() =>
-  leaveDays.value.map((leave: any) => ({
-    title: getUserFullName(leave.user_id), // Get full name using user_id
+const getLeaveTypeColor = (id: number) => {
+  const leaveType = leaveTypes.value.find((u: any) => u.id === id);
+  return leaveType ? leaveType.color  : "Unknown Leave Type";
+};
+
+const calendarEvents = computed(() => {
+  const leaveEvents = leaveDays.value.map((leave: any) => ({
+    title: getUserFullName(leave.user_id),
     start: leave.start_date,
     end: leave.end_date || leave.start_date,
-    backgroundColor: "#505ae2", // Default gray color
+    backgroundColor: getLeaveTypeColor(leave.leave_type_id),
     textColor: "#fff",
-    textFontSize: '24px'
-  }))
-);
+  }));
+
+  const holidayEvents = nationalHolidays.value.map((holiday: any) => ({
+    title: holiday.country + 'n National Holiday',
+    start: holiday.date,
+    end: holiday.date,
+    backgroundColor: "#6326F2", // Black color for holidays
+    textColor: "#fff",
+  }));
+
+  return [...leaveEvents, ...holidayEvents];
+});
 
 // Calendar Options
 const calendarOptions = computed(() => ({
@@ -70,6 +103,8 @@ const calendarOptions = computed(() => ({
 onMounted(() => {
   fetchAllApprovedLeaveDays();
   fetchUsers();
+  fetchAllNationalHolidays();
+  fetchLeaveTypes();
 });
 </script>
 

@@ -55,7 +55,6 @@ class NationalHolidayService implements NationalHolidayServiceInterface
         $data['draw'] = $data['draw'] ?? 1;
 
         $usersCollection = $this->leaveTypeRepository->draw($data);
-
         $usersDTOs = $usersCollection->getCollection()->map(function ($user) {
             return NationalHolidayDTO::fromModel($user);
         });
