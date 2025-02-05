@@ -5,15 +5,16 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Applications\NationalHoliday\Model\NationalHoliday;
 use GuzzleHttp\Client;
+use Carbon\Carbon;
 
 class PopulateNationalHolidays extends Command
 {
-    protected $signature = 'populate:holidays';
+    protected $signature = 'populate:holidays {--year=}';
     protected $description = 'Populate national holidays for Macedonia and Bulgaria using Nager.Date API';
 
     public function handle()
     {
-        $year = env('HOLIDAYS_YEAR');
+        $year = $this->option('year');
 
         if (!$year) {
             $this->error('HOLIDAYS_YEAR is not set in the .env file.');
@@ -42,6 +43,12 @@ class PopulateNationalHolidays extends Command
             $holidays = json_decode($response->getBody(), true);
 
             foreach ($holidays as $holiday) {
+                $holidayDate = Carbon::parse($holiday['date']);
+
+                if ($holidayDate->isWeekend()) {
+                    continue;
+                }
+
                 NationalHoliday::updateOrCreate(
                     [
                         'date'    => $holiday['date'],
