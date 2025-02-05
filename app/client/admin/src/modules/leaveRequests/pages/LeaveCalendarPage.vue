@@ -75,16 +75,18 @@ const calendarEvents = computed(() => {
   const leaveEvents = leaveDays.value.map((leave: any) => ({
     title: getUserFullName(leave.user_id),
     start: leave.start_date,
-    end: leave.end_date || leave.start_date,
+    end: leave.end_date
+      ? new Date(new Date(leave.end_date).getTime() + 24 * 60 * 60 * 1000).toISOString().split('T')[0] // Add 1 day
+      : leave.start_date,
     backgroundColor: getLeaveTypeColor(leave.leave_type_id),
     textColor: "#fff",
   }));
 
   const holidayEvents = nationalHolidays.value.map((holiday: any) => ({
-    title: holiday.country + 'n National Holiday',
+    title: holiday.country + ' National Holiday',
     start: holiday.date,
-    end: holiday.date,
-    backgroundColor: "#6326F2", // Black color for holidays
+    end: new Date(new Date(holiday.date).getTime() + 24 * 60 * 60 * 1000).toISOString().split('T')[0], // Add 1 day for holidays too
+    backgroundColor: "#6326F2",
     textColor: "#fff",
   }));
 

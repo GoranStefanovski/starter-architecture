@@ -60,7 +60,6 @@ class NationalHolidayRepository implements NationalHolidayRepositoryInterface
     public function draw($data): StarterPaginator
     {
         //        $paginatedUsers = $this->prepareDatatableQuery($data, [User::ADMIN, User::EDITOR, User::COLLABORATOR]);
-
         $query = $this->leaveType->query();
 
         // $query->whereIn('roles.name', $roles);
@@ -75,6 +74,13 @@ class NationalHolidayRepository implements NationalHolidayRepositoryInterface
                 $subquery->where('leave_types.slug', 'like', '%' . $search . '%');
                 $subquery->orWhere('leave_types.name', 'like', '%' . $search . '%');
             });
+        }
+
+        $country = $data['isCountry'];
+        if ($country == 1) {
+            $query->where('national_holidays.country', 'like', '%Macedonia%');
+        } else if ($country == 2) {
+            $query->where('national_holidays.country', 'like', '%Bulgaria%');
         }
 
         return $query->paginate($data['length']);

@@ -131,7 +131,7 @@
           <UserFormPasswordTab v-model:password="password" />
         </TabbedContentTab>
         <TabbedContentTab :label="'Calednar'" id="calendar">
-          <UserFormCalendarTab :userId="id" />
+          <UserFormCalendarTab :userId="id" :country="country"/>
         </TabbedContentTab>
         <TabbedContentTab v-if="isUserWriter" :label="'Leave Days'" id="leave-days">
           <UserFormLeaveDaysTab v-model:paidLeavesMax="paidLeavesMax" :daysLeft="paidLeavesLeft" />

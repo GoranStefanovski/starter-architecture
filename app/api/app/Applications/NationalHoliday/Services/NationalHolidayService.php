@@ -48,9 +48,10 @@ class NationalHolidayService implements NationalHolidayServiceInterface
     public function draw(array $data): array
     {
         $data['columns'] = ['users.first_name', 'users.last_name', 'email', 'roles.id', 'users.is_disabled'];
-        $data['length'] = $data['length'] ?? 10;
+        $data['length'] = $data['length'] ?? 25;
         $data['column'] = $data['column'] ?? 'users.first_name';
         $data['dir'] = $data['dir'] ?? 'asc';
+        $data['isCountry'] = $data['isCountry'] ?? '';
         $data['search'] = $data['search'] ?? '';
         $data['draw'] = $data['draw'] ?? 1;
 

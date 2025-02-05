@@ -14,11 +14,12 @@ import {
 const { t } = useI18n();
 
 // Props
-const props = defineProps<{ userId: number }>();
+const props = defineProps<{ userId: number, country: number }>();
 
 // Reactive References
 const leaveDays = ref([]);
 const leaveTypes = ref([]);
+const nationalHolidays = ref([]);
 
 // Fetch Approved Leave Days
 const fetchApprovedLeaveDays = async () => {
@@ -42,6 +43,17 @@ const fetchLeaveTypes = async () => {
   }
 };
 
+const fetchUserNationalHolidays = async () => {
+  try {
+    const response = await axios.get("/national_holiday/draw", {
+      params: { isCountry : props.country }
+    });
+    nationalHolidays.value = response.data.data;
+  } catch (error) {
+    console.error("Error fetching national holidays:", error);
+  }
+};
+
 // Get Leave Type Name by ID
 const getNameLeaveType = (id: number) => {
   const leaveType = leaveTypes.value.find((type) => type.id === id);
@@ -54,15 +66,31 @@ const getNameLeaveColor = (id: number) => {
 };
 
 // Map Leave Days to Calendar Events
-const calendarEvents = computed(() =>
-  leaveDays.value.map((leave: any) => ({
+const calendarEvents = computed(() => {
+  // Leave Events (Multi-Day Events)
+  const leaveEvents = leaveDays.value.map((leave: any) => ({
     title: getNameLeaveType(leave.leave_type_id),
     start: leave.start_date,
-    end: leave.end_date || leave.start_date, // Use start_date if end_date is missing
-    backgroundColor: getNameLeaveColor(leave.leave_type_id), // Green for approved, red for others
+    end: leave.end_date
+      ? new Date(new Date(leave.end_date).getTime() + 24 * 60 * 60 * 1000)
+          .toISOString()
+          .split("T")[0] // Add 1 day to include the last day
+      : leave.start_date,
+    backgroundColor: getNameLeaveColor(leave.leave_type_id),
     textColor: "#fff",
-  }))
-);
+  }));
+
+  // National Holiday Events (Single-Day Events)
+  const holidayEvents = nationalHolidays.value.map((holiday: any) => ({
+    title: `${holiday.country} National Holiday`,
+    start: holiday.date,
+    backgroundColor: getNameLeaveColor(5),
+    textColor: "#fff",
+  }));
+
+  return [...leaveEvents, ...holidayEvents]; // Combine both events
+});
+
 
 // Calendar Options
 const calendarOptions = computed(() => ({
@@ -76,6 +104,7 @@ const calendarOptions = computed(() => ({
 onMounted(() => {
   fetchApprovedLeaveDays();
   fetchLeaveTypes();
+  fetchUserNationalHolidays();
 });
 </script>
 
