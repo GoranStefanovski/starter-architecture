@@ -18,6 +18,16 @@ interface LeaveRequestServiceInterface
     public function getAll(): array;
 
     /**
+     * @return array
+     */
+    public function getApproved(): array;
+
+    /**
+     * @return array
+     */
+    public function getPending(): array;
+
+    /**
      * @param integer $id
      * @return LeaveRequestDTO
      */

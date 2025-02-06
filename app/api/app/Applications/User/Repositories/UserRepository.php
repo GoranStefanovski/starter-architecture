@@ -61,6 +61,9 @@ class UserRepository implements UserRepositoryInterface
     {
         $user = $this->user->findOrFail($userId);
         $attributes = $userData->toArray();
+        if($attributes['paid_leaves_max'] != $attributes['paid_leaves_left']) {
+            $attributes['paid_leaves_left'] = $attributes['paid_leaves_max'];
+        }
         $user->update($attributes);
         return $user;
     }

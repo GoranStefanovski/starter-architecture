@@ -15,7 +15,7 @@
     id="manager"
     :options="optionsData"
     :readonly="readonly"
-    label="Assign To PM"
+    label="Assign To"
     is-inline
   />
   

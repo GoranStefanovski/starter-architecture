@@ -9,8 +9,8 @@ export const LEAVE_REQUESTS_DATATABLE_COLUMNS: DatatableColumns = [
   },
   {
     id: 1,
-    label: "From (User)",
-    name: "from",
+    label: "Assigned To",
+    name: "request_to",
     sortable: false,
   },
   {

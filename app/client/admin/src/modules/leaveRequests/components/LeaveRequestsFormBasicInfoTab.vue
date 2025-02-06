@@ -53,11 +53,8 @@
 
   onMounted(() => {
     fetchLeaveTypes();
-    if (props.user.role == 1 || props.user.role == 2) {
       fetchAdmins();
-    } else {
       fetchManagers();
-    }
   });
 </script>
 <template>

@@ -135,6 +135,7 @@
             v-model:endDate="endDate"
             v-model:reason="reason"
             v-model:requestTo="requestTo"
+            :user="auth.user()"
           />
         </TabbedContentTab>
         <div v-if="(isConfirmed == 0) && isApprovePage" class="confirmation_btn_wrapper">

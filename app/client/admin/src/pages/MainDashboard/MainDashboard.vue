@@ -8,6 +8,7 @@
   import { ref, onMounted } from "vue";
   import { PageWrapper } from "@/components";
   // import { get } from "@/services/HTTP";
+  import { useAuth } from "@websanova/vue-auth/src/v3.js";
   import { useRootStore } from "@/store/root";
   import {
     PortletComponent,
@@ -30,6 +31,8 @@ import { leaveRequest } from "@/modules/leaveRequests/constants";
   const users = ref([]);
   const leaveRequests = ref([]);
   const isLoading = ref(false);
+  const auth = useAuth();
+
   const { setActiveClasses } = useRootStore();
   onMounted(() => {
     fetchLeaveTypes();
@@ -54,10 +57,8 @@ import { leaveRequest } from "@/modules/leaveRequests/constants";
 
   const fetchRequests = async () => {
     try {
-      const response = await axios.get("/leave_request/draw", {
-        params: { isPending: true }
-      });
-      leaveRequests.value = response.data.data;
+      const response = await axios.get("/leave_request/pending");
+      leaveRequests.value = response.data;
     } catch (error) {
       console.error("Error fetching leave types:", error);
     }
@@ -124,7 +125,7 @@ import { leaveRequest } from "@/modules/leaveRequests/constants";
           </PortletBody>
         </PortletComponent>
       </div>
-      <div class="col-md-4">
+      <div v-if="auth.user().permissions_array.includes('write_users')" class="col-md-4">
         <PortletComponent isBordered>
           <PortletHead>
             <PortletHeadLabel>
@@ -136,15 +137,13 @@ import { leaveRequest } from "@/modules/leaveRequests/constants";
               <tr>
                 <th>ID</th>
                 <th>From</th>
-                <th>Assigned</th>
-                <th>Link To Approval</th>
+                <th>Link</th>
               </tr>
               <tr v-for="leave, index in leaveRequests" :key="index">
                 <td>{{ index + 1}}.</td>
                 <td>{{ getUserFullName(leave.user_id) }}</td>
-                <td>{{ getUserFullName(leave.request_to) }}</td>
                 <td>
-                  <a :href="`/admin/leave_request/${leave.id}/confirmation`">Edit</a>
+                  <router-link :to="`/admin/leave_request/${leave.id}/confirmation`">View</router-link>
                 </td>
               </tr>
             </table>

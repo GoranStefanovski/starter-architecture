@@ -23,10 +23,8 @@ const leaveTypes = ref([]);
 // Fetch Leave Days for All Users (Only Approved)
 const fetchAllApprovedLeaveDays = async () => {
   try {
-    const response = await axios.get("/leave_request/draw", {
-      params: { isApproved: true },
-    });
-    leaveDays.value = response.data.data;
+    const response = await axios.get("/leave_request/approved");
+    leaveDays.value = response.data;
   } catch (error) {
     console.error("Error fetching leave requests:", error);
   }
@@ -79,7 +77,7 @@ const calendarEvents = computed(() => {
       ? new Date(new Date(leave.end_date).getTime() + 24 * 60 * 60 * 1000).toISOString().split('T')[0] // Add 1 day
       : leave.start_date,
     backgroundColor: getLeaveTypeColor(leave.leave_type_id),
-    textColor: "#fff",
+    textColor: "black",
   }));
 
   const holidayEvents = nationalHolidays.value.map((holiday: any) => ({
@@ -87,7 +85,7 @@ const calendarEvents = computed(() => {
     start: holiday.date,
     end: new Date(new Date(holiday.date).getTime() + 24 * 60 * 60 * 1000).toISOString().split('T')[0], // Add 1 day for holidays too
     backgroundColor: "#6326F2",
-    textColor: "#fff",
+    textColor: "white",
   }));
 
   return [...leaveEvents, ...holidayEvents];

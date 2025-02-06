@@ -42,6 +42,27 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
     {
         return LeaveRequestDTO::fromCollection($this->leaveRequest::all());
     }
+
+    public function getApproved(): array
+    {
+        $query = $this->leaveRequest->with(['user', 'leaveType']);
+        
+        $query->where('is_confirmed', '=', 2);
+
+        return $query->whereNull('deleted_at')->get()->toArray();
+    }
+
+    public function getPending(): array
+    {
+        $query = $this->leaveRequest->with(['user', 'leaveType']);
+        
+        $user = Auth::user();
+        $query->where('request_to', '=', $user->id);
+
+        $query->where('is_confirmed', '=', 0);
+
+        return $query->whereNull('deleted_at')->get()->toArray();
+    }
     // Get Leave Request by Id
     public function get($id): LeaveRequest
     {
@@ -53,8 +74,7 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
     {
         $leaveRequest = $this->leaveRequest->create($leaveRequestDTO->toArray());
         if ($leaveRequest->leave_type_id == 6) {
-            $leaveRequest->is_confirmed = 2;
-            $this->sendRequestConfirmationEmail($leaveRequest);
+            $this->confirm($leaveRequest->id, $leaveRequestDTO, 2);
         } else {
             $this->sendRequestEmail($leaveRequest, false);
         }
@@ -111,13 +131,6 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
             });
         }
 
-        if ($data['isApproved'] ?? false) {
-            $query->where('leave_requests.is_confirmed', 2);
-        }
-        if($data['isPending']) {
-            $query->where('leave_requests.is_confirmed', '=', 0);
-        }
-
         $this->applyUserRoleFilter($query, $user, $data['userId'] ?? null);
 
         return $query->whereNull('deleted_at')->paginate($data['length']);
@@ -130,11 +143,8 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
         if ($calendarUserId) {
             $query->where('leave_requests.user_id', $calendarUserId)
                   ->where('leave_requests.is_confirmed', 2);
-        } elseif (in_array($roleId, [2, 3])) {
-            $query->where(function ($q) use ($user) {
-                $q->where('leave_requests.user_id', $user->id)
-                  ->orWhere('leave_requests.request_to', $user->id);
-            });
+        } else {
+            $query->where('leave_requests.user_id', $user->id);
         }
     }
 

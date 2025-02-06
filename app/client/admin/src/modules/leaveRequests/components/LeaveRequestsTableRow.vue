@@ -43,7 +43,7 @@
     </TableColumn>
 
     <TableColumn>
-      {{ getNameUser(leaveRequest.user_id) }}
+      {{ getNameUser(Math.round(leaveRequest.request_to)) }}
     </TableColumn>
 
     <TableColumn>

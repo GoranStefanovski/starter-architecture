@@ -22,6 +22,8 @@ Route::group([
     ], function () {
         Route::get('all', [LeaveRequestController::class, 'getAll']);
         Route::get('draw', [LeaveRequestController::class, 'draw']);
+        Route::get('approved', [LeaveRequestController::class, 'getApproved']);
+        Route::get('pending', [LeaveRequestController::class, 'getPending']);
 
         // CRUD ROUTES
         Route::post('create', [LeaveRequestController::class, 'create']);

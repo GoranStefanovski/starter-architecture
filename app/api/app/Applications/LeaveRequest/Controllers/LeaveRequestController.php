@@ -33,6 +33,28 @@ class LeaveRequestController extends Controller
     }
 
     /**
+     * Get a JSON with all the users
+     *
+     * @return JsonResponse
+     */
+    public function getApproved(): JsonResponse
+    {
+        $leaveRequestDTOs = $this->leaveRequestService->getApproved();
+        return response()->json($leaveRequestDTOs);
+    }
+
+    /**
+     * Get a JSON with all the users
+     *
+     * @return JsonResponse
+     */
+    public function getPending(): JsonResponse
+    {
+        $leaveRequestDTOs = $this->leaveRequestService->getPending();
+        return response()->json($leaveRequestDTOs);
+    }
+
+    /**
      * Get a JSON with a user by ID
      *
      * @param  integer  $id
