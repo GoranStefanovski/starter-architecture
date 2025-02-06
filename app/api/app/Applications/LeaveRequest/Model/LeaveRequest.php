@@ -55,4 +55,19 @@ class LeaveRequest extends Model
     protected $appends = [
     ];
 
+    /**
+     * Relationship with the User who requested the leave.
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    /**
+     * Relationship with the LeaveType.
+     */
+    public function leaveType()
+    {
+        return $this->belongsTo(LeaveType::class, 'leave_type_id');
+    }
 }
