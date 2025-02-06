@@ -52,7 +52,13 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
     public function create(LeaveRequestDTO $leaveRequestDTO): LeaveRequest
     {
         $leaveRequest = $this->leaveRequest->create($leaveRequestDTO->toArray());
-        $this->sendRequestEmail($leaveRequest, false);
+        if ($leaveRequest->leave_type_id == 6) {
+            $leaveRequest->is_confirmed = 2;
+            $this->sendRequestConfirmationEmail($leaveRequest);
+        } else {
+            $this->sendRequestEmail($leaveRequest, false);
+        }
+
         return $leaveRequest;
     }
     // Edit a request
@@ -163,7 +169,7 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
         if ($leaveRequest->is_confirmed == 2) {
             return array_filter([
                 $requestedUser?->email,
-                $manager?->email,
+                ...User::role(User::MANAGER)->pluck('email')->toArray(),
                 ...User::role(User::ADMIN)->pluck('email')->toArray()
             ]);
         } else if ($leaveRequest->is_confirmed == 1) {

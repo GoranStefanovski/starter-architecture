@@ -11,7 +11,11 @@
 @endphp
     <h2>New Leave Request Assigned to You</h2>
     <h3>{{ $leaveRequest->user->first_name }} {{ $leaveRequest->user->last_name }}</h3>
+    @if ($leaveRequest->end_date == null)
+    <h3>{{ $formattedStartDate }}</h3>
+    @else
     <h3>{{ $formattedStartDate }} to {{ $formattedEndDate }}</h3>
+    @endif
     <h3>{{ $leaveRequest->leaveType->name }}</h3>
         <a href="{{ url('http://starter.test/admin/leave_request/' . $leaveRequest->id . '/confirmation') }}" target="_blank">
             Open Leave Request Confirmation Page
