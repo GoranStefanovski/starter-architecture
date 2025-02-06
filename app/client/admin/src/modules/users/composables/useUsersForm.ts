@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/vue-query";
 import axios from "axios";
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { useToast } from "vue-toastification";
 import { USER_API_ENDPOINTS } from "../constants";
 import type { UserFormItem, GetUserResponse } from "../types";
@@ -12,8 +12,8 @@ export const useUsersForm = (userId?: number) => {
   const queryClient = useQueryClient();
   const toast = useToast();
   const router = useRouter();
+  const manualLoading = ref(false);
 
-  console.log(userId)
   const { isLoading: isFetching, data: queryData } = useQuery({
     queryKey: [USER_CACHE_KEY, userId],
     queryFn: async (): Promise<GetUserResponse> => {
@@ -25,20 +25,24 @@ export const useUsersForm = (userId?: number) => {
 
   const { mutate: createUser, isPending: isCreating } = useMutation({
     mutationFn: async (newUserData: UserFormItem): Promise<GetUserResponse> => {
+      manualLoading.value = true;
       const data = await axios.post(USER_API_ENDPOINTS.create, newUserData);
       return data.data;
     },
     onSuccess: async () => {
       toast.success("User saved!");
       router.push({ name: "users" });
+      manualLoading.value = false;
     },
     onError: (error) => {
+      manualLoading.value = false;
       toast.error(error.message);
     },
   });
 
   const { mutate: updateUser, isPending: isUpdating } = useMutation({
     mutationFn: async (data: UserFormItem): Promise<GetUserResponse> => {
+      manualLoading.value = true;
       const response = await axios.patch(
         USER_API_ENDPOINTS.patch(userId ?? 0),
         data,
@@ -48,14 +52,17 @@ export const useUsersForm = (userId?: number) => {
     onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: [USER_CACHE_KEY, userId] });
       toast.success("User updated!");
+      manualLoading.value = false;
     },
     onError: (error) => {
+      manualLoading.value = false;
       toast.error(error.message);
     },
   });
 
   const { mutate: uploadAvatar, isPending: isUploadingAvatar } = useMutation({
     mutationFn: async (file: File): Promise<GetUserResponse> => {
+      manualLoading.value = true;
       const formData = new FormData();
       formData.append("avatar", file);
 
@@ -73,8 +80,10 @@ export const useUsersForm = (userId?: number) => {
     onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: [USER_CACHE_KEY, userId] });
       toast.success("Image has been updated!");
+      manualLoading.value = false;
     },
     onError: (error) => {
+      manualLoading.value = false;
       toast.error(error.message);
     },
   });
@@ -86,6 +95,6 @@ export const useUsersForm = (userId?: number) => {
     createUser,
     updateUser,
     uploadAvatar,
-    isLoading: isFetching || isUpdating || isCreating || isUploadingAvatar,
+    isLoading: manualLoading,
   };
 };

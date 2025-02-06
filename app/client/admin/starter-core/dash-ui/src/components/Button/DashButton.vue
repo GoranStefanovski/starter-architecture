@@ -25,7 +25,8 @@
     isPill = false,
     isSquare = false,
     isIcon = false,
-    isClean = false
+    isClean = false,
+    loading = false,
   } = defineProps<DashButtonProps>();
 
   const buttonClass = computed(() => {
@@ -88,6 +89,10 @@
       classes.push("btn-clean");
     }
 
+    if (loading) {
+      classes.push("btnNoClick");
+    }
+
     return classes.join(" ");
   });
 
@@ -107,9 +112,32 @@
     v-else
     :type="buttonType"
     :class="buttonClass"
+    :disabled="loading"
     @click="(event) => emit('click', event)"
   >
-    <component :is="icon"></component>
-    <slot />
+    <span v-if="loading" class="spinner"></span>
+    <component v-else :is="icon"></component>
+    <slot v-if="!loading" />
   </button>
 </template>
+
+<style scoped>
+  .btnNoClick {
+    pointer-events: none;
+  }
+  .spinner {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: 2px solid currentColor;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+  }
+
+  @keyframes spin {
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+</style>
