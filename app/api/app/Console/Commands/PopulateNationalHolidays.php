@@ -9,15 +9,19 @@ use Carbon\Carbon;
 
 class PopulateNationalHolidays extends Command
 {
-    protected $signature = 'populate:holidays {--year=}';
+    protected $signature = 'populate:holidays {--year=} {--drop}';
     protected $description = 'Populate national holidays for Macedonia and Bulgaria using Nager.Date API';
 
     public function handle()
     {
         $year = $this->option('year');
+        $drop_flag = $this->option('drop');
+
+        if ($drop_flag) {
+            NationalHoliday::truncate();
+        }
 
         if (!$year) {
-            $this->error('HOLIDAYS_YEAR is not set in the .env file.');
             return Command::FAILURE;
         }
 

@@ -74,7 +74,7 @@ import { leaveRequest } from "@/modules/leaveRequests/constants";
 
   const getUserFullName = (userId: number) => {
     const user = users.value.find((u: any) => u.id === userId);
-    return user ? `${user.first_name} ${user.last_name}` : "Unknown User";
+    return user ? `${user.first_name} ${user.last_name.charAt(0)}.` : "Unknown User";
 };
 </script>
 <template>
@@ -135,12 +135,14 @@ import { leaveRequest } from "@/modules/leaveRequests/constants";
             <table>
               <tr>
                 <th>ID</th>
-                <th>Name</th>
+                <th>From</th>
+                <th>Assigned</th>
                 <th>Link To Approval</th>
               </tr>
               <tr v-for="leave, index in leaveRequests" :key="index">
                 <td>{{ index + 1}}.</td>
                 <td>{{ getUserFullName(leave.user_id) }}</td>
+                <td>{{ getUserFullName(leave.request_to) }}</td>
                 <td>
                   <a :href="`/admin/leave_request/${leave.id}/confirmation`">Edit</a>
                 </td>
