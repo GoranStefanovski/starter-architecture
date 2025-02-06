@@ -30,6 +30,8 @@ class UserRepository implements UserRepositoryInterface
         'first_name' => 'users.first_name',
         'last_name' => 'users.last_name',
         'email' => 'users.email',
+        'paid_leaves_left' => 'users.paid_leaves_left',
+        'is_office_based' => 'is_office_based',
         'roles' => 'roles.id',
         'status' => 'users.is_disabled'
     ];

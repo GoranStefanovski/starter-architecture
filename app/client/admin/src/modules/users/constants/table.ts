@@ -22,7 +22,7 @@ export const USERS_DATATABLE_COLUMNS: DatatableColumns = [
   {
     id: 3,
     label: "users.datatable.days_left",
-    name: "email",
+    name: "paid_leaves_left",
     sortable: true,
   },
   {
