@@ -26,7 +26,7 @@ class LeaveRequestConfirmation extends Mailable
      */
     public function build(): self
     {
-        return $this->subject('Leave Request was Approved')
+        return $this->subject($this->leaveRequest->user->first_name . ' ' . $this->leaveRequest->user->last_name .' Leave Request was Approved')
                     ->view('emails.leave_request_confirmation')
                     ->with([
                         'leaveRequest' => $this->leaveRequest,

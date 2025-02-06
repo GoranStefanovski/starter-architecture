@@ -11,9 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('leave_requests', function (Blueprint $table) {
-            $table->unsignedBigInteger('user_id')->change();
-            $table->unsignedBigInteger('leave_type_id')->change();
+        Schema::create('leave_requests', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('leave_type_id');
+            $table->string('start_date');
+            $table->string('end_date')->nullable();
+            $table->integer('status')->nullable()->default(0);
+            $table->string('reason')->nullable()->default("-");
+            $table->string('request_to');
+            $table->integer('confirmed_by')->nullable();
+            $table->integer('is_confirmed')->nullable();
+            $table->softDeletes();
+            $table->timestamps();
 
             $table->foreign('user_id')
                   ->references('id')->on('users')
@@ -34,5 +44,6 @@ return new class extends Migration
             $table->dropForeign(['user_id']);
             $table->dropForeign(['leave_type_id']);
         });
+        Schema::dropIfExists('leave_requests');
     }
 };
