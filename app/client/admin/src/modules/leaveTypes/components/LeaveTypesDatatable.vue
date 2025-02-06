@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed } from "vue";
+  import { computed} from "vue";
   import { useUsersTable } from "../composables";
   import { LEAVE_TYPES_DATATABLE_COLUMNS } from "../constants";
   import LeaveTypesTableHeader from "./LeaveTypesTableHeader.vue";

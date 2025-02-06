@@ -14,6 +14,17 @@
       },
     });
   };
+
+  const clearFilter = () => {
+    router.push({
+      path: route.path,
+    });
+  }
+
+  const props = defineProps<{
+        options?: Array<any>;
+        optionsLabel?: String;
+    }>();
 </script>
 
 <template>
@@ -40,24 +51,26 @@
               </div>
             </div>
 
-            <div class="col-md-4 kt-margin-b-20-tablet-and-mobile">
+            <div v-if="props.options" class="col-md-4 kt-margin-b-20-tablet-and-mobile">
               <div class="kt-form__group kt-form__group--inline">
                 <div class="kt-form__label">
-                  <label>Status:</label>
+                  <label>{{ props.optionsLabel }}</label>
                 </div>
                 <div class="kt-form__control">
                   <select
+                    v-on:input="handleSearch"
                     id="kt_form_status"
                     class="form-control bootstrap-select"
                   >
-                    <option value="">All</option>
-                    <option value="1">Pending</option>
-                    <option value="2">Delivered</option>
-                    <option value="3">Canceled</option>
-                    <option value="4">Success</option>
-                    <option value="5">Info</option>
-                    <option value="6">Danger</option>
+                    <option v-for="option, index in options" :key="index" :value="option.value">{{ option.name }}</option>
                   </select>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 kt-margin-b-20-tablet-and-mobile">
+              <div class="kt-form__group kt-form__group--inline">
+                <div v-on:click="clearFilter" class="kt-form__label">
+                  <div class="clear_filters">Clear Filters</div>
                 </div>
               </div>
             </div>
@@ -76,3 +89,12 @@
     <!--end: Search Form -->
   </PortletBody>
 </template>
+<style scoped lang="scss">
+.clear_filters {
+  font-weight: bold;
+  &:hover {
+    font-weight: bolder;
+    cursor: pointer;
+  }
+}
+</style>

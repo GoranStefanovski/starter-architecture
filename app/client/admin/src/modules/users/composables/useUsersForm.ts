@@ -4,12 +4,14 @@ import { computed } from "vue";
 import { useToast } from "vue-toastification";
 import { USER_API_ENDPOINTS } from "../constants";
 import type { UserFormItem, GetUserResponse } from "../types";
+import { useRouter } from 'vue-router';
 
 const USER_CACHE_KEY = "user";
 
 export const useUsersForm = (userId?: number) => {
   const queryClient = useQueryClient();
   const toast = useToast();
+  const router = useRouter();
 
   console.log(userId)
   const { isLoading: isFetching, data: queryData } = useQuery({
@@ -28,6 +30,7 @@ export const useUsersForm = (userId?: number) => {
     },
     onSuccess: async () => {
       toast.success("User saved!");
+      router.push({ name: "users" });
     },
     onError: (error) => {
       toast.error(error.message);

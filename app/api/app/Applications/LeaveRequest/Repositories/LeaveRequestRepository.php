@@ -31,10 +31,11 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
     }
 
     private const COLUMNS_MAP = [
-        'first_name' => 'users.first_name',
-        'last_name' => 'users.last_name',
-        'email' => 'users.email',
-        'status' => 'leave_requests.is_disabled'
+        'leave_type_id' => 'leave_requests.leave_type_id',
+        'request_to' => 'leave_requests.request_to',
+        'status' => 'leave_requests.is_confirmed',
+        'start_date' => 'leave_requests.start_date',
+        'end_date' => 'leave_requests.end_date'
     ];
 
     // Get all leaveRequests

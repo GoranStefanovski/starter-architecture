@@ -18,6 +18,14 @@
 
   const pagination = computed(() => data.value?.pagination ?? null);
   const users = computed(() => data.value?.data ?? null);
+
+  const userFilterOptions = [
+    { id: 0, name: "Select Role", value: ""},
+    { id: 1, name: "Admin", value: "admin"},
+    { id: 2, name: "Manager", value: "manager"},
+    { id: 3, name: "Developer", value: "developer"},
+  ]
+
 </script>
 <template>
   <DatatableComponent
@@ -27,10 +35,10 @@
     :error="error?.message"
   >
     <template #header>
-      <DatatableHeader title="Users" subtitle="List of users">
+      <DatatableHeader title="Users">
         <UsersTableHeader />
       </DatatableHeader>
-      <DatatableFilters />
+      <DatatableFilters :options="userFilterOptions"/>
     </template>
     <template v-if="users" #default>
       <UsersTableRow

@@ -4,20 +4,20 @@ export const LEAVE_REQUESTS_DATATABLE_COLUMNS: DatatableColumns = [
   {
     id: 0,
     label: "Leave Type",
-    name: "leave_type",
-    sortable: false,
+    name: "leave_type_id",
+    sortable: true,
   },
   {
     id: 1,
     label: "Assigned To",
     name: "request_to",
-    sortable: false,
+    sortable: true,
   },
   {
     id: 2,
     label: "Status",
     name: "status",
-    sortable: false,
+    sortable: true,
   },
   {
     id: 3,

@@ -4,12 +4,14 @@ import { computed } from "vue";
 import { useToast } from "vue-toastification";
 import { LEAVE_REQUEST_API_ENDPOINTS } from "../constants";
 import type { LeaveRequestFormItem, GetLeaveRequestResponse } from "../types";
+import { useRouter } from 'vue-router';
 
 const LEAVE_REQUEST_CACHE_KEY = "leave_request";
 
 export const useLeaveRequestsForm = (leaveRequestId?: number) => {
   const queryClient = useQueryClient();
   const toast = useToast();
+  const router = useRouter();
 
   const { isLoading: isFetching, data: queryData } = useQuery({
     queryKey: [LEAVE_REQUEST_CACHE_KEY, leaveRequestId],
@@ -27,6 +29,7 @@ export const useLeaveRequestsForm = (leaveRequestId?: number) => {
     },
     onSuccess: async () => {
       toast.success("Leave Request saved!");
+      router.push({ name: "leave_requests" });
     },
     onError: (error) => {
       toast.error(error.message);

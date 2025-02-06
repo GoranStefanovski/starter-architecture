@@ -91,7 +91,7 @@ import { leaveRequest } from "@/modules/leaveRequests/constants";
           <PortletBody>
             <table>
               <tr>
-                <th>ID</th>
+                <th>No.</th>
                 <th>Name</th>
               </tr>
               <tr v-for="type, index in leaveTypes" :key="index">
@@ -112,7 +112,7 @@ import { leaveRequest } from "@/modules/leaveRequests/constants";
           <PortletBody>
             <table>
               <tr>
-                <th>ID</th>
+                <th>No.</th>
                 <th>Name</th>
                 <th>Days Left</th>
               </tr>
@@ -135,7 +135,7 @@ import { leaveRequest } from "@/modules/leaveRequests/constants";
           <PortletBody>
             <table>
               <tr>
-                <th>ID</th>
+                <th>No.</th>
                 <th>From</th>
                 <th>Link</th>
               </tr>

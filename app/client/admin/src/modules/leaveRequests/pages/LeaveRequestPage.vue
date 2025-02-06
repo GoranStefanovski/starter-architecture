@@ -16,6 +16,7 @@
   import { useLeaveRequestsForm } from "../composables";
   import type { LeaveRequestFormItem } from "../types";
   import { DashButton, DashLink } from "@starter-core/dash-ui/src";
+  import { useRootStore } from "@/store/root";
 
   const { t } = useI18n();
   const basicInfoLabeel = t("users.basic.information");
@@ -23,6 +24,7 @@
   const isEditPage = computed(() => route.name == "edit.leave_request");
   const isApprovePage = computed(() => route.name == "approve.leave_request");
   const leaveRequestId = Number(route.params.leaveRequestId);
+  const { setBackUrl } = useRootStore();
 
   const auth = useAuth();
 

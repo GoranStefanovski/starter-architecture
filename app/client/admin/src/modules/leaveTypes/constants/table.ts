@@ -17,7 +17,7 @@ export const LEAVE_TYPES_DATATABLE_COLUMNS: DatatableColumns = [
     id: 2,
     label: "Color",
     name: "color",
-    sortable: true,
+    sortable: false,
   },
   {
     id: 3,
