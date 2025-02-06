@@ -140,13 +140,18 @@
             :user="auth.user()"
           />
         </TabbedContentTab>
-        <div v-if="(isConfirmed == 0) && isApprovePage" class="confirmation_btn_wrapper">
-          <span class="req_btn approve" @click="approve">
-            Approve
-          </span>
-          <span class="req_btn decline" @click="decline">
-            Decline
-          </span>
+        <div v-if="(isConfirmed == 0) && isApprovePage">
+          <div v-if="!isLoading" class="confirmation_btn_wrapper">
+            <span class="req_btn approve" @click="approve">
+              Approve
+            </span>
+            <span class="req_btn decline" @click="decline">
+              Decline
+            </span>
+          </div>
+          <div v-else class="loading_wrapper">
+            <span class="spinner"></span>
+          </div>
         </div>
       </TabbedContent>
     </form>
@@ -174,5 +179,21 @@
 
   .decline {
     background-color: red;
+  }
+
+  .spinner {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: 2px solid currentColor;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+  }
+
+  @keyframes spin {
+    100% {
+      transform: rotate(360deg);
+    }
   }
 </style>
