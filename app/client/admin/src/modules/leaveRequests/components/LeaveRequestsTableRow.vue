@@ -60,7 +60,7 @@
 
     <TableColumn>
       <dash-link
-        v-if="auth.user().permissions_array.includes('write_requests')"
+        v-if="auth.user().permissions_array.includes('write_requests') && (leaveRequest.is_confirmed == 0 || leaveRequest.is_confirmed == 1)"
         :to="{ name: 'edit.leave_request', params: { leaveRequestId: leaveRequest.id } }"
         theme="primary"
         theme-mod="outline-hover"
@@ -68,10 +68,13 @@
       >
         {{ $t("buttons.edit") }}
       </dash-link>
+      <span v-else>
+        -
+      </span>
     </TableColumn>
     <TableColumn>
       <DashButton
-        v-if="auth.user().permissions_array.includes('delete_requests')"
+        v-if="auth.user().permissions_array.includes('delete_requests') && (leaveRequest.is_confirmed == 0 || leaveRequest.is_confirmed == 1)"
         :icon="IconTrash"
         theme="danger"
         size="sm"

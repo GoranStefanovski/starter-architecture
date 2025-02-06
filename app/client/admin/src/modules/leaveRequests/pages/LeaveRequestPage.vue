@@ -124,6 +124,7 @@
             v-model:endDate="endDate"
             v-model:reason="reason"
             v-model:requestTo="requestTo"
+            :user="auth.user()"
           />
         </TabbedContentTab>
         <TabbedContentTab v-else :label="basicInfoLabeel" id="basic-info">
@@ -136,7 +137,7 @@
             v-model:requestTo="requestTo"
           />
         </TabbedContentTab>
-        <div v-if="(isConfirmed == 0 || isConfirmed == 1) && isApprovePage" class="confirmation_btn_wrapper">
+        <div v-if="(isConfirmed == 0) && isApprovePage" class="confirmation_btn_wrapper">
           <span class="req_btn approve" @click="approve">
             Approve
           </span>

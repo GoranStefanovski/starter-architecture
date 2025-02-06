@@ -59,6 +59,7 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
     public function update(int $leaveRequestId, LeaveRequestDTO $leaveRequestData): LeaveRequest
     {
         $leaveRequest = $this->get($leaveRequestId);
+        $leaveRequestData->is_confirmed = 0;
         $leaveRequest->update($leaveRequestData->toArray());
         $this->sendRequestEmail($leaveRequest, true);
         return $leaveRequest;
@@ -154,16 +155,24 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
         }
     }
 
-    private function getRecipients(LeaveRequest $leaveRequest): array
+    private function getRecipients(LeaveRequest $leaveRequest)
     {
         $manager = $this->user->find($leaveRequest->request_to);
         $requestedUser = $leaveRequest->user;
 
-        return array_filter([
-            $requestedUser?->email,
-            $manager?->email,
-            ...User::role(User::ADMIN)->pluck('email')->toArray()
-        ]);
+        if ($leaveRequest->is_confirmed == 2) {
+            return array_filter([
+                $requestedUser?->email,
+                $manager?->email,
+                ...User::role(User::ADMIN)->pluck('email')->toArray()
+            ]);
+        } else if ($leaveRequest->is_confirmed == 1) {
+            return $requestedUser->email;
+        } else if ($leaveRequest->is_confirmed == 0) {
+            return $manager->email;
+        }
+
+        
     }
 
     private function deductPaidLeaves(User $user, LeaveRequestDTO $leaveRequestData): void
