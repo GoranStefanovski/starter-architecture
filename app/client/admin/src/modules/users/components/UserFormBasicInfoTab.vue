@@ -15,6 +15,10 @@
     required: true,
     type: Boolean,
   });
+  const isOfficeBased = defineModel("isOfficeBased", {
+    required: true,
+    type: Boolean,
+  });
   const role = defineModel("role", { required: true, type: Number });
   const lastName = defineModel("lastName", { required: true, type: String });
   const firstName = defineModel("firstName", { required: true, type: String });
@@ -47,6 +51,14 @@
         type="outline"
         :label="t('users.status.label')"
         :helper-text="`User is  ${isDisabled ? 'disabled' : 'enabled'}`"
+      />
+      <form-switch
+        v-model="isOfficeBased"
+        id="enabled"
+        theme="danger"
+        type="outline"
+        :label="'Is Office Based'"
+        :helper-text="`User is  ${isOfficeBased ? '' : 'not'} Office Based`"
       />
     </div>
   </div>

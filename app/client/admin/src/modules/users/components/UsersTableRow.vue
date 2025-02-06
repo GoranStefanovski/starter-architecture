@@ -52,6 +52,10 @@
     </TableColumn>
 
     <TableColumn>
+      {{ user.is_office_based ? "Yes" : "No" }}
+    </TableColumn>
+
+    <TableColumn>
       {{ user.email }}
     </TableColumn>
 

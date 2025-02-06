@@ -19,6 +19,7 @@ class UserDTO
     public int $paid_leaves_max;
     public int $paid_leaves_left;
     public int $country;
+    public bool $is_office_based;
 
     public function __construct(
         string $first_name,
@@ -32,7 +33,8 @@ class UserDTO
         array $permissions_array = [],
         int $paid_leaves_max,
         int $paid_leaves_left,
-        int $country
+        int $country,
+        bool $is_office_based = false,
     ) {
         $this->first_name = $first_name;
         $this->last_name = $last_name;
@@ -46,6 +48,7 @@ class UserDTO
         $this->paid_leaves_max = $paid_leaves_max;
         $this->paid_leaves_left = $paid_leaves_left;
         $this->country = $country;
+        $this->is_office_based = $is_office_based;
     }
 
     public static function fromRequest(Request $request): self
@@ -62,7 +65,8 @@ class UserDTO
             $request->input('permissions_array', []),
             $request->input('paid_leaves_max'),
             $request->input('paid_leaves_left'),
-            $request->input('country')
+            $request->input('country'),
+            (bool) $request->input('is_office_based')
         );
     }
 
@@ -80,7 +84,8 @@ class UserDTO
             permissions_array: $request->input('permissions_array', []),
             paid_leaves_max: 0,
             paid_leaves_left: 0,
-            country: $request->input('country')
+            country: $request->input('country'),
+            is_office_based: false
         );
     }
 
@@ -98,7 +103,8 @@ class UserDTO
             $user->permissions_array,
             $user->paid_leaves_max,
             $user->paid_leaves_left,
-            $user->country
+            $user->country,
+            $user->is_office_based
         );
     }
 
@@ -121,7 +127,8 @@ class UserDTO
             'permissions_array' => $this->permissions_array,
             'paid_leaves_max' => $this->paid_leaves_max,
             'paid_leaves_left' => $this->paid_leaves_left,
-            'country' => $this->country
+            'country' => $this->country,
+            'is_office_based' => $this->is_office_based
         ];
     }
 

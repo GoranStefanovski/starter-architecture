@@ -40,7 +40,8 @@ class User extends Authenticatable implements HasMedia
         'activation_code',
         'paid_leaves_max',
         'paid_leaves_left',
-        'country'
+        'country',
+        'is_office_based'
     ];
 
     /**

@@ -69,7 +69,8 @@
         is_disabled: formData.value.is_disabled,
         paid_leaves_max: formData.value.paid_leaves_max,
         paid_leaves_left: formData.value.paid_leaves_left,
-        country: formData.value.country
+        country: formData.value.country,
+        is_office_based: formData.value.is_office_based
       });
     }
   }, [formData]);
@@ -84,6 +85,7 @@
   const [paidLeavesMax] = defineField("paid_leaves_max");
   const [paidLeavesLeft] = defineField("paid_leaves_left");
   const [country] = defineField("country");
+  const [isOfficeBased] = defineField("is_office_based");
 
 </script>
 
@@ -117,6 +119,7 @@
         <TabbedContentTab :label="basicInfoLabeel" id="basic-info">
           <UserFormBasicInfoTab
             v-model:isDisabled="isDisabled"
+            v-model:isOfficeBased="isOfficeBased"
             v-model:role="role"
             v-model:lastName="lastName"
             v-model:email="email"

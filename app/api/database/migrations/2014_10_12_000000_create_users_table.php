@@ -23,6 +23,7 @@ return new class extends Migration
             $table->boolean('is_disabled')->nullable()->default(0);
             $table->integer('paid_leaves_max')->nullable()->default(20);
             $table->integer('paid_leaves_left')->nullable()->default(20);
+            $table->boolean('is_office_based')->nullable()->default(0);
             $table->rememberToken();
             $table->softDeletes();
             $table->timestamps();
