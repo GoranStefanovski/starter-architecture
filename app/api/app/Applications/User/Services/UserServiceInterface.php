@@ -58,6 +58,13 @@ interface UserServiceInterface
     public function updateMyProfile($request);
 
     /**
+     * @param User $user
+     * @param Request $request
+     * @return void
+     */
+    public function updatePassword($user, $request);
+
+    /**
      * @return array
      */
     public function getUserRoles(): array;

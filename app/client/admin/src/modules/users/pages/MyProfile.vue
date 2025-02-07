@@ -1,102 +1,106 @@
-<script setup lang="ts">
-  import { IconArrowleft, IconMail, IconSave } from "@starter-core/icons";
-  import { cloneDeep } from "lodash";
-  import { computed, onMounted, provide, ref } from "vue";
-  // import AdminUserForm from '../../../features/Admin/UsersCrud/_components/MyProfileForm.vue';
+<script lang="ts" setup>
+  import { IconSave, IconArrowleft } from "@starter-core/icons";
+  import { useForm } from "vee-validate";
+  import { useAuth } from "@websanova/vue-auth/src/v3.js";
+  import { watch, computed } from "vue";
   import { useI18n } from "vue-i18n";
   import { useRoute } from "vue-router";
   import {
+    TabbedContent,
+    TabbedContentTab,
     PageWrapper,
     PAGE_WRAPPER_SLOTS,
     SubheaderTitle,
   } from "../../../components";
-  import { user } from "../constants";
-  import { useForm } from "@/composables";
-  import { getPhotoPath } from "@/helpers";
-  import { useUserRoles } from "@/modules/users/composables";
-  import { useRootStore } from "@/store/root";
-  import {
-    PortletComponent,
-    PortletBody,
-    FormInput,
-    FormDropdown,
-    DashButton,
-    DashLink,
-  } from "@starter-core/dash-ui/src";
-  // import { useEventsBus } from "@/composables";
+  import { UserFormBasicInfoTab, UserFormPasswordTab, UserFormCalendarTab, UserFormLeaveDaysTab } from "../components";
+  import { useUsersForm } from "../composables";
+  import type { UserFormItem } from "../types";
+  import { DashButton, DashLink } from "@starter-core/dash-ui/src";
 
-  const { setBackUrl, setActiveClasses } = useRootStore();
   const { t } = useI18n();
-
-  onMounted(() => {
-    setActiveClasses({
-      main: "/users",
-      sub: "edit.user",
-      title: "users.myprofile",
-    });
-    initFormFromItem();
-    // Not 100% sure but probably this is used for the same purpose as redirect route and should be removed
-    setBackUrl("/");
-  });
-
+  const basicInfoLabeel = t("users.basic.information");
+  const changePasswordLabel = t("users.password.change");
   const route = useRoute();
-  const { isLoading: isFetchingRoles, data: roles } = useUserRoles();
+  const auth = useAuth();
 
-  const item = ref(cloneDeep(user));
-  // const edit = route.name == 'edit.user';
-  const id = 1; //Number(route.params.userId);
-  const fetchUri = `/user/${id}`;
+  const userId = Number(auth.user().id);
+
+  const isUserWriter = auth.user().permissions_array.includes("write_users") ? true : false;
+  const validationSchema = {
+    last_name(value: string) {
+      if (value?.length >= 5) return true;
+      return "Name needs to be at least 5 characters.";
+    },
+  };
+
   const {
-    form,
-    messageClass,
-    message,
-    loading,
-    onSubmitTest,
-    initFormFromItem,
-    // clearErrors
-  } = useForm(fetchUri, user);
+    isLoading,
+    data: formData,
+    createUser,
+    updateUser,
+    uploadAvatar,
+  } = useUsersForm(userId);
 
-  provide("form", form.value);
-  provide("labelStart", "user");
+  const { handleSubmit, errors, setValues, defineField } =
+    useForm<UserFormItem>({
+      validationSchema,
+    });
 
-  // const postUri = computed(() => edit ? `/user/${id}/update` : '/user/create');
-  const postUri = `/user/${id}/update`;
-  const redirectRoute = "users";
-
-  const avatar = computed(() => {
-    const { media } = item.value;
-    if (media != undefined) {
-      const userAvatar = media.find(
-        (o) => o.collection_name === "user_avatars",
-      );
-      if (userAvatar) {
-        return getPhotoPath(userAvatar, 400);
-      }
-    }
-    return "";
+  const submitHandler = handleSubmit((values) => {
+      updateUser(values);
   });
 
-  const submitHandler = (hasToRedirect = true) => {
-    onSubmitTest(postUri, redirectRoute.value, hasToRedirect);
+  const uploadAvatarHandler = (file: File) => {
+    uploadAvatar(file);
   };
+
+  watch(() => {
+    if (formData.value) {
+      setValues({
+        id: formData.value.id,
+        email: formData.value.email,
+        first_name: formData.value.first_name,
+        last_name: formData.value.last_name,
+        role: formData.value.role,
+        is_disabled: formData.value.is_disabled,
+        paid_leaves_max: formData.value.paid_leaves_max,
+        paid_leaves_left: formData.value.paid_leaves_left,
+        country: formData.value.country,
+        is_office_based: formData.value.is_office_based
+      });
+    }
+  }, [formData]);
+
+  const [id] = defineField("id");
+  const [lastName] = defineField("last_name");
+  const [firstName] = defineField("first_name");
+  const [email] = defineField("email");
+  const [isDisabled] = defineField("is_disabled");
+  const [role] = defineField("role");
+  const [password] = defineField("password");
+  const [paidLeavesMax] = defineField("paid_leaves_max");
+  const [paidLeavesLeft] = defineField("paid_leaves_left");
+  const [country] = defineField("country");
+  const [isOfficeBased] = defineField("is_office_based");
+
 </script>
 
 <template>
   <PageWrapper>
     <template #[PAGE_WRAPPER_SLOTS.subheaderMain]>
       <SubheaderTitle
-        :title="t('users.basic.information')"
-        :description="`${form.first_name} ${form.last_name}`"
+        title="My Profile"
+        :description="`${firstName} ${lastName}`"
       />
     </template>
     <template #[PAGE_WRAPPER_SLOTS.subheaderToolbox]>
       <DashLink to="/admin/users" :icon="IconArrowleft" theme="clean">
-        {{ t("buttons.cancel") }}
+        {{ t("buttons.back") }}
       </DashLink>
       <DashButton
         type="submit"
         :icon="IconSave"
-        :loading="loading"
+        :loading="isLoading"
         @click="submitHandler"
       >
         {{ t("buttons.save") }}
@@ -106,68 +110,29 @@
       autocomplete="off"
       enctype="multipart/form-data"
       @submit.prevent="submitHandler"
-      @keydown="form.errors.clear($event.target.name)"
     >
-      <PortletComponent :has-sticky-header="true" :is-loading="loading">
-        <PortletBody>
-          <div class="kt-section">
-            <div class="kt-section__body">
-              <h3 class="kt-section__title kt-section__title-lg">
-                Profile Info:
-              </h3>
-              <file-upload
-                :label="t('users.avatar')"
-                :id="'uploaded_file'"
-                v-model="form.uploaded_file"
-                :placeholder-image="avatar"
-                :form="form"
-              />
-              <FormInput
-                :label="t('users.last_name.label')"
-                v-model="form.last_name"
-                id="last_name"
-              />
-              <FormInput
-                :label="t('users.first_name.label')"
-                v-model="form.first_name"
-                id="first_name"
-              />
-              <FormInput
-                :label="t('users.email.label')"
-                v-model="form.email"
-                id="email"
-              />
-            </div>
-          </div>
-
-          <div
-            class="kt-separator kt-separator--border-dashed kt-separator--space-lg"
-          ></div>
-
-          <div class="kt-section">
-            <div class="kt-section__body">
-              <h3 class="kt-section__title kt-section__title-lg">
-                {{ t("users.password.new_password") }}:
-              </h3>
-              <FormInput
-                v-model="form.password"
-                :id="'password'"
-                :label="t('users.password.label')"
-              />
-              <FormInput
-                v-model="form.password_confirmation"
-                id="password_confirmation"
-                :label="t('users.password.confirm')"
-              />
-            </div>
-          </div>
-        </PortletBody>
-      </PortletComponent>
-      <!--    <unsaved-changes-modal-->
-      <!--      v-if="confirmUnsavedChangesModal"-->
-      <!--      @confirm-unsaved-changes="confirmUnsavedChanges"-->
-      <!--      @cancel-unsaved-changes="cancelUnsavedChanges"-->
-      <!--    />-->
+      <TabbedContent :isLoading="isLoading">
+        <TabbedContentTab :label="basicInfoLabeel" id="basic-info">
+          <UserFormBasicInfoTab
+            v-model:isDisabled="isDisabled"
+            v-model:isOfficeBased="isOfficeBased"
+            v-model:role="role"
+            v-model:lastName="lastName"
+            v-model:email="email"
+            v-model:firstName="firstName"
+            v-model:country="country"
+            :errors="errors"
+            :avatar="formData?.avatar_thumbnail"
+            @upload-avatar="uploadAvatarHandler"
+          />
+        </TabbedContentTab>
+        <TabbedContentTab :label="changePasswordLabel" id="change-password">
+          <UserFormPasswordTab v-model:password="password" />
+        </TabbedContentTab>
+        <TabbedContentTab :label="'Calednar'" id="calendar">
+          <UserFormCalendarTab :userId="id" :country="country"/>
+        </TabbedContentTab>
+      </TabbedContent>
     </form>
   </PageWrapper>
 </template>
