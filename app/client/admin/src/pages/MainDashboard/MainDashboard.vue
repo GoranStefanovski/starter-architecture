@@ -102,7 +102,7 @@ import { leaveRequest } from "@/modules/leaveRequests/constants";
           </PortletBody>
         </PortletComponent>
       </div>
-      <div class="col-md-4">
+      <div v-if="auth.user().permissions_array.includes('write_users')" class="col-md-4">
         <PortletComponent isBordered>
           <PortletHead>
             <PortletHeadLabel>

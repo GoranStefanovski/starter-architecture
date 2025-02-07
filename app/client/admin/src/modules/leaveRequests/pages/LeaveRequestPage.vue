@@ -140,17 +140,19 @@
             :user="auth.user()"
           />
         </TabbedContentTab>
-        <div v-if="(isConfirmed == 0) && isApprovePage">
-          <div v-if="!isLoading" class="confirmation_btn_wrapper">
-            <span class="req_btn approve" @click="approve">
-              Approve
-            </span>
-            <span class="req_btn decline" @click="decline">
-              Decline
-            </span>
-          </div>
-          <div v-else class="loading_wrapper">
-            <span class="spinner"></span>
+        <div v-if="auth.user().id == requestTo">
+          <div v-if="(isConfirmed == 0) && isApprovePage">
+            <div v-if="!isLoading" class="confirmation_btn_wrapper">
+              <span class="req_btn approve" @click="approve">
+                Approve
+              </span>
+              <span class="req_btn decline" @click="decline">
+                Decline
+              </span>
+            </div>
+            <div v-else class="loading_wrapper">
+              <span class="spinner"></span>
+            </div>
           </div>
         </div>
       </TabbedContent>

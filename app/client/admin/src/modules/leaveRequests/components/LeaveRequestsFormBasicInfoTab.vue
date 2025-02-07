@@ -15,7 +15,7 @@
   const startDate = defineModel("startDate", { required: true, type: String });                    
   const endDate = defineModel("endDate", { required: true, type: String });
   const reason = defineModel("reason", { required: true, type: String });
-  const requestTo = defineModel("requestTo", { required: true, type: String });
+  const requestTo = defineModel("requestTo", { required: true, type: Number });
 
   const props = defineProps(["user"]);
 

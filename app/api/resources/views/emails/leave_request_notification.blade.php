@@ -16,6 +16,13 @@
     @else
     <h3>{{ $formattedStartDate }} to {{ $formattedEndDate }}</h3>
     @endif
+
+    @if ($leaveRequest->reason && $leaveRequest->reason !== null)
+        <h3>
+            Reason: {{ $leaveRequest->reason ? $leaveRequest->reason : "" }}
+        </h3>
+    @endif
+
     <h3>{{ $leaveRequest->leaveType->name }}</h3>
         <a href="{{ url('http://starter.test/admin/leave_request/' . $leaveRequest->id . '/confirmation') }}" target="_blank">
             Open Leave Request Confirmation Page

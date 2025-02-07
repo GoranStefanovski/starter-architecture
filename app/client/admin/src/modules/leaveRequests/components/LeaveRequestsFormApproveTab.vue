@@ -5,6 +5,7 @@
   import { FormInput } from "@starter-core/dash-ui/src";
   import LeaveRequestsDropdown from "./LeaveRequestsDropdown.vue";
   import LeaveRequestsDropdownTypes from "./LeaveRequestsDropdownTypes.vue";
+  import { useAuth } from "@websanova/vue-auth/src/v3.js";
 
   const { t } = useI18n();
   const leaveTypes = ref([]);
@@ -15,7 +16,8 @@
   const startDate = defineModel("startDate", { required: true, type: String });                    
   const endDate = defineModel("endDate", { required: true, type: String });
   const reason = defineModel("reason", { required: true, type: String });
-  const requestTo = defineModel("requestTo", { required: true, type: String });
+  const requestTo = defineModel("requestTo", { required: true, type: Number });
+  const auth = useAuth();
 
   const props = defineProps(["user"]);
 
@@ -50,6 +52,10 @@
     }
   };
 
+  const setUserOptions = computed(() => {
+    return [...admins.value, ...managers.value];
+  })
+
   onMounted(() => {
     fetchLeaveTypes();
     fetchManagers();
@@ -59,8 +65,7 @@
 <template>
   <div class="kt-section">
     <div class="kt-section__body">
-      <leave-requests-dropdown v-if="user.role == 1 || user.role == 2"  class="noClick" v-model:model="requestTo" :optionsData="admins" :readonly="true"/>
-      <leave-requests-dropdown v-else v-model:model="requestTo"  class="noClick" :optionsData="managers" :readonly="true"/>
+      <leave-requests-dropdown class="noClick" v-model:model="requestTo" :optionsData="setUserOptions" :readonly="true"/>
       
       <leave-requests-dropdown-types class="noClick" v-model:model="leaveTypeId" :optionsData="leaveTypes" :readonly="true"/>
 
