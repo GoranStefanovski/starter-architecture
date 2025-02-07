@@ -94,9 +94,6 @@
       />
     </template>
     <template #[PAGE_WRAPPER_SLOTS.subheaderToolbox]>
-      <DashLink to="/admin/users" :icon="IconArrowleft" theme="clean">
-        {{ t("buttons.back") }}
-      </DashLink>
       <DashButton
         type="submit"
         :icon="IconSave"
