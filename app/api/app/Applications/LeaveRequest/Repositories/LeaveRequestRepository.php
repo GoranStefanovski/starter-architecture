@@ -82,7 +82,7 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
 
         return $leaveRequest;
     }
-    // Edit a request
+
     public function update(int $leaveRequestId, LeaveRequestDTO $leaveRequestData): LeaveRequest
     {
         $leaveRequest = $this->get($leaveRequestId);
@@ -91,13 +91,16 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
         $this->sendRequestEmail($leaveRequest, true);
         return $leaveRequest;
     }
-    // Confirm or deny a request
+
     public function confirm(int $leaveRequestId, LeaveRequestDTO $leaveRequestData, int $isConfirmed): LeaveRequest
     {
         $leaveRequest = $this->get($leaveRequestId);
+        $user = Auth::user();
+
         $leaveRequest->update([
             ...$leaveRequestData->toArray(),
-            'is_confirmed' => $isConfirmed
+            'is_confirmed' => $isConfirmed,
+            'confirmed_by' => ($isConfirmed == 2 ? $user->id : $leaveRequest['confirmed_by'])
         ]);
 
         if ($isConfirmed == 2 && $leaveRequest->user && $leaveRequestData->leave_type_id == 3) {

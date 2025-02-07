@@ -37,7 +37,7 @@
     declineLeaveRequest,
   } = useLeaveRequestsForm(leaveRequestId);
 
-  const { handleSubmit, setValues, defineField } =
+  const { handleSubmit, errors, setValues, defineField } =
     useForm<LeaveRequestFormItem>({
     });
 
@@ -126,6 +126,7 @@
             v-model:endDate="endDate"
             v-model:reason="reason"
             v-model:requestTo="requestTo"
+            :errors="errors"
             :user="auth.user()"
           />
         </TabbedContentTab>

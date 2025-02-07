@@ -9,6 +9,8 @@ use App\Applications\LeaveRequest\Services\LeaveRequestServiceInterface;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use App\Applications\LeaveRequest\Requests\NewLeaveRequestRequest;
+use App\Applications\LeaveRequest\Requests\LeaveRequestRequest;
 
 /**
  * @property LeaveRequestServiceInterface $leaveRequestService
@@ -69,10 +71,10 @@ class LeaveRequestController extends Controller
     /**
      * Store user and get JSON with a user response
      *
-     * @param  Request  $request
+     * @param  NewLeaveRequestRequest  $request
      * @return JsonResponse
      */
-    public function create(Request $request): JsonResponse
+    public function create(NewLeaveRequestRequest $request): JsonResponse
     {
         $leaveRequestDTO = LeaveRequestDTO::fromRequestForCreate($request);
         $newLeaveRequestDTO = $this->leaveRequestService->create($leaveRequestDTO);
@@ -83,10 +85,10 @@ class LeaveRequestController extends Controller
     /**
      * Update user
      *
-     * @param  Request  $request
+     * @param  LeaveRequestRequest  $request
      * @return JsonResponse
      */
-    public function update(Request $request): JsonResponse
+    public function update(LeaveRequestRequest $request): JsonResponse
     {
         $leaveRequestId = Route::current()->parameter('id');
         $dto = LeaveRequestDTO::fromRequest($request);

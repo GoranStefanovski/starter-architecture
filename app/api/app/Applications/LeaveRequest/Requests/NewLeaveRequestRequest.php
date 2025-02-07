@@ -25,11 +25,10 @@ class NewLeaveRequestRequest extends ApiFormRequest
     public function rules()
     {
         $rules = [
-            'first_name' => 'required|max:255|min:2',
-            'last_name' => 'required|max:255|min:2',
-            'email' => 'required|email|min:2|max:255|unique:users,email,'.$this->segment(3),
-            'password' => 'sometimes|between:6,30|confirmed',
-            'roles' => 'required|exists:roles,id',
+            'request_to' => 'required',
+            'leave_type_id' => 'required',
+            'start_date' => 'required|date',
+            'end_date' => 'sometimes|date|after_or_equal:start_date',
         ];
 
         return $rules;
