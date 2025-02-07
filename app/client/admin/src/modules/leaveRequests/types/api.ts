@@ -1,5 +1,7 @@
+import { LeaveTypeFormItem } from "@/modules/leaveTypes/types";
 import type { Permission, UserRoleId } from "./permissions";
 import type { PaginationObject } from "@starter-core/dash-ui/src/components";
+import { UserFormItem } from "@/modules/users/types";
 
 export interface GetLeaveRequestResponse {
   id: number;
@@ -12,9 +14,12 @@ export interface GetLeaveRequestResponse {
   request_to: number;
   confirmed_by: number;
   is_confirmed: number;
+  user: UserFormItem;
+  leaveType: LeaveTypeFormItem;
+  requestToUser: UserFormItem;
 }
 
-export interface UsersTableResponse {
+export interface LeaveRequestsTableResponse {
   data: GetLeaveRequestResponse[];
   pagination: PaginationObject;
 }

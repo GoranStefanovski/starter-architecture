@@ -70,4 +70,9 @@ class LeaveRequest extends Model
     {
         return $this->belongsTo(LeaveType::class, 'leave_type_id');
     }
+
+    public function requestToUser()
+    {
+        return $this->belongsTo(User::class, 'request_to');
+    }
 }

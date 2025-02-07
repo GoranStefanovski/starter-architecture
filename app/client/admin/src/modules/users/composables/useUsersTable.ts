@@ -7,9 +7,9 @@ import type { TableQuery } from "@starter-core/dash-ui/src";
 
 export const useUsersTable = (
   query: ComputedRef<TableQuery>,
-): UseQueryReturnType<UsersTableResponse, AxiosError> => {
-  return useQuery({
-    queryKey: [USERS_TABLE_QUERY_KEY, query],
+) => {
+  const queryResult = useQuery<UsersTableResponse, AxiosError>({
+    queryKey: [USERS_TABLE_QUERY_KEY, query.value], 
     queryFn: async () => {
       const response = await axios.get(USER_API_ENDPOINTS.table, {
         params: query.value,
@@ -17,4 +17,6 @@ export const useUsersTable = (
       return response.data;
     },
   });
+
+  return queryResult;
 };

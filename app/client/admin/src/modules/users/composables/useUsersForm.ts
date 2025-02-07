@@ -3,8 +3,8 @@ import axios from "axios";
 import { computed, ref } from "vue";
 import { useToast } from "vue-toastification";
 import { USER_API_ENDPOINTS } from "../constants";
-import type { UserFormItem, GetUserResponse } from "../types";
 import { useRouter } from 'vue-router';
+import type { UserFormItem, GetUserResponse } from "../types";
 
 const USER_CACHE_KEY = "user";
 
@@ -21,6 +21,16 @@ export const useUsersForm = (userId?: number) => {
       return data.data;
     },
     enabled: !!userId,
+  });
+
+  const { data: users } = useQuery({
+    queryKey: ["user/draw"],
+    queryFn: async () => {
+      const response = await axios.get(USER_API_ENDPOINTS.table, {
+        params: data.value,
+      });
+      return response.data;
+    },
   });
 
   const { mutate: createUser, isPending: isCreating } = useMutation({
@@ -88,6 +98,21 @@ export const useUsersForm = (userId?: number) => {
     },
   });
 
+  const { mutate: deleteUser, isPending: isDeleting } = useMutation({
+    mutationFn: async (userId: number) => {
+      await axios.post(USER_API_ENDPOINTS.delete(userId));
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["user/draw"] }).then(() => {
+        toast.success("User deleted!");
+      });
+    },
+    onError: () => {
+      toast.error("Error deleting user!");
+    },
+  });
+    
+
   const data = computed(() => queryData.value);
 
   return {
@@ -95,6 +120,8 @@ export const useUsersForm = (userId?: number) => {
     createUser,
     updateUser,
     uploadAvatar,
+    deleteUser,
+    users,
     isLoading: manualLoading,
   };
 };

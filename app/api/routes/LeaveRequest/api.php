@@ -31,6 +31,6 @@ Route::group([
         Route::post('{id}/decline', [LeaveRequestController::class, 'decline']);
         Route::get('{id}', [LeaveRequestController::class, 'get']);
         Route::patch('{id}', [LeaveRequestController::class, 'update']);
-        Route::delete('{id}', [LeaveRequestController::class, 'delete']);
+        Route::post('{id}/delete', [LeaveRequestController::class, 'delete']);
     });
 });

@@ -4,7 +4,7 @@ import { computed, ref } from "vue";
 import { useToast } from "vue-toastification";
 import { LEAVE_REQUEST_API_ENDPOINTS } from "../constants";
 import type { LeaveRequestFormItem, GetLeaveRequestResponse } from "../types";
-import { useRouter } from 'vue-router';
+import { useRouter } from "vue-router";
 
 const LEAVE_REQUEST_CACHE_KEY = "leave_request";
 
@@ -22,6 +22,14 @@ export const useLeaveRequestsForm = (leaveRequestId?: number) => {
     },
     enabled: !!leaveRequestId,
   });
+  const { data: leaveRequests, isLoading } = useQuery({
+    queryKey: ["leave_request/all"],
+    queryFn: async (): Promise<GetLeaveRequestResponse[]> => {
+      const { data } = await axios.get(LEAVE_REQUEST_API_ENDPOINTS.list);
+      return data;
+    },
+  });
+  
 
   const { mutate: createLeaveRequest, isPending: isCreating } = useMutation({
     mutationFn: async (newUserData: LeaveRequestFormItem): Promise<GetLeaveRequestResponse> => {
@@ -99,7 +107,20 @@ export const useLeaveRequestsForm = (leaveRequestId?: number) => {
       toast.error(error.message);
     },
   });
-
+  const { mutate: deleteLeaveRequest, isPending: isDeleting } = useMutation({
+    mutationFn: async (leaveRequestId: number) => {
+      await axios.post(LEAVE_REQUEST_API_ENDPOINTS.delete(leaveRequestId));
+    },
+    onSuccess: async () => {
+      queryClient.invalidateQueries({ queryKey: ["leave_request/draw"] }).then(() => {
+        toast.success("Leave Request deleted!");
+      });
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+  
 
   const data = computed(() => queryData.value);
 
@@ -109,6 +130,8 @@ export const useLeaveRequestsForm = (leaveRequestId?: number) => {
     updateLeaveRequest,
     approveLeaveRequest,
     declineLeaveRequest,
+    deleteLeaveRequest,
+    leaveRequests,
     isLoading: manualLoading,
   };
 };

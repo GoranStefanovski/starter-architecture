@@ -113,7 +113,7 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
 
     public function delete(int $id)
     {
-        return $this->get($id)->delete();
+        return $this->leaveRequest::findOrFail($id)->delete();
     }
 
     public function draw($data): StarterPaginator
@@ -136,7 +136,6 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
         }
 
         $this->applyUserRoleFilter($query, $user, $data['userId'] ?? null);
-
         return $query->whereNull('deleted_at')->paginate($data['length']);
     }
 

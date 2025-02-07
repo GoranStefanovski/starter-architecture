@@ -77,15 +77,15 @@ class LeaveRequestService implements LeaveRequestServiceInterface
         $data['userId'] = $data['userId'] ?? '';
         $data['draw'] = $data['draw'] ?? 1;
 
-        $usersCollection = $this->leaveRequestRepository->draw($data);
+        $leaveRequestsCollection = $this->leaveRequestRepository->draw($data);
 
-        $usersDTOs = $usersCollection->getCollection()->map(function ($user) {
-            return LeaveRequestDTO::fromModel($user);
+        $leaveRequestDTO = $leaveRequestsCollection->getCollection()->map(function ($leaveRequest) {
+            return LeaveRequestDTO::fromModel($leaveRequest);
         });
 
         return [
-            'data' => $usersDTOs,
-            'pagination' => $usersCollection->toArray()['pagination'],
+            'data' => $leaveRequestDTO,
+            'pagination' => $leaveRequestsCollection->toArray()['pagination'],
         ];
     }
 }
