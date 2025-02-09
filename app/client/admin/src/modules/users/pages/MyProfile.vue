@@ -123,14 +123,14 @@
             @upload-avatar="uploadAvatarHandler"
           />
         </TabbedContentTab>
-        <TabbedContentTab :label="changePasswordLabel" id="change-password">
+        <TabbedContentTab :label="'Password'" id="change-password">
           <UserFormPasswordTab v-model:password="password" />
-        </TabbedContentTab>
-        <TabbedContentTab :label="'Paid Vacation Days'" id="leave-days">
-          <UserFormLeaveDaysTab v-model:paidLeavesMax="paidLeavesMax" :daysLeft="paidLeavesLeft" :isMyProfile="true"/>
         </TabbedContentTab>
         <TabbedContentTab :label="'Calednar'" id="calendar">
           <UserFormCalendarTab :userId="id" :country="country"/>
+        </TabbedContentTab>
+        <TabbedContentTab :label="'Paid Vacation Days'" id="leave-days">
+          <UserFormLeaveDaysTab v-model:paidLeavesMax="paidLeavesMax" :daysLeft="paidLeavesLeft" :isMyProfile="true"/>
         </TabbedContentTab>
       </TabbedContent>
     </form>

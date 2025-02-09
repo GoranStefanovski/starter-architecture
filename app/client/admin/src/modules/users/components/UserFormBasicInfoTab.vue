@@ -107,7 +107,6 @@
         v-model="email"
         name="email"
         :label="t('users.email.label')"
-        helper-text="We'll never share your email with anyone else."
         is-inline
       >
         <template v-slot:prependContent>
