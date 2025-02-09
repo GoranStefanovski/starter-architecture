@@ -230,23 +230,55 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
     
     private function createLeaveRequestPDF(User $user, LeaveRequest $leaveRequest): void
     {
+        $isSingleDay = $leaveRequest->end_date === null;
+        $nowDate = $this->formatDate(now());
+        // Cannot print in PDF
+        // Create a Cyrilyc Data for each user on create in a separate table, with foreign user_id
+        $fullNameCyrilic = transliterator_transliterate('Latin-Cyrillic', $user->first_name) . ' ' . transliterator_transliterate('Latin-Cyrillic', $user->last_name);
+
+        if ($isSingleDay) {
+            $dates = $this->formatDate($leaveRequest->start_date);
+            $leaveDays = 1;
+        } else {
+            $dates = $this->formatDate($leaveRequest->start_date) . "g. to " . $this->formatDate($leaveRequest->end_date) . 'g.';
+                    // Calculate valid leave days excluding weekends and national holidays
+            $startDate = new DateTime($leaveRequest->start_date);
+            $endDate = $leaveRequest->end_date ? new DateTime($leaveRequest->end_date) : $startDate;
+
+            $nationalHolidays = NationalHoliday::whereYear('date', $startDate->format('Y'))
+                ->where('country', $user->country == 1 ? 'Macedonia' : 'Bulgaria')
+                ->pluck('date')
+                ->toArray();
+
+            $leaveDays = iterator_count(
+                new DatePeriod($startDate, new DateInterval('P1D'), $endDate->modify('+1 day'))
+            );
+
+            $leaveDays -= count(array_filter(
+                iterator_to_array(new DatePeriod($startDate, new DateInterval('P1D'), $endDate->modify('+1 day'))),
+                fn($date) => in_array($date->format('N'), [6, 7]) || in_array($date->format('Y-m-d'), $nationalHolidays)
+            ));
+        }
+
         $pdf = new Fpdi();
         $pdf->AddPage();
-        $pdf->setSourceFile(file: public_path('BG_template.pdf'));
+        $pdf->setSourceFile(public_path('BG_template.pdf'));
         $tplIdx = $pdf->importPage(1);
         $pdf->useTemplate($tplIdx, 0, 0, 210);
 
-        $pdf->SetFont('Arial', '', 12);
-        $pdf->SetXY(50, 40);
+        $pdf->SetFont('Arial', '', 11);
+        $pdf->SetXY(111, 77);
         $pdf->Write(0, $user->first_name . " " . $user->last_name);
-        $pdf->SetXY(50, 50);
-        $pdf->Write(0, $user->email);
-        $pdf->SetXY(50, 60);
-        $pdf->Write(0, $leaveRequest->start_date);
-        $pdf->SetXY(50, 70);
-        $pdf->Write(0, $leaveRequest->end_date ?: 'Single Day');
-        $pdf->SetXY(50, 80);
-        $pdf->Write(0, $leaveRequest->leave_type->name ?? 'N/A');
+        $pdf->SetXY(112, 110);
+        $pdf->Write(0, $leaveRequest->leaveType->name ?? 'N/A');
+        $pdf->SetXY(121, 114);
+        $pdf->Write(0, $leaveDays ?? 'N/A');
+        $pdf->SetXY(44, 118);
+        $pdf->Write(0, $dates ?? 'N/A');
+        $pdf->SetXY(24, 159);
+        $pdf->Write(0, $nowDate ?? 'N/A');
+        $pdf->SetXY(24, 227);
+        $pdf->Write(0, $nowDate ?? 'N/A');
 
         $pdfDirectory = storage_path("app/public/");
         if (!file_exists($pdfDirectory)) {
@@ -266,5 +298,8 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
         ]);
     }
     
-
+    private function formatDate(string $date): string
+    {
+        return date('d m Y', strtotime($date));
+    }
 }
