@@ -58,7 +58,7 @@
         id="enabled"
         theme="danger"
         type="outline"
-        :label="'Is Office Based'"
+        :label="'Office Based'"
         :helper-text="`User is  ${isOfficeBased ? '' : 'not'} Office Based`"
       />
     </div>

@@ -112,18 +112,13 @@ onMounted(() => {
   <div class="kt-section">
     <div class="kt-section__body">
       <div>
-        <table>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Color</th>
-          </tr>
-          <tr v-for="type, index in leaveTypes" :key="index">
-            <td>{{ type.id }}.</td>
-            <td>{{ type.name }}</td>
-            <td><div :style="`background-color: ${type.color}; width: 20px; height: 20px;`"></div></td>
-          </tr>
-        </table>
+        <div class="leaveTypes">
+          <div class="leaveTypes_wrapper" v-for="type, index in leaveTypes" :key="index">
+            <span>{{ type.name }}</span>
+            <span class="leaveTypes_color"><div :style="`background-color: ${type.color}; width: 20px; height: 20px;`"></div></span>
+            <span class="leaveTypes_separator"></span>
+          </div>
+        </div>
         <div
           class="kt-separator kt-separator--border-dashed kt-separator--space-lg"
         ></div>
@@ -149,5 +144,26 @@ onMounted(() => {
   border-radius: 4px;
   padding: 2px 4px;
   font-weight: bold;
+}
+
+.leaveTypes {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.leaveTypes_wrapper {
+  display: flex;
+  align-items: center;
+  width: max-content
+}
+
+.leaveTypes_color {
+  margin-left: 5px;
+}
+
+.leaveTypes_separator {
+  margin-left: 20px;
+  margin-right: 30px;
 }
 </style>

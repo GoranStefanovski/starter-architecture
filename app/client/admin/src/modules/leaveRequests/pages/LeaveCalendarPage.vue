@@ -110,9 +110,16 @@ onMounted(() => {
 
 <template>
   <PageWrapper>
-    <div style="width: 65%;">
+    <div class="leaveTypes">
+          <div class="leaveTypes_wrapper" v-for="type, index in leaveTypes" :key="index">
+            <span>{{ type.name }}</span>
+            <span class="leaveTypes_color"><div :style="`background-color: ${type.color}; width: 20px; height: 20px;`"></div></span>
+            <span class="leaveTypes_separator"></span>
+          </div>
+        </div>
+      <div style="width: 65%; padding: 20px 0 0 20px;">
       <FullCalendar :options="calendarOptions" />
-    </div>
+      </div>
   </PageWrapper>
 </template>
 
@@ -129,5 +136,28 @@ onMounted(() => {
   border-radius: 4px;
   padding: 2px 4px;
   font-weight: bold;
+}
+
+.leaveTypes {
+  padding-left: 20px;
+  margin-bottom: 23px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.leaveTypes_wrapper {
+  display: flex;
+  align-items: center;
+  width: max-content
+}
+
+.leaveTypes_color {
+  margin-left: 5px;
+}
+
+.leaveTypes_separator {
+  margin-left: 20px;
+  margin-right: 30px;
 }
 </style>

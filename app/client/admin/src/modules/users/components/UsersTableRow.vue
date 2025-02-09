@@ -47,7 +47,7 @@
       <!--kt-datatable__row&#45;&#45;even-->
 
       <TableColumn>
-        <img :style="{ width: '50px' }" :src="avatarSource" />
+        <img :style="{ width: '50px', height: '50px' }" :src="avatarSource" />
       </TableColumn>
 
       <TableColumn>

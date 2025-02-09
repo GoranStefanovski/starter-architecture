@@ -47,7 +47,7 @@
         <span class="kt-header__topbar-username kt-hidden-mobile">{{
           user.first_name
         }}</span>
-        <img v-if="avatarSource" alt="avatar" :src="avatarSource" />
+        <img v-if="avatarSource" alt="avatar" :src="avatarSource" style="width: 50px; height: 50px;"/>
         <BadgeComponent v-else font-weight="bold" size="lg">
           {{ userFirstLetter }}
         </BadgeComponent>
