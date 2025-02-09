@@ -176,12 +176,23 @@
   }
 
   .approve {
-    background-color: green;
+    border-radius: 4px;
+    background: #6c757d;
+    color: white;
     margin-right: 8px;
+    &:hover {
+      background: #5a6268;
+    }
   }
 
   .decline {
-    background-color: red;
+    border-radius: 4px;
+    background: #d9534f;
+    color: white;
+  
+    &:hover {
+      background: #c9302c;
+    }
   }
 
   .spinner {
