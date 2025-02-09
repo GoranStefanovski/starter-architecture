@@ -31,4 +31,5 @@ export interface DashButtonProps {
   isSquare?: boolean;
   isIcon?: boolean;
   isClean?: boolean;
+  loading?: boolean;
 }

@@ -8,6 +8,7 @@
   import { ref, onMounted } from "vue";
   import { PageWrapper } from "@/components";
   // import { get } from "@/services/HTTP";
+  import { useAuth } from "@websanova/vue-auth/src/v3.js";
   import { useRootStore } from "@/store/root";
   import {
     PortletComponent,
@@ -18,24 +19,74 @@
     AccordionContent,
     AccordionItem,
   } from "@starter-core/dash-ui/src";
+  import axios from "axios";
+
+  import {
+    DashLink,
+  } from "@starter-core/dash-ui/src";
+import { leaveRequest } from "@/modules/leaveRequests/constants";
 
   // const categories = ref([]);
+  const leaveTypes = ref([]);
+  const users = ref([]);
+  const leaveRequests = ref([]);
   const isLoading = ref(false);
+  const auth = useAuth();
+
   const { setActiveClasses } = useRootStore();
   onMounted(() => {
+    fetchLeaveTypes();
+    fetchUsers();
+    fetchRequests();
     isLoading.value = true;
     setActiveClasses({
       main: "item_dashboard",
       sub: "item_dashboard",
       title: "strings.dashboard",
     });
-
-    // get('/common/dashboard/get')
-    //     .then((response) => {
-    //         isLoading.value = false;
-    //         categories.value = response.data;
-    //     })
   });
+
+  const fetchUsers = async () => {
+    try {
+      const response = await axios.get("/user/all");
+      users.value = response.data;
+    } catch (error) {
+      console.error("Error fetching leave types:", error);
+    }
+  };
+
+  const fetchRequests = async () => {
+    try {
+      const response = await axios.get("/leave_request/pending");
+      leaveRequests.value = response.data;
+    } catch (error) {
+      console.error("Error fetching leave types:", error);
+    }
+  };
+
+  const fetchLeaveTypes = async () => {
+    try {
+      const response = await axios.get("/leave_type/all");
+      leaveTypes.value = response.data;
+    } catch (error) {
+      console.error("Error fetching leave types:", error);
+    }
+  };
+
+  const getUserFullName = (userId: number) => {
+    const user = users.value.find((u: any) => u.id === userId);
+    return user ? `${user.first_name} ${user.last_name.charAt(0)}.` : "Unknown User";
+  };
+  
+  const formatDate = (dateString: string) => {
+  if (!dateString) return "Invalid Date";
+  const date = new Date(dateString);
+  return date.toLocaleDateString("en-GB", {
+    year: "numeric",
+    month: "short",
+    day: "2-digit",
+  });
+};
 </script>
 <template>
   <PageWrapper>
@@ -44,45 +95,78 @@
         <PortletComponent isBordered>
           <PortletHead>
             <PortletHeadLabel>
-              Content loader
-              <IconAirpods size="32" />
+              Leave Types
             </PortletHeadLabel>
           </PortletHead>
           <PortletBody>
-            <ContentLoader />
+            <table>
+              <tr>
+                <th>No.</th>
+                <th>Name</th>
+              </tr>
+              <tr v-for="type, index in leaveTypes" :key="index">
+                <td>{{ type.id }}.</td>
+                <td>{{ type.name }}</td>
+              </tr>
+            </table>
           </PortletBody>
         </PortletComponent>
       </div>
-      <div class="col-md-4"></div>
-      <div class="col-md-4"></div>
-      <div class="col-md-3">
-        <AccordionContent>
-          <AccordionItem
-            label="Product inventory"
-            id="product-inventory"
-            :icon="IconChartpie"
-          >
-            Vero laborum esse debitis libero veniam ullam placeat molestias
-            deleniti distinctio magnam? In, odio alias? Possimus labore delectus
-            recusandae.
-          </AccordionItem>
-          <AccordionItem
-            label="Order statistics"
-            id="order-statistics"
-            :icon="IconLibrary"
-          >
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae, aut
-            molestiae.
-          </AccordionItem>
-          <AccordionItem
-            label="eCommerce reports"
-            id="ecommerce-reports"
-            :icon="IconDollar"
-          >
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae, aut
-            molestiae.
-          </AccordionItem>
-        </AccordionContent>
+      <div v-if="auth.user().permissions_array.includes('write_users')" class="col-md-4">
+        <PortletComponent isBordered>
+          <PortletHead>
+            <PortletHeadLabel>
+              Paid Leaves Left
+            </PortletHeadLabel>
+          </PortletHead>
+          <PortletBody>
+            <table>
+              <tr>
+                <th>No.</th>
+                <th>Name</th>
+                <th>Days Left</th>
+              </tr>
+              <tr v-for="user, index in users" :key="index">
+                <td>{{ index + 1 }}.</td>
+                <td>{{ user.first_name }}</td>
+                <td>{{ user.paid_leaves_left }}</td>
+              </tr>
+            </table>
+          </PortletBody>
+        </PortletComponent>
+      </div>
+      <div v-if="auth.user().permissions_array.includes('write_users')" class="col-md-4">
+        <PortletComponent isBordered>
+          <PortletHead>
+            <PortletHeadLabel>
+              Pending Leave Requests
+            </PortletHeadLabel>
+          </PortletHead>
+          <PortletBody>
+            <table>
+              <tr>
+                <th>No.</th>
+                <th>From</th>
+                <th>From (Date)</th>
+                <th>To (Date)</th>
+                <th>Link</th>
+              </tr>
+              <tr v-for="leave, index in leaveRequests" :key="index">
+                <td>{{ index + 1}}.</td>
+                <td>{{ getUserFullName(leave.user_id) }}</td>
+                <td>
+                  {{ formatDate(leave.start_date) }}
+                </td>
+                <td>
+                  {{ leave.end_date ? formatDate(leave.end_date) : 'Single Day' }}
+                </td>
+                <td>
+                  <router-link :to="`/admin/leave_request/${leave.id}/confirmation`">View</router-link>
+                </td>
+              </tr>
+            </table>
+          </PortletBody>
+        </PortletComponent>
       </div>
     </div>
   </PageWrapper>

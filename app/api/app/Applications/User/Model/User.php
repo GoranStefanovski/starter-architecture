@@ -21,7 +21,8 @@ class User extends Authenticatable implements HasMedia
     use InteractsWithMedia;
 
     const ADMIN = 'admin';
-    const EDITOR = 'editor';
+    const MANAGER = 'manager';
+    const DEVELOPER = 'developer';
     const COLLABORATOR = 'collaborator';
 
     /**
@@ -36,7 +37,11 @@ class User extends Authenticatable implements HasMedia
         'email_verified_at',
         'password',
         'is_disabled',
-        'activation_code'
+        'activation_code',
+        'paid_leaves_max',
+        'paid_leaves_left',
+        'country',
+        'is_office_based'
     ];
 
     /**

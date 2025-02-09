@@ -32,7 +32,7 @@ Route::group([
         Route::post('create', [UserController::class, 'create']);
         Route::get('{id}', [UserController::class, 'get']);
         Route::patch('{id}', [UserController::class, 'update']);
-        Route::delete('{id}', [UserController::class, 'delete']);
+        Route::post('{id}/delete', [UserController::class, 'delete']);
 
         // User avatars
         Route::post('avatar/{id}', [UserController::class, 'uploadAvatar']);

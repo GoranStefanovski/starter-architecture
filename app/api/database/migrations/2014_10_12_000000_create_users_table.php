@@ -19,7 +19,11 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('activation_code')->nullable();
+            $table->integer('country')->nullable()->default(1);
             $table->boolean('is_disabled')->nullable()->default(0);
+            $table->integer('paid_leaves_max')->nullable()->default(20);
+            $table->integer('paid_leaves_left')->nullable()->default(20);
+            $table->boolean('is_office_based')->nullable()->default(0);
             $table->rememberToken();
             $table->softDeletes();
             $table->timestamps();

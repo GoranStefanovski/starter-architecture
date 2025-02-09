@@ -1,52 +1,59 @@
 <script setup lang="ts">
-  import { ref } from "vue";
-  import { useRouter } from "vue-router";
-  import useAuthComp from "@/composables/useAuthComp";
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import useAuthComp from "@/composables/useAuthComp";
 
-  const form = ref({ email: "", password: "" });
-  const formErrors = ref({ email: "", password: "" });
-  const authError = ref(false);
-  const staySignedIn = ref(true);
+const form = ref({ email: "", password: "" });
+const formErrors = ref({ email: "", password: "" });
+const authError = ref(false);
+const staySignedIn = ref(true);
+const isLoading = ref(false); 
 
-  const router = useRouter();
-  const { login } = useAuthComp();
+const router = useRouter();
+const { login } = useAuthComp();
 
-  const validateForm = () => {
-    let isValid = true;
-    formErrors.value.email = "";
-    formErrors.value.password = "";
+const validateForm = () => {
+  let isValid = true;
+  formErrors.value.email = "";
+  formErrors.value.password = "";
 
-    if (!form.value.email) {
-      formErrors.value.email = "Email is required";
-      isValid = false;
-    }
-    if (!form.value.password) {
-      formErrors.value.password = "Password is required";
-      isValid = false;
-    }
+  if (!form.value.email) {
+    formErrors.value.email = "Email is required";
+    isValid = false;
+  }
+  if (!form.value.password) {
+    formErrors.value.password = "Password is required";
+    isValid = false;
+  }
 
-    return isValid;
-  };
+  return isValid;
+};
 
-  const submitForm = async () => {
-    if (!validateForm()) return;
+const submitForm = async () => {
+  if (!validateForm()) return;
 
-    login({
+  isLoading.value = true; 
+
+  try {
+    await login({
       data: form.value,
       redirect: false,
       remember: false,
       staySignedIn: staySignedIn.value,
-    }).catch((error) => {
-      authError.value = true;
-      console.log(error);
     });
-  };
+  } catch (error) {
+    authError.value = true;
+    console.log(error);
+  } finally {
+    isLoading.value = false; 
+  }
+};
 </script>
 
 <template>
   <div class="auth-login">
     <div class="auth-base__head">
-      <h3 class="auth-base__title">Login 1.3</h3>
+      <h3 class="auth-base__title">BreakPoint</h3>
     </div>
     <form class="kt-form auth-base__form" @submit.prevent="submitForm">
       <div class="input-group">
@@ -82,19 +89,36 @@
             <span></span>
           </label>
         </div>
-        <div class="col kt-align-right">
-          <!--                    <router-link id="kt_login_forgot" to="/password/reset" class="auth-base__link">-->
-          <!--                        Password Reset-->
-          <!--                    </router-link>-->
-        </div>
       </div>
       <div class="auth-base__actions">
-        <input
+        <button
           class="btn btn-brand btn-elevate auth-base__btn-primary"
           type="submit"
-          value="Sign In"
-        />
+          :disabled="isLoading"
+        >
+          <span v-if="isLoading" class="spinner"></span> Sign In
+        </button>
       </div>
     </form>
   </div>
 </template>
+
+<style scoped>
+/* 🔄 Loading Spinner */
+.spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid black;
+  border-radius: 50%;
+  border-top-color: transparent;
+  animation: spin 0.8s linear infinite;
+  margin-right: 8px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+</style>

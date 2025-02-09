@@ -90,6 +90,10 @@ class UserService implements UserServiceInterface
             $this->userRepository->setPassword($user, $request_array['password']);
     }
 
+    public function updatePassword($user, $request) {
+        $this->userRepository->setPassword($user, $request['password']);
+    }
+
     public function getUserRoles(): array
     {
         $rolesCollection = $this->userRepository->getUserRoles();

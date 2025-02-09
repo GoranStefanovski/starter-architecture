@@ -4,6 +4,8 @@
         "last_name": "Last name",
         "email": "Email",
         "user_role": "User role",
+        "days_left": "Paid Leaves Left",
+        "is_office_based": "Office Based",
         "status": "Status",
         "avatar": "Avatar"
     }

@@ -16,6 +16,10 @@ class UserDTO
     public int $id;
     public bool $is_disabled;
     public array $permissions_array;
+    public int $paid_leaves_max;
+    public int $paid_leaves_left;
+    public int $country;
+    public bool $is_office_based;
 
     public function __construct(
         string $first_name,
@@ -26,7 +30,11 @@ class UserDTO
         int $role,
         int $id = 0,
         bool $is_disabled = false,
-        array $permissions_array = []
+        array $permissions_array = [],
+        int $paid_leaves_max,
+        int $paid_leaves_left,
+        int $country,
+        bool $is_office_based = false,
     ) {
         $this->first_name = $first_name;
         $this->last_name = $last_name;
@@ -37,6 +45,10 @@ class UserDTO
         $this->id = $id;
         $this->is_disabled = $is_disabled;
         $this->permissions_array = $permissions_array;
+        $this->paid_leaves_max = $paid_leaves_max;
+        $this->paid_leaves_left = $paid_leaves_left;
+        $this->country = $country;
+        $this->is_office_based = $is_office_based;
     }
 
     public static function fromRequest(Request $request): self
@@ -50,7 +62,11 @@ class UserDTO
             $request->input('role'),
             $request->input('id', 0),
             (bool) $request->input('is_disabled', false),
-            $request->input('permissions_array', [])
+            $request->input('permissions_array', []),
+            $request->input('paid_leaves_max'),
+            $request->input('paid_leaves_left'),
+            $request->input('country'),
+            (bool) $request->input('is_office_based')
         );
     }
 
@@ -65,7 +81,11 @@ class UserDTO
             $request->input('role'),
             id: 0,
             is_disabled: false,
-            permissions_array: $request->input('permissions_array', [])
+            permissions_array: $request->input('permissions_array', []),
+            paid_leaves_max: 0,
+            paid_leaves_left: 0,
+            country: $request->input('country'),
+            is_office_based: false
         );
     }
 
@@ -80,7 +100,11 @@ class UserDTO
             $user->role,
             $user->id,
             (bool) $user->is_disabled,
-            $user->permissions_array
+            $user->permissions_array,
+            $user->paid_leaves_max,
+            $user->paid_leaves_left,
+            $user->country,
+            $user->is_office_based
         );
     }
 
@@ -101,6 +125,10 @@ class UserDTO
             'id' => $this->id,
             'is_disabled' => $this->is_disabled,
             'permissions_array' => $this->permissions_array,
+            'paid_leaves_max' => $this->paid_leaves_max,
+            'paid_leaves_left' => $this->paid_leaves_left,
+            'country' => $this->country,
+            'is_office_based' => $this->is_office_based
         ];
     }
 

@@ -3,6 +3,7 @@
   import { useI18n } from "vue-i18n";
   import UserFormAvatar from "./UserFormAvatar.vue";
   import UserRolesDropdown from "./UserRolesDropdown.vue";
+  import UserCountriesDropdown from "./UserCountriesDropdown.vue";
   import { FormInput, FormSwitch } from "@starter-core/dash-ui/src";
 
   type EmitsType = {
@@ -14,13 +15,19 @@
     required: true,
     type: Boolean,
   });
+  const isOfficeBased = defineModel("isOfficeBased", {
+    required: true,
+    type: Boolean,
+  });
   const role = defineModel("role", { required: true, type: Number });
   const lastName = defineModel("lastName", { required: true, type: String });
   const firstName = defineModel("firstName", { required: true, type: String });
+  const country = defineModel("country", { required: true, type: Number });
   const email = defineModel("email", { required: true, type: String });
   const { errors = {}, avatar } = defineProps<{
     errors: any;
     avatar: string | null;
+    paidLeavesLeft: number
   }>();
   const emit = defineEmits<EmitsType>();
 
@@ -35,6 +42,9 @@
         {{ t("users.user_status") }}:
       </h3>
       <user-roles-dropdown v-model:role="role" />
+
+      <UserCountriesDropdown v-model:country="country" />
+
       <form-switch
         v-model="isDisabled"
         id="enabled"
@@ -42,6 +52,14 @@
         type="outline"
         :label="t('users.status.label')"
         :helper-text="`User is  ${isDisabled ? 'disabled' : 'enabled'}`"
+      />
+      <form-switch
+        v-model="isOfficeBased"
+        id="enabled"
+        theme="danger"
+        type="outline"
+        :label="'Office Based'"
+        :helper-text="`User is  ${isOfficeBased ? '' : 'not'} Office Based`"
       />
     </div>
   </div>
@@ -89,7 +107,6 @@
         v-model="email"
         name="email"
         :label="t('users.email.label')"
-        helper-text="We'll never share your email with anyone else."
         is-inline
       >
         <template v-slot:prependContent>

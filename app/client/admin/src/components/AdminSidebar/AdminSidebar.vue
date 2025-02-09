@@ -43,10 +43,6 @@
   <!--<button class="aside-close " id="kt_aside_close_btn"><i class="la la-close"></i></button>-->
   <div
     class="aside"
-    :class="{
-      'aside--minimize': isSidebarMinimized,
-      'aside--minimize-hover': sidebarState.minimizeHover,
-    }"
     @mouseover="sidebarHover(true)"
     @mouseleave="sidebarHover(false)"
   >

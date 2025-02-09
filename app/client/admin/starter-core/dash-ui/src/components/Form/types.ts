@@ -43,6 +43,7 @@ export interface FormDropdownProps {
   modelValue: any;
   label?: string;
   errors?: string[];
+  readonly: boolean;
 }
 
 export interface FormSwitchProps {

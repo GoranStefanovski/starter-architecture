@@ -26,22 +26,32 @@ class HomeController extends Controller
                 'label' => 'admin.dashboard',
                 'name' => 'item_dashboard',
                 'route' => 'dashboard',
-                'permission' => UserPermissions::READ_USERS, // Change to dashboard_view
+                'permission' => UserPermissions::DASHBOARD_VIEW,
             ],
             [
                 'label' => 'admin.users.main',
                 'name' => 'item_users',
                 'route' => 'users',
                 'permission' => UserPermissions::READ_USERS,
-                'submenu' => [
-                    [
-                        'label' => 'admin.users.admin',
-                        'name' => 'item_users',
-                        'route' => 'users',
-                        'permission' => UserPermissions::READ_USERS,
-                    ]
-                ]
-            ]
+            ],
+            [
+                'label' => 'admin.leave_types.main',
+                'name' => 'item_types',
+                'route' => 'leave_types',
+                'permission' => UserPermissions::WRITE_USERS,
+            ],
+            [
+                'label' => 'admin.leave_requests.main',
+                'name' => 'item_requests',
+                'route' => 'leave_requests',
+                'permission' => UserPermissions::READ_REQUESTS,
+            ],
+            [
+                'label' => 'Vacation Days',
+                'name' => 'item_types',
+                'route' => 'vacation_days',
+                'permission' => UserPermissions::READ_REQUESTS,
+            ],
         ];
 
         $pagesItems = [

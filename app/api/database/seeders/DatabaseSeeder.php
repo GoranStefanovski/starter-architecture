@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Applications\User\Model\User;
 use App\Constants\UserPermissions;
 use App\Constants\UserRoles;
@@ -10,7 +9,8 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
-use Faker\Factory as Faker;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
 {
@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        // Create Users
         $admin = User::create([
             'first_name' => 'Admin',
             'last_name' => 'Userot',
@@ -26,10 +27,17 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('password')
         ]);
 
-        $editor = User::create([
-            'first_name' => 'Editor',
+        $manager = User::create([
+            'first_name' => 'Manager',
             'last_name' => 'Userot',
-            'email' => 'editor@example.com',
+            'email' => 'manager@example.com',
+            'password' => Hash::make('password')
+        ]);
+
+        $developer = User::create([
+            'first_name' => 'Developer',
+            'last_name' => 'Userot',
+            'email' => 'developer@example.com',
             'password' => Hash::make('password')
         ]);
 
@@ -40,40 +48,70 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('password')
         ]);
 
-        // Create permissions
-        Permission::create(['name' => UserPermissions::READ_USERS]);
-        Permission::create(['name' => UserPermissions::WRITE_USERS]);
-        Permission::create(['name' => UserPermissions::DELETE_USERS]);
+        // Create Permissions
+        $permissions = [
+            UserPermissions::READ_USERS,
+            UserPermissions::WRITE_USERS,
+            UserPermissions::DELETE_USERS,
+            UserPermissions::WRITE_PROFILE,
+            UserPermissions::READ_REQUESTS,
+            UserPermissions::APPROVE_REQUESTS,
+            UserPermissions::WRITE_REQUESTS,
+            UserPermissions::DELETE_REQUESTS,
+            UserPermissions::DASHBOARD_VIEW,
+        ];
 
-        // Create three roles and assign created permissions
-        $roleAdmin = Role::create(['name' => UserRoles::ADMIN])->givePermissionTo(Permission::all());
-        $roleEditor = Role::create(['name' => UserRoles::EDITOR])->givePermissionTo([UserPermissions::READ_USERS, UserPermissions::WRITE_USERS]);
-        $roleCollaborator = Role::create(['name' => UserRoles::COLLABORATOR])->givePermissionTo(UserPermissions::READ_USERS);
+        foreach ($permissions as $permission) {
+            Permission::create(['name' => $permission]);
+        }
 
-        $roles = [$roleAdmin->id, $roleEditor->id, $roleCollaborator->id];
+        // Create Roles and Assign Permissions
+        $roleAdmin = Role::create(['name' => UserRoles::ADMIN])
+            ->givePermissionTo(Permission::all());
 
-        // Adding permissions via a role
-        $admin->assignRole(UserRoles::ADMIN);
-        $editor->assignRole(UserRoles::EDITOR);
-        $collaborator->assignRole(UserRoles::COLLABORATOR);
-
-        $faker = Faker::create();
-
-        // Common password for all users, hashed
-        $password = Hash::make('password');
-
-        for ($i = 0; $i < 100; $i++) {
-            // Create a new user with random data
-            $user = User::create([
-                'first_name' => $faker->name,
-                'last_name' => $faker->name,
-                'email' => $faker->unique()->safeEmail,
-                'password' => $password,
-                // Other fields like 'first_name', 'last_name', etc., can be added here
+        $roleManager = Role::create(['name' => UserRoles::MANAGER])
+            ->givePermissionTo([
+                UserPermissions::DASHBOARD_VIEW,
+                UserPermissions::READ_USERS,
+                UserPermissions::WRITE_USERS,
+                UserPermissions::WRITE_PROFILE,
+                UserPermissions::READ_REQUESTS,
+                UserPermissions::WRITE_REQUESTS,
+                UserPermissions::APPROVE_REQUESTS,
             ]);
 
-            // Assign a random role to the user
-            $user->roles()->attach($faker->randomElement($roles));
-        }
+        $roleDeveloper = Role::create(['name' => UserRoles::DEVELOPER])
+            ->givePermissionTo([
+                UserPermissions::DASHBOARD_VIEW,
+                UserPermissions::READ_REQUESTS,
+                UserPermissions::WRITE_PROFILE,
+                UserPermissions::WRITE_REQUESTS,
+                UserPermissions::DELETE_REQUESTS,
+            ]);
+
+        $roleCollaborator = Role::create(['name' => UserRoles::COLLABORATOR])
+            ->givePermissionTo([
+                UserPermissions::DASHBOARD_VIEW,
+                UserPermissions::READ_USERS,
+                UserPermissions::READ_REQUESTS,
+            ]);
+
+        // Assign Roles to Users
+        $admin->assignRole(UserRoles::ADMIN);
+        $manager->assignRole(UserRoles::MANAGER);
+        $developer->assignRole(UserRoles::DEVELOPER);
+        $collaborator->assignRole(UserRoles::COLLABORATOR);
+
+        // Seed Leave Types
+        $leaveTypes = [
+            ['name' => 'Sick (unpaid)', 'slug' => Str::slug('Sick unpaid'), 'is_paid' => false, 'color' => '#FF6B6B'],
+            ['name' => 'Sick (paid)', 'slug' => Str::slug('Sick paid'), 'is_paid' => true, 'color' => '#FFA726'],
+            ['name' => 'Vacation Day (paid)', 'slug' => Str::slug('Vacation Day paid'), 'is_paid' => true, 'color' => '#4CAF50'],
+            ['name' => 'Vacation Day (unpaid)', 'slug' => Str::slug('Vacation Day unpaid'), 'is_paid' => false, 'color' => '#90A4AE'],
+            ['name' => 'National Holiday (paid)', 'slug' => Str::slug('National Holiday paid'), 'is_paid' => true, 'color' => '#6326F2'],
+            ['name' => 'Work From Home', 'slug' => Str::slug('Work From Home'), 'is_paid' => true, 'color' => '#ECCBCB'],
+        ];
+
+        DB::table('leave_types')->insert($leaveTypes);
     }
 }

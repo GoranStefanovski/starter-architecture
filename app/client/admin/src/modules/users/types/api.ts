@@ -12,6 +12,10 @@ export interface GetUserResponse {
   permissions_array: Permission[];
   role: UserRoleId;
   updated_at: string;
+  paid_leaves_max: number;
+  paid_leaves_left: number;
+  country: number;
+  is_office_based: boolean;
 }
 
 export interface UsersTableResponse {

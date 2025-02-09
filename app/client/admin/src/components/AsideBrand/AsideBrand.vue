@@ -22,27 +22,9 @@
   <div class="kt-aside__brand">
     <div class="kt-aside__brand-logo">
       <router-link to="/admin/dashboard">
-        <img
-          v-if="isLogoVisible"
-          alt="Logo"
-          src="@/../assets/images/sm_logo_white.png"
-        />
+        BreakPoint
       </router-link>
     </div>
-    <div class="kt-aside__brand-tools">
-      <button
-        class="kt-aside__brand-aside-toggler"
-        @click="$emit('toggleSidebar')"
-      >
-        <IconAngledoubleright v-if="isSidebarMinimized" size="26" />
-        <IconAngledoubleleft v-else size="26" />
-      </button>
-      <button
-        class="kt-aside__brand-aside-toggler kt-aside__brand-aside-toggler--left"
-        @click="$emit('toggleSidebar')"
-      >
-        <span />
-      </button>
-    </div>
+    
   </div>
 </template>

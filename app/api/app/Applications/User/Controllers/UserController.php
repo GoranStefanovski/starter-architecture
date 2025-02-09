@@ -14,6 +14,7 @@ use App\Applications\User\Requests\MyProfile;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use App\Applications\User\Model\User;
 
 /**
  * @property UserServiceInterface $userService
@@ -78,6 +79,11 @@ class UserController extends Controller
             $userId,
             $dto
         );
+        if ($request['password'] && $request['password'] !== '') {
+            $user = User::find($userId);
+            $this->userService->updatePassword($user, $request);
+        }
+        
         return response()->json($userDTO);
     }
 
