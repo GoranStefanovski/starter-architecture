@@ -81,7 +81,7 @@ const calendarEvents = computed(() => {
   }));
 
   const holidayEvents = nationalHolidays.value.map((holiday: any) => ({
-    title: holiday.country + ' National Holiday',
+    title: holiday.country + 'n Holiday',
     start: holiday.date,
     end: new Date(new Date(holiday.date).getTime() + 24 * 60 * 60 * 1000).toISOString().split('T')[0], // Add 1 day for holidays too
     backgroundColor: "#6326F2",

@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import axios from "axios";
+import { computed, ref } from "vue";
 import { useLeaveRequestsTable } from "../composables/useLeaveRequestsTable";
 import { useLeaveRequestsForm } from "../composables/useLeaveRequestsForm";
 import { LEAVE_REQUESTS_DATATABLE_COLUMNS } from "../constants";
@@ -15,7 +16,7 @@ import {
 
 const { query, onPaginationChange } = useDatatable();
 const { data, isLoading, isFetching, error, refetch } = useLeaveRequestsTable(query); 
-const { deleteLeaveRequest } = useLeaveRequestsForm();
+const { deleteLeaveRequest, downloadLeaveRequestPDF } = useLeaveRequestsForm();
 
 const pagination = computed(() => data.value?.pagination ?? null);
 const leaveRequests = computed(() => data.value?.data ?? []);
@@ -42,6 +43,7 @@ const leaveRequests = computed(() => data.value?.data ?? []);
         :leaveRequest="leaveRequest"
         :isEvenRow="index % 2 === 0"
         :deleteLeaveRequest="(id) => deleteLeaveRequest(id, { onSuccess: () => refetch() })"
+        :downloadLeaveRequestPDF="(file_name) => downloadLeaveRequestPDF(file_name)"
       />
     </template>
     <template v-else #default>

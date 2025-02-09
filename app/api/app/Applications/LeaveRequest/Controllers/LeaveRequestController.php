@@ -11,6 +11,7 @@ use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Applications\LeaveRequest\Requests\NewLeaveRequestRequest;
 use App\Applications\LeaveRequest\Requests\LeaveRequestRequest;
+use Storage;
 
 /**
  * @property LeaveRequestServiceInterface $leaveRequestService
@@ -182,4 +183,18 @@ class LeaveRequestController extends Controller
             ], 500); // Internal Server Error status code
         }
     }
+    public function downloadLeaveRequestPDF(string $file_name)
+    {
+        $filePath = storage_path( "app/public/" . $file_name);
+
+        if (!file_exists($filePath)) {
+            abort(404, "PDF not found.");
+        }
+
+        return response()->download($filePath, $file_name, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'attachment; filename="' . $file_name . '"'
+        ]);
+    }
+    
 }

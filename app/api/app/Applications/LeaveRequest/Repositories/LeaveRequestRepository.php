@@ -12,9 +12,12 @@ use App\Applications\LeaveRequest\Mail\{
 };
 use App\Applications\Pagination\StarterPaginator;
 use App\Applications\LeaveRequest\Model\LeaveRequest;
+use App\Applications\Document\Model\Document;
 use App\Applications\NationalHoliday\Model\NationalHoliday;
 use Illuminate\Support\Facades\{Mail, Auth};
 use DateTime, DateInterval, DatePeriod;
+use setasign\Fpdi\Fpdi;
+use Storage;
 
 /**
  * @property LeaveRequest $leaveRequest
@@ -103,8 +106,12 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
             'confirmed_by' => ($isConfirmed == 2 ? $user->id : $leaveRequest['confirmed_by'])
         ]);
 
-        if ($isConfirmed == 2 && $leaveRequest->user && $leaveRequestData->leave_type_id == 3) {
-            $this->deductPaidLeaves($leaveRequest->user, $leaveRequestData);
+        if ($isConfirmed == 2) {
+            $this->createLeaveRequestPDF($leaveRequest->user, $leaveRequest);
+            
+            if ($leaveRequest->user && $leaveRequestData->leave_type_id == 3) {
+                $this->deductPaidLeaves($leaveRequest->user, $leaveRequestData);
+            }
         }
 
         $this->sendRequestConfirmationEmail($leaveRequest);
@@ -170,7 +177,12 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
         };
 
         if ($mailClass) {
-            Mail::to($recipients)->send(new $mailClass($leaveRequest));
+            if ($leaveRequest->is_confirmed == 2) {
+                $document = Document::where('leave_request_id', $leaveRequest->id)->first();
+                Mail::to($recipients)->send(new $mailClass($leaveRequest, $document ? Storage::disk('public')->path($document->file_path) : null));
+            } else {
+                Mail::to($recipients)->send(new $mailClass($leaveRequest));
+            }
         }
     }
 
@@ -215,4 +227,44 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
 
         $user->update(['paid_leaves_left' => max(0, $user->paid_leaves_left - $leaveDays)]);
     }
+    
+    private function createLeaveRequestPDF(User $user, LeaveRequest $leaveRequest): void
+    {
+        $pdf = new Fpdi();
+        $pdf->AddPage();
+        $pdf->setSourceFile(file: public_path('BG_template.pdf'));
+        $tplIdx = $pdf->importPage(1);
+        $pdf->useTemplate($tplIdx, 0, 0, 210);
+
+        $pdf->SetFont('Arial', '', 12);
+        $pdf->SetXY(50, 40);
+        $pdf->Write(0, $user->first_name . " " . $user->last_name);
+        $pdf->SetXY(50, 50);
+        $pdf->Write(0, $user->email);
+        $pdf->SetXY(50, 60);
+        $pdf->Write(0, $leaveRequest->start_date);
+        $pdf->SetXY(50, 70);
+        $pdf->Write(0, $leaveRequest->end_date ?: 'Single Day');
+        $pdf->SetXY(50, 80);
+        $pdf->Write(0, $leaveRequest->leave_type->name ?? 'N/A');
+
+        $pdfDirectory = storage_path("app/public/");
+        if (!file_exists($pdfDirectory)) {
+            mkdir($pdfDirectory, 0777, true);
+        }
+
+        $fileName = $user->first_name . "_" . $user->last_name ."_" .str_replace('-', '_', $leaveRequest->start_date) . ".pdf";
+        $pdfPath = $fileName;
+        $fullPath = storage_path("app/public/" . $pdfPath);
+
+        $pdf->Output($fullPath, 'F');
+        Document::create([
+            'user_id' => $leaveRequest->user_id,
+            'leave_request_id' => $leaveRequest->id,
+            'file_path' => $pdfPath,
+            'file_name' => $fileName
+        ]);
+    }
+    
+
 }

@@ -175,6 +175,7 @@ return [
         App\Applications\LeaveRequest\Providers\LeaveRequestServiceProvider::class,
         App\Applications\Navigation\Providers\NavigationServiceProvider::class,
         App\Applications\NationalHoliday\Providers\NationalHolidayServiceProvider::class,
+        App\Applications\Document\Providers\DocumentServiceProvider::class,
 
         // Load the RouteServiceProvider last because it has the any route redirect
         App\Providers\RouteServiceProvider::class,

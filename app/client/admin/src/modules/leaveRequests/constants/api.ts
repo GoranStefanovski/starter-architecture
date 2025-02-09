@@ -6,6 +6,7 @@ export const LEAVE_REQUEST_API_ENDPOINTS = {
   decline: (leaveRequestId: number) => `/leave_request/${leaveRequestId}/decline`,
   patch: (leaveRequestId: number) => `/leave_request/${leaveRequestId}`,
   delete: (leaveRequestId: number) => `/leave_request/${leaveRequestId}/delete`,
+  download: (file_name: string) => `/leave_request/${file_name}/download`,
   table: "leave_request/draw",
 };
 

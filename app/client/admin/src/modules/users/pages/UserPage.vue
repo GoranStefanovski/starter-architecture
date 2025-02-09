@@ -12,7 +12,7 @@
     PAGE_WRAPPER_SLOTS,
     SubheaderTitle,
   } from "../../../components";
-  import { UserFormBasicInfoTab, UserFormPasswordTab, UserFormCalendarTab, UserFormLeaveDaysTab } from "../components";
+  import { UserFormBasicInfoTab, UserFormPasswordTab, UserFormCalendarTab, UserFormLeaveDaysTab, UserFormDocumentsTab } from "../components";
   import { useUsersForm } from "../composables";
   import type { UserFormItem } from "../types";
   import { DashButton, DashLink } from "@starter-core/dash-ui/src";
@@ -125,19 +125,23 @@
             v-model:email="email"
             v-model:firstName="firstName"
             v-model:country="country"
+            :paidLeavesLeft="paidLeavesLeft"
             :errors="errors"
             :avatar="formData?.avatar_thumbnail"
             @upload-avatar="uploadAvatarHandler"
           />
         </TabbedContentTab>
-        <TabbedContentTab :label="changePasswordLabel" id="change-password">
+        <TabbedContentTab :label="'Password'" id="change-password">
           <UserFormPasswordTab v-model:password="password" />
         </TabbedContentTab>
-        <TabbedContentTab :label="'Calednar'" id="calendar">
+        <TabbedContentTab v-if="isEditPage" :label="'Calednar'" id="calendar">
           <UserFormCalendarTab :userId="id" :country="country"/>
         </TabbedContentTab>
-        <TabbedContentTab v-if="isUserWriter" :label="'Leave Days'" id="leave-days">
+        <TabbedContentTab :label="'Paid Vacation Days'" id="leave-days">
           <UserFormLeaveDaysTab v-model:paidLeavesMax="paidLeavesMax" :daysLeft="paidLeavesLeft" />
+        </TabbedContentTab>
+        <TabbedContentTab v-if="isUserWriter && isEditPage" :label="'PDFs'" id="documents">
+          <UserFormDocumentsTab :userId="id" />
         </TabbedContentTab>
       </TabbedContent>
     </form>

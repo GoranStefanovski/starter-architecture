@@ -53,6 +53,7 @@ class DatabaseSeeder extends Seeder
             UserPermissions::READ_USERS,
             UserPermissions::WRITE_USERS,
             UserPermissions::DELETE_USERS,
+            UserPermissions::WRITE_PROFILE,
             UserPermissions::READ_REQUESTS,
             UserPermissions::APPROVE_REQUESTS,
             UserPermissions::WRITE_REQUESTS,
@@ -73,6 +74,7 @@ class DatabaseSeeder extends Seeder
                 UserPermissions::DASHBOARD_VIEW,
                 UserPermissions::READ_USERS,
                 UserPermissions::WRITE_USERS,
+                UserPermissions::WRITE_PROFILE,
                 UserPermissions::READ_REQUESTS,
                 UserPermissions::WRITE_REQUESTS,
                 UserPermissions::APPROVE_REQUESTS,
@@ -82,6 +84,7 @@ class DatabaseSeeder extends Seeder
             ->givePermissionTo([
                 UserPermissions::DASHBOARD_VIEW,
                 UserPermissions::READ_REQUESTS,
+                UserPermissions::WRITE_PROFILE,
                 UserPermissions::WRITE_REQUESTS,
                 UserPermissions::DELETE_REQUESTS,
             ]);

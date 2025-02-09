@@ -130,7 +130,7 @@
             :user="auth.user()"
           />
         </TabbedContentTab>
-        <TabbedContentTab v-else :label="basicInfoLabeel" id="basic-info">
+        <TabbedContentTab v-else :label="'Leave Request Confirmation'" id="basic-info">
           <LeaveRequestsFormApproveTab
             v-model:userId="userId"
             v-model:leaveTypeId="leaveTypeId"

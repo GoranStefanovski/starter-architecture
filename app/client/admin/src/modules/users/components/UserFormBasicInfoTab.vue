@@ -27,6 +27,7 @@
   const { errors = {}, avatar } = defineProps<{
     errors: any;
     avatar: string | null;
+    paidLeavesLeft: number
   }>();
   const emit = defineEmits<EmitsType>();
 

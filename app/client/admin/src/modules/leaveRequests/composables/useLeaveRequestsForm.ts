@@ -107,6 +107,8 @@ export const useLeaveRequestsForm = (leaveRequestId?: number) => {
       toast.error(error.message);
     },
   });
+
+  
   const { mutate: deleteLeaveRequest, isPending: isDeleting } = useMutation({
     mutationFn: async (leaveRequestId: number) => {
       await axios.post(LEAVE_REQUEST_API_ENDPOINTS.delete(leaveRequestId));
@@ -115,6 +117,18 @@ export const useLeaveRequestsForm = (leaveRequestId?: number) => {
       queryClient.invalidateQueries({ queryKey: ["leave_request/draw"] }).then(() => {
         toast.success("Leave Request deleted!");
       });
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+
+  const { mutate: downloadLeaveRequestPDF, isPending: isDownloading } = useMutation({
+    mutationFn: async (file_name: string) => {
+      await axios.get(LEAVE_REQUEST_API_ENDPOINTS.download(file_name));
+    },
+    onSuccess: async () => {
+      toast.success("Leave Request Downloaded!");
     },
     onError: (error) => {
       toast.error(error.message);
@@ -131,6 +145,7 @@ export const useLeaveRequestsForm = (leaveRequestId?: number) => {
     approveLeaveRequest,
     declineLeaveRequest,
     deleteLeaveRequest,
+    downloadLeaveRequestPDF,
     leaveRequests,
     isLoading: manualLoading,
   };

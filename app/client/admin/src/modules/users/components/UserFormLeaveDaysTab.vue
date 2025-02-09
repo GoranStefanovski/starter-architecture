@@ -8,7 +8,7 @@
     required: true,
     type: Number,
   });
-  const props = defineProps(["daysLeft"]);
+  const props = defineProps(["daysLeft", "isMyProfile"]);
 
 
 
@@ -22,6 +22,7 @@
         Leave Days:
       </h3>
       <form-input
+        v-if="!props.isMyProfile"
         name="paidLeavesMax"
         type="text"
         :label="'Leave Types (by Year)'"

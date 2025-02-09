@@ -82,7 +82,7 @@ const calendarEvents = computed(() => {
 
   // National Holiday Events (Single-Day Events)
   const holidayEvents = nationalHolidays.value.map((holiday: any) => ({
-    title: `${holiday.country} National Holiday`,
+    title: `Holiday`,
     start: holiday.date,
     backgroundColor: getNameLeaveColor(5),
     textColor: "#fff",

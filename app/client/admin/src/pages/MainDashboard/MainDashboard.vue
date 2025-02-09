@@ -76,6 +76,16 @@ import { leaveRequest } from "@/modules/leaveRequests/constants";
   const getUserFullName = (userId: number) => {
     const user = users.value.find((u: any) => u.id === userId);
     return user ? `${user.first_name} ${user.last_name.charAt(0)}.` : "Unknown User";
+  };
+  
+  const formatDate = (dateString: string) => {
+  if (!dateString) return "Invalid Date";
+  const date = new Date(dateString);
+  return date.toLocaleDateString("en-GB", {
+    year: "numeric",
+    month: "short",
+    day: "2-digit",
+  });
 };
 </script>
 <template>
@@ -137,11 +147,19 @@ import { leaveRequest } from "@/modules/leaveRequests/constants";
               <tr>
                 <th>No.</th>
                 <th>From</th>
+                <th>From (Date)</th>
+                <th>To (Date)</th>
                 <th>Link</th>
               </tr>
               <tr v-for="leave, index in leaveRequests" :key="index">
                 <td>{{ index + 1}}.</td>
                 <td>{{ getUserFullName(leave.user_id) }}</td>
+                <td>
+                  {{ formatDate(leave.start_date) }}
+                </td>
+                <td>
+                  {{ leave.end_date ? formatDate(leave.end_date) : 'Single Day' }}
+                </td>
                 <td>
                   <router-link :to="`/admin/leave_request/${leave.id}/confirmation`">View</router-link>
                 </td>

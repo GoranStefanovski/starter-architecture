@@ -26,6 +26,7 @@ Route::group([
         Route::get('pending', [LeaveRequestController::class, 'getPending']);
 
         // CRUD ROUTES
+        Route::get('{id}/download', [LeaveRequestController::class, 'downloadLeaveRequestPDF']);
         Route::post('create', [LeaveRequestController::class, 'create']);
         Route::post('{id}/approve', [LeaveRequestController::class, 'approve']);
         Route::post('{id}/decline', [LeaveRequestController::class, 'decline']);
