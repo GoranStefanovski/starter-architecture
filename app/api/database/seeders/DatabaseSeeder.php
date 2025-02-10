@@ -43,7 +43,7 @@ class DatabaseSeeder extends Seeder
 
         $collaborator = User::create([
             'first_name' => 'Collaborator',
-            'last_name' => 'Userot',
+            'last_name' => 'Macedonia',
             'email' => 'collaborator@example.com',
             'password' => Hash::make('password')
         ]);
@@ -77,6 +77,7 @@ class DatabaseSeeder extends Seeder
                 UserPermissions::WRITE_PROFILE,
                 UserPermissions::READ_REQUESTS,
                 UserPermissions::WRITE_REQUESTS,
+                UserPermissions::DELETE_REQUESTS,
                 UserPermissions::APPROVE_REQUESTS,
             ]);
 
