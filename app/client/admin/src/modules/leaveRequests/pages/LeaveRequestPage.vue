@@ -177,11 +177,11 @@
 
   .approve {
     border-radius: 4px;
-    background: #6c757d;
+    background: #4EAB58;
     color: white;
     margin-right: 8px;
     &:hover {
-      background: #5a6268;
+      background: #46a750;
     }
   }
 

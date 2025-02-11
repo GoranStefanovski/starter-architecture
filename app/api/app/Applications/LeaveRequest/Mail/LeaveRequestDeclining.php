@@ -26,7 +26,8 @@ class LeaveRequestDeclining extends Mailable
      */
     public function build(): self
     {
-        return $this->subject('Leave Request was Declined')
+        $subject = $this->leaveRequest->leaveType->name .  ' ' . $this->leaveRequest->start_date . ($this->leaveRequest->end_date ? ' to ' . $this->leaveRequest->end_date : '');  
+        return $this->subject($subject)
                     ->view('emails.leave_request_decline')
                     ->with([
                         'leaveRequest' => $this->leaveRequest,

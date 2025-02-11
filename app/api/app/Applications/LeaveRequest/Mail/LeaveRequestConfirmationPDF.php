@@ -28,7 +28,7 @@ class LeaveRequestConfirmationPDF extends Mailable
      */
     public function build(): self
     {
-        $email = $this->subject( 'ESOF')
+        $email = $this->subject( 'ESOF BG')
                     ->view('emails.leave_request_confirmation_pdf')
                     ->with([
                         'leaveRequest' => $this->leaveRequest,

@@ -26,7 +26,9 @@ class LeaveRequestNotification extends Mailable
      */
     public function build(): self
     {
-        return $this->subject('New Leave Request Assigned to You')
+
+        $subject =$this->leaveRequest->user->first_name . ' ' . $this->leaveRequest->user->last_name . ' has requested ' . $this->leaveRequest->leaveType->name .  ' ' . $this->leaveRequest->start_date . ($this->leaveRequest->end_date ? ' to ' . $this->leaveRequest->end_date : '');
+        return $this->subject($subject)
                     ->view('emails.leave_request_notification')
                     ->with([
                         'leaveRequest' => $this->leaveRequest,

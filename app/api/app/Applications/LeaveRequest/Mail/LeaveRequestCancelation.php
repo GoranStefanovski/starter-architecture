@@ -28,7 +28,8 @@ class LeaveRequestCancelation extends Mailable
      */
     public function build(): self
     {
-        $email = $this->subject($this->leaveRequest->user->first_name . ' ' . $this->leaveRequest->user->last_name .' Leave Request was Canceled')
+        $subject =$this->leaveRequest->user->first_name . ' ' . $this->leaveRequest->user->last_name . ': ' . $this->leaveRequest->leaveType->name .  ' ' . $this->leaveRequest->start_date . ($this->leaveRequest->end_date ? ' to ' . $this->leaveRequest->end_date : '');
+        $email = $this->subject($subject .' was Canceled')
                     ->view('emails.leave_request_cancelation')
                     ->with([
                         'leaveRequest' => $this->leaveRequest,
