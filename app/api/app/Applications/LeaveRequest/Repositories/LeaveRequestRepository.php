@@ -282,14 +282,15 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
                 fn($date) => in_array($date->format('N'), [6, 7]) || in_array($date->format('Y-m-d'), $nationalHolidays)
             ));
         }
-
+        $userCountry = $leaveRequest->user->country;
+        
         $pdf = new Fpdi();
         $pdf->AddPage();
-        if ($leaveRequest->user->country == 1) {
+        if ($userCountry == 1) {
             if ($leaveRequest->leave_type_id == 3) {
                 $pdf->setSourceFile(public_path('MK_template_paid.pdf'));
             } else {
-                $pdf->setSourceFile(public_path('MK_template_paid.pdf'));
+                $pdf->setSourceFile(public_path('MK_template_unpaid.pdf'));
             }
         } else {
             if ($leaveRequest->leave_type_id == 3) {
@@ -301,18 +302,31 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
 
         $tplIdx = $pdf->importPage(1);
         $pdf->useTemplate($tplIdx, 0, 0, 210);
-
-        $pdf->SetFont('Arial', '', 11);
-        $pdf->SetXY(111, 79);
-        $pdf->Write(0, $user->first_name . " " . $user->last_name);
-        $pdf->SetXY(92, 135);
-        $pdf->Write(0, $leaveDays ?? 'N/A');
-        $pdf->SetXY(44, 141);
-        $pdf->Write(0,  $start_date ?? 'N/A');
-        $pdf->SetXY(44, 147);
-        $pdf->Write(0,  $end_date ?? '');
-        $pdf->SetXY(24,215);
-        $pdf->Write(0, $nowDate ?? 'N/A');
+        if ($userCountry !== 1) {
+            $pdf->SetFont('Arial', '', 11);
+            $pdf->SetXY(111, 79);
+            $pdf->Write(0, $user->first_name . " " . $user->last_name);
+            $pdf->SetXY($leaveRequest->leave_type_id == 3 ? 92 : 80, 135);
+            $pdf->Write(0, $leaveDays ?? 'N/A');
+            $pdf->SetXY(44, 141);
+            $pdf->Write(0,  $start_date ?? 'N/A');
+            $pdf->SetXY(44, 147);
+            $pdf->Write(0,  $end_date ?? '');
+            $pdf->SetXY(24,215);
+            $pdf->Write(0, $nowDate ?? 'N/A');
+        } else {
+            $pdf->SetFont('Arial', '', 11);
+            $pdf->SetXY(111, 77);
+            $pdf->Write(0, $user->first_name . " " . $user->last_name);
+            $pdf->SetXY(65, 118);
+            $pdf->Write(0, $leaveDays ?? 'N/A');
+            $pdf->SetXY(124, 118);
+            $pdf->Write(0,  $start_date ?? 'N/A');
+            $pdf->SetXY(150, 118);
+            $pdf->Write(0,  $end_date ?? '');
+            $pdf->SetXY(24,193);
+            $pdf->Write(0, $nowDate ?? 'N/A');
+        }
 
         $pdfDirectory = storage_path("app/public/");
         if (!file_exists($pdfDirectory)) {
