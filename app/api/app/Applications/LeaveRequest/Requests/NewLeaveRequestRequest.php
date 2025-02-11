@@ -27,7 +27,7 @@ class NewLeaveRequestRequest extends ApiFormRequest
         $rules = [
             'request_to' => 'required',
             'leave_type_id' => 'required',
-            'start_date' => 'required|date',
+            'start_date' => 'required|date|after_or_equal:today',
             'end_date' => 'sometimes|date|after_or_equal:start_date',
         ];
 

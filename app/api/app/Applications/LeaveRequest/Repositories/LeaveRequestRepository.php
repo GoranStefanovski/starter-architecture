@@ -8,7 +8,9 @@ use App\Applications\LeaveRequest\Mail\{
     LeaveRequestNotification,
     LeaveRequestNotificationUpdate,
     LeaveRequestConfirmation,
-    LeaveRequestDeclining
+    LeaveRequestDeclining,
+    LeaveRequestCancelation,
+    LeaveRequestConfirmationPDF,
 };
 use App\Applications\Pagination\StarterPaginator;
 use App\Applications\LeaveRequest\Model\LeaveRequest;
@@ -107,7 +109,10 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
         ]);
 
         if ($isConfirmed == 2) {
-            $this->createLeaveRequestPDF($leaveRequest->user, $leaveRequest);
+            if ($leaveRequest->leave_type_id == 3 || $leaveRequest->leave_type_id == 4) {
+                $this->createLeaveRequestPDF($leaveRequest->user, $leaveRequest);
+                $this->sendConfirmationAccountentsEmail($leaveRequest);
+            }
             
             if ($leaveRequest->user && $leaveRequestData->leave_type_id == 3) {
                 $this->deductPaidLeaves($leaveRequest->user, $leaveRequestData);
@@ -120,7 +125,10 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
 
     public function delete(int $id)
     {
-        return $this->leaveRequest::findOrFail($id)->delete();
+        $leaveRequest = $this->leaveRequest::findOrFail($id);
+        $this->sendRequestCancelationEmail($leaveRequest);
+
+        return $leaveRequest->delete();
     }
 
     public function draw($data): StarterPaginator
@@ -177,13 +185,28 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
         };
 
         if ($mailClass) {
-            if ($leaveRequest->is_confirmed == 2) {
-                $document = Document::where('leave_request_id', $leaveRequest->id)->first();
-                Mail::to($recipients)->send(new $mailClass($leaveRequest, $document ? Storage::disk('public')->path($document->file_path) : null));
-            } else {
-                Mail::to($recipients)->send(new $mailClass($leaveRequest));
-            }
+            Mail::to($recipients)->send(new $mailClass($leaveRequest));
         }
+    }
+
+    private function sendRequestCancelationEmail(LeaveRequest $leaveRequest)
+    {
+        $recipients = $this->getRecipients($leaveRequest);
+
+        Mail::to($recipients)->send(new LeaveRequestCancelation($leaveRequest));
+    }
+
+
+    private function sendConfirmationAccountentsEmail(LeaveRequest $leaveRequest) {
+        $administrationEmails = User::role(User::COLLABORATOR)
+        ->where('country', '=', $leaveRequest->user->country)
+        ->pluck('email')
+        ->toArray(); 
+     
+        if ($leaveRequest->is_confirmed == 2) {
+            $document = Document::where('leave_request_id', $leaveRequest->id)->first();
+            Mail::to($administrationEmails)->send(new LeaveRequestConfirmationPDF($leaveRequest, $document ? Storage::disk('public')->path($document->file_path) : null));
+        } 
     }
 
     private function getRecipients(LeaveRequest $leaveRequest)
@@ -235,12 +258,12 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
         // Cannot print in PDF
         // Create a Cyrilyc Data for each user on create in a separate table, with foreign user_id
         $fullNameCyrilic = transliterator_transliterate('Latin-Cyrillic', $user->first_name) . ' ' . transliterator_transliterate('Latin-Cyrillic', $user->last_name);
+        $start_date = $this->formatDate($leaveRequest->start_date);
 
         if ($isSingleDay) {
-            $dates = $this->formatDate($leaveRequest->start_date);
             $leaveDays = 1;
         } else {
-            $dates = $this->formatDate($leaveRequest->start_date) . "g. to " . $this->formatDate($leaveRequest->end_date) . 'g.';
+            $end_date = $this->formatDate($leaveRequest->end_date);
                     // Calculate valid leave days excluding weekends and national holidays
             $startDate = new DateTime($leaveRequest->start_date);
             $endDate = $leaveRequest->end_date ? new DateTime($leaveRequest->end_date) : $startDate;
@@ -259,26 +282,51 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
                 fn($date) => in_array($date->format('N'), [6, 7]) || in_array($date->format('Y-m-d'), $nationalHolidays)
             ));
         }
-
+        $userCountry = $leaveRequest->user->country;
+        
         $pdf = new Fpdi();
         $pdf->AddPage();
-        $pdf->setSourceFile(public_path('BG_template.pdf'));
+        if ($userCountry == 1) {
+            if ($leaveRequest->leave_type_id == 3) {
+                $pdf->setSourceFile(public_path('MK_template_paid.pdf'));
+            } else {
+                $pdf->setSourceFile(public_path('MK_template_unpaid.pdf'));
+            }
+        } else {
+            if ($leaveRequest->leave_type_id == 3) {
+                $pdf->setSourceFile(public_path('BG_template_paid.pdf'));
+            } else {
+                $pdf->setSourceFile(public_path('BG_template_unpaid.pdf'));
+            }
+        }
+
         $tplIdx = $pdf->importPage(1);
         $pdf->useTemplate($tplIdx, 0, 0, 210);
-
-        $pdf->SetFont('Arial', '', 11);
-        $pdf->SetXY(111, 77);
-        $pdf->Write(0, $user->first_name . " " . $user->last_name);
-        $pdf->SetXY(112, 110);
-        $pdf->Write(0, $leaveRequest->leaveType->name ?? 'N/A');
-        $pdf->SetXY(121, 114);
-        $pdf->Write(0, $leaveDays ?? 'N/A');
-        $pdf->SetXY(44, 118);
-        $pdf->Write(0, $dates ?? 'N/A');
-        $pdf->SetXY(24, 159);
-        $pdf->Write(0, $nowDate ?? 'N/A');
-        $pdf->SetXY(24, 227);
-        $pdf->Write(0, $nowDate ?? 'N/A');
+        if ($userCountry !== 1) {
+            $pdf->SetFont('Arial', '', 11);
+            $pdf->SetXY(111, 79);
+            $pdf->Write(0, $user->first_name . " " . $user->last_name);
+            $pdf->SetXY($leaveRequest->leave_type_id == 3 ? 92 : 80, 135);
+            $pdf->Write(0, $leaveDays ?? 'N/A');
+            $pdf->SetXY(44, 141);
+            $pdf->Write(0,  $start_date ?? 'N/A');
+            $pdf->SetXY(44, 147);
+            $pdf->Write(0,  $end_date ?? '');
+            $pdf->SetXY(24,215);
+            $pdf->Write(0, $nowDate ?? 'N/A');
+        } else {
+            $pdf->SetFont('Arial', '', 11);
+            $pdf->SetXY(111, 77);
+            $pdf->Write(0, $user->first_name . " " . $user->last_name);
+            $pdf->SetXY(65, 118);
+            $pdf->Write(0, $leaveDays ?? 'N/A');
+            $pdf->SetXY(124, 118);
+            $pdf->Write(0,  $start_date ?? 'N/A');
+            $pdf->SetXY(150, 118);
+            $pdf->Write(0,  $end_date ?? '');
+            $pdf->SetXY(24,193);
+            $pdf->Write(0, $nowDate ?? 'N/A');
+        }
 
         $pdfDirectory = storage_path("app/public/");
         if (!file_exists($pdfDirectory)) {

@@ -7,18 +7,20 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class LeaveRequestConfirmation extends Mailable
+class LeaveRequestConfirmationPDF extends Mailable
 {
     use Queueable, SerializesModels;
 
     public LeaveRequest $leaveRequest;
+    public ?string $pdfPath;
 
     /**
      * Create a new message instance.
      */
-    public function __construct(LeaveRequest $leaveRequest)
+    public function __construct(LeaveRequest $leaveRequest, ?string $pdfPath = null)
     {
         $this->leaveRequest = $leaveRequest;
+        $this->pdfPath = $pdfPath;
     }
 
     /**
@@ -26,12 +28,19 @@ class LeaveRequestConfirmation extends Mailable
      */
     public function build(): self
     {
-        $email = $this->subject($this->leaveRequest->user->first_name . ' ' . $this->leaveRequest->user->last_name .' Leave Request was Approved')
-                    ->view('emails.leave_request_confirmation')
+        $email = $this->subject( 'ESOF')
+                    ->view('emails.leave_request_confirmation_pdf')
                     ->with([
                         'leaveRequest' => $this->leaveRequest,
                     ]);
 
+
+        if ($this->pdfPath && file_exists($this->pdfPath)) {
+            $email->attach($this->pdfPath, [
+                'as' => basename($this->pdfPath),
+                'mime' => 'application/pdf',
+            ]);
+        }
 
         return $email;
     }
