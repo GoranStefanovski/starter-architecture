@@ -150,7 +150,7 @@
         <TabbedContentTab v-if="isEditPage" :label="'Calednar'" id="calendar">
           <UserFormCalendarTab :userId="id" :country="country"/>
         </TabbedContentTab>
-        <TabbedContentTab :label="'Paid Vacation Days'" id="leave-days">
+        <TabbedContentTab v-if="isEditPage" :label="'Paid Vacation Days'" id="leave-days">
           <UserFormLeaveDaysTab v-model:paidLeavesMax="paidLeavesMax" :daysLeft="paidLeavesLeft" />
         </TabbedContentTab>
         <TabbedContentTab v-if="isUserWriter && isEditPage" :label="'PDFs'" id="documents">

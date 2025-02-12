@@ -105,7 +105,7 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
         $leaveRequest->update([
             ...$leaveRequestData->toArray(),
             'is_confirmed' => $isConfirmed,
-            'confirmed_by' => ($isConfirmed == 2 ? $user->id : $leaveRequest['confirmed_by'])
+            'confirmed_by' => $user->id
         ]);
 
         if ($isConfirmed == 2) {
