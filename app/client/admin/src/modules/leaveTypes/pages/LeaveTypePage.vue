@@ -22,13 +22,6 @@
   const isEditPage = computed(() => route.name == "edit.leave_type");
   const leaveTypeId = Number(route.params.leaveTypeId);
 
-  const validationSchema = {
-    name(value: string) {
-      if (value?.length >= 5) return true;
-      return "Name needs to be at least 5 characters.";
-    },
-  };
-
   const {
     isLoading,
     data: formData,
@@ -37,9 +30,7 @@
   } = useLeaveTypesForm(leaveTypeId);
 
   const { handleSubmit, errors, setValues, defineField } =
-    useForm<LeaveTypeFormItem>({
-      validationSchema,
-    });
+    useForm<LeaveTypeFormItem>();
 
   const submitHandler = handleSubmit((values) => {
     if (isEditPage.value) {

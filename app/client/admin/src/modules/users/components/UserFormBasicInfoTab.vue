@@ -101,12 +101,14 @@
         v-model="firstName"
         name="first-name"
         :label="t('users.first_name.label')"
+        :error="errors.first_name"
         is-inline
       />
       <form-input
         v-model="email"
         name="email"
         :label="t('users.email.label')"
+        :error="errors.email"
         is-inline
       >
         <template v-slot:prependContent>

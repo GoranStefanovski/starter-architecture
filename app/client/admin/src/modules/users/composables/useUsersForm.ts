@@ -45,8 +45,10 @@ export const useUsersForm = (userId?: number) => {
       manualLoading.value = false;
     },
     onError: (error) => {
+      // @ts-ignore
+      const firstErrorMessage = error.errors ? Object.values(error.errors)[0][0] : "An unexpected error occurred";
       manualLoading.value = false;
-      toast.error(error.message);
+      toast.error(firstErrorMessage);
     },
   });
 
@@ -65,8 +67,10 @@ export const useUsersForm = (userId?: number) => {
       manualLoading.value = false;
     },
     onError: (error) => {
+      // @ts-ignore
+      const firstErrorMessage = error.errors ? Object.values(error.errors)[0][0] : "An unexpected error occurred";
       manualLoading.value = false;
-      toast.error(error.message);
+      toast.error(firstErrorMessage);
     },
   });
 
@@ -93,8 +97,10 @@ export const useUsersForm = (userId?: number) => {
       manualLoading.value = false;
     },
     onError: (error) => {
+      // @ts-ignore
+      const firstErrorMessage = error.errors ? Object.values(error.errors)[0][0] : "An unexpected error occurred";
       manualLoading.value = false;
-      toast.error(error.message);
+      toast.error(firstErrorMessage);
     },
   });
 

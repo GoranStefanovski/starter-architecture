@@ -26,12 +26,6 @@
   const userId = Number(auth.user().id);
 
   const isUserWriter = auth.user().permissions_array.includes("write_users") ? true : false;
-  const validationSchema = {
-    last_name(value: string) {
-      if (value?.length >= 5) return true;
-      return "Name needs to be at least 5 characters.";
-    },
-  };
 
   const {
     isLoading,
@@ -42,9 +36,7 @@
   } = useUsersForm(userId);
 
   const { handleSubmit, errors, setValues, defineField } =
-    useForm<UserFormItem>({
-      validationSchema,
-    });
+    useForm<UserFormItem>();
 
   const submitHandler = handleSubmit((values) => {
       updateUser(values);

@@ -9,6 +9,8 @@ use App\Applications\LeaveType\Services\LeaveTypeServiceInterface;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use App\Applications\LeaveType\Requests\LeaveTypeRequest;
+use App\Applications\LeaveType\Requests\NewLeaveTypeRequest;
 
 /**
  * @property LeaveTypeServiceInterface $leaveTypeService
@@ -50,7 +52,7 @@ class LeaveTypeController extends Controller
      * @param  Request  $request
      * @return JsonResponse
      */
-    public function create(Request $request): JsonResponse
+    public function create(NewLeaveTypeRequest $request): JsonResponse
     {
         $leaveTypeDTO = LeaveTypeDTO::fromRequestForCreate($request);
         $newLeaveTypeDTO = $this->leaveTypeService->create($leaveTypeDTO);
@@ -64,7 +66,7 @@ class LeaveTypeController extends Controller
      * @param  Request  $request
      * @return JsonResponse
      */
-    public function update(Request $request): JsonResponse
+    public function update(LeaveTypeRequest $request): JsonResponse
     {
         $leaveTypeId = Route::current()->parameter('id');
         $dto = LeaveTypeDTO::fromRequest($request);
