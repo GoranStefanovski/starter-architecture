@@ -5,7 +5,7 @@ import { LEAVE_TYPE_API_ENDPOINTS, LEAVE_TYPES_QUERY_KEY } from "../constants";
 import type { UsersTableResponse } from "../types";
 import type { TableQuery } from "@starter-core/dash-ui/src";
 
-export const useUsersTable = (
+export const useLeaveTypesTable = (
   query: ComputedRef<TableQuery>,
 ): UseQueryReturnType<UsersTableResponse, AxiosError> => {
   return useQuery({

@@ -105,7 +105,7 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
         $leaveRequest->update([
             ...$leaveRequestData->toArray(),
             'is_confirmed' => $isConfirmed,
-            'confirmed_by' => ($isConfirmed == 2 ? $user->id : $leaveRequest['confirmed_by'])
+            'confirmed_by' => $user->id
         ]);
 
         if ($isConfirmed == 2) {
@@ -302,8 +302,8 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
 
         $tplIdx = $pdf->importPage(1);
         $pdf->useTemplate($tplIdx, 0, 0, 210);
+        $pdf->SetFont('Arial', '', 11);
         if ($userCountry !== 1) {
-            $pdf->SetFont('Arial', '', 11);
             $pdf->SetXY(111, 79);
             $pdf->Write(0, $user->first_name . " " . $user->last_name);
             $pdf->SetXY($leaveRequest->leave_type_id == 3 ? 92 : 80, 135);
@@ -315,7 +315,6 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
             $pdf->SetXY(24,215);
             $pdf->Write(0, $nowDate ?? 'N/A');
         } else {
-            $pdf->SetFont('Arial', '', 11);
             $pdf->SetXY(111, 77);
             $pdf->Write(0, $user->first_name . " " . $user->last_name);
             $pdf->SetXY(65, 118);

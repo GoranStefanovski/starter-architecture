@@ -27,12 +27,14 @@ class LeaveTypeRequest extends ApiFormRequest
         $rules = [
             'name' => 'required|max:255|min:2',
             'slug' => 'required|max:255|min:2',
+            'color' => 'required'
         ];
 
         return $rules;
     }
     public function messages(){
         return [
+            'color.required' => 'users.color.required',
             'name.required' => 'users.name.required',
             'name.max' => 'users.name.max',
             'name.min' => 'users.name.min',

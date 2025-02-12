@@ -26,8 +26,21 @@
 
   const auth = useAuth();
   const isUserWriter = auth.user().permissions_array.includes("write_users") ? true : false;
+  
   const validationSchema = {
     last_name(value: string) {
+      if (value?.length >= 5) return true;
+      return "Last name needs to be at least 5 characters.";
+    },
+    first_name(value: string) {
+      if (value?.length >= 5) return true;
+      return "First name needs to be at least 5 characters.";
+    },
+    role(value: number) {
+      if (value > 0) return true;
+      return "Name needs to be at least 5 characters.";
+    },
+    email(value: string) {
       if (value?.length >= 5) return true;
       return "Name needs to be at least 5 characters.";
     },
@@ -93,8 +106,8 @@
   <PageWrapper>
     <template #[PAGE_WRAPPER_SLOTS.subheaderMain]>
       <SubheaderTitle
-        title="Edit user"
-        :description="`${firstName} ${lastName}`"
+        :title="isEditPage ? 'Edit user' : 'Create User'"
+        :description="isEditPage ? `${firstName} ${lastName}` : ''"
       />
     </template>
     <template #[PAGE_WRAPPER_SLOTS.subheaderToolbox]>
@@ -137,7 +150,7 @@
         <TabbedContentTab v-if="isEditPage" :label="'Calednar'" id="calendar">
           <UserFormCalendarTab :userId="id" :country="country"/>
         </TabbedContentTab>
-        <TabbedContentTab :label="'Paid Vacation Days'" id="leave-days">
+        <TabbedContentTab v-if="isEditPage" :label="'Paid Vacation Days'" id="leave-days">
           <UserFormLeaveDaysTab v-model:paidLeavesMax="paidLeavesMax" :daysLeft="paidLeavesLeft" />
         </TabbedContentTab>
         <TabbedContentTab v-if="isUserWriter && isEditPage" :label="'PDFs'" id="documents">

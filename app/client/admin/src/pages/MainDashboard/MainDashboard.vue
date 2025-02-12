@@ -72,11 +72,6 @@ import { leaveRequest } from "@/modules/leaveRequests/constants";
       console.error("Error fetching leave types:", error);
     }
   };
-
-  const getUserFullName = (userId: number) => {
-    const user = users.value.find((u: any) => u.id === userId);
-    return user ? `${user.first_name} ${user.last_name.charAt(0)}.` : "Unknown User";
-  };
   
   const formatDate = (dateString: string) => {
   if (!dateString) return "Invalid Date";
@@ -153,7 +148,7 @@ import { leaveRequest } from "@/modules/leaveRequests/constants";
               </tr>
               <tr v-for="leave, index in leaveRequests" :key="index">
                 <td>{{ index + 1}}.</td>
-                <td>{{ getUserFullName(leave.user_id) }}</td>
+                <td>{{ leave.user.first_name + ' ' + leave.user.last_name }}</td>
                 <td>
                   {{ formatDate(leave.start_date) }}
                 </td>

@@ -38,13 +38,15 @@ export const useLeaveRequestsForm = (leaveRequestId?: number) => {
       return data.data;
     },
     onSuccess: async () => {
-      toast.success("Leave Request saved!");
+      toast.success("Leave Request is created!");
       router.push({ name: "leave_requests" });
       manualLoading.value = false;
     },
     onError: (error) => {
+      // @ts-ignore
+      const firstErrorMessage = error.errors ? Object.values(error.errors)[0][0] : "An unexpected error occurred";
       manualLoading.value = false;
-      toast.error(error.message);
+      toast.error(firstErrorMessage);
     },
   });
 
@@ -63,8 +65,10 @@ export const useLeaveRequestsForm = (leaveRequestId?: number) => {
       manualLoading.value = false;
     },
     onError: (error) => {
+      // @ts-ignore
+      const firstErrorMessage = error.errors ? Object.values(error.errors)[0][0] : "An unexpected error occurred";
       manualLoading.value = false;
-      toast.error(error.message);
+      toast.error(firstErrorMessage);
     },
   });
 
@@ -79,7 +83,7 @@ export const useLeaveRequestsForm = (leaveRequestId?: number) => {
     },
     onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: [LEAVE_REQUEST_CACHE_KEY, leaveRequestId] });
-      toast.success("Leave Request updated!");
+      toast.success("Leave Request approved!");
       manualLoading.value = false;
     },
     onError: (error) => {
@@ -99,7 +103,7 @@ export const useLeaveRequestsForm = (leaveRequestId?: number) => {
     },
     onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: [LEAVE_REQUEST_CACHE_KEY, leaveRequestId] });
-      toast.success("Leave Request updated!");
+      toast.success("Leave Request declined!");
       manualLoading.value = false;
     },
     onError: (error) => {

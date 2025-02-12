@@ -26,7 +26,12 @@ class LeaveRequestNotification extends Mailable
      */
     public function build(): self
     {
-        return $this->subject('New Leave Request Assigned to You')
+        $formattedStartDate = \Carbon\Carbon::parse($this->leaveRequest->start_date)->format('d M Y');
+        $formattedEndDate = $this->leaveRequest->end_date
+            ? \Carbon\Carbon::parse($this->leaveRequest->end_date)->format('d M Y')
+            : null;
+        $subject =$this->leaveRequest->user->first_name . ' ' . $this->leaveRequest->user->last_name . ': ' . $this->leaveRequest->leaveType->name .  ': ' . $formattedStartDate . ($this->leaveRequest->end_date ? ' to ' . $formattedEndDate : '');
+        return $this->subject('Requested: ' . $subject)
                     ->view('emails.leave_request_notification')
                     ->with([
                         'leaveRequest' => $this->leaveRequest,

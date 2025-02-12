@@ -35,22 +35,8 @@ class NewLeaveRequestRequest extends ApiFormRequest
     }
     public function messages(){
         return [
-            'first_name.required' => 'users.first_name.required',
-            'first_name.max' => 'users.first_name.max',
-            'first_name.min' => 'users.first_name.min',
-            'last_name.required' => 'users.last_name.required',
-            'last_name.max' => 'users.last_name.max',
-            'last_name.min' => 'users.last_name.min',
-            'email.required' => 'users.email.required',
-            'email.email' => 'users.email.invalid',
-            'email.max' => 'users.email.max',
-            'email.min' => 'users.email.min',
-            'email.unique' => 'users.email.unique',
-            'roles.required' => 'users.roles.required',
-            'roles.exists' => 'users.roles.exists',
-            'password.required' => 'users.password.required',
-            'password.between' => 'users.password.between',
-            'password.confirmed' => 'users.password.confirmed',
+            'request_to.required' => 'The assign to field is required',
+            'leave_type_id.required' => 'The leave type field is required',
         ];
     }
 }
