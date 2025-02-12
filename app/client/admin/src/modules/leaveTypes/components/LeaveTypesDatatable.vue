@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { computed} from "vue";
-  import { useUsersTable } from "../composables";
+  import { useLeaveTypesTable } from "../composables";
   import { useLeaveTypesForm } from "../composables/useLeaveTypesForm";
   import { LEAVE_TYPES_DATATABLE_COLUMNS } from "../constants";
   import LeaveTypesTableHeader from "./LeaveTypesTableHeader.vue";
@@ -15,7 +15,7 @@
 
   const { query, onPaginationChange } = useDatatable();
 
-  const { data, isLoading, isFetching, error, refetch } = useUsersTable(query);
+  const { data, isLoading, isFetching, error, refetch } = useLeaveTypesTable(query);
   const { deleteLeaveType } = useLeaveTypesForm();
 
   const pagination = computed(() => data.value?.pagination ?? null);
