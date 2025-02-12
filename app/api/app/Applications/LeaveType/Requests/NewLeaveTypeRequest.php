@@ -34,13 +34,9 @@ class NewLeaveTypeRequest extends ApiFormRequest
     }
     public function messages(){
         return [
-            'color.required' => 'Color is reqired',
-            'name.required' => 'users.name.required',
-            'name.max' => 'users.name.max',
-            'name.min' => 'users.name.min',
-            'slug.required' => 'users.slug.required',
-            'slug.max' => 'users.slug.max',
-            'slug.min' => 'users.slug.min',
+            'name.required' => 'The name field is required',
+            'slug.required' => 'The slug field is required',
+            'color.required' => 'The color field is required',
         ];
     }
 }

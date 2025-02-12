@@ -26,8 +26,13 @@ class LeaveRequestDeclining extends Mailable
      */
     public function build(): self
     {
-        $subject = $this->leaveRequest->leaveType->name .  ' ' . $this->leaveRequest->start_date . ($this->leaveRequest->end_date ? ' to ' . $this->leaveRequest->end_date : '');  
-        return $this->subject($subject)
+        $formattedStartDate = \Carbon\Carbon::parse($this->leaveRequest->start_date)->format('d M Y');
+        $formattedEndDate = $this->leaveRequest->end_date
+            ? \Carbon\Carbon::parse($this->leaveRequest->end_date)->format('d M Y')
+            : null;
+
+        $subject = $this->leaveRequest->leaveType->name .  ': ' . $formattedStartDate . ($this->leaveRequest->end_date ? ' to ' . $formattedEndDate : '');  
+        return $this->subject($subject . ' (Declined)')
                     ->view('emails.leave_request_decline')
                     ->with([
                         'leaveRequest' => $this->leaveRequest,
