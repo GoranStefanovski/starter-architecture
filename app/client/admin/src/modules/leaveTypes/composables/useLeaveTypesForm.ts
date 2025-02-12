@@ -65,6 +65,20 @@ export const useLeaveTypesForm = (leaveTypeId?: number) => {
     },
   });
 
+  const { mutate: deleteLeaveType, isPending: isDeleting } = useMutation({
+    mutationFn: async (leaveTypeId: number) => {
+      await axios.post(LEAVE_TYPE_API_ENDPOINTS.delete(leaveTypeId));
+    },
+    onSuccess: async () => {
+      queryClient.invalidateQueries({ queryKey: ["leave_type/draw"] }).then(() => {
+        toast.success("Leave Type deleted!");
+      });
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+
 
   const data = computed(() => queryData.value);
 
@@ -72,6 +86,7 @@ export const useLeaveTypesForm = (leaveTypeId?: number) => {
     data,
     createLeaveType,
     updateLeaveType,
-    isLoading: isFetching || isUpdating || isCreating,
+    deleteLeaveType,
+    isLoading: manualLoading,
   };
 };

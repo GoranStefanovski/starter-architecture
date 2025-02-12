@@ -1,8 +1,10 @@
 <script setup lang="ts">
+  import { ref } from "vue";
   import { IconTrash, IconEdit } from "@starter-core/icons";
   import { useAuth } from "@websanova/vue-auth/src/v3.js";
   import { computed } from "vue";
   import type { GetLeaveTypeResponse } from "../types";
+  import ConfirmDialog from "@/components/ConfirmDialog/ConfirmDialog.vue";
 
   import {
     DashButton,
@@ -14,10 +16,18 @@
   interface LeaveTypesTableRowProps {
     leaveType: GetLeaveTypeResponse;
     isEvenRow: boolean;
+    deleteLeaveType: (id: number) => Promise<void>;
   }
 
-  const { leaveType, isEvenRow } = defineProps<LeaveTypesTableRowProps>();
+  const { leaveType, isEvenRow, deleteLeaveType } = defineProps<LeaveTypesTableRowProps>();
   const auth = useAuth();
+
+  const showConfirmDialog = ref(false);
+
+  const confirmDelete = () => {
+    deleteLeaveType(leaveType.id);
+    showConfirmDialog.value = false;
+  };
 </script>
 
 <template>
@@ -61,7 +71,7 @@
         :icon="IconTrash"
         theme="danger"
         size="sm"
-        onclick="deleteLeaveType(leaveType, leaveType.id)"
+        @click="showConfirmDialog = true"
         is-pill
         is-icon
       />
@@ -70,6 +80,12 @@
       </span>
     </TableColumn>
   </TableRow>
+  <ConfirmDialog
+      :show="showConfirmDialog"
+      message="Are you sure you want to delete this leave type?"
+      @confirm="confirmDelete"
+      @close="showConfirmDialog = false"
+    />
 </template>
 <style cloped>
 .noClick {

@@ -28,5 +28,6 @@ Route::group([
         Route::get('{id}', [LeaveTypeController::class, 'get']);
         Route::patch('{id}', [LeaveTypeController::class, 'update']);
         Route::delete('{id}', [LeaveTypeController::class, 'delete']);
+        Route::post('{id}/delete', [LeaveTypeController::class, 'delete']);
     });
 });

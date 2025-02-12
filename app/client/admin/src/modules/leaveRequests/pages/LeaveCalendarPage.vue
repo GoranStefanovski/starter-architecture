@@ -17,7 +17,6 @@ onMounted(() => {
 // Reactive References
 const leaveDays = ref([]);
 const nationalHolidays = ref([]);
-const users = ref([]);
 const leaveTypes = ref([]);
 
 // Fetch Leave Days for All Users (Only Approved)
@@ -39,16 +38,6 @@ const fetchAllNationalHolidays = async () => {
   }
 };
 
-// Fetch Users
-const fetchUsers = async () => {
-  try {
-    const response = await axios.get("/user/draw");
-    users.value = response.data.data;
-  } catch (error) {
-    console.error("Error fetching users:", error);
-  }
-};
-
 const fetchLeaveTypes = async () => {
     try {
       const response = await axios.get("/leave_type/all");
@@ -59,10 +48,6 @@ const fetchLeaveTypes = async () => {
   };
 
 
-const getUserFullName = (userId: number) => {
-  const user = users.value.find((u: any) => u.id === userId);
-  return user ? `${user.first_name} ${user.last_name}` : "Unknown User";
-};
 
 const getLeaveTypeColor = (id: number) => {
   const leaveType = leaveTypes.value.find((u: any) => u.id === id);
@@ -71,7 +56,7 @@ const getLeaveTypeColor = (id: number) => {
 
 const calendarEvents = computed(() => {
   const leaveEvents = leaveDays.value.map((leave: any) => ({
-    title: getUserFullName(leave.user_id),
+    title: leave.user.first_name + ' ' + leave.user.last_name,
     start: leave.start_date,
     end: leave.end_date
       ? new Date(new Date(leave.end_date).getTime() + 24 * 60 * 60 * 1000).toISOString().split('T')[0] // Add 1 day
@@ -102,7 +87,6 @@ const calendarOptions = computed(() => ({
 // Fetch Data on Mount
 onMounted(() => {
   fetchAllApprovedLeaveDays();
-  fetchUsers();
   fetchAllNationalHolidays();
   fetchLeaveTypes();
 });

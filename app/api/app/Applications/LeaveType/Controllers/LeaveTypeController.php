@@ -78,7 +78,7 @@ class LeaveTypeController extends Controller
     }
 
     /**
-     * Delete user
+     * Delete leave Type
      *
      * @return string
      */
