@@ -6,18 +6,19 @@ use Illuminate\Console\Command;
 use App\Applications\NationalHoliday\Model\NationalHoliday;
 use GuzzleHttp\Client;
 use Carbon\Carbon;
+use App\Applications\Country\Model\Country;
 
 class PopulateNationalHolidays extends Command
 {
     protected $signature = 'populate:holidays {--year=} {--drop}';
-    protected $description = 'Populate national holidays for Macedonia and Bulgaria using Nager.Date API';
+    protected $description = 'Populate national holidays for countries in the database using Nager.Date API';
 
     public function handle()
     {
-        $year = $this->option('year');
-        $drop_flag = $this->option('drop');
+        $year = $this->option('year') ?? now()->year;
+        $dropFlag = $this->option('drop');
 
-        if ($drop_flag) {
+        if ($dropFlag) {
             NationalHoliday::truncate();
         }
 
@@ -27,46 +28,60 @@ class PopulateNationalHolidays extends Command
 
         $this->info("Fetching holidays for year: $year");
 
-        $countries = [
-            'Macedonia' => 'MK',
-            'Bulgaria'  => 'BG',
-        ];
+        // Get all countries from the database
+        $countries = Country::all();
+
+        if ($countries->isEmpty()) {
+            $this->error("No countries found in the database. Please add countries before running this command.");
+            return Command::FAILURE;
+        }
 
         $client = new Client();
 
-        foreach ($countries as $countryName => $countryCode) {
-            $this->info("Fetching holidays for $countryName...");
-
-            $response = $client->get("https://date.nager.at/api/v3/PublicHolidays/{$year}/{$countryCode}");
-
-            if ($response->getStatusCode() !== 200) {
-                $this->error("Failed to fetch holidays for $countryName.");
+        foreach ($countries as $country) {
+            if (empty($country->country_code)) {
+                $this->warn("Skipping country '{$country->name}' due to missing country code.");
                 continue;
             }
 
-            $holidays = json_decode($response->getBody(), true);
+            $this->info("Fetching holidays for {$country->name} ({$country->country_code})...");
 
-            foreach ($holidays as $holiday) {
-                $holidayDate = Carbon::parse($holiday['date']);
+            try {
+                $response = $client->get("https://date.nager.at/api/v3/PublicHolidays/{$year}/{$country->country_code}");
 
-                if ($holidayDate->isWeekend()) {
+                if ($response->getStatusCode() !== 200) {
+                    $this->error("Failed to fetch holidays for {$country->name}.");
                     continue;
                 }
 
-                NationalHoliday::updateOrCreate(
-                    [
-                        'date'    => $holiday['date'],
-                        'country' => $countryName,
-                        'year'    => $year,
-                    ],
-                    [
-                        'created_at' => now(),
-                        'updated_at' => now(),
-                    ]
-                );
-            }
+                $holidays = json_decode($response->getBody(), true);
 
-            $this->info("Holidays successfully populated for $countryName.");
+                foreach ($holidays as $holiday) {
+                    $holidayDate = Carbon::parse($holiday['date']);
+
+                    // Exclude weekends
+                    if ($holidayDate->isWeekend()) {
+                        continue;
+                    }
+
+                    // Insert or update the holiday
+                    NationalHoliday::updateOrCreate(
+                        [
+                            'date'    => $holiday['date'],
+                            'country' => $country->name, // Save the country name
+                            'year'    => $year,
+                        ],
+                        [
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ]
+                    );
+                }
+
+                $this->info("Holidays successfully populated for {$country->name}.");
+            } catch (\Exception $e) {
+                $this->error("Error fetching holidays for {$country->name}: " . $e->getMessage());
+            }
         }
 
         $this->info("✅ All holidays populated successfully.");

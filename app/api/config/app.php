@@ -176,6 +176,7 @@ return [
         App\Applications\Navigation\Providers\NavigationServiceProvider::class,
         App\Applications\NationalHoliday\Providers\NationalHolidayServiceProvider::class,
         App\Applications\Document\Providers\DocumentServiceProvider::class,
+        App\Applications\Country\Providers\CountryServiceProvider::class,
 
         // Load the RouteServiceProvider last because it has the any route redirect
         App\Providers\RouteServiceProvider::class,

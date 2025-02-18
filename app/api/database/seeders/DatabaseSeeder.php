@@ -114,5 +114,12 @@ class DatabaseSeeder extends Seeder
         ];
 
         DB::table('leave_types')->insert($leaveTypes);
+
+        $countries = [
+            ['name' => 'Macedonia', 'country_code' => 'MK'],
+            ['name' => 'Bulgaria', 'country_code' => 'BG'],
+        ];
+
+        DB::table('countries')->insert($countries);
     }
 }

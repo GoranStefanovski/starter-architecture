@@ -41,6 +41,12 @@ class HomeController extends Controller
                 'permission' => UserPermissions::WRITE_USERS,
             ],
             [
+                'label' => 'admin.countries.main',
+                'name' => 'countries',
+                'route' => 'countries',
+                'permission' => UserPermissions::WRITE_USERS,
+            ],
+            [
                 'label' => 'admin.leave_requests.main',
                 'name' => 'item_requests',
                 'route' => 'leave_requests',

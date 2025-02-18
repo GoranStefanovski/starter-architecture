@@ -8,10 +8,14 @@
   },
   "leave_types": {
     "main": "Leave Types",
-    "add": "New Leave Type"
+    "add": "Add Leave Type"
   },
   "leave_requests": {
     "main": "Leave Requests",
     "add": "New Request"
+  },
+  "countries": {
+    "main": "Countries",
+    "add": "Add Country"
   }
 }
