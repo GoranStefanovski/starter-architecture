@@ -5,13 +5,13 @@ export const COUNTRIES_DATATABLE_COLUMNS: DatatableColumns = [
     id: 0,
     label: "Country Code",
     name: "country_code",
-    sortable: false,
+    sortable: true,
   },
   {
     id: 1,
     label: "Name",
     name: "name",
-    sortable: false,
+    sortable: true,
   },
   {
     id: 2,
