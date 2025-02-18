@@ -2,6 +2,7 @@
 
 namespace App\Applications\LeaveRequest\Repositories;
 
+use App\Applications\Country\Model\Country;
 use App\Applications\User\Model\User;
 use App\Applications\LeaveRequest\DTO\LeaveRequestDTO;
 use App\Applications\LeaveRequest\Mail\{
@@ -234,8 +235,10 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
         $startDate = new DateTime($leaveRequestData->start_date);
         $endDate = $leaveRequestData->end_date ? new DateTime($leaveRequestData->end_date) : $startDate;
 
+        $country = Country::find($user->country);
+
         $nationalHolidays = NationalHoliday::whereYear('date', $startDate->format('Y'))
-            ->where('country', $user->country == 1 ? 'Macedonia' : 'Bulgaria')
+            ->where('country', $country->name)
             ->pluck('date')
             ->toArray();
 
@@ -268,8 +271,10 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
             $startDate = new DateTime($leaveRequest->start_date);
             $endDate = $leaveRequest->end_date ? new DateTime($leaveRequest->end_date) : $startDate;
 
+            $country = Country::find($user->country);
+
             $nationalHolidays = NationalHoliday::whereYear('date', $startDate->format('Y'))
-                ->where('country', $user->country == 1 ? 'Macedonia' : 'Bulgaria')
+                ->where('country', $country->name)
                 ->pluck('date')
                 ->toArray();
 

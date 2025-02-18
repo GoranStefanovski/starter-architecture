@@ -72,8 +72,8 @@ class CountryRepository implements CountryRepositoryInterface
         $search = $data['search'];
         if ($search) {
             $query->where(function ($subquery) use ($search) {
-                $subquery->where('leave_types.slug', 'like', '%' . $search . '%');
-                $subquery->orWhere('leave_types.name', 'like', '%' . $search . '%');
+                $subquery->where('countries.country_code', 'like', '%' . $search . '%');
+                $subquery->orWhere('countries.name', 'like', '%' . $search . '%');
             });
         }
 
