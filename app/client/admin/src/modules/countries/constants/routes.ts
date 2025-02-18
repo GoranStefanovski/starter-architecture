@@ -24,5 +24,4 @@ export const COUNTRY_ROUTES_DATA: ModulesRoutesData<countriesRoutes> = {
     name: "edit.country",
     translationKey: "countries.edit_countries",
   },
-
 };

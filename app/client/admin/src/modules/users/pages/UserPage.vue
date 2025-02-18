@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import { IconSave, IconArrowleft } from "@starter-core/icons";
-  import { useForm } from "vee-validate";
   import { useAuth } from "@websanova/vue-auth/src/v3.js";
+  import { useForm } from "vee-validate";
   import { watch, computed } from "vue";
   import { useI18n } from "vue-i18n";
   import { useRoute } from "vue-router";
@@ -12,7 +12,13 @@
     PAGE_WRAPPER_SLOTS,
     SubheaderTitle,
   } from "../../../components";
-  import { UserFormBasicInfoTab, UserFormPasswordTab, UserFormCalendarTab, UserFormLeaveDaysTab, UserFormDocumentsTab } from "../components";
+  import {
+    UserFormBasicInfoTab,
+    UserFormPasswordTab,
+    UserFormCalendarTab,
+    UserFormLeaveDaysTab,
+    UserFormDocumentsTab,
+  } from "../components";
   import { useUsersForm } from "../composables";
   import type { UserFormItem } from "../types";
   import { DashButton, DashLink } from "@starter-core/dash-ui/src";
@@ -25,8 +31,10 @@
   const userId = Number(route.params.userId);
 
   const auth = useAuth();
-  const isUserWriter = auth.user().permissions_array.includes("write_users") ? true : false;
-  
+  const isUserWriter = auth.user().permissions_array.includes("write_users")
+    ? true
+    : false;
+
   const validationSchema = {
     last_name(value: string) {
       if (value?.length >= 5) return true;
@@ -83,7 +91,7 @@
         paid_leaves_max: formData.value.paid_leaves_max,
         paid_leaves_left: formData.value.paid_leaves_left,
         country: formData.value.country,
-        is_office_based: formData.value.is_office_based
+        is_office_based: formData.value.is_office_based,
       });
     }
   }, [formData]);
@@ -99,7 +107,6 @@
   const [paidLeavesLeft] = defineField("paid_leaves_left");
   const [country] = defineField("country");
   const [isOfficeBased] = defineField("is_office_based");
-
 </script>
 
 <template>
@@ -148,12 +155,23 @@
           <UserFormPasswordTab v-model:password="password" />
         </TabbedContentTab>
         <TabbedContentTab v-if="isEditPage" :label="'Calednar'" id="calendar">
-          <UserFormCalendarTab :userId="id" :country="country"/>
+          <UserFormCalendarTab :userId="id" :country="country" />
         </TabbedContentTab>
-        <TabbedContentTab v-if="isEditPage" :label="'Paid Vacation Days'" id="leave-days">
-          <UserFormLeaveDaysTab v-model:paidLeavesMax="paidLeavesMax" :daysLeft="paidLeavesLeft" />
+        <TabbedContentTab
+          v-if="isEditPage"
+          :label="'Paid Vacation Days'"
+          id="leave-days"
+        >
+          <UserFormLeaveDaysTab
+            v-model:paidLeavesMax="paidLeavesMax"
+            :daysLeft="paidLeavesLeft"
+          />
         </TabbedContentTab>
-        <TabbedContentTab v-if="isUserWriter && isEditPage" :label="'PDFs'" id="documents">
+        <TabbedContentTab
+          v-if="isUserWriter && isEditPage"
+          :label="'PDFs'"
+          id="documents"
+        >
           <UserFormDocumentsTab :userId="id" />
         </TabbedContentTab>
       </TabbedContent>

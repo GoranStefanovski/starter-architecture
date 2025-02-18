@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-  import { useI18n } from "vue-i18n";
   import { onMounted } from "vue";
+  import { useI18n } from "vue-i18n";
   import { FormInput } from "@starter-core/dash-ui/src";
 
   const { t } = useI18n();
@@ -10,17 +10,12 @@
   });
   const props = defineProps(["daysLeft", "isMyProfile"]);
 
-
-
-  onMounted(() => {
-  });
+  onMounted(() => {});
 </script>
 <template>
   <div class="kt-section">
     <div class="kt-section__body">
-      <h3 class="kt-section__title kt-section__title-lg">
-        Leave Days:
-      </h3>
+      <h3 class="kt-section__title kt-section__title-lg">Leave Days:</h3>
       <form-input
         v-if="!props.isMyProfile"
         name="paidLeavesMax"

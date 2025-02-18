@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed} from "vue";
+  import { computed } from "vue";
   import { useCountriesTable } from "../composables";
   import { useCountriesForm } from "../composables/useCountriesForm";
   import { COUNTRIES_DATATABLE_COLUMNS } from "../constants";
@@ -15,7 +15,8 @@
 
   const { query, onPaginationChange } = useDatatable();
 
-  const { data, isLoading, isFetching, error, refetch } = useCountriesTable(query);
+  const { data, isLoading, isFetching, error, refetch } =
+    useCountriesTable(query);
   const { deleteCountry } = useCountriesForm();
 
   const pagination = computed(() => data.value?.pagination ?? null);
@@ -41,7 +42,9 @@
         :columns="COUNTRIES_DATATABLE_COLUMNS"
         :country="country"
         :is-even-row="index % 2 === 0"
-        :deleteCountry="(id) => deleteCountry(id, { onSuccess: () => refetch() })"
+        :deleteCountry="
+          (id) => deleteCountry(id, { onSuccess: () => refetch() })
+        "
       />
     </template>
     <template v-if="pagination" #pagination>

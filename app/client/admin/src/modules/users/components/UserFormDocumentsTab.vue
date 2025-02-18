@@ -1,33 +1,33 @@
 <script lang="ts" setup>
-import { useI18n } from "vue-i18n";
-import axios from "axios";
-import { ref, onMounted, computed } from "vue";
-import { useLeaveRequestsForm } from "../../leaveRequests/composables/useLeaveRequestsForm";
+  import axios from "axios";
+  import { ref, onMounted, computed } from "vue";
+  import { useI18n } from "vue-i18n";
+  import { useLeaveRequestsForm } from "../../leaveRequests/composables/useLeaveRequestsForm";
 
-const { t } = useI18n();
-const props = defineProps(["userId"]);
-const documents = ref([]);
-const { downloadLeaveRequestPDF } = useLeaveRequestsForm();
+  const { t } = useI18n();
+  const props = defineProps(["userId"]);
+  const documents = ref([]);
+  const { downloadLeaveRequestPDF } = useLeaveRequestsForm();
 
-// Fetch approved leave requests
-const fetchUserDocuments = async () => {
-  try {
-    const response = await axios.get("/document/draw", {
-      params: { userId: props.userId },
-    });
-    documents.value = response.data.data;
-  } catch (error) {
-    console.error("Error fetching leave requests:", error);
-  }
-};
+  // Fetch approved leave requests
+  const fetchUserDocuments = async () => {
+    try {
+      const response = await axios.get("/document/draw", {
+        params: { userId: props.userId },
+      });
+      documents.value = response.data.data;
+    } catch (error) {
+      console.error("Error fetching leave requests:", error);
+    }
+  };
 
-const downloadPdf = (file_name: string) => {
-  downloadLeaveRequestPDF(file_name);
-}
+  const downloadPdf = (file_name: string) => {
+    downloadLeaveRequestPDF(file_name);
+  };
 
-onMounted(() => {
-  fetchUserDocuments();
-});
+  onMounted(() => {
+    fetchUserDocuments();
+  });
 </script>
 
 <template>
@@ -35,7 +35,11 @@ onMounted(() => {
     <div class="kt-section__body">
       <h3 class="kt-section__title kt-section__title-lg">Documents:</h3>
       <ul class="documents_list_wrapper">
-        <li v-for="document in documents" :key="document.id" @click="downloadPdf(document.file_name)">
+        <li
+          v-for="document in documents"
+          :key="document.id"
+          @click="downloadPdf(document.file_name)"
+        >
           {{ document.file_name }}
         </li>
       </ul>
@@ -51,7 +55,7 @@ onMounted(() => {
     & > li {
       margin-bottom: 15px;
       font-weight: bold;
-      
+
       &:hover {
         font-weight: bolder;
         cursor: pointer;

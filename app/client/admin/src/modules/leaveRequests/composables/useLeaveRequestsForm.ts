@@ -1,10 +1,10 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/vue-query";
 import axios from "axios";
 import { computed, ref } from "vue";
+import { useRouter } from "vue-router";
 import { useToast } from "vue-toastification";
 import { LEAVE_REQUEST_API_ENDPOINTS } from "../constants";
 import type { LeaveRequestFormItem, GetLeaveRequestResponse } from "../types";
-import { useRouter } from "vue-router";
 
 const LEAVE_REQUEST_CACHE_KEY = "leave_request";
 
@@ -17,7 +17,9 @@ export const useLeaveRequestsForm = (leaveRequestId?: number) => {
   const { isLoading: isFetching, data: queryData } = useQuery({
     queryKey: [LEAVE_REQUEST_CACHE_KEY, leaveRequestId],
     queryFn: async (): Promise<GetLeaveRequestResponse> => {
-      const data = await axios.get(LEAVE_REQUEST_API_ENDPOINTS.get(leaveRequestId ?? 0));
+      const data = await axios.get(
+        LEAVE_REQUEST_API_ENDPOINTS.get(leaveRequestId ?? 0),
+      );
       return data.data;
     },
     enabled: !!leaveRequestId,
@@ -29,12 +31,16 @@ export const useLeaveRequestsForm = (leaveRequestId?: number) => {
       return data;
     },
   });
-  
 
   const { mutate: createLeaveRequest, isPending: isCreating } = useMutation({
-    mutationFn: async (newUserData: LeaveRequestFormItem): Promise<GetLeaveRequestResponse> => {
+    mutationFn: async (
+      newUserData: LeaveRequestFormItem,
+    ): Promise<GetLeaveRequestResponse> => {
       manualLoading.value = true;
-      const data = await axios.post(LEAVE_REQUEST_API_ENDPOINTS.create, newUserData);
+      const data = await axios.post(
+        LEAVE_REQUEST_API_ENDPOINTS.create,
+        newUserData,
+      );
       return data.data;
     },
     onSuccess: async () => {
@@ -44,14 +50,18 @@ export const useLeaveRequestsForm = (leaveRequestId?: number) => {
     },
     onError: (error) => {
       // @ts-ignore
-      const firstErrorMessage = error.errors ? Object.values(error.errors)[0][0] : "An unexpected error occurred";
+      const firstErrorMessage = error.errors
+        ? Object.values(error.errors)[0][0]
+        : "An unexpected error occurred";
       manualLoading.value = false;
       toast.error(firstErrorMessage);
     },
   });
 
   const { mutate: updateLeaveRequest, isPending: isUpdating } = useMutation({
-    mutationFn: async (data: LeaveRequestFormItem): Promise<GetLeaveRequestResponse> => {
+    mutationFn: async (
+      data: LeaveRequestFormItem,
+    ): Promise<GetLeaveRequestResponse> => {
       manualLoading.value = true;
       const response = await axios.patch(
         LEAVE_REQUEST_API_ENDPOINTS.patch(leaveRequestId ?? 0),
@@ -60,40 +70,52 @@ export const useLeaveRequestsForm = (leaveRequestId?: number) => {
       return response.data;
     },
     onSuccess: async () => {
-      queryClient.invalidateQueries({ queryKey: [LEAVE_REQUEST_CACHE_KEY, leaveRequestId] });
+      queryClient.invalidateQueries({
+        queryKey: [LEAVE_REQUEST_CACHE_KEY, leaveRequestId],
+      });
       toast.success("Leave Request updated!");
       manualLoading.value = false;
     },
     onError: (error) => {
       // @ts-ignore
-      const firstErrorMessage = error.errors ? Object.values(error.errors)[0][0] : "An unexpected error occurred";
+      const firstErrorMessage = error.errors
+        ? Object.values(error.errors)[0][0]
+        : "An unexpected error occurred";
       manualLoading.value = false;
       toast.error(firstErrorMessage);
     },
   });
 
-  const { mutate: approveLeaveRequest, isPending: isConfrirming } = useMutation({
-    mutationFn: async (data: LeaveRequestFormItem): Promise<GetLeaveRequestResponse> => {
-      manualLoading.value = true;
-      const response = await axios.post(
-        LEAVE_REQUEST_API_ENDPOINTS.approve(leaveRequestId ?? 0),
-        data,
-      );
-      return response.data;
+  const { mutate: approveLeaveRequest, isPending: isConfrirming } = useMutation(
+    {
+      mutationFn: async (
+        data: LeaveRequestFormItem,
+      ): Promise<GetLeaveRequestResponse> => {
+        manualLoading.value = true;
+        const response = await axios.post(
+          LEAVE_REQUEST_API_ENDPOINTS.approve(leaveRequestId ?? 0),
+          data,
+        );
+        return response.data;
+      },
+      onSuccess: async () => {
+        queryClient.invalidateQueries({
+          queryKey: [LEAVE_REQUEST_CACHE_KEY, leaveRequestId],
+        });
+        toast.success("Leave Request approved!");
+        manualLoading.value = false;
+      },
+      onError: (error) => {
+        manualLoading.value = false;
+        toast.error(error.message);
+      },
     },
-    onSuccess: async () => {
-      queryClient.invalidateQueries({ queryKey: [LEAVE_REQUEST_CACHE_KEY, leaveRequestId] });
-      toast.success("Leave Request approved!");
-      manualLoading.value = false;
-    },
-    onError: (error) => {
-      manualLoading.value = false;
-      toast.error(error.message);
-    },
-  });
+  );
 
   const { mutate: declineLeaveRequest, isPending: isDeclining } = useMutation({
-    mutationFn: async (data: LeaveRequestFormItem): Promise<GetLeaveRequestResponse> => {
+    mutationFn: async (
+      data: LeaveRequestFormItem,
+    ): Promise<GetLeaveRequestResponse> => {
       manualLoading.value = true;
       const response = await axios.post(
         LEAVE_REQUEST_API_ENDPOINTS.decline(leaveRequestId ?? 0),
@@ -102,7 +124,9 @@ export const useLeaveRequestsForm = (leaveRequestId?: number) => {
       return response.data;
     },
     onSuccess: async () => {
-      queryClient.invalidateQueries({ queryKey: [LEAVE_REQUEST_CACHE_KEY, leaveRequestId] });
+      queryClient.invalidateQueries({
+        queryKey: [LEAVE_REQUEST_CACHE_KEY, leaveRequestId],
+      });
       toast.success("Leave Request declined!");
       manualLoading.value = false;
     },
@@ -112,33 +136,34 @@ export const useLeaveRequestsForm = (leaveRequestId?: number) => {
     },
   });
 
-  
   const { mutate: deleteLeaveRequest, isPending: isDeleting } = useMutation({
     mutationFn: async (leaveRequestId: number) => {
       await axios.post(LEAVE_REQUEST_API_ENDPOINTS.delete(leaveRequestId));
     },
     onSuccess: async () => {
-      queryClient.invalidateQueries({ queryKey: ["leave_request/draw"] }).then(() => {
-        toast.success("Leave Request deleted!");
-      });
+      queryClient
+        .invalidateQueries({ queryKey: ["leave_request/draw"] })
+        .then(() => {
+          toast.success("Leave Request deleted!");
+        });
     },
     onError: (error) => {
       toast.error(error.message);
     },
   });
 
-  const { mutate: downloadLeaveRequestPDF, isPending: isDownloading } = useMutation({
-    mutationFn: async (file_name: string) => {
-      await axios.get(LEAVE_REQUEST_API_ENDPOINTS.download(file_name));
-    },
-    onSuccess: async () => {
-      toast.success("Leave Request Downloaded!");
-    },
-    onError: (error) => {
-      toast.error(error.message);
-    },
-  });
-  
+  const { mutate: downloadLeaveRequestPDF, isPending: isDownloading } =
+    useMutation({
+      mutationFn: async (file_name: string) => {
+        await axios.get(LEAVE_REQUEST_API_ENDPOINTS.download(file_name));
+      },
+      onSuccess: async () => {
+        toast.success("Leave Request Downloaded!");
+      },
+      onError: (error) => {
+        toast.error(error.message);
+      },
+    });
 
   const data = computed(() => queryData.value);
 

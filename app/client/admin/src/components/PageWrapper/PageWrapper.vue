@@ -13,9 +13,7 @@
     );
   });
 
-  const [block, element] = useBEMBuilder(
-    "page-wrapper",
-  );
+  const [block, element] = useBEMBuilder("page-wrapper");
 </script>
 <template>
   <div :class="block">

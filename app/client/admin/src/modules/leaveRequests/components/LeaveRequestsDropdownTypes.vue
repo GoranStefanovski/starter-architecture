@@ -7,8 +7,7 @@
 
   const model = defineModel("model", { required: true });
   const optionsData = defineModel("optionsData", { required: true });
-  const readonly = defineModel("readonly", { required: true, default: false});
-
+  const readonly = defineModel("readonly", { required: true, default: false });
 </script>
 <template>
   <form-dropdown-leave-types
@@ -19,5 +18,4 @@
     label="Choose Leave Type"
     is-inline
   />
-  
 </template>

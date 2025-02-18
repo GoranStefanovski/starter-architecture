@@ -1,53 +1,53 @@
 <script setup lang="ts">
-import { ref } from "vue";
-import { useRouter } from "vue-router";
-import useAuthComp from "@/composables/useAuthComp";
+  import { ref } from "vue";
+  import { useRouter } from "vue-router";
+  import useAuthComp from "@/composables/useAuthComp";
 
-const form = ref({ email: "", password: "" });
-const formErrors = ref({ email: "", password: "" });
-const authError = ref(false);
-const staySignedIn = ref(true);
-const isLoading = ref(false); 
+  const form = ref({ email: "", password: "" });
+  const formErrors = ref({ email: "", password: "" });
+  const authError = ref(false);
+  const staySignedIn = ref(true);
+  const isLoading = ref(false);
 
-const router = useRouter();
-const { login } = useAuthComp();
+  const router = useRouter();
+  const { login } = useAuthComp();
 
-const validateForm = () => {
-  let isValid = true;
-  formErrors.value.email = "";
-  formErrors.value.password = "";
+  const validateForm = () => {
+    let isValid = true;
+    formErrors.value.email = "";
+    formErrors.value.password = "";
 
-  if (!form.value.email) {
-    formErrors.value.email = "Email is required";
-    isValid = false;
-  }
-  if (!form.value.password) {
-    formErrors.value.password = "Password is required";
-    isValid = false;
-  }
+    if (!form.value.email) {
+      formErrors.value.email = "Email is required";
+      isValid = false;
+    }
+    if (!form.value.password) {
+      formErrors.value.password = "Password is required";
+      isValid = false;
+    }
 
-  return isValid;
-};
+    return isValid;
+  };
 
-const submitForm = async () => {
-  if (!validateForm()) return;
+  const submitForm = async () => {
+    if (!validateForm()) return;
 
-  isLoading.value = true; 
+    isLoading.value = true;
 
-  try {
-    await login({
-      data: form.value,
-      redirect: false,
-      remember: false,
-      staySignedIn: staySignedIn.value,
-    });
-  } catch (error) {
-    authError.value = true;
-    console.log(error);
-  } finally {
-    isLoading.value = false; 
-  }
-};
+    try {
+      await login({
+        data: form.value,
+        redirect: false,
+        remember: false,
+        staySignedIn: staySignedIn.value,
+      });
+    } catch (error) {
+      authError.value = true;
+      console.log(error);
+    } finally {
+      isLoading.value = false;
+    }
+  };
 </script>
 
 <template>
@@ -104,21 +104,21 @@ const submitForm = async () => {
 </template>
 
 <style scoped>
-/* 🔄 Loading Spinner */
-.spinner {
-  display: inline-block;
-  width: 16px;
-  height: 16px;
-  border: 2px solid black;
-  border-radius: 50%;
-  border-top-color: transparent;
-  animation: spin 0.8s linear infinite;
-  margin-right: 8px;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
+  /* 🔄 Loading Spinner */
+  .spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid black;
+    border-radius: 50%;
+    border-top-color: transparent;
+    animation: spin 0.8s linear infinite;
+    margin-right: 8px;
   }
-}
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
 </style>

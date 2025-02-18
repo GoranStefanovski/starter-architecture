@@ -1,19 +1,22 @@
 <script lang="ts" setup>
+  import { useAuth } from "@websanova/vue-auth/src/v3.js";
   import axios from "axios";
   import { ref, onMounted, computed } from "vue";
   import { useI18n } from "vue-i18n";
-  import { FormInput } from "@starter-core/dash-ui/src";
   import LeaveRequestsDropdown from "./LeaveRequestsDropdown.vue";
   import LeaveRequestsDropdownTypes from "./LeaveRequestsDropdownTypes.vue";
-  import { useAuth } from "@websanova/vue-auth/src/v3.js";
+  import { FormInput } from "@starter-core/dash-ui/src";
 
   const { t } = useI18n();
   const leaveTypes = ref([]);
   const managers = ref([]);
   const admins = ref([]);
   const userId = defineModel("userId", { required: true, type: Number });
-  const leaveTypeId = defineModel("leaveTypeId", { required: true, type: Number });
-  const startDate = defineModel("startDate", { required: true, type: String });                    
+  const leaveTypeId = defineModel("leaveTypeId", {
+    required: true,
+    type: Number,
+  });
+  const startDate = defineModel("startDate", { required: true, type: String });
   const endDate = defineModel("endDate", { required: true, type: String });
   const reason = defineModel("reason", { required: true, type: String });
   const requestTo = defineModel("requestTo", { required: true, type: Number });
@@ -54,7 +57,7 @@
 
   const setUserOptions = computed(() => {
     return [...admins.value, ...managers.value];
-  })
+  });
 
   onMounted(() => {
     fetchLeaveTypes();
@@ -65,29 +68,63 @@
 <template>
   <div class="kt-section">
     <div class="kt-section__body">
-      <leave-requests-dropdown class="noClick" v-model:model="requestTo" :optionsData="setUserOptions" :readonly="true"/>
-      
-      <leave-requests-dropdown-types class="noClick" v-model:model="leaveTypeId" :optionsData="leaveTypes" :readonly="true"/>
+      <leave-requests-dropdown
+        class="noClick"
+        v-model:model="requestTo"
+        :optionsData="setUserOptions"
+        :readonly="true"
+      />
+
+      <leave-requests-dropdown-types
+        class="noClick"
+        v-model:model="leaveTypeId"
+        :optionsData="leaveTypes"
+        :readonly="true"
+      />
 
       <div class="form-group form-input form-group--inline" readonly>
-        <div class="form-group__column form-group__column--left form-group__column--inline">
-          <label class="form-group__label" for="reason">Reason (optional)</label>
+        <div
+          class="form-group__column form-group__column--left form-group__column--inline"
+        >
+          <label class="form-group__label" for="reason"
+            >Reason (optional)</label
+          >
         </div>
-        <div class="form-group__column form-group__column--right form-group__column--inline">
-          <input name="reason" readonly class="form-input__input form-input__input--inline" type="text" v-model="reason">
+        <div
+          class="form-group__column form-group__column--right form-group__column--inline"
+        >
+          <input
+            name="reason"
+            readonly
+            class="form-input__input form-input__input--inline"
+            type="text"
+            v-model="reason"
+          />
         </div>
       </div>
-      
+
       <div class="dates_wrapper">
         <div class="dates_from">
           <label class="form-group__label" for="startDate">Start date:</label>
-          <input readonly type="date" id="startDate" name="startDate" v-model="startDate" />
+          <input
+            readonly
+            type="date"
+            id="startDate"
+            name="startDate"
+            v-model="startDate"
+          />
         </div>
 
         <div>
           <label class="form-group__label" for="endDate">End date:</label>
-          <input readonly type="date" id="endDate" name="endDate" v-model="endDate" />
-        </div>  
+          <input
+            readonly
+            type="date"
+            id="endDate"
+            name="endDate"
+            v-model="endDate"
+          />
+        </div>
       </div>
     </div>
   </div>

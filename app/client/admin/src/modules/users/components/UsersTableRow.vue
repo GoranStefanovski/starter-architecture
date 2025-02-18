@@ -1,8 +1,7 @@
 <script setup lang="ts">
   import { IconTrash, IconEdit } from "@starter-core/icons";
-  import { ref } from "vue";
   import { useAuth } from "@websanova/vue-auth/src/v3.js";
-  import { computed } from "vue";
+  import { ref, computed } from "vue";
   import type { GetUserResponse } from "../types";
   import UserRoleBadge from "./UserRoleBadge.vue";
   import UserStatusBadge from "./UserStatusBadge.vue";
@@ -103,10 +102,10 @@
       </TableColumn>
     </TableRow>
     <ConfirmDialog
-        :show="showConfirmDialog"
-        message="Are you sure you want to delete this user?"
-        @confirm="confirmDelete"
-        @close="showConfirmDialog = false"
-      />
+      :show="showConfirmDialog"
+      message="Are you sure you want to delete this user?"
+      @confirm="confirmDelete"
+      @close="showConfirmDialog = false"
+    />
   </template>
 </template>

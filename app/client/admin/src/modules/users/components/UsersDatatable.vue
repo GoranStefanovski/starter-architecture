@@ -1,30 +1,30 @@
 <script setup lang="ts">
-import { computed } from "vue";
-import { useUsersTable } from "../composables/useUsersTable";
-import { useUsersForm } from "../composables/useUsersForm";
-import { USERS_DATATABLE_COLUMNS } from "../constants";
-import UsersTableHeader from "./UsersTableHeader.vue";
-import UsersTableRow from "./UsersTableRow.vue";
-import {
-  useDatatable,
-  DatatableComponent,
-  DatatableFilters,
-  DatatableHeader,
-  PaginationComponent,
-} from "@starter-core/dash-ui/src";
+  import { computed } from "vue";
+  import { useUsersForm } from "../composables/useUsersForm";
+  import { useUsersTable } from "../composables/useUsersTable";
+  import { USERS_DATATABLE_COLUMNS } from "../constants";
+  import UsersTableHeader from "./UsersTableHeader.vue";
+  import UsersTableRow from "./UsersTableRow.vue";
+  import {
+    useDatatable,
+    DatatableComponent,
+    DatatableFilters,
+    DatatableHeader,
+    PaginationComponent,
+  } from "@starter-core/dash-ui/src";
 
-const { query, onPaginationChange } = useDatatable();
-const { data, isLoading, isFetching, error, refetch } = useUsersTable(query);
-const { deleteUser } = useUsersForm();
+  const { query, onPaginationChange } = useDatatable();
+  const { data, isLoading, isFetching, error, refetch } = useUsersTable(query);
+  const { deleteUser } = useUsersForm();
 
-const users = computed(() => data.value?.data ?? []);
-const pagination = computed(() => data.value?.pagination ?? null);
-const userFilterOptions = [
-    { id: 0, name: "Select Role", value: ""},
-    { id: 1, name: "Admin", value: "admin"},
-    { id: 2, name: "Manager", value: "manager"},
-    { id: 3, name: "Developer", value: "developer"},
-  ]
+  const users = computed(() => data.value?.data ?? []);
+  const pagination = computed(() => data.value?.pagination ?? null);
+  const userFilterOptions = [
+    { id: 0, name: "Select Role", value: "" },
+    { id: 1, name: "Admin", value: "admin" },
+    { id: 2, name: "Manager", value: "manager" },
+    { id: 3, name: "Developer", value: "developer" },
+  ];
 </script>
 
 <template>
@@ -38,7 +38,7 @@ const userFilterOptions = [
       <DatatableHeader title="Users">
         <UsersTableHeader />
       </DatatableHeader>
-      <DatatableFilters :options="userFilterOptions"/>
+      <DatatableFilters :options="userFilterOptions" />
     </template>
 
     <template v-if="users.length > 0" #default>
@@ -48,7 +48,7 @@ const userFilterOptions = [
         :columns="USERS_DATATABLE_COLUMNS"
         :user="user"
         :is-even-row="index % 2 === 0"
-        :deleteUser="(id) => deleteUser(id, { onSuccess: () => refetch() })" 
+        :deleteUser="(id) => deleteUser(id, { onSuccess: () => refetch() })"
       />
     </template>
     <template v-else #default>

@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { defineProps, defineEmits } from "vue";
-import "./ConfirmDialog.scss"; // Import styles
+  import { defineProps, defineEmits } from "vue";
+  import "./ConfirmDialog.scss"; // Import styles
 
-defineProps({
-  show: Boolean,
-  message: String,
-});
+  defineProps({
+    show: Boolean,
+    message: String,
+  });
 
-const emit = defineEmits(["confirm", "close"]);
+  const emit = defineEmits(["confirm", "close"]);
 </script>
 
 <template>

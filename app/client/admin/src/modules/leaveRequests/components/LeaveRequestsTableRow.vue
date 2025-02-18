@@ -1,33 +1,34 @@
 <script setup lang="ts">
-import { ref } from "vue";
-import { IconTrash, IconEdit } from "@starter-core/icons";
-import { useAuth } from "@websanova/vue-auth/src/v3.js";
-import type { GetLeaveRequestResponse } from "../types";
-import LeaveRequestStatusBadge from "./LeaveRequestStatusBadge.vue";
-import ConfirmDialog from "@/components/ConfirmDialog/ConfirmDialog.vue";
-import {
-  DashButton,
-  DashLink,
-  TableColumn,
-  TableRow,
-} from "@starter-core/dash-ui/src";
-import { useForm } from "vee-validate";
+  import { IconTrash, IconEdit } from "@starter-core/icons";
+  import { useAuth } from "@websanova/vue-auth/src/v3.js";
+  import { useForm } from "vee-validate";
+  import { ref } from "vue";
+  import type { GetLeaveRequestResponse } from "../types";
+  import LeaveRequestStatusBadge from "./LeaveRequestStatusBadge.vue";
+  import ConfirmDialog from "@/components/ConfirmDialog/ConfirmDialog.vue";
+  import {
+    DashButton,
+    DashLink,
+    TableColumn,
+    TableRow,
+  } from "@starter-core/dash-ui/src";
 
-interface LeaveRequestsTableRowProps {
-  leaveRequest: GetLeaveRequestResponse;
-  isEvenRow: boolean;
-  deleteLeaveRequest: (id: number) => Promise<void>;
-}
+  interface LeaveRequestsTableRowProps {
+    leaveRequest: GetLeaveRequestResponse;
+    isEvenRow: boolean;
+    deleteLeaveRequest: (id: number) => Promise<void>;
+  }
 
-const auth = useAuth();
-const { leaveRequest, isEvenRow, deleteLeaveRequest } = defineProps<LeaveRequestsTableRowProps>();
+  const auth = useAuth();
+  const { leaveRequest, isEvenRow, deleteLeaveRequest } =
+    defineProps<LeaveRequestsTableRowProps>();
 
-const showConfirmDialog = ref(false);
+  const showConfirmDialog = ref(false);
 
-const confirmDelete = () => {
-  deleteLeaveRequest(leaveRequest.id);
-  showConfirmDialog.value = false;
-};
+  const confirmDelete = () => {
+    deleteLeaveRequest(leaveRequest.id);
+    showConfirmDialog.value = false;
+  };
 </script>
 
 <template>
@@ -38,11 +39,12 @@ const confirmDelete = () => {
       </TableColumn>
 
       <TableColumn>
-        {{ leaveRequest.requestToUser.first_name}} {{ leaveRequest.requestToUser.last_name }}
+        {{ leaveRequest.requestToUser.first_name }}
+        {{ leaveRequest.requestToUser.last_name }}
       </TableColumn>
 
       <TableColumn>
-        <LeaveRequestStatusBadge :status="leaveRequest.is_confirmed"/>
+        <LeaveRequestStatusBadge :status="leaveRequest.is_confirmed" />
       </TableColumn>
 
       <TableColumn>
@@ -50,13 +52,19 @@ const confirmDelete = () => {
       </TableColumn>
 
       <TableColumn>
-        {{ leaveRequest.end_date ? leaveRequest.end_date : 'Single Day' }}
+        {{ leaveRequest.end_date ? leaveRequest.end_date : "Single Day" }}
       </TableColumn>
 
       <TableColumn>
         <DashLink
-          v-if="auth.user().permissions_array.includes('write_requests') && (leaveRequest.is_confirmed == 0 || leaveRequest.is_confirmed == 1)"
-          :to="{ name: 'edit.leave_request', params: { leaveRequestId: leaveRequest.id } }"
+          v-if="
+            auth.user().permissions_array.includes('write_requests') &&
+            (leaveRequest.is_confirmed == 0 || leaveRequest.is_confirmed == 1)
+          "
+          :to="{
+            name: 'edit.leave_request',
+            params: { leaveRequestId: leaveRequest.id },
+          }"
           theme="primary"
           theme-mod="outline-hover"
           :icon="IconEdit"
@@ -65,10 +73,13 @@ const confirmDelete = () => {
         </DashLink>
         <span v-else>-</span>
       </TableColumn>
-      
+
       <TableColumn>
         <DashButton
-          v-if="auth.user().permissions_array.includes('delete_requests') && (leaveRequest.is_confirmed == 0 || leaveRequest.is_confirmed == 1)"
+          v-if="
+            auth.user().permissions_array.includes('delete_requests') &&
+            (leaveRequest.is_confirmed == 0 || leaveRequest.is_confirmed == 1)
+          "
           :icon="IconTrash"
           theme="danger"
           size="sm"
@@ -88,4 +99,3 @@ const confirmDelete = () => {
     />
   </template>
 </template>
-

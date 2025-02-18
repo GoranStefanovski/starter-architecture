@@ -5,10 +5,12 @@
     IconDollar,
     IconLibrary,
   } from "@starter-core/icons";
+  import { useAuth } from "@websanova/vue-auth/src/v3.js";
+  import axios from "axios";
   import { ref, onMounted } from "vue";
   import { PageWrapper } from "@/components";
   // import { get } from "@/services/HTTP";
-  import { useAuth } from "@websanova/vue-auth/src/v3.js";
+  import { leaveRequest } from "@/modules/leaveRequests/constants";
   import { useRootStore } from "@/store/root";
   import {
     PortletComponent,
@@ -18,13 +20,8 @@
     ContentLoader,
     AccordionContent,
     AccordionItem,
-  } from "@starter-core/dash-ui/src";
-  import axios from "axios";
-
-  import {
     DashLink,
   } from "@starter-core/dash-ui/src";
-import { leaveRequest } from "@/modules/leaveRequests/constants";
 
   // const categories = ref([]);
   const leaveTypes = ref([]);
@@ -72,16 +69,16 @@ import { leaveRequest } from "@/modules/leaveRequests/constants";
       console.error("Error fetching leave types:", error);
     }
   };
-  
+
   const formatDate = (dateString: string) => {
-  if (!dateString) return "Invalid Date";
-  const date = new Date(dateString);
-  return date.toLocaleDateString("en-GB", {
-    year: "numeric",
-    month: "short",
-    day: "2-digit",
-  });
-};
+    if (!dateString) return "Invalid Date";
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-GB", {
+      year: "numeric",
+      month: "short",
+      day: "2-digit",
+    });
+  };
 </script>
 <template>
   <PageWrapper>
@@ -89,9 +86,7 @@ import { leaveRequest } from "@/modules/leaveRequests/constants";
       <div class="col-md-4 mb-4">
         <PortletComponent isBordered>
           <PortletHead>
-            <PortletHeadLabel>
-              Leave Types
-            </PortletHeadLabel>
+            <PortletHeadLabel> Leave Types </PortletHeadLabel>
           </PortletHead>
           <PortletBody>
             <table>
@@ -99,7 +94,7 @@ import { leaveRequest } from "@/modules/leaveRequests/constants";
                 <th>No.</th>
                 <th>Name</th>
               </tr>
-              <tr v-for="type, index in leaveTypes" :key="index">
+              <tr v-for="(type, index) in leaveTypes" :key="index">
                 <td>{{ type.id }}.</td>
                 <td>{{ type.name }}</td>
               </tr>
@@ -107,12 +102,13 @@ import { leaveRequest } from "@/modules/leaveRequests/constants";
           </PortletBody>
         </PortletComponent>
       </div>
-      <div v-if="auth.user().permissions_array.includes('write_users')" class="col-md-4">
+      <div
+        v-if="auth.user().permissions_array.includes('write_users')"
+        class="col-md-4"
+      >
         <PortletComponent isBordered>
           <PortletHead>
-            <PortletHeadLabel>
-              Paid Leaves Left
-            </PortletHeadLabel>
+            <PortletHeadLabel> Paid Leaves Left </PortletHeadLabel>
           </PortletHead>
           <PortletBody>
             <table>
@@ -121,7 +117,7 @@ import { leaveRequest } from "@/modules/leaveRequests/constants";
                 <th>Name</th>
                 <th>Days Left</th>
               </tr>
-              <tr v-for="user, index in users" :key="index">
+              <tr v-for="(user, index) in users" :key="index">
                 <td>{{ index + 1 }}.</td>
                 <td>{{ user.first_name }}</td>
                 <td>{{ user.paid_leaves_left }}</td>
@@ -130,12 +126,13 @@ import { leaveRequest } from "@/modules/leaveRequests/constants";
           </PortletBody>
         </PortletComponent>
       </div>
-      <div v-if="auth.user().permissions_array.includes('write_users')" class="col-md-4">
+      <div
+        v-if="auth.user().permissions_array.includes('write_users')"
+        class="col-md-4"
+      >
         <PortletComponent isBordered>
           <PortletHead>
-            <PortletHeadLabel>
-              Pending Leave Requests
-            </PortletHeadLabel>
+            <PortletHeadLabel> Pending Leave Requests </PortletHeadLabel>
           </PortletHead>
           <PortletBody>
             <table>
@@ -146,17 +143,24 @@ import { leaveRequest } from "@/modules/leaveRequests/constants";
                 <th>To (Date)</th>
                 <th>Link</th>
               </tr>
-              <tr v-for="leave, index in leaveRequests" :key="index">
-                <td>{{ index + 1}}.</td>
-                <td>{{ leave.user.first_name + ' ' + leave.user.last_name }}</td>
+              <tr v-for="(leave, index) in leaveRequests" :key="index">
+                <td>{{ index + 1 }}.</td>
+                <td>
+                  {{ leave.user.first_name + " " + leave.user.last_name }}
+                </td>
                 <td>
                   {{ formatDate(leave.start_date) }}
                 </td>
                 <td>
-                  {{ leave.end_date ? formatDate(leave.end_date) : 'Single Day' }}
+                  {{
+                    leave.end_date ? formatDate(leave.end_date) : "Single Day"
+                  }}
                 </td>
                 <td>
-                  <router-link :to="`/admin/leave_request/${leave.id}/confirmation`">View</router-link>
+                  <router-link
+                    :to="`/admin/leave_request/${leave.id}/confirmation`"
+                    >View</router-link
+                  >
                 </td>
               </tr>
             </table>

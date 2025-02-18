@@ -1,9 +1,9 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/vue-query";
 import axios from "axios";
 import { computed, ref } from "vue";
+import { useRouter } from "vue-router";
 import { useToast } from "vue-toastification";
 import { USER_API_ENDPOINTS } from "../constants";
-import { useRouter } from 'vue-router';
 import type { UserFormItem, GetUserResponse } from "../types";
 
 const USER_CACHE_KEY = "user";
@@ -46,7 +46,9 @@ export const useUsersForm = (userId?: number) => {
     },
     onError: (error) => {
       // @ts-ignore
-      const firstErrorMessage = error.errors ? Object.values(error.errors)[0][0] : "An unexpected error occurred";
+      const firstErrorMessage = error.errors
+        ? Object.values(error.errors)[0][0]
+        : "An unexpected error occurred";
       manualLoading.value = false;
       toast.error(firstErrorMessage);
     },
@@ -68,7 +70,9 @@ export const useUsersForm = (userId?: number) => {
     },
     onError: (error) => {
       // @ts-ignore
-      const firstErrorMessage = error.errors ? Object.values(error.errors)[0][0] : "An unexpected error occurred";
+      const firstErrorMessage = error.errors
+        ? Object.values(error.errors)[0][0]
+        : "An unexpected error occurred";
       manualLoading.value = false;
       toast.error(firstErrorMessage);
     },
@@ -98,7 +102,9 @@ export const useUsersForm = (userId?: number) => {
     },
     onError: (error) => {
       // @ts-ignore
-      const firstErrorMessage = error.errors ? Object.values(error.errors)[0][0] : "An unexpected error occurred";
+      const firstErrorMessage = error.errors
+        ? Object.values(error.errors)[0][0]
+        : "An unexpected error occurred";
       manualLoading.value = false;
       toast.error(firstErrorMessage);
     },
@@ -117,7 +123,6 @@ export const useUsersForm = (userId?: number) => {
       toast.error("Error deleting user!");
     },
   });
-    
 
   const data = computed(() => queryData.value);
 

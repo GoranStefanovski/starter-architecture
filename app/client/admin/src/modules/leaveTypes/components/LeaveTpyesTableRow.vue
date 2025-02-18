@@ -1,8 +1,7 @@
 <script setup lang="ts">
-  import { ref } from "vue";
   import { IconTrash, IconEdit } from "@starter-core/icons";
   import { useAuth } from "@websanova/vue-auth/src/v3.js";
-  import { computed } from "vue";
+  import { ref, computed } from "vue";
   import type { GetLeaveTypeResponse } from "../types";
   import ConfirmDialog from "@/components/ConfirmDialog/ConfirmDialog.vue";
 
@@ -19,7 +18,8 @@
     deleteLeaveType: (id: number) => Promise<void>;
   }
 
-  const { leaveType, isEvenRow, deleteLeaveType } = defineProps<LeaveTypesTableRowProps>();
+  const { leaveType, isEvenRow, deleteLeaveType } =
+    defineProps<LeaveTypesTableRowProps>();
   const auth = useAuth();
 
   const showConfirmDialog = ref(false);
@@ -44,13 +44,13 @@
 
     <TableColumn>
       <input
-        style="border: none;"
+        style="border: none"
         readonly
-          type="color"
-          id="colorPicker"
-          :value="leaveType.color"
-          class="color-input noClick"
-        />
+        type="color"
+        id="colorPicker"
+        :value="leaveType.color"
+        class="color-input noClick"
+      />
     </TableColumn>
 
     <TableColumn>
@@ -67,7 +67,10 @@
 
     <TableColumn>
       <DashButton
-        v-if="auth.user().permissions_array.includes('delete_users') && leaveType.id >= 7"
+        v-if="
+          auth.user().permissions_array.includes('delete_users') &&
+          leaveType.id >= 7
+        "
         :icon="IconTrash"
         theme="danger"
         size="sm"
@@ -75,20 +78,18 @@
         is-pill
         is-icon
       />
-      <span v-else>
-        -
-      </span>
+      <span v-else> - </span>
     </TableColumn>
   </TableRow>
   <ConfirmDialog
-      :show="showConfirmDialog"
-      message="Are you sure you want to delete this leave type?"
-      @confirm="confirmDelete"
-      @close="showConfirmDialog = false"
-    />
+    :show="showConfirmDialog"
+    message="Are you sure you want to delete this leave type?"
+    @confirm="confirmDelete"
+    @close="showConfirmDialog = false"
+  />
 </template>
 <style cloped>
-.noClick {
+  .noClick {
     pointer-events: none;
   }
 </style>

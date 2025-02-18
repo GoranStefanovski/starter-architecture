@@ -2,23 +2,22 @@
   import { computed, ref } from "vue";
   import { BadgeComponent } from "@starter-core/dash-ui/src";
 
-
   const props = defineProps<{
-        status?: number;
-    }>();
+    status?: number;
+  }>();
 
   const statusName = computed(() => {
-  switch (props.status) {
-    case 0:
-      return "Pending";
-    case 1:
-      return "Declined";
-    case 2:
-      return "Approved";
-    default:
-      return "Unknown";
-  }
-});
+    switch (props.status) {
+      case 0:
+        return "Pending";
+      case 1:
+        return "Declined";
+      case 2:
+        return "Approved";
+      default:
+        return "Unknown";
+    }
+  });
 
   const badgeTheme = computed(() => {
     switch (props.status) {
@@ -32,8 +31,6 @@
         return "";
     }
   });
-  
-
 </script>
 <template>
   <span>

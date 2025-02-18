@@ -1,10 +1,10 @@
 <script setup lang="ts">
-  import { computed} from "vue";
+  import { computed } from "vue";
   import { useLeaveTypesTable } from "../composables";
   import { useLeaveTypesForm } from "../composables/useLeaveTypesForm";
   import { LEAVE_TYPES_DATATABLE_COLUMNS } from "../constants";
-  import LeaveTypesTableHeader from "./LeaveTypesTableHeader.vue";
   import LeaveTpyesTableRow from "./LeaveTpyesTableRow.vue";
+  import LeaveTypesTableHeader from "./LeaveTypesTableHeader.vue";
   import {
     useDatatable,
     DatatableComponent,
@@ -15,7 +15,8 @@
 
   const { query, onPaginationChange } = useDatatable();
 
-  const { data, isLoading, isFetching, error, refetch } = useLeaveTypesTable(query);
+  const { data, isLoading, isFetching, error, refetch } =
+    useLeaveTypesTable(query);
   const { deleteLeaveType } = useLeaveTypesForm();
 
   const pagination = computed(() => data.value?.pagination ?? null);
@@ -41,7 +42,9 @@
         :columns="LEAVE_TYPES_DATATABLE_COLUMNS"
         :leaveType="leaveType"
         :is-even-row="index % 2 === 0"
-        :deleteLeaveType="(id) => deleteLeaveType(id, { onSuccess: () => refetch() })"
+        :deleteLeaveType="
+          (id) => deleteLeaveType(id, { onSuccess: () => refetch() })
+        "
       />
     </template>
     <template v-if="pagination" #pagination>

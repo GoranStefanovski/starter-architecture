@@ -6,7 +6,8 @@ export const LEAVE_TYPES_ROUTES = {
   edit: "edit",
 } as const;
 
-type LeaveTypesRoutes = (typeof LEAVE_TYPES_ROUTES)[keyof typeof LEAVE_TYPES_ROUTES];
+type LeaveTypesRoutes =
+  (typeof LEAVE_TYPES_ROUTES)[keyof typeof LEAVE_TYPES_ROUTES];
 
 export const LEAVE_TYPE_ROUTES_DATA: ModulesRoutesData<LeaveTypesRoutes> = {
   main: {
@@ -24,5 +25,4 @@ export const LEAVE_TYPE_ROUTES_DATA: ModulesRoutesData<LeaveTypesRoutes> = {
     name: "edit.leave_type",
     translationKey: "leave_types.edit_leave_types",
   },
-
 };

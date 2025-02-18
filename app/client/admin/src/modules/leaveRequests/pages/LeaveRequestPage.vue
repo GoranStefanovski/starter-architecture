@@ -12,11 +12,14 @@
     PAGE_WRAPPER_SLOTS,
     SubheaderTitle,
   } from "../../../components";
-  import { LeaveRequestsFormBasicInfoTab, LeaveRequestsFormApproveTab } from "../components";
+  import {
+    LeaveRequestsFormBasicInfoTab,
+    LeaveRequestsFormApproveTab,
+  } from "../components";
   import { useLeaveRequestsForm } from "../composables";
   import type { LeaveRequestFormItem } from "../types";
-  import { DashButton, DashLink } from "@starter-core/dash-ui/src";
   import { useRootStore } from "@/store/root";
+  import { DashButton, DashLink } from "@starter-core/dash-ui/src";
 
   const { t } = useI18n();
   const basicInfoLabeel = t("users.basic.information");
@@ -38,8 +41,7 @@
   } = useLeaveRequestsForm(leaveRequestId);
 
   const { handleSubmit, errors, setValues, defineField } =
-    useForm<LeaveRequestFormItem>({
-    });
+    useForm<LeaveRequestFormItem>({});
 
   const submitHandler = handleSubmit((values) => {
     if (isEditPage.value) {
@@ -50,11 +52,11 @@
   });
 
   const approve = handleSubmit((values) => {
-      approveLeaveRequest(values);
+    approveLeaveRequest(values);
   });
 
   const decline = handleSubmit((values) => {
-      declineLeaveRequest(values);
+    declineLeaveRequest(values);
   });
 
   onMounted(() => {
@@ -78,7 +80,7 @@
         end_date: formatDate(formData.value.end_date),
         reason: formData.value.reason,
         request_to: formData.value.request_to,
-        is_confirmed: formData.value.is_confirmed
+        is_confirmed: formData.value.is_confirmed,
       });
     }
   }, [formData]);
@@ -95,12 +97,15 @@
 <template>
   <PageWrapper>
     <template #[PAGE_WRAPPER_SLOTS.subheaderMain]>
-      <SubheaderTitle
-        title="Request"
-      />
+      <SubheaderTitle title="Request" />
     </template>
     <template v-if="!isApprovePage" #[PAGE_WRAPPER_SLOTS.subheaderToolbox]>
-      <DashLink v-if="!isApprovePage" to="/admin/leave_requests" :icon="IconArrowleft" theme="clean">
+      <DashLink
+        v-if="!isApprovePage"
+        to="/admin/leave_requests"
+        :icon="IconArrowleft"
+        theme="clean"
+      >
         {{ t("buttons.back") }}
       </DashLink>
       <DashButton
@@ -118,7 +123,11 @@
       @submit.prevent="submitHandler"
     >
       <TabbedContent :isLoading="isLoading">
-        <TabbedContentTab v-if="!isApprovePage" :label="basicInfoLabeel" id="basic-info">
+        <TabbedContentTab
+          v-if="!isApprovePage"
+          :label="basicInfoLabeel"
+          id="basic-info"
+        >
           <LeaveRequestsFormBasicInfoTab
             v-model:userId="userId"
             v-model:leaveTypeId="leaveTypeId"
@@ -130,7 +139,11 @@
             :user="auth.user()"
           />
         </TabbedContentTab>
-        <TabbedContentTab v-else :label="'Leave Request Confirmation'" id="basic-info">
+        <TabbedContentTab
+          v-else
+          :label="'Leave Request Confirmation'"
+          id="basic-info"
+        >
           <LeaveRequestsFormApproveTab
             v-model:userId="userId"
             v-model:leaveTypeId="leaveTypeId"
@@ -142,14 +155,10 @@
           />
         </TabbedContentTab>
         <div v-if="auth.user().id == requestTo">
-          <div v-if="(isConfirmed == 0) && isApprovePage">
+          <div v-if="isConfirmed == 0 && isApprovePage">
             <div class="confirmation_btn_wrapper">
-              <span class="req_btn approve" @click="approve">
-                Approve
-              </span>
-              <span class="req_btn decline" @click="decline">
-                Decline
-              </span>
+              <span class="req_btn approve" @click="approve"> Approve </span>
+              <span class="req_btn decline" @click="decline"> Decline </span>
             </div>
           </div>
         </div>
@@ -167,14 +176,14 @@
     font-weight: bold;
     padding: 10px 15px;
 
-    &:hover{
+    &:hover {
       cursor: pointer;
     }
   }
 
   .approve {
     border-radius: 4px;
-    background: #4EAB58;
+    background: #4eab58;
     color: white;
     margin-right: 8px;
     &:hover {
@@ -186,7 +195,7 @@
     border-radius: 4px;
     background: #d9534f;
     color: white;
-  
+
     &:hover {
       background: #c9302c;
     }

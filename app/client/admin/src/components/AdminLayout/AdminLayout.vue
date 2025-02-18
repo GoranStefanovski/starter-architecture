@@ -17,9 +17,7 @@
   const { isSidebarMinimized } = storeToRefs(rootStore);
   const auth = useAuth();
 
-  const [block, element] = useBEMBuilder(
-    "admin-layout",
-  );
+  const [block, element] = useBEMBuilder("admin-layout");
 
   provide(layoutConfigKey, layoutConfig);
 </script>

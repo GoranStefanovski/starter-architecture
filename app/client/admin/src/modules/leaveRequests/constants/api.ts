@@ -2,8 +2,10 @@ export const LEAVE_REQUEST_API_ENDPOINTS = {
   get: (leaveRequestId: number) => `/leave_request/${leaveRequestId}`,
   create: "/leave_request/create",
   list: "/leave_request/all",
-  approve: (leaveRequestId: number) => `/leave_request/${leaveRequestId}/approve`,
-  decline: (leaveRequestId: number) => `/leave_request/${leaveRequestId}/decline`,
+  approve: (leaveRequestId: number) =>
+    `/leave_request/${leaveRequestId}/approve`,
+  decline: (leaveRequestId: number) =>
+    `/leave_request/${leaveRequestId}/decline`,
   patch: (leaveRequestId: number) => `/leave_request/${leaveRequestId}`,
   delete: (leaveRequestId: number) => `/leave_request/${leaveRequestId}/delete`,
   download: (file_name: string) => `/leave_request/${file_name}/download`,

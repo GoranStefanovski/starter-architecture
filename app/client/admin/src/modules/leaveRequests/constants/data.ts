@@ -10,7 +10,7 @@ const leaveRequest: LeaveRequestFormItem = {
   reason: "",
   request_to: 0,
   confirmed_by: 0,
-  is_confirmed: 0
+  is_confirmed: 0,
 };
 
 export { leaveRequest };

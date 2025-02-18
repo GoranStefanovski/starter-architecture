@@ -1,8 +1,7 @@
 <script setup lang="ts">
-  import { ref } from "vue";
   import { IconTrash, IconEdit } from "@starter-core/icons";
   import { useAuth } from "@websanova/vue-auth/src/v3.js";
-  import { computed } from "vue";
+  import { ref, computed } from "vue";
   import type { GetCountryResponse } from "../types";
   import ConfirmDialog from "@/components/ConfirmDialog/ConfirmDialog.vue";
 
@@ -19,7 +18,8 @@
     deleteCountry: (id: number) => Promise<void>;
   }
 
-  const { country, isEvenRow, deleteCountry } = defineProps<CountriesTableRowProps>();
+  const { country, isEvenRow, deleteCountry } =
+    defineProps<CountriesTableRowProps>();
   const auth = useAuth();
 
   const showConfirmDialog = ref(false);
@@ -41,7 +41,6 @@
     <TableColumn>
       {{ country.name }}
     </TableColumn>
-
 
     <TableColumn>
       <dash-link
@@ -65,20 +64,18 @@
         is-pill
         is-icon
       />
-      <span v-else>
-        -
-      </span>
+      <span v-else> - </span>
     </TableColumn>
   </TableRow>
   <ConfirmDialog
-      :show="showConfirmDialog"
-      message="Are you sure you want to remove this country?"
-      @confirm="confirmDelete"
-      @close="showConfirmDialog = false"
-    />
+    :show="showConfirmDialog"
+    message="Are you sure you want to remove this country?"
+    @confirm="confirmDelete"
+    @close="showConfirmDialog = false"
+  />
 </template>
 <style cloped>
-.noClick {
+  .noClick {
     pointer-events: none;
   }
 </style>

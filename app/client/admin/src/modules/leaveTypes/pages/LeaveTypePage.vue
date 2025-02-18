@@ -61,9 +61,7 @@
 <template>
   <PageWrapper>
     <template #[PAGE_WRAPPER_SLOTS.subheaderMain]>
-      <SubheaderTitle
-        title="Leave Type"
-      />
+      <SubheaderTitle title="Leave Type" />
     </template>
     <template #[PAGE_WRAPPER_SLOTS.subheaderToolbox]>
       <DashLink to="/admin/leave_types" :icon="IconArrowleft" theme="clean">

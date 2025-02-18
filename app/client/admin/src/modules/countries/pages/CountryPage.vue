@@ -57,9 +57,7 @@
 <template>
   <PageWrapper>
     <template #[PAGE_WRAPPER_SLOTS.subheaderMain]>
-      <SubheaderTitle
-        title="Country Page"
-      />
+      <SubheaderTitle title="Country Page" />
     </template>
     <template #[PAGE_WRAPPER_SLOTS.subheaderToolbox]>
       <DashLink to="/admin/countries" :icon="IconArrowleft" theme="clean">

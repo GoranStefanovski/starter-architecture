@@ -4,25 +4,22 @@
   import { FormInput } from "@starter-core/dash-ui/src";
 
   const { t } = useI18n();
-  const countryCode = defineModel("countryCode", { required: true, type: String });
+  const countryCode = defineModel("countryCode", {
+    required: true,
+    type: String,
+  });
   const name = defineModel("name", { required: true, type: String });
 </script>
 <template>
   <div class="kt-section">
     <div class="kt-section__body">
-      
       <form-input
         v-model="countryCode"
         name="countryCode"
-        label="Slug"
+        label="Country Code"
         is-inline
       />
-      <form-input
-        v-model="name"
-        name="name"
-        label="Name"
-        is-inline
-      />
+      <form-input v-model="name" name="name" label="Name" is-inline />
     </div>
   </div>
 </template>

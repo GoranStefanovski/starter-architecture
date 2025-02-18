@@ -1,7 +1,10 @@
 <script lang="ts" setup>
   import { useI18n } from "vue-i18n";
   import { useUserRoles } from "../composables";
-  import { FormDropdownManagers, FormDropdownLeaveTypes } from "@starter-core/dash-ui/src";
+  import {
+    FormDropdownManagers,
+    FormDropdownLeaveTypes,
+  } from "@starter-core/dash-ui/src";
 
   const { t } = useI18n();
 
@@ -18,5 +21,4 @@
     label="Assign To"
     is-inline
   />
-  
 </template>

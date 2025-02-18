@@ -2,7 +2,7 @@ export const USER_PERMISSIONS = {
   readRequests: "read_requests",
   writeRequests: "write_requests",
   deleteRequests: "delete_requests",
-  approveRequests: "approve_requests"
+  approveRequests: "approve_requests",
 } as const;
 
 export const USER_ROLES = {

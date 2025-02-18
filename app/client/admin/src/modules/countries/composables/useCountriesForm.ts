@@ -1,10 +1,10 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/vue-query";
 import axios from "axios";
 import { computed, ref } from "vue";
+import { useRouter } from "vue-router";
 import { useToast } from "vue-toastification";
 import { COUNTRY_API_ENDPOINTS } from "../constants";
 import type { CountryFormItem, GetCountryResponse } from "../types";
-import { useRouter } from "vue-router";
 
 const COUNTRY_CACHE_KEY = "country";
 
@@ -24,7 +24,9 @@ export const useCountriesForm = (countryId?: number) => {
   });
 
   const { mutate: createCountry, isPending: isCreating } = useMutation({
-    mutationFn: async (newUserData: CountryFormItem): Promise<GetCountryResponse> => {
+    mutationFn: async (
+      newUserData: CountryFormItem,
+    ): Promise<GetCountryResponse> => {
       manualLoading.value = true;
       const data = await axios.post(COUNTRY_API_ENDPOINTS.create, newUserData);
       return data.data;
@@ -36,7 +38,9 @@ export const useCountriesForm = (countryId?: number) => {
     },
     onError: (error) => {
       // @ts-ignore
-      const firstErrorMessage = error.errors ? Object.values(error.errors)[0][0] : "An unexpected error occurred";
+      const firstErrorMessage = error.errors
+        ? Object.values(error.errors)[0][0]
+        : "An unexpected error occurred";
       toast.error(firstErrorMessage);
       manualLoading.value = false;
     },
@@ -52,14 +56,18 @@ export const useCountriesForm = (countryId?: number) => {
       return response.data;
     },
     onSuccess: async () => {
-      queryClient.invalidateQueries({ queryKey: [COUNTRY_CACHE_KEY, countryId] });
+      queryClient.invalidateQueries({
+        queryKey: [COUNTRY_CACHE_KEY, countryId],
+      });
       router.push({ name: "countries" });
       manualLoading.value = false;
       toast.success("Country updated!");
     },
     onError: (error) => {
       // @ts-ignore
-      const firstErrorMessage = error.errors ? Object.values(error.errors)[0][0] : "An unexpected error occurred";
+      const firstErrorMessage = error.errors
+        ? Object.values(error.errors)[0][0]
+        : "An unexpected error occurred";
       manualLoading.value = false;
       toast.error(firstErrorMessage);
     },
@@ -78,7 +86,6 @@ export const useCountriesForm = (countryId?: number) => {
       toast.error(error.message);
     },
   });
-
 
   const data = computed(() => queryData.value);
 

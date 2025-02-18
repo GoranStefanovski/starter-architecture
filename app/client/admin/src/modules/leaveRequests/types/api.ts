@@ -1,7 +1,7 @@
-import { LeaveTypeFormItem } from "@/modules/leaveTypes/types";
 import type { Permission, UserRoleId } from "./permissions";
-import type { PaginationObject } from "@starter-core/dash-ui/src/components";
+import { LeaveTypeFormItem } from "@/modules/leaveTypes/types";
 import { UserFormItem } from "@/modules/users/types";
+import type { PaginationObject } from "@starter-core/dash-ui/src/components";
 
 export interface GetLeaveRequestResponse {
   id: number;

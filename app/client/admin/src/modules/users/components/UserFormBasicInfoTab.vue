@@ -1,9 +1,9 @@
 <script lang="ts" setup>
   import { IconMail } from "@starter-core/icons";
   import { useI18n } from "vue-i18n";
+  import UserCountriesDropdown from "./UserCountriesDropdown.vue";
   import UserFormAvatar from "./UserFormAvatar.vue";
   import UserRolesDropdown from "./UserRolesDropdown.vue";
-  import UserCountriesDropdown from "./UserCountriesDropdown.vue";
   import { FormInput, FormSwitch } from "@starter-core/dash-ui/src";
 
   type EmitsType = {
@@ -27,7 +27,7 @@
   const { errors = {}, avatar } = defineProps<{
     errors: any;
     avatar: string | null;
-    paidLeavesLeft: number
+    paidLeavesLeft: number;
   }>();
   const emit = defineEmits<EmitsType>();
 

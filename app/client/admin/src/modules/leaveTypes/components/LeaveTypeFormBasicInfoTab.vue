@@ -20,29 +20,23 @@
         label="Paid"
         :helper-text="`Leave Type is  ${isPaid ? 'Paid' : 'Unpaid'}`"
       />
-      <form-input
-        v-model="slug"
-        name="slug"
-        label="Slug"
-        is-inline
-      />
-      <form-input
-        v-model="name"
-        name="name"
-        label="Name"
-        is-inline
-      />
+      <form-input v-model="slug" name="slug" label="Slug" is-inline />
+      <form-input v-model="name" name="name" label="Name" is-inline />
       <div class="form-group form-input form-group--inline">
-        <div class="form-group__column form-group__column--left form-group__column--inline">
+        <div
+          class="form-group__column form-group__column--left form-group__column--inline"
+        >
           <label class="form-group__label" for="name">Select Color</label>
         </div>
-        <div class="form-group__column form-group__column--right form-group__column--inline">
+        <div
+          class="form-group__column form-group__column--right form-group__column--inline"
+        >
           <input
-          type="color"
-          id="colorPicker"
-          v-model="color"
-          class="color-input"
-        />
+            type="color"
+            id="colorPicker"
+            v-model="color"
+            class="color-input"
+          />
         </div>
       </div>
     </div>

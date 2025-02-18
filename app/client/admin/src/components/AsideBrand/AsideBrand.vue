@@ -21,10 +21,7 @@
 <template>
   <div class="kt-aside__brand">
     <div class="kt-aside__brand-logo">
-      <router-link to="/admin/dashboard">
-        BreakPoint
-      </router-link>
+      <router-link to="/admin/dashboard"> LeaveSync </router-link>
     </div>
-    
   </div>
 </template>
