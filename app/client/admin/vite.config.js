@@ -64,10 +64,15 @@ export default defineConfig({
     },
   },
   server: {
-    host: "0.0.0.0",
+    host: "0.0.0.0",  // Allow external connections
+    port: 5173,
+    strictPort: true,
+    cors: true,
+
     hmr: {
-      host: "localhost",
-      clientPort: 5173,
+      host: "188.166.106.22",  // Use your server IP or domain
+      protocol: "wss",
+      clientPort: 443,
     },
   },
   __VUE_PROD_DEVTOOLS__: process.env.NODE_ENV === "development",

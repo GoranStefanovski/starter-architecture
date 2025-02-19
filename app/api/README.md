@@ -50,7 +50,7 @@ npm install && npm run dev
 
 To fix Permission issues for Laravel folder in folder **app/api** outside of docker containers:
 ```shell
-sudo chown -R www-data. . && sudo setfacl -R -m u:$USER:rwx .
+sudo chown -R www-data: . && sudo setfacl -R -m u:$USER:rwx .
 ```
 
 ## Useful commands:
