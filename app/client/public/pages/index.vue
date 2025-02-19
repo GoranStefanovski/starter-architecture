@@ -13,7 +13,7 @@
     </ul>
 
     <a
-      href="#"
+      href="https://docs.google.com/document/d/1onPg8l5NdO5NSReJKt0qOC0gyHgefN-IPg943Wo2eEw/edit?usp=sharing"
       target="_blank"
     >
       Learn more & get started
@@ -40,6 +40,7 @@
   }
 
   & > ul {
+    padding-left: 0;
     list-style: none;
     > li {
       font-size: 20px;
