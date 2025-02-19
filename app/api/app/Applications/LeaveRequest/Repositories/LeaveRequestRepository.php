@@ -203,7 +203,7 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
         ->where('country', '=', $leaveRequest->user->country)
         ->pluck('email')
         ->toArray(); 
-     
+
         if ($leaveRequest->is_confirmed == 2) {
             $document = Document::where('leave_request_id', $leaveRequest->id)->first();
             Mail::to($administrationEmails)->send(new LeaveRequestConfirmationPDF($leaveRequest, $document ? Storage::disk('public')->path($document->file_path) : null));
