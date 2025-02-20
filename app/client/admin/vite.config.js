@@ -70,7 +70,7 @@ export default defineConfig({
     cors: true,
 
     hmr: {
-      host: "188.166.106.22",  // Use your server IP or domain
+      host: "165.232.82.246",  // Use your server IP or domain
       protocol: "wss",
       clientPort: 443,
     },
