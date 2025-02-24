@@ -24,7 +24,7 @@
     @endif
 
     <h3>{{ $leaveRequest->leaveType->name }}</h3>
-        <a href="{{ url('http://starter.test/admin/leave_request/' . $leaveRequest->id . '/confirmation') }}" target="_blank">
+        <a href="{{ url('http://165.232.82.246/admin/leave_request/' . $leaveRequest->id . '/confirmation') }}" target="_blank">
             Open Leave Request Confirmation Page
         </a>
 </body>
