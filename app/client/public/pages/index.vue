@@ -3,7 +3,7 @@
     <div class="homepage_wrapper">
     <h2>Simplify Your Leave Management</h2>
     <p>
-      LeaveSync is an intuitive leave management system designed to streamline time-off requests, <br> approvals, and tracking—all in one place.
+      Experience hassle-free leave management with LeaveSync—your all-in-one solution for managing time-off requests, <br>streamlining approvals, and tracking leave effortlessly.
     </p>
     
     <ul>
@@ -29,14 +29,28 @@
   color: black;
   text-align: center;
 
+  @media screen and (max-width: 456px) {
+    margin-top: 40px;
+  }
+  
   & > h2 {
     margin-bottom: 12px;
     font-size: 54px;
+
+    @media screen and (max-width: 456px) {
+      font-size: 32px;
+      margin-bottom: 30px;
+      font-weight: 500;
+      }
   }
 
   & > p {
     margin-bottom: 40px;
     font-size: 24px;
+
+    @media screen and (max-width: 456px) {
+        font-size: 18px;
+      }
   }
 
   & > ul {
@@ -44,11 +58,18 @@
     list-style: none;
     > li {
       font-size: 20px;
+
+      @media screen and (max-width: 456px) {
+        font-size: 16px;
+      }
     }
   }
 
   & > a {
     font-size: 16px;
+    @media screen and (max-width: 456px) {
+        font-size: 14px;
+      }
   }
 }
 
