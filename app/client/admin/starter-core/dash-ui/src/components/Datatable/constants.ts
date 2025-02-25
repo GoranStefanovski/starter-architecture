@@ -21,4 +21,5 @@ export const DATATABLE_ORDER_DIRECTIONS = {
 export const INITIAL_QUERY_DATA: TableQuery = {
   length: 10,
   dir: DATATABLE_ORDER_DIRECTIONS.asc,
+  isList: false,
 };

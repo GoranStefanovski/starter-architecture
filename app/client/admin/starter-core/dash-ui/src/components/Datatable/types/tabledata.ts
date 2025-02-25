@@ -11,4 +11,5 @@ export interface TableQuery {
   column?: string;
   search?: string;
   length?: number;
+  isList?: boolean;
 }

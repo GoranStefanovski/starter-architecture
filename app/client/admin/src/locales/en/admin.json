@@ -11,8 +11,10 @@
     "add": "Add Leave Type"
   },
   "leave_requests": {
+    "mine": "My Leave Requests",
     "main": "Leave Requests",
-    "add": "New Request"
+    "add": "New Request",
+    "all": "All Leave Requests"
   },
   "countries": {
     "main": "Countries",

@@ -29,12 +29,12 @@ class UserDTO
         ?string $avatar_thumbnail,
         int $role,
         int $id = 0,
-        bool $is_disabled = false,
+        bool $is_disabled,
         array $permissions_array = [],
         int $paid_leaves_max,
         int $paid_leaves_left,
         int $country,
-        bool $is_office_based = false,
+        bool $is_office_based,
     ) {
         $this->first_name = $first_name;
         $this->last_name = $last_name;
@@ -66,7 +66,7 @@ class UserDTO
             $request->input('paid_leaves_max'),
             $request->input('paid_leaves_left'),
             $request->input('country'),
-            (bool) $request->input('is_office_based')
+            (bool) $request->input('is_office_based', false)
         );
     }
 
@@ -80,12 +80,12 @@ class UserDTO
             null,
             $request->input('role'),
             id: 0,
-            is_disabled: false,
+            is_disabled: $request->input('is_disabled', false),
             permissions_array: $request->input('permissions_array', []),
             paid_leaves_max: 0,
             paid_leaves_left: 0,
             country: $request->input('country'),
-            is_office_based: false
+            is_office_based: $request->input('is_office_based', false)
         );
     }
 
@@ -99,7 +99,7 @@ class UserDTO
             $user->avatar_thumbnail,
             $user->role,
             $user->id,
-            (bool) $user->is_disabled,
+            $user->is_disabled,
             $user->permissions_array,
             $user->paid_leaves_max,
             $user->paid_leaves_left,

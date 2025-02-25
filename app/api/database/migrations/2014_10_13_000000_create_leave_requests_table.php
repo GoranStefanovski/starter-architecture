@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('start_date');
             $table->string('end_date')->nullable();
             $table->integer('status')->nullable()->default(0);
+            $table->integer('days')->nullable()->default(0);
             $table->string('reason')->nullable()->default("-");
             $table->integer('confirmed_by')->nullable();
             $table->integer('is_confirmed')->nullable();

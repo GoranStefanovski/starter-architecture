@@ -10,6 +10,7 @@ use Illuminate\Http\UploadedFile;
 use App\Applications\User\Model\User;
 use Spatie\Permission\Models\Role;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Illuminate\Support\Facades\Auth;
 
 
 /**
@@ -87,6 +88,17 @@ class UserRepository implements UserRepositoryInterface
             $query->orderBy(self::COLUMNS_MAP[$data['column']], $data['dir']);
         }
 
+        $isList = $data['isList'];
+        if($isList) {
+            $user = Auth::user();
+            $userRole = $user->getRoleAttribute(); 
+            if ($userRole == 2) {
+                $query->whereHas('roles', function ($roleQuery) {
+                    $roleQuery->where('roles.id', 3);
+                });
+            }
+        }
+
         $search = $data['search'];
         if ($search) {
             $query->where(function ($subquery) use ($search) {
@@ -98,7 +110,7 @@ class UserRepository implements UserRepositoryInterface
                 });
             });
         }
-
+        
         $query->whereNull('deleted_at');
 
         return $query->paginate($data['length']);
