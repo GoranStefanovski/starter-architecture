@@ -2,6 +2,7 @@ import type { ModulesRoutesData } from "@/types/routes";
 
 export const LEAVE_REQUESTS_ROUTES = {
   main: "main",
+  all: "all",
   add: "add",
   edit: "edit",
   approve: "approve",
@@ -16,6 +17,11 @@ export const LEAVE_REQUEST_ROUTES_DATA: ModulesRoutesData<LeaveRequestsRoutes> =
     main: {
       path: "leave_requests",
       name: "leave_requests",
+      translationKey: "leave_requests",
+    },
+    all: {
+      path: "leave_requests_all",
+      name: "leave_requests_all",
       translationKey: "leave_requests",
     },
     add: {

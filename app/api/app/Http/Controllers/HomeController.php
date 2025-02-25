@@ -38,19 +38,33 @@ class HomeController extends Controller
                 'label' => 'admin.leave_types.main',
                 'name' => 'item_types',
                 'route' => 'leave_types',
-                'permission' => UserPermissions::WRITE_USERS,
+                'permission' => UserPermissions::DELETE_USERS,
             ],
             [
                 'label' => 'admin.countries.main',
                 'name' => 'countries',
                 'route' => 'countries',
-                'permission' => UserPermissions::WRITE_USERS,
+                'permission' => UserPermissions::DELETE_USERS,
             ],
             [
                 'label' => 'admin.leave_requests.main',
                 'name' => 'item_requests',
-                'route' => 'leave_requests',
+                'route' => 'leave_requests.trigger',
                 'permission' => UserPermissions::READ_REQUESTS,
+                'submenu' => [
+                    [
+                        'label' => 'admin.leave_requests.mine',
+                        'name' => 'item_requests',
+                        'route' => 'leave_requests',
+                        'permission' => UserPermissions::READ_REQUESTS,
+                    ],
+                    [
+                        'label' => 'admin.leave_requests.all',
+                        'name' => 'item_requests_all',
+                        'route' => 'leave_requests_all',
+                        'permission' => UserPermissions::WRITE_USERS,
+                    ],
+                ]
             ],
             [
                 'label' => 'Vacation Days',

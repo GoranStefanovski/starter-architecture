@@ -95,7 +95,7 @@
 </script>
 
 <template>
-  <PageWrapper>
+  <PageWrapper class="bg">
     <div class="leaveTypes">
       <div
         class="leaveTypes_wrapper"
@@ -118,6 +118,9 @@
 </template>
 
 <style scoped>
+.bg {
+  background-color: white;
+}
   .page-title {
     margin-bottom: 20px;
     font-size: 24px;

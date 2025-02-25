@@ -24,12 +24,22 @@ const LeaveRequestPage = () =>
     "../pages/LeaveRequestPage.vue"
   );
 
-const { add, main, edit, approve, vacationDays } = LEAVE_REQUEST_ROUTES_DATA;
+const { add, main, all, edit, approve, vacationDays } = LEAVE_REQUEST_ROUTES_DATA;
 
 export const LeaveRequestsRoutes: RouteRecordRaw[] = [
   {
     path: main.path,
     name: main.name,
+    component: LeaveRequests,
+    meta: {
+      auth: {
+        roles: [USER_PERMISSIONS.readRequests],
+      },
+    },
+  },
+  {
+    path: all.path,
+    name: all.name,
     component: LeaveRequests,
     meta: {
       auth: {

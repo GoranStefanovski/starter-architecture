@@ -34,6 +34,10 @@ export function useDatatable() {
       queryObject["search"] = search;
     }
 
+    if (route.name == 'users' || route.name == 'leave_requests_all') {
+      queryObject["isList"] = true;
+    }
+
     if (
       dir &&
       Object.values(DATATABLE_ORDER_DIRECTIONS).indexOf(

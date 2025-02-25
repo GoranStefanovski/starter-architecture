@@ -18,6 +18,7 @@ class LeaveRequestDTO
     public int $confirmed_by;
     public int $is_confirmed;
     public int $status;
+    public int $days;
     public int $id;
     public ?User $user; 
     public ?LeaveType $leaveType;
@@ -34,6 +35,7 @@ class LeaveRequestDTO
         int $confirmed_by = 0,
         int $is_confirmed = 0,
         int $status = 0,
+        int $days = 0,
         int $id = 0,
         ?User $user = null,   
         ?LeaveType $leaveType = null,
@@ -48,6 +50,7 @@ class LeaveRequestDTO
         $this->confirmed_by = $confirmed_by;
         $this->is_confirmed = $is_confirmed;
         $this->status = $status;
+        $this->days = $days;
         $this->id = $id;
         $this->user = $user;
         $this->leaveType = $leaveType;
@@ -66,6 +69,7 @@ class LeaveRequestDTO
             confirmed_by: $request->input('confirmed_by', 0),
             is_confirmed: $request->input('is_confirmed', 0),
             status: $request->input('status', 0),
+            days: $request->input('days', 0),
             id: $request->input('id', 0)
         );
     }
@@ -82,6 +86,7 @@ class LeaveRequestDTO
             confirmed_by: 0,
             is_confirmed: 0,
             status: 0,
+            days: $request->input('days', 0),
             id: 0
             // Excluding User and LeaveType (default to null)
         );
@@ -99,6 +104,7 @@ class LeaveRequestDTO
             confirmed_by: $leaveRequest->confirmed_by,
             is_confirmed: $leaveRequest->is_confirmed,
             status: $leaveRequest->status,
+            days: $leaveRequest->days,
             id: $leaveRequest->id,
             user: $leaveRequest->user, 
             leaveType: $leaveRequest->leaveType,
@@ -123,6 +129,7 @@ class LeaveRequestDTO
             'confirmed_by' => $this->confirmed_by,
             'is_confirmed' => $this->is_confirmed,
             'status' => $this->status,
+            'days' => $this->days,
             'id' => $this->id,
         ];
     }

@@ -65,6 +65,7 @@ class UserService implements UserServiceInterface
         $data['dir'] = $data['dir'] ?? 'asc';
         $data['search'] = $data['search'] ?? '';
         $data['draw'] = $data['draw'] ?? 1;
+        $data['isList'] = $data['isList'] ?? false;
 
         $usersCollection = $this->userRepository->draw($data);
 

@@ -48,6 +48,13 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('password')
         ]);
 
+        $collaboratorBG = User::create([
+            'first_name' => 'Collaborator',
+            'last_name' => 'Bulgaria',
+            'email' => 'collaboratorBG@example.com',
+            'password' => Hash::make('password')
+        ]);
+
         // Create Permissions
         $permissions = [
             UserPermissions::READ_USERS,
@@ -102,6 +109,7 @@ class DatabaseSeeder extends Seeder
         $manager->assignRole(UserRoles::MANAGER);
         $developer->assignRole(UserRoles::DEVELOPER);
         $collaborator->assignRole(UserRoles::COLLABORATOR);
+        $collaboratorBG->assignRole(UserRoles::COLLABORATOR);
 
         // Seed Leave Types
         $leaveTypes = [

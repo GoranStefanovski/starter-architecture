@@ -83,6 +83,47 @@
 <template>
   <PageWrapper>
     <div class="row">
+      <div
+        v-if="auth.user().permissions_array.includes('write_users')"
+        class="col-md-4"
+      >
+        <PortletComponent isBordered>
+          <PortletHead>
+            <PortletHeadLabel> Pending Leave Requests </PortletHeadLabel>
+          </PortletHead>
+          <PortletBody>
+            <table>
+              <tr>
+                <th>No.</th>
+                <th>From</th>
+                <th>From (Date)</th>
+                <th>To (Date)</th>
+                <th>Link</th>
+              </tr>
+              <tr v-for="(leave, index) in leaveRequests" :key="index">
+                <td>{{ index + 1 }}.</td>
+                <td>
+                  {{ leave.user.first_name + " " + leave.user.last_name }}
+                </td>
+                <td>
+                  {{ formatDate(leave.start_date) }}
+                </td>
+                <td>
+                  {{
+                    leave.end_date ? formatDate(leave.end_date) : "Single Day"
+                  }}
+                </td>
+                <td>
+                  <router-link
+                    :to="`/admin/leave_request/${leave.id}/confirmation`"
+                    >View</router-link
+                  >
+                </td>
+              </tr>
+            </table>
+          </PortletBody>
+        </PortletComponent>
+      </div>
       <div class="col-md-4 mb-4">
         <PortletComponent isBordered>
           <PortletHead>
@@ -121,47 +162,6 @@
                 <td>{{ index + 1 }}.</td>
                 <td>{{ user.first_name }}</td>
                 <td>{{ user.paid_leaves_left }}</td>
-              </tr>
-            </table>
-          </PortletBody>
-        </PortletComponent>
-      </div>
-      <div
-        v-if="auth.user().permissions_array.includes('write_users')"
-        class="col-md-4"
-      >
-        <PortletComponent isBordered>
-          <PortletHead>
-            <PortletHeadLabel> Pending Leave Requests </PortletHeadLabel>
-          </PortletHead>
-          <PortletBody>
-            <table>
-              <tr>
-                <th>No.</th>
-                <th>From</th>
-                <th>From (Date)</th>
-                <th>To (Date)</th>
-                <th>Link</th>
-              </tr>
-              <tr v-for="(leave, index) in leaveRequests" :key="index">
-                <td>{{ index + 1 }}.</td>
-                <td>
-                  {{ leave.user.first_name + " " + leave.user.last_name }}
-                </td>
-                <td>
-                  {{ formatDate(leave.start_date) }}
-                </td>
-                <td>
-                  {{
-                    leave.end_date ? formatDate(leave.end_date) : "Single Day"
-                  }}
-                </td>
-                <td>
-                  <router-link
-                    :to="`/admin/leave_request/${leave.id}/confirmation`"
-                    >View</router-link
-                  >
-                </td>
               </tr>
             </table>
           </PortletBody>

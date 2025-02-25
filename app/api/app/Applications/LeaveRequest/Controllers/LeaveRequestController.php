@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Applications\LeaveRequest\Requests\NewLeaveRequestRequest;
 use App\Applications\LeaveRequest\Requests\LeaveRequestRequest;
 use Storage;
+use App\Applications\LeaveRequest\Model\LeaveRequest;
 
 /**
  * @property LeaveRequestServiceInterface $leaveRequestService

@@ -1,7 +1,6 @@
 <script setup lang="ts">
   import { IconTrash, IconEdit } from "@starter-core/icons";
   import { useAuth } from "@websanova/vue-auth/src/v3.js";
-  import { useForm } from "vee-validate";
   import { ref } from "vue";
   import type { GetLeaveRequestResponse } from "../types";
   import LeaveRequestStatusBadge from "./LeaveRequestStatusBadge.vue";
@@ -17,16 +16,24 @@
     leaveRequest: GetLeaveRequestResponse;
     isEvenRow: boolean;
     deleteLeaveRequest: (id: number) => Promise<void>;
+    downloadLeaveRequestPDF: (file_name: string) => Promise<void>;
+    documents: Array<any>;
+    isAllPage: boolean;
   }
 
   const auth = useAuth();
-  const { leaveRequest, isEvenRow, deleteLeaveRequest } =
+  const { leaveRequest, isEvenRow, deleteLeaveRequest, downloadLeaveRequestPDF, documents, isAllPage } =
     defineProps<LeaveRequestsTableRowProps>();
 
   const showConfirmDialog = ref(false);
 
   const confirmDelete = () => {
     deleteLeaveRequest(leaveRequest.id);
+    showConfirmDialog.value = false;
+  };
+
+  const confirmDownload = (string: string) => {
+    downloadLeaveRequestPDF(string);
     showConfirmDialog.value = false;
   };
 </script>
@@ -36,6 +43,17 @@
     <TableRow :section="'body'" :is-even="isEvenRow">
       <TableColumn>
         {{ leaveRequest.leaveType.name }}
+      </TableColumn>
+
+      <TableColumn>
+        <span v-if="isAllPage">
+          {{ leaveRequest.user.first_name }}
+          {{ leaveRequest.user.last_name }}
+        </span>
+        <span v-else>
+          -
+        </span>
+        
       </TableColumn>
 
       <TableColumn>
@@ -56,10 +74,28 @@
       </TableColumn>
 
       <TableColumn>
+        {{ leaveRequest.days }}
+      </TableColumn>
+
+      <TableColumn>
+        <div v-if="documents.length">
+          <ul v-for="doc in documents" :key="doc.id">
+            <li class="pdf" v-if="doc.leave_request_id === leaveRequest.id" @click="confirmDownload(doc.file_name)">
+              Download {{ doc.file_name }}
+            </li>
+          </ul>
+        </div>
+        <div v-else>
+          -
+        </div>
+      </TableColumn>
+
+      <TableColumn>
         <DashLink
           v-if="
-            auth.user().permissions_array.includes('write_requests') &&
-            (leaveRequest.is_confirmed == 0 || leaveRequest.is_confirmed == 1)
+            auth.user().permissions_array.includes('delete_requests') &&
+            (((leaveRequest.is_confirmed == 0 || leaveRequest.is_confirmed == 1) && auth.user().role !== 1) ||
+            (auth.user().role == 1))
           "
           :to="{
             name: 'edit.leave_request',
@@ -78,7 +114,8 @@
         <DashButton
           v-if="
             auth.user().permissions_array.includes('delete_requests') &&
-            (leaveRequest.is_confirmed == 0 || leaveRequest.is_confirmed == 1)
+            (((leaveRequest.is_confirmed == 0 || leaveRequest.is_confirmed == 1) && auth.user().role !== 1) ||
+            (auth.user().role == 1))
           "
           :icon="IconTrash"
           theme="danger"
@@ -99,3 +136,9 @@
     />
   </template>
 </template>
+<style>
+.pdf:hover {
+ cursor: pointer;
+ border-bottom: 0.3px solid black;
+}
+</style>

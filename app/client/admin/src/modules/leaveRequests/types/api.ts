@@ -9,6 +9,7 @@ export interface GetLeaveRequestResponse {
   leave_type_id: number;
   start_date: Date;
   end_date: Date;
+  days: number;
   status: number;
   reason: string;
   request_to: number;
