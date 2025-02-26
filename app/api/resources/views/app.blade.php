@@ -12,7 +12,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Page Description for SEO -->
-    <meta name="description" content="Laravel/Vue SPA Admin Panel application">
+    <meta name="description" content="Experience hassle-free leave management with LeaveSync—your all-in-one solution for managing time-off requests, streamlining approvals, and tracking leave effortlessly.">
 
     <!-- Robots to control search engine behavior: no indexing needed since it is an admin panel -->
     <meta name="robots" content="noindex">
@@ -27,7 +27,7 @@
     <!-- Theme Color to specify a default color for the browser's address bar -->
     <meta name="theme-color" content="#ADD8E6">
 
-    <title>Starter kit</title>
+    <title>LeaveSync - Starter Kit</title>
 
     <!-- Bootstrap Vite integration -->
     @vite('src/app.ts')

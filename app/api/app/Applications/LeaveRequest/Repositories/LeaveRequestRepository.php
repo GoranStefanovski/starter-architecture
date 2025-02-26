@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\{Mail, Auth};
 use DateTime, DateInterval, DatePeriod;
 use setasign\Fpdi\Fpdi;
 use Storage;
+use Illuminate\Support\Facades\Route;
 
 /**
  * @property LeaveRequest $leaveRequest
@@ -56,6 +57,17 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
         $query = $this->leaveRequest->with(['user', 'leaveType']);
         
         $query->where('is_confirmed', '=', 2);
+
+        return $query->whereNull('deleted_at')->get()->toArray();
+    }
+
+    public function getApprovedByUser(): array
+    {
+        $userId = Route::current()->parameter('id');
+        
+        $query = $this->leaveRequest->with(['user', 'leaveType']);
+        
+        $query->where('is_confirmed', '=', 2)->where('user_id', $userId);
 
         return $query->whereNull('deleted_at')->get()->toArray();
     }
@@ -145,8 +157,9 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
 
     public function delete(int $id)
     {
+        $user = Auth::user();
         $leaveRequest = $this->leaveRequest::findOrFail($id);
-        if ($leaveRequest->is_confirmed == 2) {
+        if ($leaveRequest->is_confirmed == 2 && $user->role == 1 && $leaveRequest->leave_type_id == 3) {
             $leaveRequestUser = User::find($leaveRequest->user->id);
             $leaveRequestUser->update([
                 'paid_leaves_left' => $leaveRequest->user->paid_leaves_left + $leaveRequest->days

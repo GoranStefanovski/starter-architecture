@@ -21,8 +21,8 @@
     }
   };
 
-  const downloadPdf = (file_name: string) => {
-    downloadLeaveRequestPDF(file_name);
+  const getFileUrl = (fileName: string) => {
+    return `${window.location.origin}/storage/${fileName}`;
   };
 
   onMounted(() => {
@@ -38,9 +38,15 @@
         <li
           v-for="document in documents"
           :key="document.id"
-          @click="downloadPdf(document.file_name)"
         >
-          {{ document.file_name }}
+          <a
+            :href="getFileUrl(document.file_name)"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="pdf"
+          >
+            {{ document.file_name }}
+          </a>
         </li>
       </ul>
     </div>

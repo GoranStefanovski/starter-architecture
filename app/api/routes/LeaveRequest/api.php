@@ -24,6 +24,7 @@ Route::group([
         Route::get('draw', [LeaveRequestController::class, 'draw']);
         Route::get('approved', [LeaveRequestController::class, 'getApproved']);
         Route::get('pending', [LeaveRequestController::class, 'getPending']);
+        Route::get('{id}/approved_user', [LeaveRequestController::class, 'getApprovedByUser']);
 
         // CRUD ROUTES
         Route::get('{id}/download', [LeaveRequestController::class, 'downloadLeaveRequestPDF']);

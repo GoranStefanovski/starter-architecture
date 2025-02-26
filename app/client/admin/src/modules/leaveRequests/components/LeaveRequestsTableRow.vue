@@ -32,9 +32,8 @@
     showConfirmDialog.value = false;
   };
 
-  const confirmDownload = (string: string) => {
-    downloadLeaveRequestPDF(string);
-    showConfirmDialog.value = false;
+  const getFileUrl = (fileName: string) => {
+    return `${window.location.origin}/storage/${fileName}`;
   };
 </script>
 
@@ -80,9 +79,15 @@
       <TableColumn>
         <div v-if="documents.length">
           <div v-for="doc in documents" :key="doc.id">
-            <p class="pdf" v-if="doc.leave_request_id === leaveRequest.id" @click="confirmDownload(doc.file_name)">
+            <a
+              v-if="doc.leave_request_id === leaveRequest.id"
+              :href="getFileUrl(doc.file_name)"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="pdf"
+            >
               {{ doc.file_name }}
-            </p>
+            </a>
           </div>
         </div>
         <div v-else>
