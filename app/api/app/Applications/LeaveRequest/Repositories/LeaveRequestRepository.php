@@ -277,11 +277,12 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
         // Create a Cyrilyc Data for each user on create in a separate table, with foreign user_id
         $fullNameCyrilic = transliterator_transliterate('Latin-Cyrillic', $user->first_name) . ' ' . transliterator_transliterate('Latin-Cyrillic', $user->last_name);
         $start_date = $this->formatDate($leaveRequest->start_date);
+        $end_date = $this->formatDate($leaveRequest->end_date);
 
         if ($isSingleDay) {
             $leaveDays = 1;
         } else {
-            $this->calculateDays($leaveRequest, $user);
+            $leaveDays = $this->calculateDays($leaveRequest, $user);
         }
         $userCountry = $leaveRequest->user->country;
         
