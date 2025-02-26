@@ -13,5 +13,6 @@ class UserPermissions
     public const APPROVE_REQUESTS = 'approve_requests';
     public const DELETE_REQUESTS = 'delete_requests';
     public const DASHBOARD_VIEW = 'dashboard_view';
+    public const ALL_REQUESTS = 'all_requests';
 
 }

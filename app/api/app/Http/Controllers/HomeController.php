@@ -62,7 +62,7 @@ class HomeController extends Controller
                         'label' => 'admin.leave_requests.all',
                         'name' => 'item_requests_all',
                         'route' => 'leave_requests_all',
-                        'permission' => UserPermissions::WRITE_USERS,
+                        'permission' => UserPermissions::ALL_REQUESTS,
                     ],
                 ]
             ],
