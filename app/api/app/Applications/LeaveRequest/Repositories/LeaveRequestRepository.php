@@ -85,7 +85,7 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
         $leaveRequestDTO->days = $leaveDays;
         $leaveRequest = $this->leaveRequest->create($leaveRequestDTO->toArray());
         if ($leaveRequest->leave_type_id == 6) {
-            $this->confirm($leaveRequest->id, $leaveRequestDTO, 2);
+            $this->confirm($leaveRequest->id, $leaveRequestDTO, 2, false);
         } else {
             $this->sendRequestEmail($leaveRequest, false);
         }
@@ -104,11 +104,20 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
         return $leaveRequest;
     }
 
-    public function confirm(int $leaveRequestId, LeaveRequestDTO $leaveRequestData, int $isConfirmed): LeaveRequest
+    public function confirm(int $leaveRequestId, LeaveRequestDTO $leaveRequestData, int $isConfirmed, bool $isUpdate): LeaveRequest
     {
         $leaveRequest = $this->get($leaveRequestId);
         $user = Auth::user();
+        $leaveRequestUser = User::find($leaveRequest->user->id);
+
+        if ($isUpdate && $leaveRequest->leave_type_id == 3) {
+            $leaveRequestUser->update([
+                'paid_leaves_left' => $leaveRequestUser->paid_leaves_left + $leaveRequest->days
+            ]);
+        }
+
         $leaveDays = $this->calculateDays($leaveRequestData, $leaveRequest->user);
+
         $leaveRequest->update([
             ...$leaveRequestData->toArray(),
             'is_confirmed' => $isConfirmed,
@@ -118,13 +127,15 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
         ]);
 
         if ($isConfirmed == 2) {
-            if ($leaveRequest->leave_type_id == 3 || $leaveRequest->leave_type_id == 4) {
+            if (in_array($leaveRequest->leave_type_id, [3, 4])) {
                 $this->createLeaveRequestPDF($leaveRequest->user, $leaveRequest);
                 $this->sendConfirmationAccountentsEmail($leaveRequest);
             }
-            
+
             if ($leaveRequest->user && $leaveRequestData->leave_type_id == 3) {
-                $this->deductPaidLeaves($leaveRequest->user, $leaveRequestData);
+                $leaveRequestUser->update([
+                    'paid_leaves_left' => max(0, $leaveRequestUser->paid_leaves_left - $leaveDays)
+                ]);
             }
         }
 
@@ -135,6 +146,12 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
     public function delete(int $id)
     {
         $leaveRequest = $this->leaveRequest::findOrFail($id);
+        if ($leaveRequest->is_confirmed == 2) {
+            $leaveRequestUser = User::find($leaveRequest->user->id);
+            $leaveRequestUser->update([
+                'paid_leaves_left' => $leaveRequest->user->paid_leaves_left + $leaveRequest->days
+            ]);
+        }
         $this->sendRequestCancelationEmail($leaveRequest);
 
         return $leaveRequest->delete();
@@ -251,30 +268,6 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
 
         
     }
-
-    private function deductPaidLeaves(User $user, LeaveRequestDTO $leaveRequestData): void
-    {
-        $startDate = new DateTime($leaveRequestData->start_date);
-        $endDate = $leaveRequestData->end_date ? new DateTime($leaveRequestData->end_date) : $startDate;
-
-        $country = Country::find($user->country);
-
-        $nationalHolidays = NationalHoliday::whereYear('date', $startDate->format('Y'))
-            ->where('country', $country->name)
-            ->pluck('date')
-            ->toArray();
-
-        $leaveDays = iterator_count(
-            new DatePeriod($startDate, new DateInterval('P1D'), $endDate->modify('+1 day'))
-        );
-
-        $leaveDays -= count(array_filter(
-            iterator_to_array(new DatePeriod($startDate, new DateInterval('P1D'), $endDate->modify('+1 day'))),
-            fn($date) => in_array($date->format('N'), [6, 7]) || in_array($date->format('Y-m-d'), $nationalHolidays)
-        ));
-
-        $user->update(['paid_leaves_left' => max(0, $user->paid_leaves_left - $leaveDays)]);
-    }
     
     private function createLeaveRequestPDF(User $user, LeaveRequest $leaveRequest): void
     {
@@ -359,32 +352,27 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
     }
 
     private function calculateDays($leaveRequest, $user) {
-        $isSingleDay = $leaveRequest->end_date === null;
-
-        if ($isSingleDay) {
-            return 1;
-        } else {
-            $end_date = $this->formatDate($leaveRequest->end_date);
-                    // Calculate valid leave days excluding weekends and national holidays
-            $startDate = new DateTime($leaveRequest->start_date);
-            $endDate = $leaveRequest->end_date ? new DateTime($leaveRequest->end_date) : $startDate;
-
-            $country = Country::find($user->country);
-
-            $nationalHolidays = NationalHoliday::whereYear('date', $startDate->format('Y'))
-                ->where('country', $country->name)
-                ->pluck('date')
-                ->toArray();
-
-            $leaveDays = iterator_count(
-                new DatePeriod($startDate, new DateInterval('P1D'), $endDate->modify('+1 day'))
-            );
-
-            $leaveDays -= count(array_filter(
-                iterator_to_array(new DatePeriod($startDate, new DateInterval('P1D'), $endDate->modify('+1 day'))),
-                fn($date) => in_array($date->format('N'), [6, 7]) || in_array($date->format('Y-m-d'), $nationalHolidays)
-            ));
-            return $leaveDays;
-        }
+        $startDate = new DateTime($leaveRequest->start_date);
+        $endDate = $leaveRequest->end_date ? new DateTime($leaveRequest->end_date) : $startDate;
+    
+        // ✅ Ensure the end date is always included
+        $endDate->modify('+1 day');
+    
+        $country = Country::find($user->country);
+    
+        $nationalHolidays = NationalHoliday::whereYear('date', $startDate->format('Y'))
+            ->where('country', $country->name)
+            ->pluck('date')
+            ->toArray();
+    
+        $leaveDays = iterator_count(new DatePeriod($startDate, new DateInterval('P1D'), $endDate));
+    
+        // ✅ Exclude weekends and national holidays from the count
+        $leaveDays -= count(array_filter(
+            iterator_to_array(new DatePeriod($startDate, new DateInterval('P1D'), $endDate)),
+            fn($date) => in_array($date->format('N'), [6, 7]) || in_array($date->format('Y-m-d'), $nationalHolidays)
+        ));
+    
+        return max(1, $leaveDays); // ✅ Ensure at least 1 day is counted
     }
 }

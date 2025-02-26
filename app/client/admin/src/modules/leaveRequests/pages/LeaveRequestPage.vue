@@ -37,6 +37,7 @@
     createLeaveRequest,
     updateLeaveRequest,
     approveLeaveRequest,
+    approveUpdateLeaveRequest,
     declineLeaveRequest,
   } = useLeaveRequestsForm(leaveRequestId);
 
@@ -49,6 +50,10 @@
     } else {
       createLeaveRequest(values);
     }
+  });
+  
+  const approveUpdate = handleSubmit((values) => {
+    approveUpdateLeaveRequest(values);
   });
 
   const approve = handleSubmit((values) => {
@@ -154,11 +159,16 @@
             :user="auth.user()"
           />
         </TabbedContentTab>
-        <div v-if="auth.user().id == requestTo || auth.user().role == 1">
-          <div v-if="(isConfirmed == 0 && isApprovePage) || (auth.user().role == 1 && !isApprovePage)">
+        <div v-if="auth.user().id == requestTo || ( isConfirmed == 2 && auth.user().role == 1)">
+          <div v-if="isConfirmed == 0 && isApprovePage">
             <div class="confirmation_btn_wrapper">
               <span class="req_btn approve" @click="approve"> Approve </span>
               <span class="req_btn decline" @click="decline"> Decline </span>
+            </div>
+          </div>
+          <div v-else-if="isConfirmed == 2 && auth.user().role == 1">
+            <div class="confirmation_btn_wrapper">
+              <span class="req_btn approve" @click="approveUpdate"> Approve </span>
             </div>
           </div>
         </div>

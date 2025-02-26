@@ -51,9 +51,10 @@ interface LeaveRequestRepositoryInterface
      * @param int $leaveRequestId
      * @param LeaveRequestDTO $leaveRequestData
      * @param int $isConfirmed
+     * @param bool $isUpdate
      * @return LeaveRequest
      */
-    public function confirm(int $leaveRequestId, LeaveRequestDTO $leaveRequestData, int $isConfirmed): LeaveRequest;
+    public function confirm(int $leaveRequestId, LeaveRequestDTO $leaveRequestData, int $isConfirmed, bool $isUpdate): LeaveRequest;
 
     /**
      * @param integer $id

@@ -4,6 +4,8 @@ export const LEAVE_REQUEST_API_ENDPOINTS = {
   list: "/leave_request/all",
   approve: (leaveRequestId: number) =>
     `/leave_request/${leaveRequestId}/approve`,
+  approve_update: (leaveRequestId: number) =>
+    `/leave_request/${leaveRequestId}/approve_update`,
   decline: (leaveRequestId: number) =>
     `/leave_request/${leaveRequestId}/decline`,
   patch: (leaveRequestId: number) => `/leave_request/${leaveRequestId}`,
