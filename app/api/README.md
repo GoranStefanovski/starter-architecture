@@ -25,7 +25,7 @@ composer install && php artisan config:clear && php artisan view:clear && php ar
 ```
 Run these commands to migrate and populate the database:
 ```shell
-php artisan migrate:fresh && php artisan db:seed && php artisan populate:holidays --year=2025 && php artisan storage:link
+php artisan migrate:fresh && php artisan db:seed && php artisan populate:holidays --year=2025
 ```
 
 ### For the Vuejs Admin Panel SPA start the app container by running:

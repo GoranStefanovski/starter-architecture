@@ -26,6 +26,11 @@ class LeaveRequestService implements LeaveRequestServiceInterface
         return $this->leaveRequestRepository->getApproved();
     }
 
+    public function getApprovedByUser(): array
+    {
+        return $this->leaveRequestRepository->getApprovedByUser();
+    }
+
     public function getPending(): array
     {
         return $this->leaveRequestRepository->getPending();

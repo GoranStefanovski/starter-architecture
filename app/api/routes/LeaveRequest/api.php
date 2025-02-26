@@ -24,12 +24,12 @@ Route::group([
         Route::get('draw', [LeaveRequestController::class, 'draw']);
         Route::get('approved', [LeaveRequestController::class, 'getApproved']);
         Route::get('pending', [LeaveRequestController::class, 'getPending']);
+        Route::get('{id}/approved_user', [LeaveRequestController::class, 'getApprovedByUser']);
 
         // CRUD ROUTES
         Route::get('{id}/download', [LeaveRequestController::class, 'downloadLeaveRequestPDF']);
         Route::post('create', [LeaveRequestController::class, 'create']);
         Route::post('{id}/approve', [LeaveRequestController::class, 'approve']);
-        Route::post('{id}/approve_update', [LeaveRequestController::class, 'approveUpdate']);
         Route::post('{id}/decline', [LeaveRequestController::class, 'decline']);
         Route::get('{id}', [LeaveRequestController::class, 'get']);
         Route::patch('{id}', [LeaveRequestController::class, 'update']);

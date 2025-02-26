@@ -17,6 +17,8 @@
     <h3>{{ $formattedStartDate }} to {{ $formattedEndDate }}</h3>
     @endif
 
+    <h3>Days: {{ $leaveRequest->days }}</h3>
+
     @if ($leaveRequest->reason && $leaveRequest->reason !== null)
         <h3>
             Reason: {{ $leaveRequest->reason ? $leaveRequest->reason : "" }}

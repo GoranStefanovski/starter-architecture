@@ -24,10 +24,8 @@
   // Fetch Approved Leave Days
   const fetchApprovedLeaveDays = async () => {
     try {
-      const response = await axios.get("/leave_request/draw", {
-        params: { userId: props.userId },
-      });
-      leaveDays.value = response.data.data;
+      const response = await axios.get(`/leave_request/${props.userId}/approved_user`);
+      leaveDays.value = response.data;
     } catch (error) {
       console.error("Error fetching leave requests:", error);
     }

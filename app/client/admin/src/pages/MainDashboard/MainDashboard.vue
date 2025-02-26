@@ -144,7 +144,7 @@
         </PortletComponent>
       </div>
       <div
-        v-if="auth.user().permissions_array.includes('write_users')"
+        v-if="auth.user().role == 1"
         class="col-md-4"
       >
         <PortletComponent isBordered>
