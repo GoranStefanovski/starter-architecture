@@ -52,13 +52,19 @@ class LeaveRequestService implements LeaveRequestServiceInterface
 
     public function approve(int $leaveRequestId, LeaveRequestDTO $leaveRequestData, int $isConfirmed): LeaveRequestDTO
     {
-        $leaveRequest = $this->leaveRequestRepository->confirm($leaveRequestId, $leaveRequestData, $isConfirmed);
+        $leaveRequest = $this->leaveRequestRepository->confirm($leaveRequestId, $leaveRequestData, $isConfirmed, false);
+        return LeaveRequestDTO::fromModel($leaveRequest);
+    }
+
+    public function approveUpdate(int $leaveRequestId, LeaveRequestDTO $leaveRequestData, int $isConfirmed): LeaveRequestDTO
+    {
+        $leaveRequest = $this->leaveRequestRepository->confirm($leaveRequestId, $leaveRequestData, $isConfirmed, true);
         return LeaveRequestDTO::fromModel($leaveRequest);
     }
 
     public function decline(int $leaveRequestId, LeaveRequestDTO $leaveRequestData, int $isConfirmed): LeaveRequestDTO
     {
-        $leaveRequest = $this->leaveRequestRepository->confirm($leaveRequestId, $leaveRequestData, $isConfirmed);
+        $leaveRequest = $this->leaveRequestRepository->confirm($leaveRequestId, $leaveRequestData, $isConfirmed, false);
         return LeaveRequestDTO::fromModel($leaveRequest);
     }
 

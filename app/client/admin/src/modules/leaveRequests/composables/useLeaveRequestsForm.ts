@@ -112,6 +112,32 @@ export const useLeaveRequestsForm = (leaveRequestId?: number) => {
     },
   );
 
+  const { mutate: approveUpdateLeaveRequest, isPending: isUpdateConfrirming } = useMutation(
+    {
+      mutationFn: async (
+        data: LeaveRequestFormItem,
+      ): Promise<GetLeaveRequestResponse> => {
+        manualLoading.value = true;
+        const response = await axios.post(
+          LEAVE_REQUEST_API_ENDPOINTS.approve_update(leaveRequestId ?? 0),
+          data,
+        );
+        return response.data;
+      },
+      onSuccess: async () => {
+        queryClient.invalidateQueries({
+          queryKey: [LEAVE_REQUEST_CACHE_KEY, leaveRequestId],
+        });
+        toast.success("Leave Request Update approved!");
+        manualLoading.value = false;
+      },
+      onError: (error) => {
+        manualLoading.value = false;
+        toast.error(error.message);
+      },
+    },
+  );
+
   const { mutate: declineLeaveRequest, isPending: isDeclining } = useMutation({
     mutationFn: async (
       data: LeaveRequestFormItem,
@@ -172,6 +198,7 @@ export const useLeaveRequestsForm = (leaveRequestId?: number) => {
     createLeaveRequest,
     updateLeaveRequest,
     approveLeaveRequest,
+    approveUpdateLeaveRequest,
     declineLeaveRequest,
     deleteLeaveRequest,
     downloadLeaveRequestPDF,

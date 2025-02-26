@@ -54,6 +54,14 @@ interface LeaveRequestServiceInterface
      */
     public function approve(int $leaveRequestId, LeaveRequestDTO $leaveRequestData, int $isConfirmed): LeaveRequestDTO;
 
+    /**
+     * @param int $leaveRequestId
+     * @param LeaveRequestDTO $leaveRequestData
+     * @param int $isConfirmed
+     * @return LeaveRequestDTO
+     */
+    public function approveUpdate(int $leaveRequestId, LeaveRequestDTO $leaveRequestData, int $isConfirmed): LeaveRequestDTO;
+
         /**
      * @param int $leaveRequestId
      * @param LeaveRequestDTO $leaveRequestData

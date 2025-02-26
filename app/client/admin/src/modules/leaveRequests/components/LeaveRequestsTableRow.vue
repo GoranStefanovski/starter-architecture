@@ -79,11 +79,11 @@
 
       <TableColumn>
         <div v-if="documents.length">
-          <ul v-for="doc in documents" :key="doc.id">
-            <li class="pdf" v-if="doc.leave_request_id === leaveRequest.id" @click="confirmDownload(doc.file_name)">
-              Download {{ doc.file_name }}
-            </li>
-          </ul>
+          <div v-for="doc in documents" :key="doc.id">
+            <p class="pdf" v-if="doc.leave_request_id === leaveRequest.id" @click="confirmDownload(doc.file_name)">
+              {{ doc.file_name }}
+            </p>
+          </div>
         </div>
         <div v-else>
           -

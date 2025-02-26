@@ -31,7 +31,7 @@ class LeaveRequestNotificationUpdate extends Mailable
             ? \Carbon\Carbon::parse($this->leaveRequest->end_date)->format('d M Y')
             : null;
 
-        $subject =$this->leaveRequest->user->first_name . ' ' . $this->leaveRequest->user->last_name . ': ' . $this->leaveRequest->leaveType->name .  ': ' . $this->leaveRequest->leaveDays . 'days: ' . $formattedStartDate . ($this->leaveRequest->end_date ? ' to ' . $formattedEndDate : '');
+        $subject =$this->leaveRequest->user->first_name . ' ' . $this->leaveRequest->user->last_name . ': ' . $this->leaveRequest->leaveType->name .  ': ' . $this->leaveRequest->days . ' days: ' . $formattedStartDate . ($this->leaveRequest->end_date ? ' to ' . $formattedEndDate : '');
         return $this->subject($subject . ' (Update)')
                     ->view('emails.leave_request_notification')
                     ->with([

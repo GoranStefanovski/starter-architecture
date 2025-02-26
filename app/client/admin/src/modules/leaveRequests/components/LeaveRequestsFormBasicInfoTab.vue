@@ -20,6 +20,12 @@
   const reason = defineModel("reason", { required: true, type: String });
   const requestTo = defineModel("requestTo", { required: true, type: Number });
 
+  const today = new Date();
+  const currentYear = today.getFullYear();
+
+  const minDate = computed(() => today.toISOString().split("T")[0]);
+  const maxDate = computed(() => `${currentYear}-12-31`);
+
   const props = defineProps(["user"]);
 
   const fetchLeaveTypes = async () => {
@@ -95,12 +101,21 @@
             id="startDate"
             name="startDate"
             v-model="startDate"
+            :min="minDate"
+            :max="maxDate"
           />
         </div>
 
         <div>
           <label class="form-group__label" for="endDate">End date:</label>
-          <input type="date" id="endDate" name="endDate" v-model="endDate" />
+          <input
+            type="date"
+            id="endDate"
+            name="endDate"
+            v-model="endDate"
+            :min="startDate || minDate"
+            :max="maxDate"
+          />
         </div>
       </div>
     </div>
