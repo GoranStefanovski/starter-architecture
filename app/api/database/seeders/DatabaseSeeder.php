@@ -66,6 +66,7 @@ class DatabaseSeeder extends Seeder
             UserPermissions::WRITE_REQUESTS,
             UserPermissions::DELETE_REQUESTS,
             UserPermissions::DASHBOARD_VIEW,
+            UserPermissions::ALL_REQUESTS,
         ];
 
         foreach ($permissions as $permission) {
@@ -86,6 +87,7 @@ class DatabaseSeeder extends Seeder
                 UserPermissions::WRITE_REQUESTS,
                 UserPermissions::DELETE_REQUESTS,
                 UserPermissions::APPROVE_REQUESTS,
+                UserPermissions::ALL_REQUESTS
             ]);
 
         $roleDeveloper = Role::create(['name' => UserRoles::DEVELOPER])
@@ -102,6 +104,8 @@ class DatabaseSeeder extends Seeder
                 UserPermissions::DASHBOARD_VIEW,
                 UserPermissions::READ_USERS,
                 UserPermissions::READ_REQUESTS,
+                UserPermissions::WRITE_PROFILE,
+                UserPermissions::ALL_REQUESTS
             ]);
 
         // Assign Roles to Users

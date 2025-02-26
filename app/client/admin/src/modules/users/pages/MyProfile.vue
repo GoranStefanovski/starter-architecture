@@ -121,7 +121,7 @@
             @upload-avatar="uploadAvatarHandler"
           />
         </TabbedContentTab>
-        <TabbedContentTab :label="'Password'" id="change-password">
+        <TabbedContentTab v-if="auth.user().role !== 4" :label="'Password'" id="change-password">
           <UserFormPasswordTab v-model:password="password" />
         </TabbedContentTab>
         <TabbedContentTab :label="'Calednar'" id="calendar">
