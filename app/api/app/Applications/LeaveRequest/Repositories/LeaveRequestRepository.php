@@ -166,7 +166,7 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
             }
         }
 
-        $this->sendRequestConfirmationEmail($leaveRequest);
+        $this->sendRequestConfirmationEmail($leaveRequest, $isUpdate);
         return $leaveRequest;
     }
 
@@ -227,15 +227,20 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
         Mail::to($recipients)->send(new $mailClass($leaveRequest));
     }
 
-    private function sendRequestConfirmationEmail(LeaveRequest $leaveRequest)
+    private function sendRequestConfirmationEmail(LeaveRequest $leaveRequest, bool $isUpdate)
     {
         $recipients = $this->getRecipients($leaveRequest);
 
-        $mailClass = match ($leaveRequest->is_confirmed) {
-            1 => LeaveRequestDeclining::class,
-            2 => LeaveRequestConfirmation::class,
-            default => null,
-        };
+        if ($isUpdate) {
+            $mailClass = LeaveRequestNotificationUpdate::class;
+        } else {
+            $mailClass = match ($leaveRequest->is_confirmed) {
+                1 => LeaveRequestDeclining::class,
+                2 => LeaveRequestConfirmation::class,
+                default => null,
+            };
+        }
+
 
         if ($mailClass) {
             Mail::to($recipients)->send(new $mailClass($leaveRequest));
