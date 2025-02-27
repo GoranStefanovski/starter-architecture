@@ -61,7 +61,7 @@
           v-model="form.email"
           class="form-control"
           type="text"
-          placeholder="admin@example.com"
+          placeholder="visitor@leavesync.com"
           name="email"
           autocomplete="off"
           required
@@ -73,7 +73,7 @@
           v-model="form.password"
           class="form-control"
           type="password"
-          placeholder="password"
+          placeholder="leavesync"
           name="password"
           required
         />

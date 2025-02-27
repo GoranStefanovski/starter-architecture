@@ -224,7 +224,7 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
         $recipients = $this->getRecipients($leaveRequest);
 
         $mailClass = $isUpdate ? LeaveRequestNotificationUpdate::class : LeaveRequestNotification::class;
-        Mail::to($recipients)->send(new $mailClass($leaveRequest));
+        // Mail::to($recipients)->send(new $mailClass($leaveRequest));
     }
 
     private function sendRequestConfirmationEmail(LeaveRequest $leaveRequest, bool $isUpdate)
@@ -243,7 +243,7 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
 
 
         if ($mailClass) {
-            Mail::to($recipients)->send(new $mailClass($leaveRequest));
+            // Mail::to($recipients)->send(new $mailClass($leaveRequest));
         }
     }
 
@@ -251,7 +251,7 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
     {
         $recipients = $this->getRecipients($leaveRequest);
 
-        Mail::to($recipients)->send(new LeaveRequestCancelation($leaveRequest));
+        // Mail::to($recipients)->send(new LeaveRequestCancelation($leaveRequest));
     }
 
 
@@ -263,7 +263,7 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
 
         if ($leaveRequest->is_confirmed == 2) {
             $document = Document::where('leave_request_id', $leaveRequest->id)->first();
-            Mail::to($administrationEmails)->send(new LeaveRequestConfirmationPDF($leaveRequest, $document ? Storage::disk('public')->path($document->file_path) : null));
+            // Mail::to($administrationEmails)->send(new LeaveRequestConfirmationPDF($leaveRequest, $document ? Storage::disk('public')->path($document->file_path) : null));
         } 
     }
 
