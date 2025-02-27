@@ -116,13 +116,28 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
         return $leaveRequest;
     }
 
+    public function delete(int $id)
+    {
+        $user = Auth::user();
+        $leaveRequest = $this->leaveRequest::findOrFail($id);
+        if ($leaveRequest->is_confirmed == 2 && $user->role == 1 && $leaveRequest->leave_type_id == 3) {
+            $leaveRequestUser = User::find($leaveRequest->user->id);
+            $leaveRequestUser->update([
+                'paid_leaves_left' => $leaveRequest->user->paid_leaves_left + $leaveRequest->days
+            ]);
+        }
+        $this->sendRequestCancelationEmail($leaveRequest);
+
+        return $leaveRequest->delete();
+    }
+
     public function confirm(int $leaveRequestId, LeaveRequestDTO $leaveRequestData, int $isConfirmed, bool $isUpdate): LeaveRequest
     {
         $leaveRequest = $this->get($leaveRequestId);
         $user = Auth::user();
         $leaveRequestUser = User::find($leaveRequest->user->id);
 
-        if ($isUpdate && $leaveRequest->leave_type_id == 3) {
+        if ($isConfirmed == 2 && $isUpdate && $leaveRequest->leave_type_id == 3) {
             $leaveRequestUser->update([
                 'paid_leaves_left' => $leaveRequestUser->paid_leaves_left + $leaveRequest->days
             ]);
@@ -153,21 +168,6 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
 
         $this->sendRequestConfirmationEmail($leaveRequest);
         return $leaveRequest;
-    }
-
-    public function delete(int $id)
-    {
-        $user = Auth::user();
-        $leaveRequest = $this->leaveRequest::findOrFail($id);
-        if ($leaveRequest->is_confirmed == 2 && $user->role == 1 && $leaveRequest->leave_type_id == 3) {
-            $leaveRequestUser = User::find($leaveRequest->user->id);
-            $leaveRequestUser->update([
-                'paid_leaves_left' => $leaveRequest->user->paid_leaves_left + $leaveRequest->days
-            ]);
-        }
-        $this->sendRequestCancelationEmail($leaveRequest);
-
-        return $leaveRequest->delete();
     }
 
     public function draw($data): StarterPaginator
