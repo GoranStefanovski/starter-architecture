@@ -27,6 +27,7 @@ Route::group([
         Route::get('{id}/approved_user', [LeaveRequestController::class, 'getApprovedByUser']);
 
         // CRUD ROUTES
+        Route::post('{id}/approve_update', [LeaveRequestController::class, 'approveUpdate']);
         Route::get('{id}/download', [LeaveRequestController::class, 'downloadLeaveRequestPDF']);
         Route::post('create', [LeaveRequestController::class, 'create']);
         Route::post('{id}/approve', [LeaveRequestController::class, 'approve']);
