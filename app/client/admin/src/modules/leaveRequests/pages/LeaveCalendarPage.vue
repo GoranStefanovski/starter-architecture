@@ -83,6 +83,7 @@
     plugins: [dayGridPlugin],
     initialView: "dayGridMonth",
     weekends: true,
+    firstDay: 1,
     events: calendarEvents.value,
   }));
 
