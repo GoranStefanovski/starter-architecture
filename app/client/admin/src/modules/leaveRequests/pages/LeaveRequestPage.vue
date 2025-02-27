@@ -159,13 +159,14 @@
             :user="auth.user()"
           />
         </TabbedContentTab>
-        <div v-if="auth.user().id == requestTo || ( isConfirmed == 2 && auth.user().role == 1)">
+        <div v-if="auth.user().id == requestTo || (isConfirmed == 2 && auth.user().role == 1)">
           <div v-if="isConfirmed == 0 && isApprovePage">
             <div class="confirmation_btn_wrapper">
               <span class="req_btn approve" @click="approve"> Approve </span>
               <span class="req_btn decline" @click="decline"> Decline </span>
             </div>
           </div>
+          <!-- <div v-else-if="isConfirmed == 2 && (auth.user().role == 1 || (auth.user().role == 2 && auth.user().id == requestTo))"> -->
           <div v-else-if="isConfirmed == 2 && auth.user().role == 1">
             <div class="confirmation_btn_wrapper">
               <span class="req_btn approve" @click="approveUpdate"> Approve </span>
