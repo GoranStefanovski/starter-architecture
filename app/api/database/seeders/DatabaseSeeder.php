@@ -42,10 +42,10 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $collaborator = User::create([
-            'first_name' => 'Collaborator',
-            'last_name' => 'Macedonia',
-            'email' => 'collaborator@example.com',
-            'password' => Hash::make('password')
+            'first_name' => 'Visitor',
+            'last_name' => 'LeaveSync',
+            'email' => 'visitor@leavesync.com',
+            'password' => Hash::make('leavesync')
         ]);
 
         $collaboratorBG = User::create([
