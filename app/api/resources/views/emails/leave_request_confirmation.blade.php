@@ -14,7 +14,7 @@
     @else
     <h2>{{ $leaveRequest->user->first_name }} {{ $leaveRequest->user->last_name }} is on {{ $leaveRequest->leaveType->name }} {{ $leaveRequest->days }} days leave from {{ $formattedStartDate }} to {{ $formattedEndDate }} </h2>
     @endif
-    <a href="{{ url('http://starter.test/admin/leave_request/' . $leaveRequest->id) }}" target="_blank">
+    <a href="{{ url('https://leavesync.com/admin/leave_request/' . $leaveRequest->id) }}" target="_blank">
         View Leave Request
     </a>
 </body>
