@@ -15,6 +15,12 @@
   const hasDefaultOption = computed(() => !options.some(
     (option) => option.id === String(model.value)
   ));
+
+  const capitalize = (text: string) => {
+    if (!text) return "";
+    return text.charAt(0).toUpperCase() + text.slice(1);
+  };
+
 </script>
 
 <template>
@@ -42,7 +48,7 @@
           :value="option.id"
           :disabled="option.isDisabled"
         >
-          {{ option.name }}
+          {{ capitalize(option.name) }}
         </option>
       </select>
       <div v-if="errors?.length" class="form-dropdown__error">

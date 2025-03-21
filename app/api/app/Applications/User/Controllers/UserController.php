@@ -3,6 +3,7 @@
 namespace App\Applications\User\Controllers;
 
 use App\Applications\User\DTO\UserDTO;
+use App\Applications\User\Requests\NewUserRequest;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -53,11 +54,12 @@ class UserController extends Controller
     /**
      * Store user and get JSON with a user response
      *
-     * @param  Request  $request
+     * @param  NewUserRequest  $request
      * @return JsonResponse
      */
-    public function create(Request $request): JsonResponse
+    public function create(NewUserRequest $request): JsonResponse
     {
+        dd($request);
         $password = $request->input('password');
         $userDTO = UserDTO::fromRequestForCreate($request);
         $newUserDTO = $this->userService->create($userDTO, $password);

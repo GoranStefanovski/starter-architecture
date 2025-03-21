@@ -42,6 +42,7 @@
       >
         <option v-if="hasDefaultOption" value="">Select an Option</option>
         <option
+          v-show="option.id !== 5"
           v-for="option in options"
           :key="option.id"
           :value="option.id"

@@ -23,6 +23,12 @@ class HomeController extends Controller
     {
         $mainMenu = [
             [
+                'label' => 'admin.myprofile',
+                'name' => 'myprofile',
+                'route' => 'myprofile',
+                'permission' => UserPermissions::WRITE_PROFILE,
+            ],
+            [
                 'label' => 'admin.dashboard',
                 'name' => 'item_dashboard',
                 'route' => 'dashboard',

@@ -35,6 +35,7 @@ class LeaveRequestNotification extends Mailable
                     ->view('emails.leave_request_notification')
                     ->with([
                         'leaveRequest' => $this->leaveRequest,
+                        'status' => 'New'
                     ]);
     }
 }

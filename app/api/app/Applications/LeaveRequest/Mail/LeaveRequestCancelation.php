@@ -32,7 +32,7 @@ class LeaveRequestCancelation extends Mailable
         $formattedEndDate = $this->leaveRequest->end_date
             ? \Carbon\Carbon::parse($this->leaveRequest->end_date)->format('d M Y')
             : null;
-        $subject = $this->leaveRequest->user->first_name . ' ' . $this->leaveRequest->user->last_name . ': ' . $this->leaveRequest->leaveType->name .  ': ' . $this->leaveRequest->leaveType->days .  ' days: '  . $formattedStartDate . ($this->leaveRequest->end_date ? ' to ' . $formattedEndDate : '');
+        $subject = $this->leaveRequest->user->first_name . ' ' . $this->leaveRequest->user->last_name . ': ' . $this->leaveRequest->leaveType->name .  ': ' . $this->leaveRequest->days .  ' days: '  . $formattedStartDate . ($this->leaveRequest->end_date ? ' to ' . $formattedEndDate : '');
         $email = $this->subject($subject .' (Canceled)')
                     ->view('emails.leave_request_cancelation')
                     ->with([
