@@ -74,6 +74,7 @@ export const useLeaveRequestsForm = (leaveRequestId?: number) => {
         queryKey: [LEAVE_REQUEST_CACHE_KEY, leaveRequestId],
       });
       toast.success("Leave Request updated!");
+      router.push({ name: "leave_requests" });
       manualLoading.value = false;
     },
     onError: (error) => {

@@ -177,7 +177,9 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
 
         if (isset(self::COLUMNS_MAP[$data['column']])) {
             $query->orderBy(self::COLUMNS_MAP[$data['column']], $data['dir']);
-        }
+        } else {
+            $query->orderBy('leave_requests.created_at', 'desc'); // Default to latest requests first
+        };
         // Search by keyword regardless on user first name last name or email and leave type
         if ($search = $data['search']) {
             $query->where(function ($q) use ($search) {

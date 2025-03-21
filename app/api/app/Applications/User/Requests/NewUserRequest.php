@@ -28,8 +28,7 @@ class NewUserRequest extends ApiFormRequest
             'first_name' => 'required|max:255|min:2',
             'last_name' => 'required|max:255|min:2',
             'email' => 'required|email|min:2|max:255|unique:users,email,'.$this->segment(3),
-            'password' => 'sometimes|between:6,30|confirmed',
-            'roles' => 'required|exists:roles,id',
+            'password' => 'required|between:6,30',
         ];
 
         return $rules;
@@ -47,9 +46,7 @@ class NewUserRequest extends ApiFormRequest
             'email.max' => 'users.email.max',
             'email.min' => 'users.email.min',
             'email.unique' => 'users.email.unique',
-            'roles.required' => 'users.roles.required',
-            'roles.exists' => 'users.roles.exists',
-            'password.required' => 'users.password.required',
+            'password.required' => 'Please add a pasword',
             'password.between' => 'users.password.between',
             'password.confirmed' => 'users.password.confirmed',
         ];
