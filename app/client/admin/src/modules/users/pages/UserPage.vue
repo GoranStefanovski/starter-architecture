@@ -101,6 +101,8 @@
         country: formData.value.country,
         is_office_based: formData.value.is_office_based,
       });
+
+      originalPaidLeavesMax.value = formData.value.paid_leaves_max;
     }
   }, [formData]);
 
