@@ -116,6 +116,7 @@
             v-model:email="email"
             v-model:firstName="firstName"
             v-model:country="country"
+            :isEdit="true"
             :errors="errors"
             :avatar="formData?.avatar_thumbnail"
             @upload-avatar="uploadAvatarHandler"
