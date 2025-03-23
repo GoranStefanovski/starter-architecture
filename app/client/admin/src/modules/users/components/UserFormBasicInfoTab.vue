@@ -28,6 +28,7 @@
     errors: any;
     avatar: string | null;
     paidLeavesLeft: number;
+    isEdit: boolean;
   }>();
   const emit = defineEmits<EmitsType>();
 
@@ -70,8 +71,8 @@
 
   <div class="kt-section">
     <div class="kt-section__body">
-      <h3 class="kt-section__title kt-section__title-lg">Customer Info:</h3>
-      <div class="form-group form-input form-group--inline">
+      <h3 class="kt-section__title kt-section__title-lg">User Info:</h3>
+      <div v-if="isEdit" class="form-group form-input form-group--inline">
         <div
           class="form-group__column form-group__column--left form-group__column--inline"
         >
