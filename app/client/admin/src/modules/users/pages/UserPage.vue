@@ -199,11 +199,12 @@
             :errors="errors"
             :avatar="formData?.avatar_thumbnail"
             :isEdit="isEditPage"
+            :isMyProfile="false"
             @upload-avatar="uploadAvatarHandler"
           />
         </TabbedContentTab>
         <TabbedContentTab :label="'Password'" id="change-password">
-          <UserFormPasswordTab v-model:password="password" />
+          <UserFormPasswordTab v-model:password="password" :isEdit="isEditPage" />
         </TabbedContentTab>
         <TabbedContentTab
           v-if="isEditPage"

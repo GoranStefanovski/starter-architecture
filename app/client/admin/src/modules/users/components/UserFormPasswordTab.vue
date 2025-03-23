@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, computed } from "vue";
+import { ref, computed, defineProps } from "vue";
 import { useI18n } from "vue-i18n";
 import { FormInput } from "@starter-core/dash-ui/src";
 
@@ -7,11 +7,20 @@ const { t } = useI18n();
 const password = defineModel("password", { required: true });
 const confirmPassword = ref(""); // Store confirm password field
 
+const props = defineProps(["isEdit"]);
+
 const passwordError = computed(() => {
   if (confirmPassword.value && confirmPassword.value !== password.value) {
     return 'Passwords do not match!';
   }
   return "";
+});
+
+const passwordLabel = computed(() => {
+  if (props.isEdit) {
+    return 'New Password';
+  }
+  return "Password";
 });
 </script>
 
@@ -25,7 +34,7 @@ const passwordError = computed(() => {
       <form-input
         name="password"
         type="password"
-        :label="t('users.password.label')"
+        :label="passwordLabel"
         v-model="password"
         is-inline
       />

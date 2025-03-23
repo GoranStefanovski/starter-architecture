@@ -117,13 +117,14 @@
             v-model:firstName="firstName"
             v-model:country="country"
             :isEdit="true"
+            :isMyProfile="true"
             :errors="errors"
             :avatar="formData?.avatar_thumbnail"
             @upload-avatar="uploadAvatarHandler"
           />
         </TabbedContentTab>
         <TabbedContentTab v-if="auth.user().role !== 4" :label="'Password'" id="change-password">
-          <UserFormPasswordTab v-model:password="password" />
+          <UserFormPasswordTab v-model:password="password" :isEdit="true"/>
         </TabbedContentTab>
         <TabbedContentTab v-if="auth.user().role !== 4" :label="'Paid Vacation Days'" id="leave-days">
           <UserFormLeaveDaysTab

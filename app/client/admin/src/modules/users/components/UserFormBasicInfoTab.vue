@@ -29,6 +29,7 @@
     avatar: string | null;
     paidLeavesLeft: number;
     isEdit: boolean;
+    isMyProfile: boolean;
   }>();
   const emit = defineEmits<EmitsType>();
 
@@ -42,11 +43,12 @@
       <h3 class="kt-section__title kt-section__title-lg">
         {{ t("users.user_status") }}:
       </h3>
-      <user-roles-dropdown v-model:role="role" />
+      <user-roles-dropdown v-if="!isMyProfile" v-model:role="role" />
 
       <UserCountriesDropdown v-model:country="country" />
 
       <form-switch
+        v-if="!isMyProfile"
         v-model="isDisabled"
         id="enabled"
         theme="danger"
