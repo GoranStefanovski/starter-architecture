@@ -124,15 +124,15 @@
         <TabbedContentTab v-if="auth.user().role !== 4" :label="'Password'" id="change-password">
           <UserFormPasswordTab v-model:password="password" />
         </TabbedContentTab>
-        <TabbedContentTab v-if="auth.user().role !== 4" :label="'Calednar'" id="calendar">
-          <UserFormCalendarTab :userId="id" :country="country" />
-        </TabbedContentTab>
         <TabbedContentTab v-if="auth.user().role !== 4" :label="'Paid Vacation Days'" id="leave-days">
           <UserFormLeaveDaysTab
             v-model:paidLeavesMax="paidLeavesMax"
             :daysLeft="paidLeavesLeft"
             :isMyProfile="true"
           />
+        </TabbedContentTab>
+        <TabbedContentTab v-if="auth.user().role !== 4" :label="'Calednar'" id="calendar">
+          <UserFormCalendarTab :userId="id" :country="country" />
         </TabbedContentTab>
       </TabbedContent>
     </form>

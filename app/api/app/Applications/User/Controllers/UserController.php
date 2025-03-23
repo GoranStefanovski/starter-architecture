@@ -59,7 +59,6 @@ class UserController extends Controller
      */
     public function create(NewUserRequest $request): JsonResponse
     {
-        dd($request);
         $password = $request->input('password');
         $userDTO = UserDTO::fromRequestForCreate($request);
         $newUserDTO = $this->userService->create($userDTO, $password);

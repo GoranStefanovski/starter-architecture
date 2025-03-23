@@ -151,10 +151,10 @@
     const isSelf = userId === currentUserId;
 
     if (isSelf) {
-      return "Are you sure you want to update your own paid leave allowance?";
+      return "Are you sure you want to update your own paid leave days?";
     }
 
-    return `Are you sure you want to update the paid leave allowance for ${firstName.value} ${lastName.value}?`;
+    return `Are you sure you want to update the paid leave days for ${firstName.value} ${lastName.value}?`;
   });
 
 </script>
@@ -198,14 +198,12 @@
             :paidLeavesLeft="paidLeavesLeft"
             :errors="errors"
             :avatar="formData?.avatar_thumbnail"
+            :isEdit="isEditPage"
             @upload-avatar="uploadAvatarHandler"
           />
         </TabbedContentTab>
         <TabbedContentTab :label="'Password'" id="change-password">
           <UserFormPasswordTab v-model:password="password" />
-        </TabbedContentTab>
-        <TabbedContentTab v-if="isEditPage" :label="'Calednar'" id="calendar">
-          <UserFormCalendarTab :userId="id" :country="country" />
         </TabbedContentTab>
         <TabbedContentTab
           v-if="isEditPage"
@@ -216,6 +214,9 @@
             v-model:paidLeavesMax="paidLeavesMax"
             :daysLeft="paidLeavesLeft"
           />
+        </TabbedContentTab>
+        <TabbedContentTab v-if="isEditPage" :label="'Calednar'" id="calendar">
+          <UserFormCalendarTab :userId="id" :country="country" />
         </TabbedContentTab>
         <TabbedContentTab
           v-if="isUserWriter && isEditPage"
