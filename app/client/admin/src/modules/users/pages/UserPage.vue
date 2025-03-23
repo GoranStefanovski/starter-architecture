@@ -22,6 +22,7 @@
   import { useUsersForm } from "../composables";
   import type { UserFormItem } from "../types";
   import { DashButton, DashLink } from "@starter-core/dash-ui/src";
+  import ConfirmDialog from "@/components/ConfirmDialog/ConfirmDialog.vue";
 
   const { t } = useI18n();
   const basicInfoLabeel = t("users.basic.information");
@@ -30,6 +31,9 @@
   const isEditPage = computed(() => route.name == "edit.user");
   const userId = Number(route.params.userId);
   const newFile = ref<File | null>(null);
+  const showConfirmModal = ref(false);
+  const wasPaidLeavesMaxChanged = ref(false);
+  const originalPaidLeavesMax = ref<number | null>(null);
 
   const auth = useAuth();
   const isUserWriter = auth.user().permissions_array.includes("write_users")
@@ -111,6 +115,46 @@
   const [paidLeavesLeft] = defineField("paid_leaves_left");
   const [country] = defineField("country");
   const [isOfficeBased] = defineField("is_office_based");
+
+  watch(formData, () => {
+    if (formData.value) {
+      originalPaidLeavesMax.value = formData.value.paid_leaves_max;
+      setValues({
+        ...formData.value
+      });
+    }
+  });
+
+  watch(paidLeavesMax, (newVal) => {
+    if (originalPaidLeavesMax.value !== null) {
+      wasPaidLeavesMaxChanged.value = newVal !== originalPaidLeavesMax.value;
+    }
+  });
+
+  const confirmAndSubmit = () => {
+    if (wasPaidLeavesMaxChanged.value) {
+      showConfirmModal.value = true;
+    } else {
+      submitHandler();
+    }
+  };
+
+  const proceedSubmit = () => {
+    showConfirmModal.value = false;
+    submitHandler();
+  };
+
+  const confirmMessage = computed(() => {
+    const currentUserId = auth.user().id;
+    const isSelf = userId === currentUserId;
+
+    if (isSelf) {
+      return "Are you sure you want to update your own paid leave allowance?";
+    }
+
+    return `Are you sure you want to update the paid leave allowance for ${firstName.value} ${lastName.value}?`;
+  });
+
 </script>
 
 <template>
@@ -129,7 +173,7 @@
         type="submit"
         :icon="IconSave"
         :loading="isLoading"
-        @click="submitHandler"
+        @click="confirmAndSubmit"
       >
         {{ t("buttons.save") }}
       </DashButton>
@@ -137,7 +181,7 @@
     <form
       autocomplete="off"
       enctype="multipart/form-data"
-      @submit.prevent="submitHandler"
+      @submit.prevent="confirmAndSubmit"
     >
       <TabbedContent :isLoading="isLoading">
         <TabbedContentTab :label="basicInfoLabeel" id="basic-info">
@@ -181,4 +225,10 @@
       </TabbedContent>
     </form>
   </PageWrapper>
+  <ConfirmDialog
+      :show="showConfirmModal"
+      :message="confirmMessage"
+      @confirm="proceedSubmit"
+      @close="showConfirmModal = false"
+    />
 </template>

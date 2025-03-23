@@ -33,8 +33,8 @@
 <template>
   <div class="kt-section">
     <div class="kt-section__body">
-      <h3 class="kt-section__title kt-section__title-lg">Documents:</h3>
-      <ul class="documents_list_wrapper">
+      <h3 class="kt-section__title kt-section__title-lg">Documents({{documents.length}}):</h3>
+      <ul v-if="documents.length >= 1" class="documents_list_wrapper">
         <li
           v-for="document in documents"
           :key="document.id"
@@ -49,6 +49,9 @@
           </a>
         </li>
       </ul>
+      <div v-else>
+        -
+      </div>
     </div>
   </div>
 </template>
