@@ -37,11 +37,12 @@
 
     file.value = newFile;
     reader.readAsDataURL(newFile);
+    emit("change", newFile);
   };
 
   const changeHandler = (e) => {
     var files = e.target.files;
-
+    
     if (!files.length) return;
     createImage(files[0]);
 
@@ -55,7 +56,6 @@
 
   const saveHandler = () => {
     if (file.value) {
-      emit("change", file.value);
       preview.value = null;
       file.value = null;
     }
@@ -83,7 +83,6 @@
     </div>
 
     <label
-      v-if="!preview"
       :class="
         element(
           'upload',
@@ -103,23 +102,6 @@
         @change="changeHandler"
       />
     </label>
-
-    <button
-      v-if="preview"
-      :class="
-        element(
-          'upload',
-          ref({
-            circle: isCircle,
-          }),
-        ).value
-      "
-      type="button"
-      @click.prevent="saveHandler"
-    >
-      <IconSave />
-    </button>
-
     <button
       v-if="preview"
       @click.prevent="deleteHandler"

@@ -139,11 +139,6 @@ class UserService implements UserServiceInterface
         // Check if the current user is trying to update their own avatar
         if ($authenticatedUser->id !== $userId) {
             // If not, check if the user has the 'write_users' permission
-            if (!$authenticatedUser->hasPermissionTo(UserPermissions::WRITE_USERS)) {
-                abort(403, 'You do not have permission to update avatars for other users.');
-            }
-
-            // Find the user by the provided user ID
             return $this->userRepository->get($userId);
         }
 
