@@ -57,6 +57,7 @@
         :helper-text="`User is  ${isDisabled ? 'disabled' : 'enabled'}`"
       />
       <form-switch
+        v-if="!isMyProfile"
         v-model="isOfficeBased"
         id="enabled"
         theme="danger"

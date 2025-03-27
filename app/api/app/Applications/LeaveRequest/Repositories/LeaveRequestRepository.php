@@ -156,7 +156,6 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
         if ($isConfirmed == 2) {
             if (in_array($leaveRequest->leave_type_id, [3, 4])) {
                 $this->createLeaveRequestPDF($leaveRequest->user, $leaveRequest);
-                $this->sendConfirmationAccountentsEmail($leaveRequest);
             }
 
             if ($leaveRequest->user && $leaveRequestData->leave_type_id == 3) {
@@ -167,6 +166,7 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
         }
 
         $this->sendRequestConfirmationEmail($leaveRequest, $isUpdate);
+        $this->sendConfirmationAccountentsEmail($leaveRequest);
         return $leaveRequest;
     }
 
