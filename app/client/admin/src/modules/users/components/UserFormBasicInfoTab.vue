@@ -38,17 +38,16 @@
   };
 </script>
 <template>
-  <div class="kt-section kt-section--first">
+  <div  v-if="!isMyProfile" class="kt-section kt-section--first">
     <div class="kt-section__body">
       <h3 class="kt-section__title kt-section__title-lg">
         {{ t("users.user_status") }}:
       </h3>
-      <user-roles-dropdown v-if="!isMyProfile" v-model:role="role" />
+      <user-roles-dropdown v-model:role="role" />
 
       <UserCountriesDropdown v-model:country="country" />
 
       <form-switch
-        v-if="!isMyProfile"
         v-model="isDisabled"
         id="enabled"
         theme="danger"
@@ -57,7 +56,6 @@
         :helper-text="`User is  ${isDisabled ? 'disabled' : 'enabled'}`"
       />
       <form-switch
-        v-if="!isMyProfile"
         v-model="isOfficeBased"
         id="enabled"
         theme="danger"
@@ -69,6 +67,7 @@
   </div>
 
   <div
+    v-if="!isMyProfile"
     class="kt-separator kt-separator--border-dashed kt-separator--space-lg"
   ></div>
 
