@@ -2,7 +2,7 @@
   import { IconSave, IconArrowleft } from "@starter-core/icons";
   import { useAuth } from "@websanova/vue-auth/src/v3.js";
   import { useForm } from "vee-validate";
-  import { watch, computed } from "vue";
+  import { watch, computed, ref } from "vue";
   import { useI18n } from "vue-i18n";
   import { useRoute } from "vue-router";
   import {
@@ -29,6 +29,7 @@
   const auth = useAuth();
 
   const userId = Number(auth.user().id);
+  const newFile = ref<File | null>(null);
 
   const isUserWriter = auth.user().permissions_array.includes("write_users")
     ? true
@@ -47,10 +48,13 @@
 
   const submitHandler = handleSubmit((values) => {
     updateUser(values);
+    if (newFile.value !== null) {
+      uploadAvatar(newFile.value);
+    }
   });
 
   const uploadAvatarHandler = (file: File) => {
-    uploadAvatar(file);
+    newFile.value = file;
   };
 
   watch(() => {
