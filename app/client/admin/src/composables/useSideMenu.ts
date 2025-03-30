@@ -2,6 +2,11 @@ import {
   IconLayout4blocks,
   IconUser,
   IconArrowright,
+  IconSettings1,
+  IconShielduser,
+  IconClipboardlist,
+  IconLayoutgrid,
+  IconEarth
 } from "@starter-core/icons";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
@@ -24,6 +29,16 @@ const getItemIcon = (link: string) => {
       return IconLayout4blocks;
     case "users":
       return IconUser;
+    case "myprofile":
+      return IconShielduser;
+    case "leave_types":
+      return IconSettings1;
+    case "leave_requests.trigger":
+      return IconClipboardlist;
+    case "vacation_days":
+      return IconLayoutgrid;
+    case "countries":
+      return IconEarth;
     default:
       return IconArrowright;
   }
