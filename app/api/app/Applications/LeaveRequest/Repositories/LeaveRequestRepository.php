@@ -167,6 +167,7 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
 
         $this->sendRequestConfirmationEmail($leaveRequest, $isUpdate);
         $this->sendConfirmationAccountentsEmail($leaveRequest);
+        $this->createRedmineIssueOnConfirm($leaveRequest);
         return $leaveRequest;
     }
 
@@ -396,4 +397,50 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
     
         return max(1, $leaveDays); // ✅ Ensure at least 1 day is counted
     }
+
+    // Add Issue To REDMINE:
+    public function createRedmineIssueOnConfirm($leaveRequest)
+    {
+        $formattedStartDate = \Carbon\Carbon::parse($leaveRequest->start_date)->format('d M Y');
+        $formattedEndDate = $leaveRequest->end_date
+            ? \Carbon\Carbon::parse($leaveRequest->end_date)->format('d M Y')
+            : null;
+            
+        $apiUrl = env('REDMINE_API_URL');
+        $apiKey = env('REDMINE_API_KEY');
+
+        $data = [
+            "issue" => [
+                "project_id" => 'p000-holday',
+                "subject" => $leaveRequest->user->first_name . ' ' . $leaveRequest->user->last_name . ': ' . $leaveRequest->leaveType->name .  ': ' . $leaveRequest->days . ' days: '. $formattedStartDate . ($leaveRequest->end_date ? ' to ' . $formattedEndDate : ''),
+                "status_id" => 5 
+            ]
+        ];
+
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, $apiUrl);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            "Content-Type: application/json",
+            "X-Redmine-API-Key: $apiKey"
+        ]);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+
+        $response = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+        if ($response === false || $httpCode !== 201) {
+            $errorMessage = curl_error($ch);
+            \Log::error("Failed to create Redmine issue. Error: " . $errorMessage . " Response: " . $response);
+            throw new \Exception("Redmine issue creation failed. HTTP Code: $httpCode. Error: $errorMessage");
+        }
+
+        curl_close($ch);
+
+        \Log::info("Redmine issue created successfully. Response: " . $response);
+        return json_decode($response, true);
+    }
+
 }
