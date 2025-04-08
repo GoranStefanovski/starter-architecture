@@ -6,7 +6,10 @@ use Illuminate\Database\Eloquent\Collection;
 use App\Applications\User\Model\User;
 use App\Applications\User\DTO\UserDTO;
 use App\Applications\User\DTO\UserRoleDTO;
+use App\Applications\User\DTO\UserPermissionDTO;
 // use App\Applications\User\Data\UserRole;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 use App\Applications\User\Repositories\UserRepositoryInterface;
 use App\Constants\UserPermissions;
 use Illuminate\Http\Request;
@@ -90,10 +93,20 @@ class UserService implements UserServiceInterface
             $this->userRepository->setPassword($user, $request_array['password']);
     }
 
-    public function getUserRoles(): array
+    public function getUserPermissionsAndRoles(): array
     {
         $rolesCollection = $this->userRepository->getUserRoles();
-        return UserRoleDTO::fromCollection($rolesCollection);
+        $permissionsCollection = $this->userRepository->getUserPermissions();
+
+        return [
+            'roles' => UserRoleDTO::fromCollection($rolesCollection),
+            'permissions' => UserPermissionDTO::fromCollection($permissionsCollection)
+        ];
+    }
+
+    public function getUserRoleByName(string $name): ?Role
+    {
+        return $this->userRepository->findUserRoleByName($name);
     }
 
     /**

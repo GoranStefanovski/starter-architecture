@@ -1,10 +1,11 @@
 <script setup lang="ts">
   import { IconTrash, IconEdit } from "@starter-core/icons";
-  import { useAuth } from "@websanova/vue-auth/src/v3.js";
   import { computed } from "vue";
   import type { GetUserResponse } from "../types";
   import UserRoleBadge from "./UserRoleBadge.vue";
   import UserStatusBadge from "./UserStatusBadge.vue";
+  import { useUserCheck } from "@/modules/users/composables";
+  import { USER_PERMISSIONS } from "@/modules/users/constants";
   import {
     DashButton,
     DashLink,
@@ -17,8 +18,8 @@
     isEvenRow: boolean;
   }
 
+  const { checkUser } = useUserCheck();
   const { user, isEvenRow } = defineProps<UsersTableRowProps>();
-  const auth = useAuth();
 
   const avatarSource = computed(() => {
     if (user.avatar_thumbnail) {
@@ -61,7 +62,7 @@
 
     <TableColumn>
       <dash-link
-        v-if="auth.user().permissions_array.includes('write_users')"
+        v-if="checkUser('permissions', USER_PERMISSIONS.writeUsers)"
         :to="{ name: 'edit.user', params: { userId: user.id } }"
         theme="primary"
         theme-mod="outline-hover"
@@ -73,7 +74,7 @@
 
     <TableColumn>
       <DashButton
-        v-if="auth.user().permissions_array.includes('delete_users')"
+        v-if="checkUser('permissions', USER_PERMISSIONS.deleteUsers)"
         :icon="IconTrash"
         theme="danger"
         size="sm"

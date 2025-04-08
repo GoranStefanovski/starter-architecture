@@ -1,15 +1,10 @@
-import {
-  IconLayout4blocks,
-  IconUser,
-  IconArrowright,
-  IconRoute,
-  IconLibrary,
-} from "@starter-core/icons";
+import { IconArrowright } from "@starter-core/icons";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
-import { useRoute, type RouteLocationNormalizedLoaded } from "vue-router";
-import { useInitialData } from "@/composables";
-import useAuthComp from "@/composables/useAuthComp";
+import { useRoute } from "vue-router";
+import { useInitialData, useAuth } from "@/composables";
+import { SIDEMENU_ICONS_MAP } from "@/constants";
+import { findActiveCategory } from "@/helpers/composables";
 import { NavSubmenuData } from "@/types";
 import type {
   SubMenu,
@@ -20,54 +15,8 @@ import type {
   MenuItems,
 } from "@starter-core/dash-ui/src/components/Menu/types";
 
-const getItemIcon = (link: string) => {
-  switch (link) {
-    case "dashboard":
-      return IconLayout4blocks;
-    case "users.trigger":
-      return IconUser;
-    case "navigations.trigger":
-      return IconRoute;
-    case "navigations.menus":
-      return IconLibrary;
-    default:
-      return IconArrowright;
-  }
-};
-
-function findActiveCategory(
-  categories: NavSubmenuData,
-  routeName: RouteLocationNormalizedLoaded["name"],
-  activePath: string[] = [],
-) {
-  for (const category of categories) {
-    if (category.route === routeName) {
-      activePath.push(category.route);
-      return activePath;
-    }
-
-    if (category.submenu) {
-      const submenuActiveCategories = findActiveCategory(
-        category.submenu,
-        routeName,
-        activePath,
-      );
-      if (submenuActiveCategories.length > 0) {
-        activePath = [
-          category.route,
-          ...activePath,
-          ...submenuActiveCategories,
-        ];
-        return activePath;
-      }
-    }
-  }
-
-  return activePath;
-}
-
 export default function useSideMenu() {
-  const { permissionsArray } = useAuthComp();
+  const { permissionsArray } = useAuth();
   const { t } = useI18n();
   const { data, isLoading } = useInitialData();
   const route = useRoute();
@@ -93,7 +42,7 @@ export default function useSideMenu() {
           name: route,
         },
         isActive: activeRoutes.value.includes(route),
-        icon: getItemIcon(route),
+        icon: SIDEMENU_ICONS_MAP[route] ?? IconArrowright,
       }));
 
     return {
@@ -118,7 +67,7 @@ export default function useSideMenu() {
         route: {
           name: route,
         },
-        icon: getItemIcon(route),
+        icon: SIDEMENU_ICONS_MAP[route] ?? IconArrowright,
         isActive: activeRoutes.value.includes(route),
         submenu: parseSubmenu(submenu),
       };
