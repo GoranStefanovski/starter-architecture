@@ -3,12 +3,13 @@
   import { ref, computed } from "vue";
   import HeaderUserBarListItem from "./HeaderUserBarListItem.vue";
   import { useAuth } from "@/composables";
+  import { USER_ROUTES_DATA } from "@/modules/users/constants";
   import { BadgeComponent } from "@starter-core/dash-ui/src";
   import { useOnClickOutside } from "@starter-core/dash-ui/src/composables";
 
   import "./HeaderUserBar.scss";
 
-  const { logout, user } = useAuth();
+  const { logout, user, avatar } = useAuth();
   const isDropdownVisible = ref(false);
   const dropdownRef = ref();
 
@@ -21,16 +22,8 @@
     }
   });
 
-  const avatarSource = computed(() => {
-    if (user?.value?.avatar_thumbnail) {
-      return user.value.avatar_thumbnail;
-    }
-
-    return null;
-  });
-
   const userFirstLetter = computed(() =>
-    (user?.value?.first_name ?? "A")?.substring(0, 1),
+    (user?.first_name ?? "A")?.substring(0, 1),
   );
 </script>
 <template>
@@ -47,7 +40,7 @@
         <span class="kt-header__topbar-username kt-hidden-mobile">{{
           user.first_name
         }}</span>
-        <img v-if="avatarSource" alt="avatar" :src="avatarSource" />
+        <img v-if="avatar" alt="avatar" :src="avatar" />
         <BadgeComponent v-else font-weight="bold" size="lg">
           {{ userFirstLetter }}
         </BadgeComponent>
@@ -63,7 +56,7 @@
           class="header-user-bar__user-card kt-user-card kt-user-card--skin-dark kt-notification-item-padding-x"
         >
           <div class="kt-user-card__avatar">
-            <img v-if="avatarSource" alt="avatar" :src="avatarSource" />
+            <img v-if="avatar" alt="avatar" :src="avatar" />
             <BadgeComponent v-else font-weight="bold" size="lg">
               {{ userFirstLetter }}
             </BadgeComponent>
@@ -79,7 +72,7 @@
         <div class="kt-notification">
           <HeaderUserBarListItem
             :icon="IconUser"
-            :to="{ name: 'myprofile' }"
+            :to="{ name: USER_ROUTES_DATA.myProfilePersonalInfo.name }"
             title="My Profile"
             subtitle="Account settings and more"
           />

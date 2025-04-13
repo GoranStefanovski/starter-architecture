@@ -4,20 +4,22 @@
   import { watch, computed } from "vue";
   import { useI18n } from "vue-i18n";
   import { useRoute } from "vue-router";
+  import { UserFormPasswordTab, UserFormBasicInfo } from "../components";
+  import { useUsersForm } from "../composables";
+  import type { UserFormItem } from "../types";
   import {
     TabbedContent,
     TabbedContentTab,
     PageWrapper,
     PAGE_WRAPPER_SLOTS,
     SubheaderTitle,
-  } from "../../../components";
-  import { UserFormBasicInfoTab, UserFormPasswordTab } from "../components";
-  import { useUsersForm } from "../composables";
-  import type { UserFormItem } from "../types";
-  import { DashButton, DashLink } from "@starter-core/dash-ui/src";
+    SkSection,
+  } from "@/components";
+  import UserRolesDropdown from "@/modules/users/components/UserRolesDropdown.vue";
+  import { DashButton, DashLink, FormSwitch } from "@starter-core/dash-ui/src";
 
   const { t } = useI18n();
-  const basicInfoLabeel = t("users.basic.information");
+  const personalInformationLabel = t("users.personal-information.label");
   const changePasswordLabel = t("users.password.change");
   const route = useRoute();
   const isEditPage = computed(() => route.name == "edit.user");
@@ -77,7 +79,7 @@
 </script>
 
 <template>
-  <PageWrapper>
+  <PageWrapper size="large" justify-content="center">
     <template #[PAGE_WRAPPER_SLOTS.subheaderMain]>
       <SubheaderTitle
         title="Edit user"
@@ -103,17 +105,28 @@
       @submit.prevent="submitHandler"
     >
       <TabbedContent :isLoading="isLoading">
-        <TabbedContentTab :label="basicInfoLabeel" id="basic-info">
-          <UserFormBasicInfoTab
-            v-model:isDisabled="isDisabled"
-            v-model:role="role"
-            v-model:lastName="lastName"
-            v-model:email="email"
-            v-model:firstName="firstName"
-            :errors="errors"
-            :avatar="formData?.avatar_thumbnail"
-            @upload-avatar="uploadAvatarHandler"
-          />
+        <TabbedContentTab :label="personalInformationLabel" id="basic-info">
+          <SkSection :title="t('users.user_status')">
+            <user-roles-dropdown v-model:role="role" />
+            <form-switch
+              v-model="isDisabled"
+              id="enabled"
+              theme="danger"
+              type="outline"
+              :label="t('users.status.label')"
+              :helper-text="`User is  ${isDisabled ? 'disabled' : 'enabled'}`"
+            />
+          </SkSection>
+          <SkSection title="Customer Info">
+            <UserFormBasicInfo
+              v-model:lastName="lastName"
+              v-model:email="email"
+              v-model:firstName="firstName"
+              :avatar="formData?.avatar_thumbnail"
+              @upload-avatar="uploadAvatarHandler"
+              :errors="errors"
+            />
+          </SkSection>
         </TabbedContentTab>
         <TabbedContentTab :label="changePasswordLabel" id="change-password">
           <UserFormPasswordTab v-model:password="password" />

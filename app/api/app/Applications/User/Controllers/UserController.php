@@ -3,14 +3,14 @@
 namespace App\Applications\User\Controllers;
 
 use App\Applications\User\DTO\UserDTO;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Applications\User\Services\UserServiceInterface;
-// use App\Applications\User\Requests\UserRequest;
-use App\Applications\User\Requests\MyProfile;
+use App\Applications\User\Requests\MyProfileRequest;
+use App\Applications\User\Requests\UpdatePasswordRequest;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -147,18 +147,38 @@ class UserController extends Controller
      */
     public function getMyProfile()
     {
-        return $this->userService->get(Auth::user()->id)->toJson();
+        $userDTO = $this->userService->get(
+            Auth::user()->id
+        );
+        return response()->json($userDTO);
     }
 
     /**
      * Update logged user
      *
-     * @param  MyProfile  $request
-     * @return void
+     * @param MyProfileRequest $request
+     * @return JsonResponse
      */
-    public function updateMyProfile(MyProfile $request)
+    public function updateMyProfile(MyProfileRequest $request): JsonResponse
     {
-        $this->userService->updateMyProfile($request);
+        try {
+            $userDTO = $this->userService->updateMyProfile($request->validated());
+
+            return response()->json($userDTO, 200);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json([
+                'message' => 'User not found.',
+            ], 404);
+        } catch (\Throwable $e) {
+            Log::error('Profile update failed', [
+                'error' => $e->getMessage(),
+                'user_id' => Auth::id(),
+            ]);
+
+            return response()->json([
+                'message' => 'An unexpected error occurred while updating your profile. Please try again later.',
+            ], 500);
+        }
     }
 
     /**
@@ -171,9 +191,11 @@ class UserController extends Controller
     {
         try {
             $userId = Route::current()->parameter('id');
-            $authenticatedUser = Auth::user();
+            $userId = (is_numeric($userId) && (int)$userId > 0)
+                ? (int)$userId
+                : Auth::id();
 
-            $userDTO = $this->userService->uploadAvatar($userId, $request, $authenticatedUser);
+            $userDTO = $this->userService->uploadAvatar($userId, $request, Auth::user());
 
             return response()->json($userDTO, 200);
         } catch (ValidationException $e) {
@@ -190,12 +212,33 @@ class UserController extends Controller
                 'message' => $e->getMessage(),
             ], 403);
         } catch (\Exception $e) {
-            // Log unexpected errors and return a generic error response
-            \Log::error('Error uploading avatar: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Error uploading avatar: ' . $e->getMessage(), ['exception' => $e]);
 
             return response()->json([
                 'message' => 'An error occurred while uploading the avatar. Please try again later.',
             ], 500);
+        }
+    }
+
+    /**
+     * Update password for the currently authenticated user.
+     *
+     * @param UpdatePasswordRequest $request
+     * @return JsonResponse
+     */
+    public function updatePassword(UpdatePasswordRequest $request): JsonResponse
+    {
+        try {
+            $this->userService->updatePassword(Auth::id(), $request->validated());
+
+            return response()->json(['message' => 'Password updated successfully.']);
+        } catch (\Throwable $e) {
+            \Log::error('Password update failed', [
+                'user_id' => Auth::id(),
+                'error' => $e->getMessage(),
+            ]);
+
+            return response()->json(['message' => 'An error occurred while updating the password.'], 500);
         }
     }
 }
