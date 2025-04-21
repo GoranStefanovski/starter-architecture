@@ -1,16 +1,16 @@
 <script setup lang="ts">
-  import { computed } from "vue";
-  import { useUsersTable } from "../composables";
-  import { USERS_DATATABLE_COLUMNS } from "../constants";
-  import UsersTableHeader from "./UsersTableHeader.vue";
-  import UsersTableRow from "./UsersTableRow.vue";
+  import { computed } from 'vue';
+  import { useUsersTable } from '../composables';
+  import { USERS_DATATABLE_COLUMNS } from '../constants';
+  import UsersTableHeader from './UsersTableHeader.vue';
+  import UsersTableRow from './UsersTableRow.vue';
   import {
     useDatatable,
     DatatableComponent,
     DatatableFilters,
     DatatableHeader,
     PaginationComponent,
-  } from "@starter-core/dash-ui/src";
+  } from '@starter-core/dash-ui/src';
 
   const { query, onPaginationChange } = useDatatable();
 
@@ -42,11 +42,7 @@
       />
     </template>
     <template v-if="pagination" #pagination>
-      <PaginationComponent
-        :pagination="pagination"
-        :isLoading="isLoading"
-        @change="onPaginationChange"
-      />
+      <PaginationComponent :pagination="pagination" :isLoading="isLoading" @change="onPaginationChange" />
     </template>
   </DatatableComponent>
 </template>
