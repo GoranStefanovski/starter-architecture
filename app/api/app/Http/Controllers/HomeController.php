@@ -52,32 +52,31 @@ class HomeController extends Controller
                 'route' => 'countries',
                 'permission' => UserPermissions::DELETE_USERS,
             ],
+            // QUICK ACCESS NEW LEAVE REQUEST
             [
-                'label' => 'admin.leave_requests.main',
+                'label' => 'admin.leave_requests.new',
+                'name' => 'item_requests_mine',
+                'route' => 'add.leave_request',
+                'permission' => UserPermissions::READ_REQUESTS,
+            ],
+            [
+                'label' => 'admin.leave_requests.mine',
                 'name' => 'item_requests',
-                'route' => 'leave_requests.trigger',
+                'route' => 'leave_requests',
                 'permission' => UserPermissions::READ_REQUESTS,
-                'submenu' => [
-                    [
-                        'label' => 'admin.leave_requests.mine',
-                        'name' => 'item_requests',
-                        'route' => 'leave_requests',
-                        'permission' => UserPermissions::READ_REQUESTS,
-                    ],
-                    [
-                        'label' => 'admin.leave_requests.all',
-                        'name' => 'item_requests_all',
-                        'route' => 'leave_requests_all',
-                        'permission' => UserPermissions::ALL_REQUESTS,
-                    ],
-                ]
             ],
             [
-                'label' => 'Vacation Days',
-                'name' => 'item_types',
-                'route' => 'vacation_days',
-                'permission' => UserPermissions::READ_REQUESTS,
+                'label' => 'admin.leave_requests.all',
+                'name' => 'item_requests_all',
+                'route' => 'leave_requests_all',
+                'permission' => UserPermissions::ALL_REQUESTS,
             ],
+            // [
+            //     'label' => 'Vacation Days',
+            //     'name' => 'item_types',
+            //     'route' => 'vacation_days',
+            //     'permission' => UserPermissions::READ_REQUESTS,
+            // ],
         ];
 
         $pagesItems = [

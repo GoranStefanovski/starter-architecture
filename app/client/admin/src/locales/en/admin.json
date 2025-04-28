@@ -15,7 +15,8 @@
     "mine": "My Leave Requests",
     "main": "Leave Requests",
     "add": "New Request",
-    "all": "All Leave Requests"
+    "all": "All Leave Requests",
+    "new": "New Leave Request"
   },
   "countries": {
     "main": "Countries",

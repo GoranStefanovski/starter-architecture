@@ -6,7 +6,8 @@ import {
   IconShielduser,
   IconClipboardlist,
   IconLayoutgrid,
-  IconEarth
+  IconEarth,
+  IconPlus
 } from "@starter-core/icons";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
@@ -33,12 +34,14 @@ const getItemIcon = (link: string) => {
       return IconShielduser;
     case "leave_types":
       return IconSettings1;
-    case "leave_requests.trigger":
+    case "leave_requests":
       return IconClipboardlist;
     case "vacation_days":
       return IconLayoutgrid;
     case "countries":
       return IconEarth;
+    case "add.leave_request":
+      return IconPlus;
     default:
       return IconArrowright;
   }
