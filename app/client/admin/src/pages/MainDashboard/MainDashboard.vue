@@ -22,7 +22,7 @@
     AccordionItem,
     DashLink,
   } from "@starter-core/dash-ui/src";
-
+  import LeaveCalendarPage from "@/modules/leaveRequests/pages/LeaveCalendarPage.vue";
   // const categories = ref([]);
   const leaveTypes = ref([]);
   const users = ref([]);
@@ -81,11 +81,10 @@
   };
 </script>
 <template>
-  <PageWrapper>
-    <div class="row">
+  <PageWrapper class="display-dashboard">
+    <div class="row col-4 main_dashboard-data">
       <div
         v-if="auth.user().permissions_array.includes('write_users')"
-        class="col-md-4"
       >
         <PortletComponent isBordered>
           <PortletHead>
@@ -124,7 +123,7 @@
           </PortletBody>
         </PortletComponent>
       </div>
-      <div class="col-md-4 mb-4">
+      <div>
         <PortletComponent isBordered>
           <PortletHead>
             <PortletHeadLabel> Leave Types </PortletHeadLabel>
@@ -134,10 +133,14 @@
               <tr>
                 <th>No.</th>
                 <th>Name</th>
+                <th>Color</th>
               </tr>
               <tr v-for="(type, index) in leaveTypes" :key="index">
                 <td>{{ type.id }}.</td>
                 <td>{{ type.name }}</td>
+                <td><span class="leaveTypes_color">
+                  <div :style="`background-color: ${type.color}; width: 20px; height: 20px;`"></div></span>
+                </td>
               </tr>
             </table>
           </PortletBody>
@@ -145,7 +148,6 @@
       </div>
       <div
         v-if="auth.user().role == 1 || auth.user().role == 4"
-        class="col-md-4"
       >
         <PortletComponent isBordered>
           <PortletHead>
@@ -168,5 +170,17 @@
         </PortletComponent>
       </div>
     </div>
+    <LeaveCalendarPage/>
   </PageWrapper>
 </template>
+<style>
+.display-dashboard > div {
+  display: flex;
+}
+
+.main_dashboard-data {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+</style>

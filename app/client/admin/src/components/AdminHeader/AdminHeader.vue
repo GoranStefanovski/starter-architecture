@@ -35,6 +35,21 @@
         </NavMenu>
       </div>
     </div>
+    <!-- QUICK ACCESS FOR NEW LEAVE REQUEST -->
+    <!-- <div class="new_leave_btn">
+      <router-link to="/admin/leave_request/add">
+        <button type="button" class="btn btn-secondary">
+          + New Leave Request
+        </button>
+      </router-link>
+    </div> -->
     <HeaderTopBar />
   </div>
 </template>
+<style scoped lang="scss">
+.new_leave_btn {
+  display: flex;
+  align-items: center;
+  margin-right: 15px;
+}
+</style>
