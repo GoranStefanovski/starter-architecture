@@ -16,7 +16,7 @@
       case 3:
         return "primary";
       default:
-        return "";
+        return "warning";
     }
   });
 
