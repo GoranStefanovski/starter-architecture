@@ -60,6 +60,7 @@
   });
 
   onMounted(() => {
+    auth.fetch();
     fetchLeaveTypes();
     fetchManagers();
     fetchAdmins();

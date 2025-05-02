@@ -30,6 +30,7 @@
   const { setBackUrl } = useRootStore();
 
   const auth = useAuth();
+  const myUser = auth.user();
 
   const {
     isLoading,
@@ -65,9 +66,9 @@
   });
 
   onMounted(() => {
-    const user = auth.user();
-    if (user && user.id) {
-      userId.value = user.id;
+    auth.fetch();
+    if (myUser && myUser.id) {
+      userId.value = myUser.id;
     }
   });
   const formatDate = (date: string | Date | null): string => {
@@ -141,7 +142,7 @@
             v-model:reason="reason"
             v-model:requestTo="requestTo"
             :errors="errors"
-            :user="auth.user()"
+            :user="myUser"
           />
         </TabbedContentTab>
         <TabbedContentTab
