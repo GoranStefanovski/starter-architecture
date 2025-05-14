@@ -67,7 +67,7 @@
 <template>
   <PageWrapper size="large" justify-content="center">
     <template #[PAGE_WRAPPER_SLOTS.subheaderMain]>
-      <SubheaderTitle title="Edit user" :description="`${firstName} ${lastName}`" />
+      <SubheaderTitle :title="isEditPage ? 'Edit user' : 'Add user'" :description="`${firstName} ${lastName}`" />
     </template>
     <template #[PAGE_WRAPPER_SLOTS.subheaderToolbox]>
       <DashLink to="/admin/users" :icon="IconArrowleft" theme="clean">
@@ -96,6 +96,7 @@
               v-model:lastName="lastName"
               v-model:email="email"
               v-model:firstName="firstName"
+              :isEditPage="isEditPage"
               :avatar="formData?.avatar_thumbnail"
               @upload-avatar="uploadAvatarHandler"
               :errors="errors"

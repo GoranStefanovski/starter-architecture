@@ -12,9 +12,14 @@
   const lastName = defineModel('lastName', { required: true, type: String });
   const firstName = defineModel('firstName', { required: true, type: String });
   const email = defineModel('email', { required: true, type: String });
-  const { errors = {}, avatar } = defineProps<{
+  const {
+    errors = {},
+    avatar,
+    isEditPage,
+  } = defineProps<{
     errors: any;
     avatar: string | null;
+    isEditPage: boolean;
   }>();
   const emit = defineEmits<EmitsType>();
 
@@ -34,6 +39,7 @@
   <form-input v-model="firstName" name="first-name" :label="t('users.first_name.label')" is-inline />
   <form-input v-model="lastName" name="last-name" :label="t('users.last_name.label')" :error="errors.last_name" is-inline />
   <form-input
+    v-if="isEditPage"
     v-model="email"
     name="email"
     :label="t('users.email.label')"
@@ -41,6 +47,11 @@
     is-inline
     readonly
   >
+    <template v-slot:prependContent>
+      <IconMail />
+    </template>
+  </form-input>
+  <form-input v-else v-model="email" name="email" :label="t('users.email.label')" is-inline>
     <template v-slot:prependContent>
       <IconMail />
     </template>

@@ -2,7 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/vue-query';
 import axios from 'axios';
 import { computed } from 'vue';
 import { useToast } from 'vue-toastification';
-import { USER_API_ENDPOINTS } from '../constants';
+import { USER_API_ENDPOINTS, USERS_TABLE_QUERY_KEY } from '../constants';
 import type { UserFormItem, GetUserResponse } from '../types';
 import { useUploadAvatar } from './useUploadAvatar';
 
@@ -54,6 +54,19 @@ export const useUsersForm = (userId?: number) => {
       toast.error(error.message);
     },
   });
+  const { mutate: deleteUser, isPending: isDeleting } = useMutation({
+    mutationFn: async (data: UserFormItem): Promise<GetUserResponse> => {
+      const response = await axios.delete(USER_API_ENDPOINTS.delete(userId ?? 0));
+      return response.data;
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: [USERS_TABLE_QUERY_KEY] });
+      toast.success('User deleted!');
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
 
   const data = computed(() => queryData.value);
 
@@ -62,6 +75,7 @@ export const useUsersForm = (userId?: number) => {
     createUser,
     updateUser,
     uploadAvatar,
-    isLoading: isFetching || isUpdating || isCreating || isUploadingAvatar,
+    deleteUser,
+    isLoading: isFetching || isUpdating || isCreating || isUploadingAvatar || isDeleting,
   };
 };

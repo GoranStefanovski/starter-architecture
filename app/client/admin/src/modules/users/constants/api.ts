@@ -1,7 +1,9 @@
 export const USER_API_ENDPOINTS = {
   get: (userId: number) => `/user/${userId}`,
+  getAll: 'user/all',
   create: '/user/create',
   patch: (userId: number) => `/user/${userId}`,
+  delete: (userId: number) => `/user/${userId}`,
   uploadAvatar: (userId: number) => `/user/avatar/${userId}`,
   table: 'user/draw',
   myProfileGet: 'me/profile',

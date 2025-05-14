@@ -1,12 +1,13 @@
 <script setup lang="ts">
   import { IconTrash, IconEdit } from '@starter-core/icons';
-  import { computed } from 'vue';
+  import { computed, ref } from 'vue';
+  import { useUsersForm, useUserCheck } from '../composables';
   import type { GetUserResponse } from '../types';
   import UserRoleBadge from './UserRoleBadge.vue';
   import UserStatusBadge from './UserStatusBadge.vue';
-  import { useUserCheck } from '@/modules/users/composables';
   import { USER_PERMISSIONS } from '@/modules/users/constants';
-  import { DashButton, DashLink, TableColumn, TableRow } from '@starter-core/dash-ui/src';
+
+  import { DashButton, DashLink, ModalComponent, TableColumn, TableRow } from '@starter-core/dash-ui/src';
 
   interface UsersTableRowProps {
     user: GetUserResponse;
@@ -15,6 +16,7 @@
 
   const { checkUser } = useUserCheck();
   const { user, isEvenRow } = defineProps<UsersTableRowProps>();
+  const { deleteUser } = useUsersForm(user.id);
 
   const avatarSource = computed(() => {
     if (user.avatar_thumbnail) {
@@ -22,6 +24,15 @@
     }
     return new URL(`@/../assets/images/placeholders/avatar-placeholder.jpg`, import.meta.url).href;
   });
+  const deleteModalRef = ref<InstanceType<typeof ModalComponent> | null>(null);
+
+  const onDeleteClick = () => {
+    deleteModalRef.value?.show();
+  };
+
+  const confirmDelete = () => {
+    deleteUser(user.id);
+  };
 </script>
 
 <template>
@@ -70,10 +81,23 @@
         :icon="IconTrash"
         theme="danger"
         size="sm"
-        onclick="deleteUser(user, user.id)"
+        @click="onDeleteClick"
         is-pill
         is-icon
       />
     </TableColumn>
+    <ModalComponent
+      ref="deleteModalRef"
+      :title="`Delete ${user.first_name} ${user.last_name}`"
+      confirm-text="Delete"
+      cancel-text="Cancel"
+      show-cancel
+      @confirm="confirmDelete"
+      @cancel="() => {}"
+    >
+      <template #default>
+        <p>Are you sure you want to delete this user?</p>
+      </template>
+    </ModalComponent>
   </TableRow>
 </template>
