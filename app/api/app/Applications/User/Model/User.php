@@ -119,4 +119,9 @@ class User extends Authenticatable implements HasMedia
         // Return the URL of the first media item in the 'avatars' collection
         return $this->getFirstMediaUrl('avatars', 'thumb') ?: null;
     }
+
+    public function venues(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Venue::class, 'owner_id');
+    }
 }
