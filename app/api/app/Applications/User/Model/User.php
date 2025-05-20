@@ -21,8 +21,8 @@ class User extends Authenticatable implements HasMedia
     use InteractsWithMedia;
 
     const ADMIN = 'admin';
-    const EDITOR = 'editor';
     const COLLABORATOR = 'collaborator';
+    const ORGANIZATION = 'organization';
 
     /**
      * The attributes that are mass assignable.

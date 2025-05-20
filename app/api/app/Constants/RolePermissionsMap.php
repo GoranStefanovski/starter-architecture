@@ -12,17 +12,19 @@ class RolePermissionsMap
             UserPermissions::READ_USERS,
             UserPermissions::WRITE_USERS,
             UserPermissions::DELETE_USERS,
-            UserPermissions::READ_NAVIGATION,
-            UserPermissions::WRITE_NAVIGATION,
-            UserPermissions::DELETE_NAVIGATION,
+            UserPermissions::READ_VENUES,
+            UserPermissions::WRITE_VENUES,
+            UserPermissions::DELETE_VENUES,
         ],
-        UserRoles::EDITOR => [
+        UserRoles::COLLABORATOR => [
+            UserPermissions::READ_VENUES,
+            UserPermissions::WRITE_VENUES,
+            UserPermissions::DELETE_VENUES,
+        ],
+        UserRoles::ORGANIZATION => [
             UserPermissions::READ_USERS,
             UserPermissions::READ_NAVIGATION,
             UserPermissions::WRITE_NAVIGATION,
-        ],
-        UserRoles::COLLABORATOR => [
-            UserPermissions::READ_NAVIGATION,
         ],
     ];
 }

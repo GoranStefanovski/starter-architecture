@@ -15,7 +15,7 @@ use Faker\Factory as Faker;
 
 class DatabaseSeeder extends Seeder
 {
-    const NUMBER_OF_FAKE_USERS = 100;
+    const NUMBER_OF_FAKE_USERS = 10;
     const STATIC_USERS = [
         [
             "email" => "admin@example.com",
@@ -24,10 +24,10 @@ class DatabaseSeeder extends Seeder
             "permissions" => RolePermissionsMap::MAP[UserRoles::ADMIN]
         ],
         [
-            "email" => "editor@example.com",
-            "name" => "Editor",
-            "role" => UserRoles::EDITOR,
-            "permissions" => RolePermissionsMap::MAP[UserRoles::EDITOR]
+            "email" => "organization@example.com",
+            "name" => "Organization",
+            "role" => UserRoles::ORGANIZATION,
+            "permissions" => RolePermissionsMap::MAP[UserRoles::ORGANIZATION]
         ],
         [
             "email" => "collaborator@example.com",
