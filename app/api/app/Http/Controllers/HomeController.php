@@ -26,7 +26,7 @@ class HomeController extends Controller
                 'label' => 'admin.dashboard',
                 'name' => 'item_dashboard',
                 'route' => 'dashboard',
-                'permission' => UserPermissions::READ_USERS,
+                'permission' => UserPermissions::DASHBOARD_VIEW,
             ],
             [
                 'label' => 'admin.users.main',

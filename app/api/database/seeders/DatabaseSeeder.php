@@ -35,6 +35,12 @@ class DatabaseSeeder extends Seeder
             "role" => UserRoles::COLLABORATOR,
             "permissions" => RolePermissionsMap::MAP[UserRoles::COLLABORATOR]
         ],
+        [
+            "email" => "public@example.com",
+            "name" => "Public",
+            "role" => UserRoles::PUBLIC,
+            "permissions" => RolePermissionsMap::MAP[UserRoles::PUBLIC]
+        ],
     ];
 
     /**
