@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed } from 'vue';
   import { useUsersTable } from '../composables';
-  import { USERS_DATATABLE_COLUMNS } from '../constants';
+  import { VENUES_DATATABLE_COLUMNS } from '../constants';
   import VenuesTableHeader from './VenuesTableHeader.vue';
   import VenuesTableRow from './VenuesTableRow.vue';
   import {
@@ -23,7 +23,7 @@
   <DatatableComponent
     :query="query"
     :isLoading="isLoading || isFetching"
-    :columns="USERS_DATATABLE_COLUMNS"
+    :columns="VENUES_DATATABLE_COLUMNS"
     :error="error?.message"
   >
     <template #header>
@@ -36,7 +36,7 @@
       <VenuesTableRow
         v-for="(venue, index) in venues"
         :key="venue.id"
-        :columns="USERS_DATATABLE_COLUMNS"
+        :columns="VENUES_DATATABLE_COLUMNS"
         :user="venue"
         :is-even-row="index % 2 === 0"
       />

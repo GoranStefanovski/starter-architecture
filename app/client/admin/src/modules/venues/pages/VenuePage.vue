@@ -5,7 +5,7 @@
   import { useI18n } from 'vue-i18n';
   import { useRoute } from 'vue-router';
   import { VenueFormBasicInfo } from '../components';
-  import { useUsersForm } from '../composables';
+  import { useVenuesForm } from '../composables';
   import type { UserFormItem } from '../types';
   import { TabbedContent, TabbedContentTab, PageWrapper, PAGE_WRAPPER_SLOTS, SubheaderTitle, SkSection } from '@/components';
   import { DashButton, DashLink } from '@starter-core/dash-ui/src';
@@ -13,8 +13,8 @@
   const { t } = useI18n();
   const personalInformationLabel = t('users.personal-information.label');
   const route = useRoute();
-  const isEditPage = computed(() => route.name == 'edit.user');
-  const userId = Number(route.params.userId);
+  const isEditPage = computed(() => route.name == 'edit.venue');
+  const venueId = Number(route.params.venueId);
 
   const validationSchema = {
     name(value: string) {
@@ -23,7 +23,7 @@
     },
   };
 
-  const { isLoading, data: formData, createUser, updateUser } = useUsersForm(userId);
+  const { isLoading, data: formData, createVenue, updateVenue } = useVenuesForm(venueId);
 
   const { handleSubmit, errors, setValues, defineField } = useForm<UserFormItem>({
     validationSchema,
@@ -31,9 +31,9 @@
 
   const submitHandler = handleSubmit((values) => {
     if (isEditPage.value) {
-      updateUser(values);
+      updateVenue(values);
     } else {
-      createUser(values);
+      createVenue(values);
     }
   });
 

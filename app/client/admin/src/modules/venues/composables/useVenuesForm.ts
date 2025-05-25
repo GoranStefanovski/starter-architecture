@@ -3,33 +3,33 @@ import axios from 'axios';
 import { computed } from 'vue';
 import { useToast } from 'vue-toastification';
 import { USER_API_ENDPOINTS } from '../constants';
-import type { UserFormItem, GetUserResponse } from '../types';
+import type { UserFormItem, GetVenueResponse } from '../types';
 import { useUploadAvatar } from './useUploadAvatar';
 
 const USER_CACHE_KEY = 'user';
 
-export const useUsersForm = (userId?: number) => {
+export const useVenuesForm = (venueId?: number) => {
   const queryClient = useQueryClient();
   const toast = useToast();
   const { uploadAvatar, isLoading: isUploadingAvatar } = useUploadAvatar({
-    userId,
+    venueId,
     onSuccess: async () => {
-      queryClient.invalidateQueries({ queryKey: [USER_CACHE_KEY, userId] });
+      queryClient.invalidateQueries({ queryKey: [USER_CACHE_KEY, venueId] });
       toast.success('Image has been updated!');
     },
   });
 
   const { isLoading: isFetching, data: queryData } = useQuery({
-    queryKey: [USER_CACHE_KEY, userId],
-    queryFn: async (): Promise<GetUserResponse> => {
-      const data = await axios.get(USER_API_ENDPOINTS.get(userId ?? 0));
+    queryKey: [USER_CACHE_KEY, venueId],
+    queryFn: async (): Promise<GetVenueResponse> => {
+      const data = await axios.get(USER_API_ENDPOINTS.get(venueId ?? 0));
       return data.data;
     },
-    enabled: !!userId,
+    enabled: !!venueId,
   });
 
-  const { mutate: createUser, isPending: isCreating } = useMutation({
-    mutationFn: async (newUserData: UserFormItem): Promise<GetUserResponse> => {
+  const { mutate: createVenue, isPending: isCreating } = useMutation({
+    mutationFn: async (newUserData: UserFormItem): Promise<GetVenueResponse> => {
       const data = await axios.post(USER_API_ENDPOINTS.create, newUserData);
       return data.data;
     },
@@ -41,13 +41,13 @@ export const useUsersForm = (userId?: number) => {
     },
   });
 
-  const { mutate: updateUser, isPending: isUpdating } = useMutation({
-    mutationFn: async (data: UserFormItem): Promise<GetUserResponse> => {
-      const response = await axios.patch(USER_API_ENDPOINTS.patch(userId ?? 0), data);
+  const { mutate: updateVenue, isPending: isUpdating } = useMutation({
+    mutationFn: async (data: UserFormItem): Promise<GetVenueResponse> => {
+      const response = await axios.patch(USER_API_ENDPOINTS.patch(venueId ?? 0), data);
       return response.data;
     },
     onSuccess: async () => {
-      queryClient.invalidateQueries({ queryKey: [USER_CACHE_KEY, userId] });
+      queryClient.invalidateQueries({ queryKey: [USER_CACHE_KEY, venueId] });
       toast.success('User updated!');
     },
     onError: (error) => {
@@ -59,8 +59,8 @@ export const useUsersForm = (userId?: number) => {
 
   return {
     data,
-    createUser,
-    updateUser,
+    createVenue,
+    updateVenue,
     uploadAvatar,
     isLoading: isFetching || isUpdating || isCreating || isUploadingAvatar,
   };

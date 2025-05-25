@@ -30,6 +30,6 @@
       <user-form-avatar :src="avatar" @change="uploadAvatar" is-circle is-outline />
     </div> -->
   </div>
-  <form-input v-model="name" name="first-name" :label="t('users.first_name.label')" is-inline />
-  <form-input v-model="address" name="last-name" :label="t('users.last_name.label')" is-inline />
+  <form-input v-model="name" name="name" :label="t('venues.name.label')" is-inline />
+  <form-input v-model="address" name="address" :label="t('venues.address.label')" is-inline />
 </template>

@@ -1,27 +1,27 @@
 import type { DatatableColumns } from '@starter-core/dash-ui/src';
 
-export const USERS_DATATABLE_COLUMNS: DatatableColumns = [
+export const VENUES_DATATABLE_COLUMNS: DatatableColumns = [
   {
     id: 0,
-    label: 'users.datatable.avatar',
+    label: 'venues.datatable.avatar',
     name: 'avatar',
     sortable: false,
   },
   {
     id: 1,
-    label: 'users.datatable.name',
+    label: 'venues.datatable.name',
     name: 'name',
     sortable: true,
   },
   {
     id: 2,
-    label: 'users.datatable.address',
+    label: 'venues.datatable.address',
     name: 'address',
     sortable: true,
   },
   {
     id: 3,
-    label: 'users.datatable.status',
+    label: 'venues.datatable.status',
     name: 'status',
   },
   {

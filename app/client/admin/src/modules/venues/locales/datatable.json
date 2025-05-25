@@ -1,10 +1,9 @@
 {
   "datatable": {
-    "first_name": "First name",
-    "last_name": "Last name",
-    "email": "Email",
+    "name": "Name",
+    "address": "Address",
     "user_role": "User role",
     "status": "Status",
-    "avatar": "Avatar"
+    "avatar": "Logo"
   }
 }

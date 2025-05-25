@@ -1,6 +1,6 @@
 import type { PaginationObject } from '@starter-core/dash-ui/src/components';
 
-export interface GetUserResponse {
+export interface GetVenueResponse {
   name: string;
   address: string;
   id: number;
@@ -9,9 +9,9 @@ export interface GetUserResponse {
   updated_at: string;
 }
 
-export interface UsersTableResponse {
-  data: GetUserResponse[];
+export interface VenuesTableResponse {
+  data: GetVenueResponse[];
   pagination: PaginationObject;
 }
 
-export type AuthUser = Omit<GetUserResponse, 'updated_at'>;
+export type AuthUser = Omit<GetVenueResponse, 'updated_at'>;

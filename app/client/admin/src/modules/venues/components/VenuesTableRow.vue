@@ -1,14 +1,14 @@
 <script setup lang="ts">
   import { IconTrash, IconEdit } from '@starter-core/icons';
   import { computed } from 'vue';
-  import type { GetUserResponse } from '../types';
+  import type { GetVenueResponse } from '../types';
   import VenueStatusBadge from './VenueStatusBadge.vue';
   import { useUserCheck } from '@/modules/users/composables';
-  import { USER_PERMISSIONS } from '@/modules/users/constants';
+  import { USER_PERMISSIONS } from '@/modules/venues/constants';
   import { DashButton, DashLink, TableColumn, TableRow } from '@starter-core/dash-ui/src';
 
   interface VenuesTableRowProps {
-    user: GetUserResponse;
+    user: GetVenueResponse;
     isEvenRow: boolean;
   }
 
@@ -45,8 +45,8 @@
 
     <TableColumn>
       <dash-link
-        v-if="checkUser('permissions', USER_PERMISSIONS.writeUsers)"
-        :to="{ name: 'edit.user', params: { userId: user.id } }"
+        v-if="checkUser('permissions', USER_PERMISSIONS.writeVenues)"
+        :to="{ name: 'edit.venue', params: { venueId: user.id } }"
         theme="primary"
         theme-mod="outline-hover"
         :icon="IconEdit"
@@ -57,7 +57,7 @@
 
     <TableColumn>
       <DashButton
-        v-if="checkUser('permissions', USER_PERMISSIONS.deleteUsers)"
+        v-if="checkUser('permissions', USER_PERMISSIONS.deleteVenues)"
         :icon="IconTrash"
         theme="danger"
         size="sm"
