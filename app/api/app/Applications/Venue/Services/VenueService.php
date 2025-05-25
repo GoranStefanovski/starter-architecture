@@ -50,9 +50,9 @@ class VenueService implements VenueServiceInterface
 
     public function draw(array $data): array
     {
-        $data['columns'] = ['venues.first_name', 'venues.last_name', 'email', 'roles.id', 'venues.is_disabled'];
+        $data['columns'] = ['venues.name', 'venues.address'];
         $data['length'] = $data['length'] ?? 10;
-        $data['column'] = $data['column'] ?? 'venues.first_name';
+        $data['column'] = $data['column'] ?? 'venues.name';
         $data['dir'] = $data['dir'] ?? 'asc';
         $data['search'] = $data['search'] ?? '';
         $data['draw'] = $data['draw'] ?? 1;

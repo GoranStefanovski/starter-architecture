@@ -23,9 +23,8 @@ class VenueRepository implements VenueRepositoryInterface
     }
 
     private const COLUMNS_MAP = [
-        'first_name' => 'venues.first_name',
-        'last_name' => 'venues.last_name',
-        'email' => 'venues.email',
+        'name' => 'venues.name',
+        'address' => 'venues.address',
         'status' => 'venues.is_disabled'
     ];
 
@@ -78,10 +77,8 @@ class VenueRepository implements VenueRepositoryInterface
         $search = $data['search'];
         if ($search) {
             $query->where(function ($subquery) use ($search) {
-                $subquery->where('venues.first_name', 'like', '%' . $search . '%');
-                $subquery->orWhere('venues.last_name', 'like', '%' . $search . '%');
-                $subquery->orWhere('venues.email', 'like', '%' . $search . '%');
-                $subquery->orWhere('roles.name', 'like', '%' . $search . '%');
+                $subquery->where('venues.name', 'like', '%' . $search . '%');
+                $subquery->orWhere('venues.address', 'like', '%' . $search . '%');
             });
         }
 
