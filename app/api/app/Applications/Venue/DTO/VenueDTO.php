@@ -37,7 +37,7 @@ class VenueDTO
             $request->input('name'),
             $request->input('address'),
             $request->input('owner_id'),
-            $request->input('venue_type_id'),
+            $request->input('venue_type_id', 1),
             $request->input('id', 0),
         );
     }

@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { onMounted } from 'vue';
-  import { UsersDatatable } from '../components';
+  import { VenuesDatatable } from '../components';
   import { PageWrapper } from '@/components';
   import { useRootStore } from '@/store/root';
 
@@ -18,6 +18,6 @@
 </script>
 <template>
   <PageWrapper>
-    <UsersDatatable />
+    <VenuesDatatable />
   </PageWrapper>
 </template>

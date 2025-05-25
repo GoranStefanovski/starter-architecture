@@ -4,7 +4,7 @@
   import { watch, computed } from 'vue';
   import { useI18n } from 'vue-i18n';
   import { useRoute } from 'vue-router';
-  import { UserFormBasicInfo } from '../components';
+  import { VenueFormBasicInfo } from '../components';
   import { useUsersForm } from '../composables';
   import type { UserFormItem } from '../types';
   import { TabbedContent, TabbedContentTab, PageWrapper, PAGE_WRAPPER_SLOTS, SubheaderTitle, SkSection } from '@/components';
@@ -43,12 +43,14 @@
         id: formData.value.id,
         name: formData.value.name,
         address: formData.value.address,
+        venue_type_id: formData.value.venue_type_id,
       });
     }
   }, [formData]);
 
   const [name] = defineField('name');
   const [address] = defineField('address');
+  const [venueTypeId] = defineField('venue_type_id');
 </script>
 
 <template>
@@ -68,7 +70,12 @@
       <TabbedContent :isLoading="isLoading">
         <TabbedContentTab :label="personalInformationLabel" id="basic-info">
           <SkSection title="Customer Info">
-            <UserFormBasicInfo v-model:name="name" v-model:address="address" :errors="errors" />
+            <VenueFormBasicInfo
+              v-model:name="name"
+              v-model:address="address"
+              v-model:venue_type_id="venueTypeId"
+              :errors="errors"
+            />
           </SkSection>
         </TabbedContentTab>
       </TabbedContent>

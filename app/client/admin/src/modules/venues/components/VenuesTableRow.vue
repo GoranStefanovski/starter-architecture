@@ -2,19 +2,18 @@
   import { IconTrash, IconEdit } from '@starter-core/icons';
   import { computed } from 'vue';
   import type { GetUserResponse } from '../types';
-  import UserRoleBadge from './UserRoleBadge.vue';
-  import UserStatusBadge from './UserStatusBadge.vue';
+  import VenueStatusBadge from './VenueStatusBadge.vue';
   import { useUserCheck } from '@/modules/users/composables';
   import { USER_PERMISSIONS } from '@/modules/users/constants';
   import { DashButton, DashLink, TableColumn, TableRow } from '@starter-core/dash-ui/src';
 
-  interface UsersTableRowProps {
+  interface VenuesTableRowProps {
     user: GetUserResponse;
     isEvenRow: boolean;
   }
 
   const { checkUser } = useUserCheck();
-  const { user, isEvenRow } = defineProps<UsersTableRowProps>();
+  const { user, isEvenRow } = defineProps<VenuesTableRowProps>();
 
   const avatarSource = computed(() => {
     if (user.avatar_thumbnail) {
@@ -33,23 +32,15 @@
     </TableColumn>
 
     <TableColumn>
-      {{ user.first_name }}
+      {{ user.name }}
     </TableColumn>
 
     <TableColumn>
-      {{ user.last_name }}
+      {{ user.address }}
     </TableColumn>
 
     <TableColumn>
-      {{ user.email }}
-    </TableColumn>
-
-    <TableColumn>
-      <UserRoleBadge :user-role-id="user.role" />
-    </TableColumn>
-
-    <TableColumn>
-      <UserStatusBadge :is-disabled="user.is_disabled" />
+      <VenueStatusBadge :is-disabled="user.is_disabled" />
     </TableColumn>
 
     <TableColumn>

@@ -15,8 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->text('address')->nullable();
-            $table->integer('venue_type')->nullable();
+            $table->integer('venue_type_id')->nullable();
             $table->unsignedBigInteger('owner_id');
+            $table->softDeletes();
             $table->timestamps();
 
             $table->foreign('owner_id')->references('id')->on('users')->onDelete('cascade');

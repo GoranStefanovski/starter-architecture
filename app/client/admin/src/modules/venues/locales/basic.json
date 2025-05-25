@@ -9,11 +9,11 @@
     "label": "Roles"
   },
   "avatar": "Avatar",
-  "last_name": {
-    "label": "Last name"
+  "address": {
+    "label": "Address"
   },
-  "first_name": {
-    "label": "First name"
+  "name": {
+    "label": "Name"
   },
   "email": {
     "label": "Email"

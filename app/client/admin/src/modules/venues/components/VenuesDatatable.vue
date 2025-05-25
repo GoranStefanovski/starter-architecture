@@ -2,8 +2,8 @@
   import { computed } from 'vue';
   import { useUsersTable } from '../composables';
   import { USERS_DATATABLE_COLUMNS } from '../constants';
-  import UsersTableHeader from './UsersTableHeader.vue';
-  import UsersTableRow from './UsersTableRow.vue';
+  import VenuesTableHeader from './VenuesTableHeader.vue';
+  import VenuesTableRow from './VenuesTableRow.vue';
   import {
     useDatatable,
     DatatableComponent,
@@ -28,12 +28,12 @@
   >
     <template #header>
       <DatatableHeader title="Venues" subtitle="List of venues">
-        <UsersTableHeader />
+        <VenuesTableHeader />
       </DatatableHeader>
       <DatatableFilters />
     </template>
     <template v-if="venues" #default>
-      <UsersTableRow
+      <VenuesTableRow
         v-for="(venue, index) in venues"
         :key="venue.id"
         :columns="USERS_DATATABLE_COLUMNS"
