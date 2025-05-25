@@ -45,6 +45,7 @@ class VenueController extends Controller
      */
     public function get(int $id): JsonResponse
     {
+        dd('asdasdasdas');
         $venueDTO = $this->venueService->get($id);
         return response()->json($venueDTO);
     }

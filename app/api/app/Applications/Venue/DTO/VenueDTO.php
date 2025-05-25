@@ -7,95 +7,60 @@ use Illuminate\Http\Request;
 
 class VenueDTO
 {
-    public string $first_name;
-    public string $last_name;
-    public string $email;
-    public ?string $avatar_url;
-    public ?string $avatar_thumbnail;
-    public int $role;
+    public string $name;
+    public string $address;
+    public int $owner_id;
+    public int $venue_type_id;
     public int $id;
-    public bool $is_disabled;
-    public array $permissions_array;
 
     private ?Venue $model = null;
 
     public function __construct(
-        string $first_name,
-        string $last_name,
-        string $email,
-        ?string $avatar_url,
-        ?string $avatar_thumbnail,
-        int $role,
+        string $name,
+        string $address,
+        int $owner_id,
+        int $venue_type_id,
         int $id = 0,
-        bool $is_disabled = false,
-        array $permissions_array = [],
         ?Venue $model = null
     ) {
-        $this->first_name = $first_name;
-        $this->last_name = $last_name;
-        $this->email = $email;
-        $this->avatar_url = $avatar_url;
-        $this->avatar_thumbnail = $avatar_thumbnail;
-        $this->role = $role;
+        $this->name = $name;
+        $this->address = $address;
+        $this->owner_id = $owner_id;
+        $this->venue_type_id = $venue_type_id;
         $this->id = $id;
-        $this->is_disabled = $is_disabled;
-        $this->permissions_array = $permissions_array;
         $this->model = $model;
     }
 
     public static function fromRequest(Request $request): self
     {
         return new self(
-            $request->input('first_name'),
-            $request->input('last_name'),
-            $request->input('email'),
-            null,
-            null,
-            $request->input('role'),
+            $request->input('name'),
+            $request->input('address'),
+            $request->input('owner_id'),
+            $request->input('venue_type_id'),
             $request->input('id', 0),
-            (bool) $request->input('is_disabled', false),
-            $request->input('permissions_array', [])
         );
-    }
-
-    public static function fromMyProfileRequest(Venue $user, array $data): self
-    {
-        $dto = self::fromModel($user);
-
-        $dto->first_name = $data['first_name'];
-        $dto->last_name = $data['last_name'];
-
-        return $dto;
     }
 
     public static function fromRequestForCreate(Request $request): self
     {
         return new self(
-            $request->input('first_name'),
-            $request->input('last_name'),
-            $request->input('email'),
-            null,
-            null,
-            $request->input('role'),
-            id: 0,
-            is_disabled: false,
-            permissions_array: $request->input('permissions_array', [])
+            $request->input('name'),
+            $request->input('address'),
+            1,
+            1,
         );
     }
 
-    public static function fromModel(Venue $user): self
+    public static function fromModel(Venue $venue): self
     {
         return new self(
-            $user->first_name,
-            $user->last_name,
-            $user->email,
-            $user->avatar_url,
-            $user->avatar_thumbnail,
-            $user->role,
-            $user->id,
-            (bool) $user->is_disabled,
-            $user->permissions_array,
-            $user
+            $venue->name,
+            $venue->address,
+            $venue->owner_id,
+            $venue->venue_type_id,
+            $venue->id,
+            $venue
         );
     }
 
@@ -108,30 +73,26 @@ class VenueDTO
         return $this->model;
     }
 
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'address' => $this->address,
+            'owner_id' => $this->owner_id,
+            'venue_type_id' => $this->venue_type_id,
+        ];
+    }
+
     public function jsonSerialize(): array
     {
         return $this->toArray();
     }
 
-    public function toArray(): array
+    public static function fromCollection(iterable $venues): array
     {
-        return [
-            'first_name' => $this->first_name,
-            'last_name' => $this->last_name,
-            'email' => $this->email,
-            'avatar_url' => $this->avatar_url,
-            'avatar_thumbnail' => $this->avatar_thumbnail,
-            'role' => $this->role,
-            'id' => $this->id,
-            'is_disabled' => $this->is_disabled,
-            'permissions_array' => $this->permissions_array,
-        ];
-    }
-
-    public static function fromCollection(iterable $users): array
-    {
-        return array_map(function (Venue $user) {
-            return self::fromModel($user);
-        }, $users->all());
+        return array_map(function (Venue $venue) {
+            return self::fromModel($venue);
+        }, $venues->all());
     }
 }

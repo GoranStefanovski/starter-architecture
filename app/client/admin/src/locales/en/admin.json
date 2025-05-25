@@ -4,6 +4,12 @@
     "main": "Users",
     "admin": "Admin Users",
     "public": "Public Users",
-    "add": "Add user"
+    "add": "Add User"
+  },
+  "venues": {
+    "main": "Venues",
+    "admin": "Admin Venues",
+    "public": "Public Venues",
+    "add": "Add Venue"
   }
 }

@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
-use App\Applications\User\Controllers\UserController;
+use App\Applications\Venue\Controllers\VenueController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,32 +18,18 @@ Route::group([
     'middleware' => 'auth:sanctum'
 ], function () {
     Route::group([
-        'prefix' => 'user',
+        'prefix' => 'venue',
     ], function () {
-        Route::get('all', [UserController::class, 'getAll']);
-        Route::get('draw', [UserController::class, 'draw']);
-        Route::get('permissions-roles', [UserController::class, 'getUserPermissionsRoles']);
+        Route::get('all', [VenueController::class, 'getAll']);
+        Route::get('draw', [VenueController::class, 'draw']);
 
         // CRUD ROUTES
-        Route::post('create', [UserController::class, 'create']);
-        Route::get('{id}', [UserController::class, 'get']);
-        Route::patch('{id}', [UserController::class, 'update']);
-        Route::delete('{id}', [UserController::class, 'delete']);
+        Route::post('create', [VenueController::class, 'create']);
+        Route::get('{id}', [VenueController::class, 'get']);
+        Route::patch('{id}', [VenueController::class, 'update']);
+        Route::delete('{id}', [VenueController::class, 'delete']);
 
         // User avatars
-        Route::post('avatar/{id}', [UserController::class, 'uploadAvatar']);
-    });
-});
-
-// User profile
-Route::group([
-    'middleware' => 'auth:sanctum'
-], function () {
-    Route::group([
-        'prefix' => 'me',
-    ], function () {
-        Route::patch('profile', [UserController::class, 'updateMyProfile']);
-        Route::get('profile', [UserController::class, 'getMyProfile']);
-        Route::patch('password', [UserController::class, 'updatePassword']);
+        Route::post('avatar/{id}', [VenueController::class, 'uploadAvatar']);
     });
 });
