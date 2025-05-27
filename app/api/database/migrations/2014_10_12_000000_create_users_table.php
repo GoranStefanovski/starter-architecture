@@ -12,14 +12,23 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id();
+            $table->id(); // unsignedBigInteger by default
+
             $table->string('first_name')->nullable();
             $table->string('last_name')->nullable();
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
+            $table->string('artist_tag')->unique()->nullable();
+            $table->text('bio')->nullable();
+
+            $table->string('city_from', 200)->nullable();
+            $table->string('country_from', 200)->nullable();
+
+            $table->string('email', 150)->unique();
+            $table->string('phone_number', 25)->nullable();
+
             $table->string('password');
-            $table->string('activation_code')->nullable();
-            $table->boolean('is_disabled')->nullable()->default(0);
+            $table->string('role')->nullable(); // optional enum later?
+            $table->boolean('is_disabled')->default(false);
+
             $table->rememberToken();
             $table->softDeletes();
             $table->timestamps();

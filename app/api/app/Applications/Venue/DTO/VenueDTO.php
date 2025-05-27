@@ -7,26 +7,38 @@ use Illuminate\Http\Request;
 
 class VenueDTO
 {
+    public int $id;
     public string $name;
     public string $address;
-    public int $owner_id;
+    public ?string $bio;
+    public float $lng;
+    public float $lat;
+    public string $slug;
     public int $venue_type_id;
-    public int $id;
+    public int $user_id;
 
     private ?Venue $model = null;
 
     public function __construct(
         string $name,
         string $address,
-        int $owner_id,
+        ?string $bio,
+        float $lng,
+        float $lat,
+        string $slug,
         int $venue_type_id,
+        int $user_id,
         int $id = 0,
         ?Venue $model = null
     ) {
         $this->name = $name;
         $this->address = $address;
-        $this->owner_id = $owner_id;
+        $this->bio = $bio;
+        $this->lng = $lng;
+        $this->lat = $lat;
+        $this->slug = $slug;
         $this->venue_type_id = $venue_type_id;
+        $this->user_id = $user_id;
         $this->id = $id;
         $this->model = $model;
     }
@@ -36,19 +48,27 @@ class VenueDTO
         return new self(
             $request->input('name'),
             $request->input('address'),
-            $request->input('owner_id'),
-            $request->input('venue_type_id', 1),
-            $request->input('id', 0),
+            $request->input('bio'),
+            $request->float('lng'),
+            $request->float('lat'),
+            $request->input('slug'),
+            $request->integer('venue_type_id'),
+            $request->integer('user_id'),
+            $request->input('id', 0)
         );
     }
 
-    public static function fromRequestForCreate(Request $request): self
+    public static function fromRequestForCreate(Request $request, int $userId): self
     {
         return new self(
             $request->input('name'),
             $request->input('address'),
-            1,
-            1,
+            $request->input('bio'),
+            $request->float('lng'),
+            $request->float('lat'),
+            $request->input('slug'),
+            $request->integer('venue_type_id'),
+            $userId
         );
     }
 
@@ -57,8 +77,12 @@ class VenueDTO
         return new self(
             $venue->name,
             $venue->address,
-            $venue->owner_id,
+            $venue->bio,
+            $venue->lng,
+            $venue->lat,
+            $venue->slug,
             $venue->venue_type_id,
+            $venue->user_id,
             $venue->id,
             $venue
         );
@@ -79,8 +103,12 @@ class VenueDTO
             'id' => $this->id,
             'name' => $this->name,
             'address' => $this->address,
-            'owner_id' => $this->owner_id,
+            'bio' => $this->bio,
+            'lng' => $this->lng,
+            'lat' => $this->lat,
+            'slug' => $this->slug,
             'venue_type_id' => $this->venue_type_id,
+            'user_id' => $this->user_id,
         ];
     }
 
@@ -91,8 +119,9 @@ class VenueDTO
 
     public static function fromCollection(iterable $venues): array
     {
-        return array_map(function (Venue $venue) {
-            return self::fromModel($venue);
-        }, $venues->all());
+        return array_map(
+            fn(Venue $venue) => self::fromModel($venue),
+            $venues instanceof \Illuminate\Support\Collection ? $venues->all() : iterator_to_array($venues)
+        );
     }
 }

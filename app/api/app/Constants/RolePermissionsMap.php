@@ -16,17 +16,29 @@ class RolePermissionsMap
             UserPermissions::READ_VENUES,
             UserPermissions::WRITE_VENUES,
             UserPermissions::DELETE_VENUES,
+            UserPermissions::READ_EVENTS,
+            UserPermissions::WRITE_EVENTS,
+            UserPermissions::DELETE_EVENTS,
         ],
+        //Artist
         UserRoles::COLLABORATOR => [
+            UserPermissions::DASHBOARD_VIEW,
+            UserPermissions::READ_VENUES,
+            UserPermissions::READ_EVENTS,
+            UserPermissions::WRITE_EVENTS,
+            UserPermissions::DELETE_EVENTS,
+        ],
+        //Venue owner
+        UserRoles::ORGANIZATION => [
             UserPermissions::DASHBOARD_VIEW,
             UserPermissions::READ_VENUES,
             UserPermissions::WRITE_VENUES,
             UserPermissions::DELETE_VENUES,
+            UserPermissions::READ_EVENTS,
+            UserPermissions::WRITE_EVENTS,
+            UserPermissions::DELETE_EVENTS,
         ],
-        UserRoles::ORGANIZATION => [
-            UserPermissions::DASHBOARD_VIEW,
-        ],
-        // TBD: Remove Access for Public Users in Admin Dashboard
+        //Registered User, can comment, vote etc.
         UserRoles::PUBLIC => [
             UserPermissions::WRITE_PUBLIC,
         ],

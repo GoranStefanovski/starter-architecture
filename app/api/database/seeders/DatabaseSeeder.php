@@ -2,91 +2,77 @@
 
 namespace Database\Seeders;
 
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Applications\Event\Model\Event;
 use App\Applications\User\Model\User;
-use App\Constants\UserPermissions;
-use App\Constants\UserRoles;
+use App\Applications\Venue\Model\Venue;
 use App\Constants\RolePermissionsMap;
+use App\Constants\UserRoles;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
-use Faker\Factory as Faker;
 
 class DatabaseSeeder extends Seeder
 {
     const NUMBER_OF_FAKE_USERS = 10;
+    const NUMBER_OF_VENUES = 15;
+    const NUMBER_OF_EVENTS = 20;
+
     const STATIC_USERS = [
         [
             "email" => "admin@example.com",
-            "name" => "Admin",
+            "first_name" => "Admin",
             "role" => UserRoles::ADMIN,
-            "permissions" => RolePermissionsMap::MAP[UserRoles::ADMIN]
         ],
         [
             "email" => "organization@example.com",
-            "name" => "Organization",
+            "first_name" => "Organization",
             "role" => UserRoles::ORGANIZATION,
-            "permissions" => RolePermissionsMap::MAP[UserRoles::ORGANIZATION]
         ],
         [
             "email" => "collaborator@example.com",
-            "name" => "Collaborator",
+            "first_name" => "Collaborator",
             "role" => UserRoles::COLLABORATOR,
-            "permissions" => RolePermissionsMap::MAP[UserRoles::COLLABORATOR]
         ],
         [
             "email" => "public@example.com",
-            "name" => "Public",
+            "first_name" => "Public",
             "role" => UserRoles::PUBLIC,
-            "permissions" => RolePermissionsMap::MAP[UserRoles::PUBLIC]
         ],
     ];
 
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
-        $faker = Faker::create();
-        $password = Hash::make('password');
+        // Create all permissions
+        collect(RolePermissionsMap::MAP)->flatten()->unique()->each(function ($permission) {
+            Permission::firstOrCreate(['name' => $permission]);
+        });
 
-        // Create permissions
-        $allPermissions = collect(RolePermissionsMap::MAP)->flatten()->unique();
-        foreach ($allPermissions as $permission) {
-            Permission::create(['name' => $permission]);
+        // Create roles and assign their mapped permissions
+        foreach (RolePermissionsMap::MAP as $role => $permissions) {
+            Role::firstOrCreate(['name' => $role])
+                ->syncPermissions($permissions);
         }
 
-        // Create three roles and assign created permissions
-        $roleIds = [];
-        $roles = array_values((new \ReflectionClass(UserRoles::class))->getConstants());
-        foreach ($roles as $userRole) {
-            $newRole = Role::create(['name' => $userRole])
-                ->givePermissionTo(RolePermissionsMap::MAP[$userRole]);
-            array_push($roleIds, $newRole->id);
-        };
-
-        foreach (self::STATIC_USERS as $staticUser) {
-            $newUser = User::create([
-                'first_name' => $staticUser['name'],
-                'last_name' => $faker->lastName(),
-                'email' => $staticUser['email'],
-                'password' => $password
+        // Create static users with defined roles
+        foreach (self::STATIC_USERS as $static) {
+            $user = User::factory()->create([
+                'first_name' => $static['first_name'],
+                'email' => $static['email'],
+                'password' => Hash::make('password'),
+                'role' => $static['role'],
             ]);
-
-            $newUser->assignRole($staticUser['role']);
+            $user->assignRole($static['role']);
         }
 
-        for ($i = 0; $i < self::NUMBER_OF_FAKE_USERS; $i++) {
-            $user = User::create([
-                'first_name' => $faker->firstName,
-                'last_name' => $faker->lastName,
-                'email' => $faker->unique()->safeEmail,
-                'password' => $password,
-            ]);
+        // Create N random users
+        User::factory(self::NUMBER_OF_FAKE_USERS)->create()->each(function ($user) {
+            $role = fake()->randomElement(array_keys(RolePermissionsMap::MAP));
+            $user->update(['role' => $role]);
+            $user->assignRole($role);
+        });
 
-            // Assign a random role to the user
-            $user->roles()->attach($faker->randomElement($roleIds));
-        }
+        Venue::factory()->count(self::NUMBER_OF_VENUES)->create();
+        Event::factory()->count(self::NUMBER_OF_EVENTS)->create();
     }
 }

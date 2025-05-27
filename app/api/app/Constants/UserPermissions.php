@@ -17,6 +17,11 @@ class UserPermissions
     public const WRITE_VENUES = 'write_venues';
     public const DELETE_VENUES = 'delete_venues';
 
+    // Events module
+    public const READ_EVENTS = 'read_events';
+    public const WRITE_EVENTS = 'write_events';
+    public const DELETE_EVENTS = 'delete_events';
+
     // Public Users
     public const WRITE_PUBLIC = 'WRITE_PUBLIC';
 
