@@ -12,9 +12,18 @@ export interface GetVenueResponse {
   updated_at: string;
 }
 
+export interface GetVenueTypeResponse {
+  id: number;
+  name: string;
+}
+
 export interface VenuesTableResponse {
   data: GetVenueResponse[];
   pagination: PaginationObject;
+}
+
+export interface VenueTypeResponse {
+  data: GetVenueTypeResponse[];
 }
 
 export type AuthUser = Omit<GetVenueResponse, 'updated_at'>;

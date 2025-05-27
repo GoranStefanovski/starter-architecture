@@ -3,7 +3,7 @@ import axios from 'axios';
 import { computed } from 'vue';
 import { useToast } from 'vue-toastification';
 import { USER_API_ENDPOINTS } from '../constants';
-import type { UserFormItem, GetVenueResponse } from '../types';
+import type { UserFormItem, GetVenueResponse, VenueTypeResponse } from '../types';
 import { useUploadAvatar } from './useUploadAvatar';
 
 const USER_CACHE_KEY = 'user';
@@ -14,7 +14,7 @@ export const useVenuesForm = (venueId?: number) => {
   const { uploadAvatar, isLoading: isUploadingAvatar } = useUploadAvatar({
     venueId,
     onSuccess: async () => {
-      queryClient.invalidateQueries({ queryKey: [USER_CACHE_KEY, venueId] });
+      void queryClient.invalidateQueries({ queryKey: [USER_CACHE_KEY, venueId] });
       toast.success('Image has been updated!');
     },
   });
@@ -23,7 +23,7 @@ export const useVenuesForm = (venueId?: number) => {
     queryKey: [USER_CACHE_KEY, venueId],
     queryFn: async (): Promise<GetVenueResponse> => {
       const data = await axios.get(USER_API_ENDPOINTS.get(venueId ?? 0));
-      return data.data;
+      return data.data as GetVenueResponse;
     },
     enabled: !!venueId,
   });
@@ -31,7 +31,7 @@ export const useVenuesForm = (venueId?: number) => {
   const { mutate: createVenue, isPending: isCreating } = useMutation({
     mutationFn: async (newUserData: UserFormItem): Promise<GetVenueResponse> => {
       const data = await axios.post(USER_API_ENDPOINTS.create, newUserData);
-      return data.data;
+      return data.data as GetVenueResponse;
     },
     onSuccess: async () => {
       toast.success('User saved!');
@@ -44,7 +44,7 @@ export const useVenuesForm = (venueId?: number) => {
   const { mutate: updateVenue, isPending: isUpdating } = useMutation({
     mutationFn: async (data: UserFormItem): Promise<GetVenueResponse> => {
       const response = await axios.patch(USER_API_ENDPOINTS.patch(venueId ?? 0), data);
-      return response.data;
+      return response.data as GetVenueResponse;
     },
     onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: [USER_CACHE_KEY, venueId] });
@@ -55,6 +55,22 @@ export const useVenuesForm = (venueId?: number) => {
     },
   });
 
+  const { data: venueTypesRaw, isLoading: isLoadingVenueTypes } = useQuery({
+    queryKey: ['venue-types'],
+    queryFn: async () => {
+      const response = await axios.get<VenueTypeResponse[]>(USER_API_ENDPOINTS.getVenueTypes);
+      console.log(response.data);
+      return response.data;
+    },
+  });
+
+  const venueTypes = computed(() =>
+    (venueTypesRaw.value || []).map((type: any) => ({
+      id: type.id,
+      name: type.name,
+    }))
+  );
+
   const data = computed(() => queryData.value);
 
   return {
@@ -62,6 +78,7 @@ export const useVenuesForm = (venueId?: number) => {
     createVenue,
     updateVenue,
     uploadAvatar,
-    isLoading: isFetching || isUpdating || isCreating || isUploadingAvatar,
+    venueTypes,
+    isLoading: isFetching || isUpdating || isCreating || isUploadingAvatar || isLoadingVenueTypes,
   };
 };

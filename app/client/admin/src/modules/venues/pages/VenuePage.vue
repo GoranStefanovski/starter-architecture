@@ -24,7 +24,7 @@
     },
   };
 
-  const { isLoading, data: formData, createVenue, updateVenue } = useVenuesForm(venueId);
+  const { isLoading, data: formData, createVenue, updateVenue, venueTypes } = useVenuesForm(venueId);
 
   const { handleSubmit, errors, setValues, defineField } = useForm<UserFormItem>({
     validationSchema,
@@ -88,6 +88,7 @@
               v-model:address="address"
               v-model:lng="lng"
               v-model:lat="lat"
+              :venue-types="venueTypes"
               :errors="errors"
             />
           </SkSection>
