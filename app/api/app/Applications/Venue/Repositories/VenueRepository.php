@@ -6,6 +6,7 @@ use App\Applications\Venue\DTO\VenueDTO;
 use App\Applications\Pagination\StarterPaginator;
 use Illuminate\Http\UploadedFile;
 use App\Applications\Venue\Model\Venue;
+use Illuminate\Support\Str;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -44,6 +45,7 @@ class VenueRepository implements VenueRepositoryInterface
         $attributes = $venueDTO->toArray();
 
         $venue = new Venue($attributes);
+        $venue->slug = Str::slug($venue->name) . '-' . $venue->id;
         $venue->save();
 
         return $venue;
@@ -53,6 +55,7 @@ class VenueRepository implements VenueRepositoryInterface
     {
         $venue = $this->venue->findOrFail($venueId);
         $attributes = $venueData->toArray();
+        $attributes['slug'] = Str::slug($attributes['name']) . '-' . $attributes['id'];
         $venue->update($attributes);
         return $venue;
     }
@@ -83,7 +86,6 @@ class VenueRepository implements VenueRepositoryInterface
         }
 
         $query->whereNull('deleted_at');
-
         return $query->paginate($data['length']);
     }
 

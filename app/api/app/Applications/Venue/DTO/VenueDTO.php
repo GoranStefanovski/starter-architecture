@@ -13,8 +13,9 @@ class VenueDTO
     public ?string $bio;
     public float $lng;
     public float $lat;
-    public string $slug;
+    public ?string $slug = null;
     public int $venue_type_id;
+    public ?string $type_label = null;
     public int $user_id;
 
     private ?Venue $model = null;
@@ -25,8 +26,9 @@ class VenueDTO
         ?string $bio,
         float $lng,
         float $lat,
-        string $slug,
         int $venue_type_id,
+        ?string $type_label,
+        ?string $slug,
         int $user_id,
         int $id = 0,
         ?Venue $model = null
@@ -36,8 +38,9 @@ class VenueDTO
         $this->bio = $bio;
         $this->lng = $lng;
         $this->lat = $lat;
-        $this->slug = $slug;
         $this->venue_type_id = $venue_type_id;
+        $this->type_label = $type_label;
+        $this->slug = $slug;
         $this->user_id = $user_id;
         $this->id = $id;
         $this->model = $model;
@@ -51,8 +54,9 @@ class VenueDTO
             $request->input('bio'),
             $request->float('lng'),
             $request->float('lat'),
-            $request->input('slug'),
             $request->integer('venue_type_id'),
+            null, // type_label
+            $request->input('slug'),
             $request->integer('user_id'),
             $request->input('id', 0)
         );
@@ -66,8 +70,9 @@ class VenueDTO
             $request->input('bio'),
             $request->float('lng'),
             $request->float('lat'),
-            $request->input('slug'),
             $request->integer('venue_type_id'),
+            null, // type_label
+            $request->input('slug'),
             $userId
         );
     }
@@ -80,12 +85,14 @@ class VenueDTO
             $venue->bio,
             $venue->lng,
             $venue->lat,
+            (int) $venue->venue_type_id,
+            $venue->type?->name,
             $venue->slug,
-            $venue->venue_type_id,
             $venue->user_id,
             $venue->id,
             $venue
         );
+
     }
 
     public function model(): Venue
@@ -108,6 +115,7 @@ class VenueDTO
             'lat' => $this->lat,
             'slug' => $this->slug,
             'venue_type_id' => $this->venue_type_id,
+            'type_label' => $this->type_label,
             'user_id' => $this->user_id,
         ];
     }
