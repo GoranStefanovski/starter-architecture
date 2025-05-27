@@ -1,10 +1,10 @@
 export interface FormInputProps {
   name: string;
   error?: string;
-  type?: "text" | "password";
+  type?: "text" | "password" | "number";
   label?: string;
   helperText?: string;
-  modelValue?: string;
+  modelValue?: string | number;
   isInline?: boolean;
   disabled?: boolean;
   required?: boolean;

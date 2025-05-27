@@ -4,17 +4,18 @@
   import { watch, computed } from 'vue';
   import { useI18n } from 'vue-i18n';
   import { useRoute } from 'vue-router';
+  import useAuth from '../../../composables/useAuth';
   import { VenueFormBasicInfo } from '../components';
   import { useVenuesForm } from '../composables';
   import type { UserFormItem } from '../types';
   import { TabbedContent, TabbedContentTab, PageWrapper, PAGE_WRAPPER_SLOTS, SubheaderTitle, SkSection } from '@/components';
   import { DashButton, DashLink } from '@starter-core/dash-ui/src';
-
   const { t } = useI18n();
   const personalInformationLabel = t('users.personal-information.label');
   const route = useRoute();
   const isEditPage = computed(() => route.name == 'edit.venue');
   const venueId = Number(route.params.venueId);
+  const auth = useAuth();
 
   const validationSchema = {
     name(value: string) {
@@ -37,20 +38,30 @@
     }
   });
 
-  watch(() => {
-    if (formData.value) {
-      setValues({
-        id: formData.value.id,
-        name: formData.value.name,
-        address: formData.value.address,
-        venue_type_id: formData.value.venue_type_id,
-      });
-    }
-  }, [formData]);
-
+  watch(
+    formData,
+    (newValue) => {
+      if (newValue) {
+        setValues({
+          id: newValue.id,
+          user_id: auth.user.id,
+          name: newValue.name,
+          bio: newValue.bio,
+          address: newValue.address,
+          lng: newValue.lng,
+          lat: newValue.lat,
+          venue_type_id: newValue.venue_type_id,
+        });
+      }
+    },
+    { immediate: true } // Optional: runs immediately on mount
+  );
   const [name] = defineField('name');
-  const [address] = defineField('address');
   const [venueTypeId] = defineField('venue_type_id');
+  const [bio] = defineField('bio');
+  const [address] = defineField('address');
+  const [lng] = defineField('lng');
+  const [lat] = defineField('lat');
 </script>
 
 <template>
@@ -72,8 +83,11 @@
           <SkSection title="Customer Info">
             <VenueFormBasicInfo
               v-model:name="name"
-              v-model:address="address"
               v-model:venue_type_id="venueTypeId"
+              v-model:bio="bio"
+              v-model:address="address"
+              v-model:lng="lng"
+              v-model:lat="lat"
               :errors="errors"
             />
           </SkSection>

@@ -1,12 +1,15 @@
 export interface UserFormItem {
   id?: number;
-  name?: string;
-  owner_id?: number;
-  address?: string;
-  venue_type_id?: number;
+  user_id?: number;
+  name: string;
+  venue_type_id: number;
+  bio?: string;
+  address: string;
+  lng: number;
+  lat: number;
 }
 
-export type UserMyProfileForm = Pick<UserFormItem, 'name' | 'address'>;
+export type UserMyProfileForm = Pick<UserFormItem, 'name' | 'address' | 'bio'>;
 
 export interface UpdatePasswordForm {
   current_password: string;

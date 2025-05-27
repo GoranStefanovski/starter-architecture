@@ -8,9 +8,17 @@
   "roles": {
     "label": "Roles"
   },
+  "venue_type": {
+    "label": "Type of Venue"
+  },
   "avatar": "Avatar",
   "address": {
-    "label": "Address"
+    "label": "Address",
+    "lat": "Latitude",
+    "lng": "Longitude"
+  },
+  "bio": {
+    "label": "Bio"
   },
   "name": {
     "label": "Name"
