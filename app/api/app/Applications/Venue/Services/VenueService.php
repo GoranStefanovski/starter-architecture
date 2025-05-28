@@ -2,6 +2,7 @@
 
 namespace App\Applications\Venue\Services;
 
+use App\Applications\User\Model\User;
 use App\Applications\Venue\Model\Venue;
 use App\Applications\Venue\DTO\VenueDTO;
 use App\Applications\Venue\Repositories\VenueRepositoryInterface;
@@ -50,6 +51,12 @@ class VenueService implements VenueServiceInterface
 
     public function draw(array $data): array
     {
+        $user = auth()->user();
+        // VenuePolicy
+        if ($user->cannot('viewAllVenues', User::class)) {
+            $data['user_only'] = $user->id;
+        }
+
         $data['columns'] = ['venues.name', 'venues.address'];
         $data['length'] = $data['length'] ?? 10;
         $data['column'] = $data['column'] ?? 'venues.name';

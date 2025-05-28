@@ -100,6 +100,7 @@ class VenueController extends Controller
      */
     public function draw(Request $request): JsonResponse
     {
+        //TODO: implement Policy that returns venues based on ownership, or all if user is Admin
         try {
             $data = $request->all();
             $usersDTO = $this->venueService->draw($data);

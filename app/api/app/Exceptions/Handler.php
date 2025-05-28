@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\Exceptions\ThrottleRequestsException;
 use Illuminate\Validation\ValidationException;
 use Throwable;
 
@@ -33,6 +34,13 @@ class Handler extends ExceptionHandler
     {
         if ($exception instanceof ValidationException) {
             return response()->json(['errors' => $exception->errors()], 422);
+        }
+
+        if ($exception instanceof ThrottleRequestsException) {
+            return response()->json([
+                'error' => $exception->getMessage() ?: 'Too many login attempts. Please try again later.',
+                'retry_after' => $exception->getHeaders()['Retry-After'] ?? null,
+            ], 429);
         }
 
         return parent::render($request, $exception);

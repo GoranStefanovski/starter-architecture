@@ -45,6 +45,7 @@ class VenueRepository implements VenueRepositoryInterface
         $attributes = $venueDTO->toArray();
 
         $venue = new Venue($attributes);
+        //TODO: move this to Venue DTO Factory
         $venue->slug = Str::slug($venue->name) . '-' . $venue->id;
         $venue->save();
 
@@ -55,6 +56,7 @@ class VenueRepository implements VenueRepositoryInterface
     {
         $venue = $this->venue->findOrFail($venueId);
         $attributes = $venueData->toArray();
+        //TODO: move this to Venue DTO Factory
         $attributes['slug'] = Str::slug($attributes['name']) . '-' . $attributes['id'];
         $venue->update($attributes);
         return $venue;
@@ -72,6 +74,10 @@ class VenueRepository implements VenueRepositoryInterface
         $query = $this->venue->query();
 
         // $query->whereIn('roles.name', $roles);
+
+        if (!empty($data['user_only'])) {
+            $query->where('user_id', $data['user_only']);
+        }
 
         if (array_key_exists($data['column'], self::COLUMNS_MAP)) {
             $query->orderBy(self::COLUMNS_MAP[$data['column']], $data['dir']);

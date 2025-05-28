@@ -28,8 +28,8 @@ Route::get('vue', [HomeController::class, 'vue']);
 Route::group([
     'prefix' => 'auth',
 ], function () {
-    Route::post('login', [LoginController::class, 'login']);
-    Route::post('sign-up', [LoginController::class, 'signUp']);
+    Route::post('login', [LoginController::class, 'login'])->middleware('throttle:login');
+    Route::post('sign-up', [LoginController::class, 'signUp'])->middleware('throttle:login');
 });
 
 // GUEST ROUTES

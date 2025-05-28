@@ -191,4 +191,9 @@ class User extends Authenticatable implements HasMedia
     {
         return $this->role === self::COLLABORATOR;
     }
+
+    public function isAdmin(): bool
+    {
+        return $this->role === self::ADMIN;
+    }
 }

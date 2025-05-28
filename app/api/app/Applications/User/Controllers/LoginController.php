@@ -3,6 +3,7 @@
 namespace App\Applications\User\Controllers;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Exceptions\ThrottleRequestsException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -10,6 +11,8 @@ use App\Applications\User\DTO\UserDTO;
 use App\Constants\UserRoles;
 use App\Applications\User\Services\LoginServiceInterface;
 use App\Applications\User\Services\UserService;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
 /**
@@ -35,7 +38,20 @@ class LoginController extends Controller
 
         $credentials = $request->only('email', 'password');
 
+        $email = Str::lower($request->input('email'));
+        $key = "login:{$email}|{$request->ip()}";
+        $maxAttempts = 5;
+        $decaySeconds = 60;
+        if (RateLimiter::tooManyAttempts($key, $maxAttempts)) {
+            $seconds = RateLimiter::availableIn($key);
+            throw new ThrottleRequestsException(
+                "Too many login attempts. Try again in {$seconds} seconds.",
+                null,
+                ['Retry-After' => $seconds]);
+        }
+
         if (Auth::attempt($credentials)) {
+            RateLimiter::clear($key);
             $data = Auth::user();
             $token = $data->createToken('api-token')->plainTextToken;
 
@@ -44,6 +60,7 @@ class LoginController extends Controller
                 ->header('authorization', $token)
                 ->header('Access-Control-Expose-Headers', 'Authorization');
         }
+        RateLimiter::hit($key, $decaySeconds);
 
         return response()->json(['error' => 'Invalid Credentials'], 401);
     }
