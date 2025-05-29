@@ -21,10 +21,7 @@ class UserFactory extends Factory
         return [
             'first_name' => $this->faker->firstName(),
             'last_name' => $this->faker->lastName(),
-
-            // Only 10% of users get an artist_tag (artists)
-            'artist_tag' => $this->faker->boolean(10) ? $this->faker->unique()->userName() : null,
-
+            'artist_tag' => null, // default null
             'bio' => $this->faker->optional()->paragraph(),
             'city_from' => 'Bitola',
             'country_from' => 'North Macedonia',

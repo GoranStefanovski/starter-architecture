@@ -45,8 +45,6 @@ class VenueRepository implements VenueRepositoryInterface
         $attributes = $venueDTO->toArray();
 
         $venue = new Venue($attributes);
-        //TODO: move this to Venue DTO Factory
-        $venue->slug = Str::slug($venue->name) . '-' . $venue->id;
         $venue->save();
 
         return $venue;
@@ -56,8 +54,6 @@ class VenueRepository implements VenueRepositoryInterface
     {
         $venue = $this->venue->findOrFail($venueId);
         $attributes = $venueData->toArray();
-        //TODO: move this to Venue DTO Factory
-        $attributes['slug'] = Str::slug($attributes['name']) . '-' . $attributes['id'];
         $venue->update($attributes);
         return $venue;
     }

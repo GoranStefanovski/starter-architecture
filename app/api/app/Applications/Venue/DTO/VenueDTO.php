@@ -4,6 +4,7 @@ namespace App\Applications\Venue\DTO;
 
 use App\Applications\Venue\Model\Venue;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class VenueDTO
 {
@@ -48,6 +49,9 @@ class VenueDTO
 
     public static function fromRequest(Request $request): self
     {
+        $name = $request->input('name');
+        $id = $request->integer('id', 0);
+
         return new self(
             $request->input('name'),
             $request->input('address'),
@@ -55,7 +59,7 @@ class VenueDTO
             $request->float('lng'),
             $request->float('lat'),
             $request->integer('venue_type_id'),
-            null, // type_label
+            self::generateSlug($name, $id), // type_label
             $request->input('slug'),
             $request->integer('user_id'),
             $request->input('id', 0)
@@ -64,6 +68,9 @@ class VenueDTO
 
     public static function fromRequestForCreate(Request $request, int $userId): self
     {
+        $name = $request->input('name');
+        $id = $request->integer('id', 0);
+
         return new self(
             $request->input('name'),
             $request->input('address'),
@@ -71,7 +78,7 @@ class VenueDTO
             $request->float('lng'),
             $request->float('lat'),
             $request->integer('venue_type_id'),
-            null, // type_label
+            self::generateSlug($name, $id), // type_label
             $request->input('slug'),
             $userId
         );
@@ -131,5 +138,11 @@ class VenueDTO
             fn(Venue $venue) => self::fromModel($venue),
             $venues instanceof \Illuminate\Support\Collection ? $venues->all() : iterator_to_array($venues)
         );
+    }
+
+    public static function generateSlug(string $name, ?int $id = null): string
+    {
+        $slug = Str::slug($name);
+        return $id ? "$slug-$id" : $slug;
     }
 }

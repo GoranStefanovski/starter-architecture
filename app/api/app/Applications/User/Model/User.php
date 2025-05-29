@@ -32,6 +32,8 @@ class User extends Authenticatable implements HasMedia
     const ADMIN = 'admin';
     const COLLABORATOR = 'collaborator';
     const ORGANIZATION = 'organization';
+    const ARTIST = 'artist';
+
     const PUBLIC = 'public';
 
     protected $fillable = [
@@ -189,7 +191,7 @@ class User extends Authenticatable implements HasMedia
      */
     public function isArtist(): bool
     {
-        return $this->role === self::COLLABORATOR;
+        return $this->role === self::ARTIST;
     }
 
     public function isAdmin(): bool

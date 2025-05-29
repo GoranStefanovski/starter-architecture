@@ -3,6 +3,7 @@
 namespace App\Applications\Event\Model;
 
 use App\Applications\Common\Pivot\EventUserStatus;
+use App\Applications\Ticket\Model\Ticket;
 use Database\Factories\EventFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -98,6 +99,14 @@ class Event extends Model implements HasMedia
             \App\Applications\Common\Model\MusicGenre::class,
             'event_music_genre'
         );
+    }
+
+    /**
+     * Tickets for this event.
+     */
+    public function tickets()
+    {
+        return $this->hasMany(Ticket::class);
     }
 
     /**

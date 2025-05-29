@@ -30,6 +30,8 @@ class Venue extends Model implements HasMedia
         'address',
         'lng',
         'lat',
+        'email',
+        'phone_number',
         'slug',
         'venue_type_id',
         'user_id',

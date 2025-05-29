@@ -14,7 +14,7 @@ use Spatie\Permission\Models\Role;
 
 class DatabaseSeeder extends Seeder
 {
-    const NUMBER_OF_FAKE_USERS = 10;
+    const NUMBER_OF_FAKE_USERS = 30;
     const NUMBER_OF_VENUES = 15;
     const NUMBER_OF_EVENTS = 20;
 
@@ -65,10 +65,21 @@ class DatabaseSeeder extends Seeder
             $user->assignRole($static['role']);
         }
 
+        $rolesPool = array_merge(
+            array_fill(0, 60, UserRoles::PUBLIC),        // 60% public
+            array_fill(0, 20, UserRoles::ARTIST),        // 20% artist
+            array_fill(0, 15, UserRoles::ORGANIZATION),  // 15% organization
+            array_fill(0, 5, UserRoles::COLLABORATOR)    // 5% collaborator
+            // Exclude UserRoles::ADMIN
+        );
+
         // Create N random users
-        User::factory(self::NUMBER_OF_FAKE_USERS)->create()->each(function ($user) {
-            $role = fake()->randomElement(array_keys(RolePermissionsMap::MAP));
-            $user->update(['role' => $role]);
+        User::factory(self::NUMBER_OF_FAKE_USERS)->create()->each(function ($user) use ($rolesPool) {
+            $role = $rolesPool[array_rand($rolesPool)];
+            $user->update([
+                'role' => $role,
+                'artist_tag' => $role === UserRoles::ARTIST ? fake()->unique()->userName() : null,
+            ]);
             $user->assignRole($role);
         });
 

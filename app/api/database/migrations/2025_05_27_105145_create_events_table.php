@@ -26,7 +26,7 @@ return new class extends Migration
 
             $table->string('slug', 100)->unique();
 
-            $table->unsignedBigInteger('user_id'); // creator (organization)
+            $table->unsignedBigInteger('user_id'); // creator (collaborator)
             $table->unsignedBigInteger('venue_id')->nullable();
 
             $table->timestamps();

@@ -25,11 +25,8 @@ class VenueRequest extends ApiFormRequest
     public function rules()
     {
         $rules = [
-            'first_name' => 'required|max:255|min:2',
-            'last_name' => 'required|max:255|min:2',
+            'name' => 'required|max:255|min:2',
             'email' => 'required|email|min:2|max:255|unique:users,email,'.$this->segment(3),
-            'password' => 'required_with:password_confirmation|nullable|between:6,30|confirmed',
-            'password_confirmation' => 'required_with:password|nullable|between:6,30|same:password',
 //            'roles' => 'required|exists:roles,id',
         ];
 

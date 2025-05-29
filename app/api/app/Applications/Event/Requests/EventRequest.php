@@ -2,9 +2,12 @@
 
 namespace App\Applications\Venue\Requests;
 
+use App\Constants\TicketType;
 use App\Http\Requests\ApiFormRequest;
+use Illuminate\Validation\Rule;
 
-class NewVenueRequest extends ApiFormRequest
+
+class EventRequest extends ApiFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,8 +30,9 @@ class NewVenueRequest extends ApiFormRequest
         $rules = [
             'name' => 'required|max:255|min:2',
             'email' => 'required|email|min:2|max:255|unique:users,email,'.$this->segment(3),
-            'password' => 'sometimes|between:6,30|confirmed',
-            'roles' => 'required|exists:roles,id',
+            'type' => ['required', Rule::in(TicketType::TYPES)],
+
+//            'roles' => 'required|exists:roles,id',
         ];
 
         return $rules;
@@ -46,9 +50,10 @@ class NewVenueRequest extends ApiFormRequest
             'email.max' => 'users.email.max',
             'email.min' => 'users.email.min',
             'email.unique' => 'users.email.unique',
-            'roles.required' => 'users.roles.required',
-            'roles.exists' => 'users.roles.exists',
-            'password.required' => 'users.password.required',
+//            'roles.required' => 'users.roles.required',
+//            'roles.exists' => 'users.roles.exists',
+            'password.required_with' => 'users.password.required',
+            'password_confirmation.required_with' => 'users.password_confirmation.required',
             'password.between' => 'users.password.between',
             'password.confirmed' => 'users.password.confirmed',
         ];
