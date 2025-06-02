@@ -59,8 +59,8 @@ class VenueDTO
             $request->float('lng'),
             $request->float('lat'),
             $request->integer('venue_type_id'),
-            self::generateSlug($name, $id), // type_label
-            $request->input('slug'),
+            $request->input('type_label'),
+            self::generateSlug($name, $id), // venue_slug
             $request->integer('user_id'),
             $request->input('id', 0)
         );

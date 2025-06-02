@@ -11,12 +11,13 @@ return new class extends Migration {
             $table->id();
 
             $table->string('type'); // e.g., Free Entry, Regular, VIP, Early Bird
-            $table->decimal('price', 10, 2); // e.g. 19.99
-            $table->integer('quantity')->default(0); // available tickets
+            $table->decimal('price', 10, 2)->default(0); // e.g. 19.99
+            $table->integer('quantity')->nullable(); // available tickets
             $table->timestamp('sale_start')->nullable();
             $table->timestamp('sale_end')->nullable();
 
             $table->unsignedBigInteger('event_id');
+            $table->unique(['type', 'event_id']);
 
             $table->timestamps();
 

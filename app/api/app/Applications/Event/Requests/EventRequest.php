@@ -30,9 +30,9 @@ class EventRequest extends ApiFormRequest
         $rules = [
             'name' => 'required|max:255|min:2',
             'email' => 'required|email|min:2|max:255|unique:users,email,'.$this->segment(3),
+            //TODO: handle it so a user can't send any other type of a ticket other than those given in the TicketType class
             'type' => ['required', Rule::in(TicketType::TYPES)],
 
-//            'roles' => 'required|exists:roles,id',
         ];
 
         return $rules;

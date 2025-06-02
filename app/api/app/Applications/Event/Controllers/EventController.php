@@ -1,29 +1,27 @@
 <?php
 
-namespace App\Applications\Venue\Controllers;
+namespace App\Applications\Event\Controllers;
 
-use App\Applications\Venue\DTO\VenueDTO;
-use Illuminate\Http\Request;
+use App\Applications\Event\DTO\EventDTO;
+use App\Applications\Event\Services\EventServiceInterface;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use App\Applications\Venue\Services\VenueServiceInterface;
-use App\Applications\Venue\Requests\MyProfileRequest;
-use App\Applications\Venue\Requests\UpdatePasswordRequest;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Validation\ValidationException;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Controller;
+
 
 /**
- * @property VenueServiceInterface $venueService
+ * @property EventServiceInterface $eventService
  */
-class VenueController extends Controller
+class EventController extends Controller
 {
     public function __construct(
-        VenueServiceInterface $venueService
+        EventServiceInterface $eventService
     ) {
-        $this->venueService = $venueService;
+        $this->eventService = $eventService;
     }
 
     /**
@@ -33,8 +31,8 @@ class VenueController extends Controller
      */
     public function getAll(): JsonResponse
     {
-        $venueDTOs = $this->venueService->getAll();
-        return response()->json($venueDTOs);
+        $EventDTOs = $this->eventService->getAll();
+        return response()->json($EventDTOs);
     }
 
     /**
@@ -45,8 +43,8 @@ class VenueController extends Controller
      */
     public function get(int $id): JsonResponse
     {
-        $venueDTO = $this->venueService->get($id);
-        return response()->json($venueDTO);
+        $EventDTO = $this->eventService->get($id);
+        return response()->json($EventDTO);
     }
 
     /**
@@ -57,10 +55,11 @@ class VenueController extends Controller
      */
     public function create(Request $request): JsonResponse
     {
-        $venueDTO = VenueDTO::fromRequestForCreate($request);
-        $newVenueDTO = $this->venueService->create($venueDTO);
+        $EventDTO = EventDTO::fromRequest($request);
 
-        return response()->json($newVenueDTO);
+        $newEventDTO = $this->eventService->create($EventDTO);
+
+        return response()->json($newEventDTO);
     }
 
     /**
@@ -69,15 +68,11 @@ class VenueController extends Controller
      * @param  Request  $request
      * @return JsonResponse
      */
-    public function update(Request $request): JsonResponse
+    public function update(Request $request,$eventId): JsonResponse
     {
-        $userId = Route::current()->parameter('id');
-        $dto = VenueDTO::fromRequest($request);
-        $venueDTO = $this->venueService->update(
-            $userId,
-            $dto
-        );
-        return response()->json($venueDTO);
+        $dto = EventDTO::fromRequest($request);
+        $EventDTO = $this->eventService->update($eventId,$dto);
+        return response()->json($EventDTO);
     }
 
     /**
@@ -88,11 +83,11 @@ class VenueController extends Controller
     public function delete()
     {
         $userId = Route::current()->parameter('id');
-        return $this->venueService->delete($userId);
+        return $this->eventService->delete($userId);
     }
 
     /**
-     * Get a paginated, filtered and sorted array of Venues.
+     * Get a paginated, filtered and sorted array of Events.
      * This endpoint requires some data in the request.
      *
      * @param  Request  $request
@@ -102,9 +97,9 @@ class VenueController extends Controller
     {
         try {
             $data = $request->all();
-            $usersDTO = $this->venueService->draw($data);
+            $eventsDTO = $this->eventService->draw($data);
 
-            return response()->json($usersDTO);
+            return response()->json($eventsDTO);
         } catch (\InvalidArgumentException $e) {
             // Handle specific exceptions like InvalidArgumentException
             return response()->json([
@@ -127,19 +122,7 @@ class VenueController extends Controller
         }
     }
 
-    /**
-     * Get a JSON for the logged in user
-     *
-     * @return string
-     */
-    public function getMyProfile()
-    {
-        $venueDTO = $this->venueService->get(
-            Auth::user()->id
-        );
-        return response()->json($venueDTO);
-    }
-
+    //TODO: change this to event image or something
     /**
      * Handle the avatar upload for the authenticated user.
      *
@@ -154,9 +137,9 @@ class VenueController extends Controller
                 ? (int)$userId
                 : Auth::id();
 
-            $venueDTO = $this->venueService->uploadAvatar($userId, $request, Auth::user());
+            $EventDTO = $this->eventService->uploadAvatar($userId, $request, Auth::user());
 
-            return response()->json($venueDTO, 200);
+            return response()->json($EventDTO, 200);
         } catch (ValidationException $e) {
             return response()->json([
                 'message' => 'Validation error.',

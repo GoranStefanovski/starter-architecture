@@ -25,9 +25,10 @@ Route::group([
 
         // CRUD ROUTES
         Route::post('create', [VenueController::class, 'create']);
-        Route::get('{id}', [VenueController::class, 'get']);
+        Route::get('get/{id}', [VenueController::class, 'get']);
+        //TODO: change to update/{id} for clarity, handle route for the frontend(dashboard) aswell
         Route::patch('{id}', [VenueController::class, 'update']);
-        Route::delete('{id}', [VenueController::class, 'delete']);
+        Route::delete('delete/{id}', [VenueController::class, 'delete']);
 
         // User avatars
         Route::post('avatar/{id}', [VenueController::class, 'uploadAvatar']);

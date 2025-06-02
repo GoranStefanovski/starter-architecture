@@ -23,7 +23,7 @@ class UserPermissions
     public const DELETE_EVENTS = 'delete_events';
 
     // Public Users
-    public const WRITE_PUBLIC = 'WRITE_PUBLIC';
+    public const WRITE_PUBLIC = 'write_public';
 
     // Navigation module
     public const READ_NAVIGATION = 'read_navigation';
