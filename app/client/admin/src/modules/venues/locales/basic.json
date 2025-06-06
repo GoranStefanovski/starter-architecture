@@ -25,8 +25,9 @@
   "name": {
     "label": "Name"
   },
-  "email": {
-    "label": "Email"
+  "contact": {
+    "email": "E-mail",
+    "phone_number": "Phone Number"
   },
   "password": {
     "change": "Change password",

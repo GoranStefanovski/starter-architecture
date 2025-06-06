@@ -16,6 +16,8 @@ class VenueDTO
     public string $city;
     public float $lng;
     public float $lat;
+    public string $email;
+    public string $phone_number;
     public ?string $slug = null;
     public int $venue_type_id;
     public ?string $type_label = null;
@@ -32,6 +34,8 @@ class VenueDTO
         string $city,
         float $lng,
         float $lat,
+        string $email,
+        string $phone_number,
         int $venue_type_id,
         ?string $type_label,
         ?string $slug,
@@ -46,6 +50,8 @@ class VenueDTO
         $this->city = $city;
         $this->lng = $lng;
         $this->lat = $lat;
+        $this->email = $email;
+        $this->phone_number = $phone_number;
         $this->venue_type_id = $venue_type_id;
         $this->type_label = $type_label;
         $this->slug = $slug;
@@ -67,6 +73,8 @@ class VenueDTO
             $request->input('city'),
             $request->float('lng'),
             $request->float('lat'),
+            $request->input('email'),
+            $request->input('phone_number'),
             $request->integer('venue_type_id'),
             $request->input('type_label'),
             self::generateSlug($name, $id), // venue_slug
@@ -87,9 +95,11 @@ class VenueDTO
             $request->input('city'),
             $request->float('lng'),
             $request->float('lat'),
+            $request->input('email'),
+            $request->input('phone_number'),
             $request->integer('venue_type_id'),
-            self::generateSlug($name, $id), // type_label
-            $request->input('slug'),
+            $request->input('type_label'),
+            self::generateSlug($name, $id), // slug
             $request->integer('user_id'),
         );
     }
@@ -104,6 +114,8 @@ class VenueDTO
             $venue->city,
             $venue->lng,
             $venue->lat,
+            $venue->email,
+            $venue->phone_number,
             (int) $venue->venue_type_id,
             $venue->type?->name,
             $venue->slug,
@@ -134,6 +146,8 @@ class VenueDTO
             'city' => $this->city,
             'lng' => $this->lng,
             'lat' => $this->lat,
+            'email' => $this->email,
+            'phone_number' => $this->phone_number,
             'slug' => $this->slug,
             'venue_type_id' => $this->venue_type_id,
             'type_label' => $this->type_label,

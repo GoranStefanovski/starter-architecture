@@ -54,6 +54,8 @@
           address: newValue.address,
           lng: newValue.lng,
           lat: newValue.lat,
+          email: newValue.email,
+          phone_number: newValue.phone_number,
           venue_type_id: newValue.venue_type_id,
           country: newValue.country,
           city: newValue.city,
@@ -68,6 +70,8 @@
   const [address] = defineField('address');
   const [lng] = defineField('lng');
   const [lat] = defineField('lat');
+  const [email] = defineField('email');
+  const [phone_number] = defineField('phone_number');
   const [city] = defineField('city');
   const [country] = defineField('country');
 </script>
@@ -96,6 +100,8 @@
               v-model:address="address"
               v-model:lng="lng"
               v-model:lat="lat"
+              v-model:email="email"
+              v-model:phone_number="phone_number"
               v-model:city="city"
               v-model:country="country"
               :venue-types="venueTypes"

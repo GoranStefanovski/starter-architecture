@@ -9,6 +9,8 @@ export interface GetVenueResponse {
   address: string;
   lng: number;
   lat: number;
+  email: string;
+  phone_number: string;
   city: string;
   country: string;
   updated_at: string;

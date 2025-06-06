@@ -7,6 +7,8 @@ export interface UserFormItem {
   address: string;
   lng: number;
   lat: number;
+  email: string;
+  phone_number: string;
   city: string;
   country: string;
 }

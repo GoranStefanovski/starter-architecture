@@ -17,6 +17,8 @@
   const address = defineModel('address', { required: true, type: String });
   const lat = defineModel('lat', { required: true, type: Number });
   const lng = defineModel('lng', { required: true, type: Number });
+  const email = defineModel('email', { required: true, type: String });
+  const phone_number = defineModel('phone_number', { required: true, type: String });
   const city = defineModel('city', { required: true, type: String });
   const country = defineModel('country', { required: true, type: String });
   const countryCodeMap = {
@@ -52,13 +54,7 @@
   };
 
   //TODO: should be put in a seperate component
-  // watch([lat, lng], ([newLat, newLng]) => {
-  //   if (map && marker) {
-  //     const pos = { lat: newLat, lng: newLng };
-  //     map.setCenter(pos);
-  //     marker.setPosition(pos);
-  //   }
-  // });
+  //TODO: change AutoComplete to PlacesAutoComplete & Marker to AdvancedMarkerElement in future (working fine for now)
 
   watch(country, (newCode) => {
     if (autocomplete && newCode) {
@@ -150,9 +146,11 @@
   />
   <form-input v-model="bio" name="bio" :label="t('venues.bio.label')" is-inline />
   <form-input v-model="address" name="address" :label="t('venues.address.label')" is-inline />
-  <form-input v-model="lat" type="number" name="lat" :label="t('venues.address.lat')" is-inline />
-  <form-input v-model="lng" type="number" name="lng" :label="t('venues.address.lng')" is-inline />
+  <form-input v-model="email" name="email" :label="t('venues.contact.email')" is-inline />
+  <form-input v-model="phone_number" name="phone_number" :label="t('venues.contact.phone_number')" is-inline />
   <form-dropdown id="country" v-model="country" name="country" :label="t('venues.address.country')" :options="allowedCountries" />
   <form-input ref="cityInput" v-model="city" name="city" :label="t('venues.address.city')" is-inline />
+  <form-input v-model="lat" type="number" name="lat" :label="t('venues.address.lat')" is-inline />
+  <form-input v-model="lng" type="number" name="lng" :label="t('venues.address.lng')" is-inline />
   <div ref="mapContainer" style="width: 100%; height: 400px; margin-top: 1rem" />
 </template>
