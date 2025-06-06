@@ -59,7 +59,6 @@ export const useVenuesForm = (venueId?: number) => {
     queryKey: ['venue-types'],
     queryFn: async () => {
       const response = await axios.get<VenueTypeResponse[]>(USER_API_ENDPOINTS.getVenueTypes);
-      console.log(response.data);
       return response.data;
     },
   });

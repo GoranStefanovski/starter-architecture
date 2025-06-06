@@ -12,11 +12,14 @@ class VenueDTO
     public string $name;
     public string $address;
     public ?string $bio;
+    public string $country;
+    public string $city;
     public float $lng;
     public float $lat;
     public ?string $slug = null;
     public int $venue_type_id;
     public ?string $type_label = null;
+    //TODO: might have to be null
     public int $user_id;
 
     private ?Venue $model = null;
@@ -25,6 +28,8 @@ class VenueDTO
         string $name,
         string $address,
         ?string $bio,
+        string $country,
+        string $city,
         float $lng,
         float $lat,
         int $venue_type_id,
@@ -37,6 +42,8 @@ class VenueDTO
         $this->name = $name;
         $this->address = $address;
         $this->bio = $bio;
+        $this->country = $country;
+        $this->city = $city;
         $this->lng = $lng;
         $this->lat = $lat;
         $this->venue_type_id = $venue_type_id;
@@ -56,6 +63,8 @@ class VenueDTO
             $request->input('name'),
             $request->input('address'),
             $request->input('bio'),
+            $request->input('country'),
+            $request->input('city'),
             $request->float('lng'),
             $request->float('lat'),
             $request->integer('venue_type_id'),
@@ -66,21 +75,22 @@ class VenueDTO
         );
     }
 
-    public static function fromRequestForCreate(Request $request, int $userId): self
+    public static function fromRequestForCreate(Request $request): self
     {
         $name = $request->input('name');
         $id = $request->integer('id', 0);
-
         return new self(
             $request->input('name'),
             $request->input('address'),
             $request->input('bio'),
+            $request->input('country'),
+            $request->input('city'),
             $request->float('lng'),
             $request->float('lat'),
             $request->integer('venue_type_id'),
             self::generateSlug($name, $id), // type_label
             $request->input('slug'),
-            $userId
+            $request->integer('user_id'),
         );
     }
 
@@ -90,6 +100,8 @@ class VenueDTO
             $venue->name,
             $venue->address,
             $venue->bio,
+            $venue->country,
+            $venue->city,
             $venue->lng,
             $venue->lat,
             (int) $venue->venue_type_id,
@@ -118,6 +130,8 @@ class VenueDTO
             'name' => $this->name,
             'address' => $this->address,
             'bio' => $this->bio,
+            'country' => $this->country,
+            'city' => $this->city,
             'lng' => $this->lng,
             'lat' => $this->lat,
             'slug' => $this->slug,

@@ -32,10 +32,10 @@ interface EventRepositoryInterface{
 
     /**
      * @param int $eventId
-     * @param EventDTO $eventData
+     * @param EventDTO $eventDTO
      * @return Event
      */
-    public function update(int $eventId, EventDTO $eventData): Event;
+    public function update(int $eventId, EventDTO $eventDTO): Event;
 
     /**
      * @param integer $id

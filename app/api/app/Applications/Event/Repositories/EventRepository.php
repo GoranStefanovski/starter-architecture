@@ -34,28 +34,29 @@ class EventRepository implements EventRepositoryInterface{
 
     public function get($id): Event
     {
-        return $this->event::findOrFail($id);
+        return $this->event::with('musicGenres')->findOrFail($id);
     }
 
     public function create(EventDTO $eventDTO): Event
     {
         $attributes = $eventDTO->toArray();
-
+        //Safe Hydration (tickets and genreIds are not fillable on the Event Eloquent model)
+        unset($attributes['tickets'],$attributes['genreIds']);
         $event = new Event($attributes);
         $event->save();
-
         return $event;
     }
 
-    public function update(int $eventId, EventDTO $eventData): Event
+    public function update(int $eventId, EventDTO $eventDTO): Event
     {
         $event = $this->event->findOrFail($eventId);
-        $attributes = $eventData->toArray();
+        $attributes = $eventDTO->toArray();
         unset($attributes['tickets']);
         $event->update($attributes);
+        $event->musicGenres()->sync($eventDTO->genreIds);
 
         $existingTicketIds = [];
-        foreach ($eventData->tickets as $ticketDTO) {
+        foreach ($eventDTO->tickets as $ticketDTO) {
             if ($ticketDTO->id) {
                 // update existing ticket
                 $ticket = $event->tickets()->find($ticketDTO->id);
@@ -90,6 +91,21 @@ class EventRepository implements EventRepositoryInterface{
 
         if (array_key_exists($data['column'], self::COLUMNS_MAP)) {
             $query->orderBy(self::COLUMNS_MAP[$data['column']], $data['dir']);
+        }
+
+        if (!empty($data['music_genre'])) {
+            $genreIds = is_array($data['music_genre']) ? $data['music_genre'] : [$data['music_genre']];
+            $query->whereHas('musicGenres', function ($q) use ($genreIds) {
+                $q->whereIn('music_genres.id', $genreIds);
+            });
+        }
+
+        if (!empty($data['city'])) {
+            $query->where('city', $data['city']);
+        }
+
+        if (!empty($data['start_date'])) {
+            $query->whereDate('event_start', '=', $data['start_date']);
         }
 
         $search = $data['search'];

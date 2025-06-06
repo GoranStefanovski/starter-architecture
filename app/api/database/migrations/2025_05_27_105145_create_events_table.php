@@ -16,6 +16,8 @@ return new class extends Migration
 
             $table->string('name');
             $table->text('description')->nullable();
+            $table->string('city');
+            $table->string('country')->default('North Macedonia'); // or nullable
             $table->text('address')->nullable();
 
             $table->float('lng');

@@ -1,8 +1,10 @@
 <script lang="ts" setup>
   import { IconMail } from '@starter-core/icons';
+  import { ref, watch, onMounted } from 'vue';
   import { useI18n } from 'vue-i18n';
   import UserFormAvatar from '../UserFormAvatar.vue';
   import { FormDropdown, FormInput } from '@starter-core/dash-ui/src';
+  import { loadGoogleMaps } from '@/plugins/googleMaps';
 
   type EmitsType = {
     (event: 'uploadAvatar', file: File): void;
@@ -15,6 +17,29 @@
   const address = defineModel('address', { required: true, type: String });
   const lat = defineModel('lat', { required: true, type: Number });
   const lng = defineModel('lng', { required: true, type: Number });
+  const city = defineModel('city', { required: true, type: String });
+  const country = defineModel('country', { required: true, type: String });
+  const countryCodeMap = {
+    'North Macedonia': 'mk',
+    Germany: 'de',
+    France: 'fr',
+    USA: 'us',
+  };
+
+  const mapContainer = ref<HTMLElement | null>(null);
+  const cityInput = ref<HTMLElement | null>(null);
+  let map: any = null;
+  let marker: any = null;
+  let autocomplete: any;
+  let sessionToken: any;
+  const allowedCountries = [
+    { id: 'mk', name: 'North Macedonia' },
+    { id: 'de', name: 'Germany' },
+    { id: 'fr', name: 'France' },
+    { id: 'us', name: 'USA' },
+  ];
+  let isUserDragging = false;
+
   const { errors = {}, avatar } = defineProps<{
     errors: any;
     avatar?: string | null;
@@ -25,6 +50,86 @@
   const uploadAvatar = (file: File) => {
     emit('uploadAvatar', file);
   };
+
+  //TODO: should be put in a seperate component
+  // watch([lat, lng], ([newLat, newLng]) => {
+  //   if (map && marker) {
+  //     const pos = { lat: newLat, lng: newLng };
+  //     map.setCenter(pos);
+  //     marker.setPosition(pos);
+  //   }
+  // });
+
+  watch(country, (newCode) => {
+    if (autocomplete && newCode) {
+      autocomplete.setComponentRestrictions({ country: newCode });
+    }
+  });
+
+  watch([lat, lng], ([newLat, newLng]) => {
+    if (!isUserDragging && map && marker) {
+      const pos = { lat: newLat, lng: newLng };
+      map.setCenter(pos);
+      marker.setPosition(pos);
+    }
+  });
+
+  onMounted(async () => {
+    const maps = await loadGoogleMaps();
+    const center = { lat: lat.value || 41.0312, lng: lng.value || 21.3339 };
+
+    const inputEl = (cityInput.value as any)?.$el?.querySelector('input');
+    if (!inputEl) return;
+
+    sessionToken = new maps.places.AutocompleteSessionToken();
+    autocomplete = new maps.places.Autocomplete(inputEl, {
+      types: ['(cities)'],
+      componentRestrictions: { country: (country.value || 'mk').toLowerCase() },
+      sessionToken,
+    });
+
+    map = new maps.Map(mapContainer.value!, {
+      center,
+      zoom: 14,
+    });
+
+    marker = new maps.Marker({
+      position: center,
+      map,
+      draggable: true,
+    });
+
+    inputEl.addEventListener('input', () => {
+      sessionToken = new maps.places.AutocompleteSessionToken();
+      autocomplete.setOptions({ sessionToken });
+    });
+
+    autocomplete.addListener('place_changed', () => {
+      const place = autocomplete.getPlace();
+      if (!place.geometry) return;
+
+      const loc = place.geometry.location;
+      city.value = place.name;
+      lat.value = loc.lat();
+      lng.value = loc.lng();
+
+      isUserDragging = false;
+      map.setCenter(loc);
+      marker.setPosition(loc);
+    });
+
+    marker.addListener('dragstart', () => {
+      isUserDragging = true;
+    });
+
+    marker.addListener('dragend', () => {
+      const pos = marker.getPosition();
+      if (pos) {
+        lat.value = pos.lat();
+        lng.value = pos.lng();
+      }
+    });
+  });
 </script>
 <template>
   <div class="form-group form-input form-group--inline">
@@ -47,4 +152,7 @@
   <form-input v-model="address" name="address" :label="t('venues.address.label')" is-inline />
   <form-input v-model="lat" type="number" name="lat" :label="t('venues.address.lat')" is-inline />
   <form-input v-model="lng" type="number" name="lng" :label="t('venues.address.lng')" is-inline />
+  <form-dropdown id="country" v-model="country" name="country" :label="t('venues.address.country')" :options="allowedCountries" />
+  <form-input ref="cityInput" v-model="city" name="city" :label="t('venues.address.city')" is-inline />
+  <div ref="mapContainer" style="width: 100%; height: 400px; margin-top: 1rem" />
 </template>

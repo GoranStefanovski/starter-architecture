@@ -15,7 +15,9 @@
   "address": {
     "label": "Address",
     "lat": "Latitude",
-    "lng": "Longitude"
+    "lng": "Longitude",
+    "city": "City",
+    "country": "Country"
   },
   "bio": {
     "label": "Bio"

@@ -25,17 +25,17 @@ interface EventServiceInterface
     public function get(int $id): EventDTO;
 
     /**
-     * @param EventDTO $eventData
+     * @param EventDTO $eventDTO
      * @return EventDTO
      */
-    public function create(EventDTO $eventData): EventDTO;
+    public function create(EventDTO $eventDTO): EventDTO;
 
     /**
      * @param int $eventId
-     * @param EventDTO $eventData
+     * @param EventDTO $eventDTO
      * @return EventDTO
      */
-    public function update(int $eventId, EventDTO $eventData): EventDTO;
+    public function update(int $eventId, EventDTO $eventDTO): EventDTO;
 
     /**
      * @param integer $id

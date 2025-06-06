@@ -27,6 +27,8 @@ class Venue extends Model implements HasMedia
     protected $fillable = [
         'name',
         'bio',
+        'country',
+        'city',
         'address',
         'lng',
         'lat',

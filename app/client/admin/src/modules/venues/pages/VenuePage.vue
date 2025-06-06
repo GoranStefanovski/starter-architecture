@@ -31,10 +31,14 @@
   });
 
   const submitHandler = handleSubmit((values) => {
+    const payload = {
+      ...values,
+      user_id: auth.user.id,
+    };
     if (isEditPage.value) {
-      updateVenue(values);
+      updateVenue(payload);
     } else {
-      createVenue(values);
+      createVenue(payload);
     }
   });
 
@@ -51,6 +55,8 @@
           lng: newValue.lng,
           lat: newValue.lat,
           venue_type_id: newValue.venue_type_id,
+          country: newValue.country,
+          city: newValue.city,
         });
       }
     },
@@ -62,6 +68,8 @@
   const [address] = defineField('address');
   const [lng] = defineField('lng');
   const [lat] = defineField('lat');
+  const [city] = defineField('city');
+  const [country] = defineField('country');
 </script>
 
 <template>
@@ -88,6 +96,8 @@
               v-model:address="address"
               v-model:lng="lng"
               v-model:lat="lat"
+              v-model:city="city"
+              v-model:country="country"
               :venue-types="venueTypes"
               :errors="errors"
             />

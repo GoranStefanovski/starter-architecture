@@ -29,6 +29,8 @@ class VenueFactory extends Factory
         return [
             'name' => $this->faker->sentence(3),
             'bio' => $this->faker->sentence(),
+            'country' => 'North Macedonia',
+            'city' => 'Bitola',
             'address' => $this->faker->randomElement($streets) . ' ' . $this->faker->buildingNumber . ', Bitola, Macedonia',
             'lng' => $this->faker->longitude(21.300, 21.370),
             'lat' => $this->faker->latitude(41.020, 41.060),

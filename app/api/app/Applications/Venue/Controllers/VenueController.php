@@ -102,9 +102,9 @@ class VenueController extends Controller
     {
         try {
             $data = $request->all();
-            $usersDTO = $this->venueService->draw($data);
+            $venuesDTO = $this->venueService->draw($data);
 
-            return response()->json($usersDTO);
+            return response()->json($venuesDTO);
         } catch (\InvalidArgumentException $e) {
             // Handle specific exceptions like InvalidArgumentException
             return response()->json([

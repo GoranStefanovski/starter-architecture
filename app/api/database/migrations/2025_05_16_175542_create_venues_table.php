@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('name');
             $table->text('bio')->nullable();
             $table->text('address');
+            $table->string('city');
+            $table->string('country')->default('North Macedonia');
             $table->float('lng'); // longitude
             $table->float('lat'); // latitude
             $table->string('email', 150)->unique();

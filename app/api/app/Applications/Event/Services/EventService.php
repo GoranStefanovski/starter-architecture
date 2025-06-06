@@ -30,22 +30,24 @@ class EventService implements EventServiceInterface{
         );
     }
 
-    public function create(EventDTO $eventData): EventDTO
+    public function create(EventDTO $eventDTO): EventDTO
     {
         // Create and save the event
-        $newEvent = $this->eventRepository->create($eventData);
+        $newEvent = $this->eventRepository->create($eventDTO);
 
         // Create and save the tickets
-        foreach ($eventData->tickets as $ticketDTO) {
+        foreach ($eventDTO->tickets as $ticketDTO) {
             $newEvent->tickets()->create($ticketDTO->toArray());
         }
+        // Create and save the attached genres
+        $newEvent->musicGenres()->sync($eventDTO->genreIds);
 
         return EventDTO::fromModel($newEvent);
     }
 
-    public function update(int $eventId, EventDTO $eventData): EventDTO
+    public function update(int $eventId, EventDTO $eventDTO): EventDTO
     {
-        $venue = $this->eventRepository->update($eventId, $eventData);
+        $venue = $this->eventRepository->update($eventId, $eventDTO);
         return EventDTO::fromModel($venue);
     }
 
@@ -64,7 +66,7 @@ class EventService implements EventServiceInterface{
 
         $data['columns'] = ['events.name', 'events.address'];
         $data['length'] = $data['length'] ?? 10;
-        $data['column'] = $data['column'] ?? 'venues.name';
+        $data['column'] = $data['column'] ?? 'events.name';
         $data['dir'] = $data['dir'] ?? 'asc';
         $data['search'] = $data['search'] ?? '';
         $data['draw'] = $data['draw'] ?? 1;

@@ -7,6 +7,8 @@ export interface UserFormItem {
   address: string;
   lng: number;
   lat: number;
+  city: string;
+  country: string;
 }
 
 export type UserMyProfileForm = Pick<UserFormItem, 'name' | 'address' | 'bio'>;

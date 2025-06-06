@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Applications\Common\Model\MusicGenre;
 use App\Applications\User\Model\User;
 use App\Applications\Venue\Model\Venue;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -46,6 +47,8 @@ class EventFactory extends Factory
         return [
             'name' => $this->faker->sentence(3),
             'description' => $this->faker->paragraph(),
+            'country' => 'North Macedonia',
+            'city' => 'Bitola',
             'address' => $address,
             'lat' => $lat,
             'lng' => $lng,
@@ -55,5 +58,14 @@ class EventFactory extends Factory
             'user_id' => $admin->id, // override in seeder or factory call
             'venue_id' => $venueId,
         ];
+    }
+
+    public function configure(): static
+    {
+        return $this->afterCreating(function (Event $event) {
+            // Attach 0–3 random genres
+            $genres = MusicGenre::inRandomOrder()->limit(rand(0, 3))->pluck('id');
+            $event->musicGenres()->attach($genres);
+        });
     }
 }
