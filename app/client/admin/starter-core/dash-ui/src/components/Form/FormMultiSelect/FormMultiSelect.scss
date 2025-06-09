@@ -1,0 +1,63 @@
+@import "../FormDropdown/FormDropdown.scss";
+$label-config: kt-get($form-config, label);
+$input-config: kt-get($form-config, input);
+
+.form-dropdown--multi__wrapper {
+  @extend .form-dropdown__input !optional;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  cursor: pointer;
+  min-height: 38px;
+}
+
+.form-dropdown--multi__tag {
+  background-color: var(--dui-color-neutral-100);
+  border: 1px solid var(--dui-color-neutral-300);
+  border-radius: 3px;
+  padding: 2px 6px;
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+
+  &-remove {
+    margin-left: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    color: var(--dui-color-neutral-700);
+
+    &:hover {
+      color: kt-get($state-colors, danger, base);
+    }
+  }
+}
+
+.form-dropdown--multi__input {
+  border: none;
+  outline: none;
+  background: transparent;
+  flex: 1;
+  min-width: 80px;
+}
+
+.form-dropdown--multi__dropdown {
+  position: sticky;
+  z-index: 100;
+  background: white;
+  border: var(--dui-border);
+  border-radius: var(--dui-border-radius);
+  margin-top: 4px;
+  max-height: 200px;
+  overflow-y: auto;
+  width: 100%;
+}
+
+.form-dropdown--multi__option {
+  padding: 8px 12px;
+  cursor: pointer;
+  &:hover {
+    background-color: var(--dui-color-neutral-100);
+  }
+}
+

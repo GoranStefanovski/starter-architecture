@@ -3,6 +3,7 @@
 namespace App\Applications\Venue\Repositories;
 
 use App\Applications\Pagination\StarterPaginator;
+use App\Applications\User\Model\User;
 use App\Applications\Venue\DTO\VenueDTO;
 use App\Applications\Venue\Model\Venue;
 use Spatie\Permission\Models\Role;
@@ -69,4 +70,15 @@ interface VenueRepositoryInterface
      * @return Media
      */
     public function uploadAvatar(Venue $venue, UploadedFile $file): Media;
+
+    /**
+     * Fetch venues for an event based on if the user is an Organizator or Collaborator
+     * Organization = all venues
+     * Collaborator = only his venues
+     *
+     * @param User $user
+     * @return Collection
+     */
+    public function getVenuesAvailableForEvent(User $user): Collection;
+
 }

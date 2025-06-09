@@ -1,9 +1,9 @@
 <script setup lang="ts">
   import { computed } from 'vue';
-  import { useVenuesTable } from '../composables';
-  import { VENUES_DATATABLE_COLUMNS } from '../constants';
-  import VenuesTableHeader from './VenuesTableHeader.vue';
-  import VenuesTableRow from './VenuesTableRow.vue';
+  import { EVENTS_DATATABLE_COLUMNS } from '../constants';
+  import EventsTableHeader from './EventsTableHeader.vue';
+  import EventsTableRow from './EventsTableRow.vue';
+  import { useEventsTable } from '@/modules/events/composables';
   import {
     useDatatable,
     DatatableComponent,
@@ -14,30 +14,30 @@
 
   const { query, onPaginationChange } = useDatatable();
 
-  const { data, isLoading, isFetching, error } = useVenuesTable(query);
+  const { data, isLoading, isFetching, error } = useEventsTable(query);
 
   const pagination = computed(() => data.value?.pagination ?? null);
-  const venues = computed(() => data.value?.data ?? null);
+  const events = computed(() => data.value?.data ?? null);
 </script>
 <template>
   <DatatableComponent
     :query="query"
     :isLoading="isLoading || isFetching"
-    :columns="VENUES_DATATABLE_COLUMNS"
+    :columns="EVENTS_DATATABLE_COLUMNS"
     :error="error?.message"
   >
     <template #header>
-      <DatatableHeader title="Venues" subtitle="List of venues">
-        <VenuesTableHeader />
+      <DatatableHeader title="Events" subtitle="List of events">
+        <EventsTableHeader />
       </DatatableHeader>
       <DatatableFilters />
     </template>
-    <template v-if="venues" #default>
-      <VenuesTableRow
-        v-for="(venue, index) in venues"
-        :key="venue.id"
-        :columns="VENUES_DATATABLE_COLUMNS"
-        :user="venue"
+    <template v-if="events" #default>
+      <EventsTableRow
+        v-for="(event, index) in events"
+        :key="event.id"
+        :columns="EVENTS_DATATABLE_COLUMNS"
+        :event="event"
         :is-even-row="index % 2 === 0"
       />
     </template>

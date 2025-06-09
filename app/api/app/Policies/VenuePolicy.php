@@ -16,13 +16,15 @@ class VenuePolicy
         return $user->hasRole('admin');
     }
 
-    /**
-     * Determine whether the user can view the model.
-     */
-//    public function view(User $user, Venue $venue): bool
-//    {
-//        //
-//    }
+    public function getAllVenuesForEvent(User $user): bool
+    {
+        return $user->hasRole('organization');
+    }
+
+    public function getOwnVenuesForEvent(User $user): bool
+    {
+        return $user->hasRole('collaborator');
+    }
 
     /**
      * Determine whether the user can create models.

@@ -40,6 +40,12 @@ class HomeController extends Controller
                 'route' => 'venues',
                 'permission' => UserPermissions::READ_VENUES,
             ],
+            [
+                'label' => 'admin.events.main',
+                'name' => 'item_events',
+                'route' => 'events',
+                'permission' => UserPermissions::READ_EVENTS,
+            ],
         ];
 
         $pagesItems = [

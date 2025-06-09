@@ -2,8 +2,10 @@
 
 namespace App\Applications\Venue\Repositories;
 
+use App\Applications\User\Model\User;
 use App\Applications\Venue\DTO\VenueDTO;
 use App\Applications\Pagination\StarterPaginator;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\UploadedFile;
 use App\Applications\Venue\Model\Venue;
 use Illuminate\Support\Str;
@@ -113,5 +115,20 @@ class VenueRepository implements VenueRepositoryInterface
     public function uploadAvatar(Venue $venue, UploadedFile $file): Media
     {
         return $venue->addMedia($file)->toMediaCollection('avatars');
+    }
+
+    //TODO: smart to cache these in redis after they've been fetched once, no reason for multiple fetches, they wont be changed,
+    //TODO: unless a new venue is added(look into this)
+    public function getVenuesAvailableForEvent(User $user): Collection
+    {
+        if ($user->can('getAllVenuesForEvent', $user)){
+            return Venue::select('id', 'name')->get();
+        }
+
+        if ($user->can('getOwnVenuesForEvent', $user)) {
+            return $user->venues()->select('id', 'name')->get();
+        }
+
+        return new Collection();
     }
 }

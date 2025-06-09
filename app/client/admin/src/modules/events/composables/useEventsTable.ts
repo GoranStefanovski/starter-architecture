@@ -3,10 +3,10 @@ import { useQuery } from '@tanstack/vue-query';
 import axios, { type AxiosError } from 'axios';
 import type { ComputedRef } from 'vue';
 import { USER_API_ENDPOINTS, USERS_TABLE_QUERY_KEY } from '../constants';
-import type { VenuesTableResponse } from '../types';
+import type { EventsTableResponse } from '../types';
 import type { TableQuery } from '@starter-core/dash-ui/src';
 
-export const useVenuesTable = (query: ComputedRef<TableQuery>): UseQueryReturnType<VenuesTableResponse, AxiosError> => {
+export const useEventsTable = (query: ComputedRef<TableQuery>): UseQueryReturnType<EventsTableResponse, AxiosError> => {
   return useQuery({
     queryKey: [USERS_TABLE_QUERY_KEY, query],
     queryFn: async () => {

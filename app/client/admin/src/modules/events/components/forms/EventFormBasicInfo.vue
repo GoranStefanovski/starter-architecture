@@ -3,7 +3,7 @@
   import { ref, watch, onMounted } from 'vue';
   import { useI18n } from 'vue-i18n';
   import UserFormAvatar from '../UserFormAvatar.vue';
-  import { FormDropdown, FormInput } from '@starter-core/dash-ui/src';
+  import { FormDropdown, FormInput, FormMultiSelect } from '@starter-core/dash-ui/src';
   import { loadGoogleMaps } from '@/plugins/googleMaps';
 
   type EmitsType = {
@@ -11,16 +11,18 @@
   };
 
   const { t } = useI18n();
+  const event_id = defineModel('event_id', { required: true, type: Number });
+  const venue_id = defineModel('venue_id', { required: true, type: Number });
   const name = defineModel('name', { required: true, type: String });
-  const venueTypeId = defineModel('venue_type_id', { required: true, type: Number });
-  const bio = defineModel('bio', { required: false, type: String });
-  const address = defineModel('address', { required: true, type: String });
-  const lat = defineModel('lat', { required: true, type: Number });
-  const lng = defineModel('lng', { required: true, type: Number });
-  const email = defineModel('email', { required: true, type: String });
-  const phone_number = defineModel('phone_number', { required: true, type: String });
-  const city = defineModel('city', { required: true, type: String });
+  const description = defineModel('description', { required: false, type: String });
   const country = defineModel('country', { required: true, type: String });
+  const city = defineModel('city', { required: true, type: String });
+  const lng = defineModel('lng', { required: true, type: Number });
+  const lat = defineModel('lat', { required: true, type: Number });
+  const event_start = defineModel('event_start', { required: true, type: Date });
+  const event_end = defineModel('event_end', { required: true, type: Date });
+  const tickets = defineModel('tickets', { required: true, type: Array<any> });
+  const genreIds = defineModel('genreIds', { required: true, type: Array<Number> });
 
   const mapContainer = ref<HTMLElement | null>(null);
   const cityInput = ref<HTMLElement | null>(null);
@@ -39,7 +41,7 @@
   const { errors = {}, avatar } = defineProps<{
     errors: any;
     avatar?: string | null;
-    venueTypes: any[];
+    musicGenres: any[];
   }>();
   const emit = defineEmits<EmitsType>();
 
@@ -130,21 +132,31 @@
       <user-form-avatar :src="avatar" @change="uploadAvatar" is-circle is-outline />
     </div> -->
   </div>
-  <form-input v-model="name" name="name" :label="t('venues.name.label')" is-inline />
-  <form-dropdown
-    v-model="venueTypeId"
-    id="venue_type_id"
-    :options="venueTypes"
-    label="Venue Type"
-    :errors="[errors?.venue_type_id]"
+  <form-input v-model="name" name="name" :label="t('events.name.label')" is-inline />
+  <form-input v-model="description" name="description" :label="t('events.desc.label')" is-inline />
+  <form-input v-model="venue_id" name="venue_id" :label="t('events.venue.label')" is-inline />
+
+  <form-multi-select
+    v-model="genreIds"
+    id="music_genres_id"
+    :options="musicGenres"
+    label="Music Genres"
+    :errors="[errors?.music_genres_id]"
+    is-inline
   />
-  <form-input v-model="bio" name="bio" :label="t('venues.bio.label')" is-inline />
-  <form-input v-model="address" name="address" :label="t('venues.address.label')" is-inline />
-  <form-input v-model="email" name="email" :label="t('venues.contact.email')" is-inline />
-  <form-input v-model="phone_number" name="phone_number" :label="t('venues.contact.phone_number')" is-inline />
-  <form-dropdown id="country" v-model="country" name="country" :label="t('venues.address.country')" :options="allowedCountries" />
-  <form-input ref="cityInput" v-model="city" name="city" :label="t('venues.address.city')" is-inline />
-  <form-input v-model="lat" type="number" name="lat" :label="t('venues.address.lat')" is-inline />
-  <form-input v-model="lng" type="number" name="lng" :label="t('venues.address.lng')" is-inline />
+  <form-input v-model="event_start" name="event_start" :label="t('events.event_time.start')" is-inline />
+  <form-input v-model="event_end" name="event_end" :label="t('events.event_time.end')" is-inline />
+  <form-input v-model="tickets" name="tickets" :label="t('events.tickets.add')" is-inline />
+  <form-dropdown
+    id="country"
+    v-model="country"
+    name="country"
+    :label="t('events.address.country')"
+    :options="allowedCountries"
+    is-inline
+  />
+  <form-input ref="cityInput" v-model="city" name="city" :label="t('events.address.city')" is-inline />
+  <form-input v-model="lat" type="number" name="lat" :label="t('events.address.lat')" is-inline />
+  <form-input v-model="lng" type="number" name="lng" :label="t('events.address.lng')" is-inline />
   <div ref="mapContainer" style="width: 100%; height: 400px; margin-top: 1rem" />
 </template>

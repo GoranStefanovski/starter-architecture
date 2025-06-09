@@ -30,6 +30,9 @@ Route::group([
         Route::patch('{id}', [VenueController::class, 'update']);
         Route::delete('delete/{id}', [VenueController::class, 'delete']);
 
+        //TODO: need to create route for fetching specific venues, where creating or editing an Event
+        //TODO: and use getVenuesAvailableForEvent in VenueRepository
+
         // User avatars
         Route::post('avatar/{id}', [VenueController::class, 'uploadAvatar']);
     });
