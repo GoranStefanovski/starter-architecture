@@ -97,12 +97,17 @@
     }
   });
 
+  watch(
+    () => tickets.value,
+    (val) => {
+      if (!val.length) {
+        tickets.value = [createEmptyTicket()];
+      }
+    },
+    { immediate: true }
+  );
+
   onMounted(async () => {
-    if (!tickets.value.length) {
-      const updated = [...tickets.value]; // create a shallow clone
-      updated.push(createEmptyTicket());
-      tickets.value = updated;
-    }
     const maps = await loadGoogleMaps();
     const center = { lat: lat.value || 41.0312, lng: lng.value || 21.3339 };
 
