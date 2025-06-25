@@ -37,6 +37,9 @@ class EventService implements EventServiceInterface{
 
         // Create and save the tickets
         foreach ($eventDTO->tickets as $ticketDTO) {
+            // handle different if ticket sale date is inputed from the front
+            $ticketDTO->sale_start = $eventDTO->event_start;
+            $ticketDTO->sale_end = $eventDTO->event_end;
             $newEvent->tickets()->create($ticketDTO->toArray());
         }
         // Create and save the attached genres

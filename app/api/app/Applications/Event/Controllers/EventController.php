@@ -70,7 +70,9 @@ class EventController extends Controller
      */
     public function update(Request $request,$eventId): JsonResponse
     {
+//        dd($request);
         $dto = EventDTO::fromRequest($request);
+        //dd($dto);
         $EventDTO = $this->eventService->update($eventId,$dto);
         return response()->json($EventDTO);
     }

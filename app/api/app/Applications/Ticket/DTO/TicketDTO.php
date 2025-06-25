@@ -88,7 +88,7 @@ class TicketDTO
             $data['sale_start'] ?? null,
             $data['sale_end'] ?? null,
             $data['id'] ?? null,
-            $data['event_id'] ?? null
+            $data['event_id'] ?? null,
         );
     }
 

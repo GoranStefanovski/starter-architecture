@@ -1,9 +1,9 @@
 export interface UserFormItem {
-  id?: number | undefined;
+  id?: number;
   user_id: number;
-  venue_id?: number | undefined;
+  venue_id?: number;
   name: string;
-  description?: string | undefined;
+  description?: string;
   country: string;
   city: string;
   address?: string;
@@ -11,14 +11,16 @@ export interface UserFormItem {
   lat: number;
   event_start: Date;
   event_end: Date;
-  tickets: [];
+  tickets: Array<TicketFormItem>[];
   genreIds: [];
 }
 
-export type UserMyProfileForm = Pick<UserFormItem, 'name' | 'address' | 'description'>;
-
-export interface UpdatePasswordForm {
-  current_password: string;
-  password: string;
-  password_confirmation: string;
+export interface TicketFormItem {
+  id?: number;
+  event_id: number;
+  price: number;
+  quantity: number;
+  sale_start: Date;
+  sale_end: Date;
+  type: any;
 }

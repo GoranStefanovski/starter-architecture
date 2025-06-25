@@ -67,10 +67,9 @@ class EventDTO
 
     public static function fromRequest(Request $request): self
     {
-//        dd($request->all());
         $name = $request->input('name');
         $slug = Str::slug($name);
-
+        //dd($request);
         $tickets = collect($request->input('tickets', []))
             ->map(fn($ticket) => TicketDTO::fromArray($ticket))
             ->all();

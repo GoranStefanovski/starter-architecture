@@ -2,6 +2,7 @@
 
 namespace App\Applications\Common\Controllers;
 
+use App\Constants\TicketType;
 use App\Http\Controllers\Controller;
 use App\Applications\Common\Model\MusicGenre;
 use App\Applications\Common\Model\VenueType;
@@ -20,5 +21,12 @@ class TaxonomyController extends Controller
         return response()->json(
             VenueType::orderBy('order')->get(['id', 'name'])
         );
+    }
+
+    public function ticketTypes()
+    {
+        return response()->json([
+            'types' => TicketType::TYPES
+        ]);
     }
 }

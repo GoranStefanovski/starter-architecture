@@ -24,7 +24,7 @@
     },
   };
 
-  const { isLoading, data: formData, createEvent, updateEvent, musicGenres } = useEventsForm(eventId);
+  const { isLoading, data: formData, createEvent, updateEvent, musicGenres, ticketTypes } = useEventsForm(eventId);
 
   const { handleSubmit, errors, setValues, defineField } = useForm<UserFormItem>({
     validationSchema,
@@ -59,7 +59,7 @@
           lat: newValue.lat,
           event_start: newValue.event_start,
           event_end: newValue.event_end,
-          tickets: newValue.tickets,
+          tickets: newValue.tickets ?? [],
           genreIds: newValue.genreIds,
         });
       }
@@ -111,6 +111,7 @@
               v-model:tickets="tickets"
               v-model:genreIds="genreIds"
               :music-genres="musicGenres"
+              :ticket-types="ticketTypes"
               :errors="errors"
             />
           </SkSection>

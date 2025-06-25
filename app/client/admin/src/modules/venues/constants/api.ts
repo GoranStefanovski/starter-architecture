@@ -1,5 +1,5 @@
 export const USER_API_ENDPOINTS = {
-  get: (venueId: number) => `/venue/${venueId}`,
+  get: (venueId: number) => `/venue/get/${venueId}`,
   create: '/venue/create',
   patch: (venueId: number) => `/venue/${venueId}`,
   uploadAvatar: (venueId: number) => `/venue/avatar/${venueId}`,

@@ -5,3 +5,4 @@ use App\Applications\Common\Controllers\TaxonomyController;
 
 Route::get('/taxonomies/music-genres', [TaxonomyController::class, 'musicGenres']);
 Route::get('/taxonomies/venue-types', [TaxonomyController::class, 'venueTypes']);
+Route::get('/taxonomies/ticket-types', [TaxonomyController::class, 'ticketTypes']);

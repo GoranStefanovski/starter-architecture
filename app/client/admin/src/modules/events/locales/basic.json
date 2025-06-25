@@ -27,7 +27,10 @@
     "end": "Event end"
   },
   "tickets": {
-    "add": "Add tickets"
+    "add": "Add tickets",
+    "price": "Price",
+    "quantity": "Quantity",
+    "type": "Ticket Type"
   },
   "venue": {
     "label": "Held at"

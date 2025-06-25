@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-  import { IconMail } from '@starter-core/icons';
-  import { ref, watch, onMounted } from 'vue';
+  import { ref, watch, onMounted, computed } from 'vue';
   import { useI18n } from 'vue-i18n';
-  import UserFormAvatar from '../UserFormAvatar.vue';
-  import { FormDropdown, FormInput, FormMultiSelect } from '@starter-core/dash-ui/src';
+  import type { TicketFormItem } from '../../types/form.ts';
+  import TicketForm from '@/modules/events/components/forms/TicketForm.vue';
   import { loadGoogleMaps } from '@/plugins/googleMaps';
+  import { FormDropdown, FormInput, FormMultiSelect } from '@starter-core/dash-ui/src';
 
   type EmitsType = {
     (event: 'uploadAvatar', file: File): void;
@@ -21,7 +21,7 @@
   const lat = defineModel('lat', { required: true, type: Number });
   const event_start = defineModel('event_start', { required: true, type: Date });
   const event_end = defineModel('event_end', { required: true, type: Date });
-  const tickets = defineModel('tickets', { required: true, type: Array<any> });
+  const tickets = defineModel('tickets', { required: true, type: Array<any>, default: () => [] });
   const genreIds = defineModel('genreIds', { required: true, type: Array<Number> });
 
   const mapContainer = ref<HTMLElement | null>(null);
@@ -37,11 +37,24 @@
     { id: 'us', name: 'USA' },
   ];
   let isUserDragging = false;
+  const createEmptyTicket = (): TicketFormItem => ({
+    event_id: 0,
+    price: 0,
+    quantity: 0,
+    sale_start: new Date(),
+    sale_end: new Date(),
+    type: null,
+  });
 
-  const { errors = {}, avatar } = defineProps<{
+  const {
+    errors = {},
+    musicGenres,
+    ticketTypes,
+  } = defineProps<{
     errors: any;
     avatar?: string | null;
     musicGenres: any[];
+    ticketTypes: any[];
   }>();
   const emit = defineEmits<EmitsType>();
 
@@ -49,6 +62,24 @@
     emit('uploadAvatar', file);
   };
 
+  const availableTicketTypes = computed(() => {
+    return ticketTypes.map((type) => {
+      const isUsed = tickets.value.some((ticket) => ticket.type === type.id);
+
+      return {
+        id: type.id,
+        name: type.name,
+        isDisabled: isUsed,
+      };
+    });
+  });
+
+  const adjustedTicketTypes = (currentType: string) => {
+    return availableTicketTypes.value.map((type) => ({
+      ...type,
+      isDisabled: type.id !== currentType && type.isDisabled,
+    }));
+  };
   //TODO: should be put in a seperate component, having trouble doing so, map not rendering
   //TODO: change AutoComplete to PlacesAutoComplete & Marker to AdvancedMarkerElement in future (working fine for now)
 
@@ -67,6 +98,11 @@
   });
 
   onMounted(async () => {
+    if (!tickets.value.length) {
+      const updated = [...tickets.value]; // create a shallow clone
+      updated.push(createEmptyTicket());
+      tickets.value = updated;
+    }
     const maps = await loadGoogleMaps();
     const center = { lat: lat.value || 41.0312, lng: lng.value || 21.3339 };
 
@@ -146,7 +182,8 @@
   />
   <form-input v-model="event_start" name="event_start" :label="t('events.event_time.start')" is-inline />
   <form-input v-model="event_end" name="event_end" :label="t('events.event_time.end')" is-inline />
-  <form-input v-model="tickets" name="tickets" :label="t('events.tickets.add')" is-inline />
+  <TicketForm v-for="(ticket, i) in tickets" :key="i" :ticket="ticket" :ticket-types="adjustedTicketTypes(ticket.type)" />
+
   <form-dropdown
     id="country"
     v-model="country"

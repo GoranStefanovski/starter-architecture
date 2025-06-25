@@ -3,7 +3,7 @@ import axios from 'axios';
 import { computed } from 'vue';
 import { useToast } from 'vue-toastification';
 import { USER_API_ENDPOINTS } from '../constants';
-import type { UserFormItem, GetEventResponse, MusicGenreResponse } from '../types';
+import type { UserFormItem, GetEventResponse, MusicGenreResponse, TicketTypesResponse } from '../types';
 import { useUploadAvatar } from './useUploadAvatar';
 
 const USER_CACHE_KEY = 'user';
@@ -63,10 +63,25 @@ export const useEventsForm = (eventId?: number) => {
     },
   });
 
+  const { data: ticketTypesRaw, isLoading: isLoadingTicketTypes } = useQuery({
+    queryKey: ['ticket-types'],
+    queryFn: async () => {
+      const response = await axios.get<TicketTypesResponse>(USER_API_ENDPOINTS.getTicketTypes);
+      return response.data;
+    },
+  });
+
   const musicGenres = computed(() =>
     (musicGenresRaw.value || []).map((type: any) => ({
       id: type.id,
       name: type.name,
+    }))
+  );
+
+  const ticketTypes = computed(() =>
+    (ticketTypesRaw.value?.types || []).map((type: any) => ({
+      id: type,
+      name: type.replace('_', ' ').toUpperCase(),
     }))
   );
 
@@ -78,6 +93,7 @@ export const useEventsForm = (eventId?: number) => {
     updateEvent,
     uploadAvatar,
     musicGenres,
-    isLoading: isFetching || isUpdating || isCreating || isUploadingAvatar || isLoadingMusicGenres,
+    ticketTypes,
+    isLoading: isFetching || isUpdating || isCreating || isUploadingAvatar || isLoadingMusicGenres || isLoadingTicketTypes,
   };
 };

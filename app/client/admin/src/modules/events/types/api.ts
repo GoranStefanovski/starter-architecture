@@ -22,6 +22,12 @@ export interface GetMusicGenreResponse {
   name: string;
 }
 
+export interface GetTicketTypesResponse {
+  // label: string;
+  id: string;
+  name: string;
+}
+
 export interface EventsTableResponse {
   data: GetEventResponse[];
   pagination: PaginationObject;
@@ -29,6 +35,10 @@ export interface EventsTableResponse {
 
 export interface MusicGenreResponse {
   data: GetMusicGenreResponse[];
+}
+
+export interface TicketTypesResponse {
+  types: GetTicketTypesResponse[];
 }
 
 export type AuthUser = Omit<GetEventResponse, 'updated_at'>;

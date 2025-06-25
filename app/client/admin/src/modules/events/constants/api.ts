@@ -5,6 +5,7 @@ export const USER_API_ENDPOINTS = {
   uploadAvatar: (eventId: number) => `/event/avatar/${eventId}`,
   table: 'event/draw',
   getMusicGenres: '/taxonomies/music-genres',
+  getTicketTypes: '/taxonomies/ticket-types',
 };
 
 export const USERS_TABLE_QUERY_KEY = 'events-table';

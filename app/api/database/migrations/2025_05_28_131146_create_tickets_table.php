@@ -17,7 +17,7 @@ return new class extends Migration {
             $table->timestamp('sale_end')->nullable();
 
             $table->unsignedBigInteger('event_id');
-            $table->unique(['type', 'event_id']);
+            //$table->unique(['type', 'event_id']);
 
             $table->timestamps();
 
