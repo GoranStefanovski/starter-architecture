@@ -11,7 +11,7 @@
   };
 
   const { t } = useI18n();
-  const event_id = defineModel('event_id', { required: true, type: Number });
+  // const event_id = defineModel('event_id', { required: true, type: Number });
   const venue_id = defineModel('venue_id', { required: true, type: Number });
   const name = defineModel('name', { required: true, type: String });
   const description = defineModel('description', { required: false, type: String });
@@ -43,7 +43,7 @@
     quantity: 0,
     sale_start: new Date(),
     sale_end: new Date(),
-    type: null,
+    type: ticketTypes.find((t) => t.id === 'free_entry').id,
   });
 
   const {
@@ -97,17 +97,12 @@
     }
   });
 
-  watch(
-    () => tickets.value,
-    (val) => {
-      if (!val.length) {
-        tickets.value = [createEmptyTicket()];
-      }
-    },
-    { immediate: true }
-  );
-
   onMounted(async () => {
+    if (!tickets.value.length) {
+      const updated = [...tickets.value]; // create a shallow clone
+      updated.push(createEmptyTicket());
+      tickets.value = updated;
+    }
     const maps = await loadGoogleMaps();
     const center = { lat: lat.value || 41.0312, lng: lng.value || 21.3339 };
 

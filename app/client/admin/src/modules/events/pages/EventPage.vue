@@ -98,6 +98,7 @@
         <TabbedContentTab :label="personalInformationLabel" id="basic-info">
           <SkSection title="Customer Info">
             <EventFormBasicInfo
+              v-if="!isLoading"
               v-model:venue_id="venue_id"
               v-model:name="name"
               v-model:description="description"
