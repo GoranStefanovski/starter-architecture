@@ -15,6 +15,6 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::get('/login', [HomeController::class, 'index'])->name('login');
+//Route::get('/login', [HomeController::class, 'index'])->name('login');
 
 Route::get('/{any}', [HomeController::class, 'index'])->where('any', '.*');

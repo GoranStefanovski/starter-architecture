@@ -34,7 +34,6 @@ class RolePermissionsMap
         // Event owner
         UserRoles::ORGANIZATION => [
             UserPermissions::DASHBOARD_VIEW,
-            UserPermissions::READ_VENUES,
             UserPermissions::READ_EVENTS,
             UserPermissions::WRITE_EVENTS,
             UserPermissions::DELETE_EVENTS,
@@ -43,6 +42,7 @@ class RolePermissionsMap
         // Manage artist profile
         UserRoles::ARTIST => [
             UserPermissions::DASHBOARD_VIEW,
+            UserPermissions::WRITE_PUBLIC,
         ],
         //Registered user, can comment, vote etc.
         UserRoles::PUBLIC => [

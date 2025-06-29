@@ -11,5 +11,11 @@
     "admin": "Admin Venues",
     "public": "Public Venues",
     "add": "Add Venue"
+  },
+  "events": {
+    "main": "Events",
+    "admin": "Admin Events",
+    "public": "Public Events",
+    "add": "Add Event"
   }
 }

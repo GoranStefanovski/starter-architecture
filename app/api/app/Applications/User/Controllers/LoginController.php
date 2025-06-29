@@ -53,6 +53,9 @@ class LoginController extends Controller
         if (Auth::attempt($credentials)) {
             RateLimiter::clear($key);
             $data = Auth::user();
+            if($data->getRoleNames()->first() == 'public'){
+                return response()->json(['error' => 'Unauthorized'], 403);
+            }
             $token = $data->createToken('api-token')->plainTextToken;
 
             return response()
