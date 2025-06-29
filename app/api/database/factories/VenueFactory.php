@@ -15,13 +15,13 @@ class VenueFactory extends Factory
 
     public function definition(): array
     {
-        static $admin;
         $admin ??= User::where('email', 'admin@example.com')->first();
 
         $streets = [
             'Shirok Sokak', 'Partizanska', 'Ruzveltova', 'Goce Delchev',
             'Ivan Milutinovic', 'Stevche Naumov', 'Jane Sandanski'
         ];
+        $cities = ['Bitola','Ohrid','Skopje'];
         $name = $this->faker->company;
         $venueTypeId = VenueType::inRandomOrder()->value('id');
         $email = $this->faker->unique()->safeEmail();
@@ -29,8 +29,8 @@ class VenueFactory extends Factory
         return [
             'name' => $this->faker->sentence(3),
             'bio' => $this->faker->sentence(),
-            'country' => 'North Macedonia',
-            'city' => 'Bitola',
+            'country' => 'mk',
+            'city' => $this->faker->randomElement($cities),
             'address' => $this->faker->randomElement($streets) . ' ' . $this->faker->buildingNumber . ', Bitola, Macedonia',
             'lng' => $this->faker->longitude(21.300, 21.370),
             'lat' => $this->faker->latitude(41.020, 41.060),

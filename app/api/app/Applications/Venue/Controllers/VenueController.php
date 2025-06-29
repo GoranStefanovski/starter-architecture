@@ -14,6 +14,7 @@ use App\Applications\Venue\Requests\UpdatePasswordRequest;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use function PHPUnit\Framework\isNull;
 
 /**
  * @property VenueServiceInterface $venueService
@@ -178,4 +179,16 @@ class VenueController extends Controller
             ], 500);
         }
     }
+
+    /**
+     * Get a JSON with venues in a city
+     *
+     * @return JsonResponse
+     */
+    public function getByCity(String $city): JsonResponse
+    {
+        $venueDTOs = $this->venueService->getAllVenuesFromCity($city);
+        return response()->json($venueDTOs);
+    }
+
 }

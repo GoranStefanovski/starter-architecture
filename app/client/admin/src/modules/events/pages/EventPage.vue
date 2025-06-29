@@ -31,6 +31,7 @@
   });
 
   const submitHandler = handleSubmit((values) => {
+    console.log(values);
     const payload = {
       ...values,
       user_id: auth.user.id,
@@ -45,6 +46,7 @@
   watch(
     formData,
     (newValue) => {
+      console.log(newValue);
       if (newValue) {
         setValues({
           id: newValue.id,
@@ -52,8 +54,8 @@
           venue_id: newValue.venue_id,
           name: newValue.name,
           description: newValue.description,
-          country: newValue.country,
-          city: newValue.city,
+          country: newValue.country ?? 'mk',
+          city: newValue.city ?? 'Bitola',
           address: newValue.address,
           lng: newValue.lng,
           lat: newValue.lat,

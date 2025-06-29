@@ -81,4 +81,13 @@ interface VenueRepositoryInterface
      */
     public function getVenuesAvailableForEvent(User $user): Collection;
 
+    /**
+     * Fetch venues from the selected city
+     * Organization = all venues
+     * Collaborator = only his venues
+     *
+     * @param User $user
+     * @return Collection
+     */
+    public function getAllVenuesFromCity(String $city): array;
 }

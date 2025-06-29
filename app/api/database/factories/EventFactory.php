@@ -16,7 +16,6 @@ class EventFactory extends Factory
 
     public function definition(): array
     {
-        static $admin;
         $admin ??= User::where('email', 'admin@example.com')->first();
 
         $startHour = $this->faker->numberBetween(20, 23); // between 8 PM and 11 PM
@@ -47,7 +46,7 @@ class EventFactory extends Factory
         return [
             'name' => $this->faker->sentence(3),
             'description' => $this->faker->paragraph(),
-            'country' => 'North Macedonia',
+            'country' => 'mk',
             'city' => 'Bitola',
             'address' => $address,
             'lat' => $lat,

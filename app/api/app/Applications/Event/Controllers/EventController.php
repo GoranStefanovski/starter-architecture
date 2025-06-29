@@ -56,7 +56,6 @@ class EventController extends Controller
     public function create(Request $request): JsonResponse
     {
         $EventDTO = EventDTO::fromRequest($request);
-
         $newEventDTO = $this->eventService->create($EventDTO);
 
         return response()->json($newEventDTO);
@@ -70,9 +69,7 @@ class EventController extends Controller
      */
     public function update(Request $request,$eventId): JsonResponse
     {
-//        dd($request);
         $dto = EventDTO::fromRequest($request);
-        //dd($dto);
         $EventDTO = $this->eventService->update($eventId,$dto);
         return response()->json($EventDTO);
     }

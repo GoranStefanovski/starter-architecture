@@ -98,4 +98,9 @@ class VenueService implements VenueServiceInterface
         // Return the updated VenueDTO
         return VenueDTO::fromModel($venue);
     }
+
+    public function getAllVenuesFromCity(String $city): array
+    {
+       return  $this->venueRepository->getAllVenuesFromCity($city);
+    }
 }

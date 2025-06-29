@@ -6,8 +6,10 @@ use App\Applications\User\Model\User;
 use App\Applications\Venue\DTO\VenueDTO;
 use App\Applications\Pagination\StarterPaginator;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Http\UploadedFile;
 use App\Applications\Venue\Model\Venue;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
@@ -131,4 +133,14 @@ class VenueRepository implements VenueRepositoryInterface
 
         return new Collection();
     }
+
+    public function getAllVenuesFromCity(string $city): array
+    {
+        $query = DB::table('venues')
+            ->select('venues.id', 'venues.name', 'venues.address', 'venues.city', 'venues.country', 'venues.lat','venues.lng',)
+            ->where('venues.city', $city);
+        return $query->get()->toArray();
+    }
+
+
 }

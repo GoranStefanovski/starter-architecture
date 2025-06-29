@@ -46,7 +46,6 @@ class User extends Authenticatable implements HasMedia
         'email',
         'phone_number',
         'password',
-        'role',
         'is_disabled',
     ];
 
@@ -62,7 +61,7 @@ class User extends Authenticatable implements HasMedia
 
     protected $appends = [
         'permissions_array',
-        'role',
+        'roles',
         'avatar_url',
         'avatar_thumbnail',
     ];

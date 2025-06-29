@@ -39,6 +39,11 @@ class Event extends Model implements HasMedia
         'venue_id',
     ];
 
+    protected $casts = [
+        'event_start' => 'datetime',
+        'event_end' => 'datetime',
+    ];
+
     public function registerMediaCollections(): void
     {
         $this

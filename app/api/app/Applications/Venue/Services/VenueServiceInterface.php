@@ -58,4 +58,11 @@ interface VenueServiceInterface
      * @return VenueDTO
      */
     public function uploadAvatar(int $venueId, Request $request, Venue $venue): VenueDTO;
+
+
+    /**
+     * @return array
+     */
+    public function getAllVenuesFromCity(String $city): array;
+
 }

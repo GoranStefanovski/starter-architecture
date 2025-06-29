@@ -71,3 +71,20 @@ Clear all docker cache containers networks etc ... This will remove docker conta
 ```shell
 docker system prune -a
 ```
+
+## Running Tests:
+
+Create new .env.testing file with the following variables (or based on your current DB config)
+```dotenv
+APP_ENV=testing
+DB_CONNECTION=mysql
+DB_DATABASE=starter_test
+DB_HOST=database
+DB_PORT=3306
+DB_USERNAME=root
+DB_PASSWORD=password
+```
+After that run the command
+```shell
+php artisan migrate:fresh --database=mysql --env=testing --seed
+```

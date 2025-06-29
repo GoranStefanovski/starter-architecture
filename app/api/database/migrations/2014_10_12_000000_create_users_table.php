@@ -26,7 +26,7 @@ return new class extends Migration
             $table->string('phone_number', 25)->nullable();
 
             $table->string('password');
-            $table->string('role')->nullable(); // optional enum later?
+//            $table->string('role')->nullable(); // optional enum later?
             $table->boolean('is_disabled')->default(false);
 
             $table->rememberToken();

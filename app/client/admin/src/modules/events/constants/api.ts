@@ -6,6 +6,7 @@ export const USER_API_ENDPOINTS = {
   table: 'event/draw',
   getMusicGenres: '/taxonomies/music-genres',
   getTicketTypes: '/taxonomies/ticket-types',
+  getVenueFromCity: (city: string) => `/venue/by-city/${city}`,
 };
 
 export const USERS_TABLE_QUERY_KEY = 'events-table';

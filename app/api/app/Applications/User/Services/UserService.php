@@ -73,7 +73,6 @@ class UserService implements UserServiceInterface
         $data['draw'] = $data['draw'] ?? 1;
 
         $usersCollection = $this->userRepository->draw($data);
-
         $usersDTOs = $usersCollection->getCollection()->map(function ($user) {
             return UserDTO::fromModel($user);
         });

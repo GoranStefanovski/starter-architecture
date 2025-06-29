@@ -41,6 +41,7 @@ class UserRepository implements UserRepositoryInterface
     public function getAll(): array
     {
         $users = $this->user::all();
+//        dd($users);
         return UserDTO::fromCollection($users);
     }
 
@@ -76,11 +77,10 @@ class UserRepository implements UserRepositoryInterface
 
     public function draw($data): StarterPaginator
     {
-        //        $paginatedUsers = $this->prepareDatatableQuery($data, [User::ADMIN, User::EDITOR, User::COLLABORATOR]);
-
-        $query = $this->user->query();
-
-        // $query->whereIn('roles.name', $roles);
+        $query = $this->user->query()
+            ->leftJoin('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
+            ->leftJoin('roles', 'model_has_roles.role_id', '=', 'roles.id')
+            ->select('users.*');
 
         if (array_key_exists($data['column'], self::COLUMNS_MAP)) {
             $query->orderBy(self::COLUMNS_MAP[$data['column']], $data['dir']);

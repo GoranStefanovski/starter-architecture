@@ -60,7 +60,6 @@ class DatabaseSeeder extends Seeder
                 'first_name' => $static['first_name'],
                 'email' => $static['email'],
                 'password' => Hash::make('password'),
-                'role' => $static['role'],
             ]);
             $user->assignRole($static['role']);
         }
@@ -77,7 +76,7 @@ class DatabaseSeeder extends Seeder
         User::factory(self::NUMBER_OF_FAKE_USERS)->create()->each(function ($user) use ($rolesPool) {
             $role = $rolesPool[array_rand($rolesPool)];
             $user->update([
-                'role' => $role,
+//                'role' => $role,
                 'artist_tag' => $role === UserRoles::ARTIST ? fake()->unique()->userName() : null,
             ]);
             $user->assignRole($role);

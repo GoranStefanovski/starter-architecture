@@ -69,16 +69,15 @@ class EventDTO
     {
         $name = $request->input('name');
         $slug = Str::slug($name);
-        //dd($request);
         $tickets = collect($request->input('tickets', []))
             ->map(fn($ticket) => TicketDTO::fromArray($ticket))
             ->all();
 
         $genreIds = $request->input('genreIds', []);
-
+        $request->integer('venue_id') > 0 ? $venueId = $request->integer('venue_id') : $venueId = null;
         return new self(
             $request->integer('user_id'),
-            $request->integer('venue_id', null),
+            $venueId,
             $name,
             $request->input('description'),
             $request->input('country'),
