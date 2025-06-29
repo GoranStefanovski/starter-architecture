@@ -9,6 +9,7 @@ class UserDTO
 {
     public string $first_name;
     public string $last_name;
+    public string $phone_number;
     public string $email;
     public ?string $avatar_url;
     public ?string $avatar_thumbnail;
@@ -22,6 +23,7 @@ class UserDTO
     public function __construct(
         string $first_name,
         string $last_name,
+        string $phone_number,
         string $email,
         ?string $avatar_url,
         ?string $avatar_thumbnail,
@@ -33,6 +35,7 @@ class UserDTO
     ) {
         $this->first_name = $first_name;
         $this->last_name = $last_name;
+        $this->phone_number = $phone_number;
         $this->email = $email;
         $this->avatar_url = $avatar_url;
         $this->avatar_thumbnail = $avatar_thumbnail;
@@ -48,6 +51,7 @@ class UserDTO
         return new self(
             $request->input('first_name'),
             $request->input('last_name'),
+            $request->input('phone_number'),
             $request->input('email'),
             null,
             null,
@@ -64,6 +68,7 @@ class UserDTO
 
         $dto->first_name = $data['first_name'];
         $dto->last_name = $data['last_name'];
+        $dto->phone_number = $data['phone_number'];
 
         return $dto;
     }
@@ -73,6 +78,7 @@ class UserDTO
         return new self(
             $request->input('first_name'),
             $request->input('last_name'),
+            $request->input('phone_number'),
             $request->input('email'),
             null,
             null,
@@ -88,6 +94,7 @@ class UserDTO
         return new self(
             $user->first_name,
             $user->last_name,
+            $user->phone_number,
             $user->email,
             $user->avatar_url,
             $user->avatar_thumbnail,
@@ -118,6 +125,7 @@ class UserDTO
         return [
             'first_name' => $this->first_name,
             'last_name' => $this->last_name,
+            'phone_number' => $this->phone_number,
             'email' => $this->email,
             'avatar_url' => $this->avatar_url,
             'avatar_thumbnail' => $this->avatar_thumbnail,

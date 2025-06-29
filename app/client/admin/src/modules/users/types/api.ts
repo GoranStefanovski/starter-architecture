@@ -9,6 +9,7 @@ export interface GetUserResponse {
   id: number;
   is_disabled: boolean;
   last_name: string;
+  phone_number: string;
   permissions_array: Permission[];
   role: UserRoleId;
   updated_at: string;

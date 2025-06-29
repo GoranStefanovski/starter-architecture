@@ -25,11 +25,7 @@
     },
     {
       label: 'Phone',
-      value: '',
-    },
-    {
-      label: 'Location',
-      value: '',
+      value: user.phone_number,
     },
   ];
 </script>

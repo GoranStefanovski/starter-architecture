@@ -137,12 +137,20 @@
     :options="venueTypes"
     label="Venue Type"
     :errors="[errors?.venue_type_id]"
+    is-inline
   />
   <form-input v-model="bio" name="bio" :label="t('venues.bio.label')" is-inline />
   <form-input v-model="address" name="address" :label="t('venues.address.label')" is-inline />
   <form-input v-model="email" name="email" :label="t('venues.contact.email')" is-inline />
   <form-input v-model="phone_number" name="phone_number" :label="t('venues.contact.phone_number')" is-inline />
-  <form-dropdown id="country" v-model="country" name="country" :label="t('venues.address.country')" :options="allowedCountries" />
+  <form-dropdown
+    id="country"
+    v-model="country"
+    name="country"
+    :label="t('venues.address.country')"
+    :options="allowedCountries"
+    is-inline
+  />
   <form-input ref="cityInput" v-model="city" name="city" :label="t('venues.address.city')" is-inline />
   <form-input v-model="lat" type="number" name="lat" :label="t('venues.address.lat')" is-inline />
   <form-input v-model="lng" type="number" name="lng" :label="t('venues.address.lng')" is-inline />

@@ -3,6 +3,7 @@ nav{
   z-index: 99;
   width: 100%;
   background: transparent;
+  padding: 12px 0;
 }
 nav .wrapper {
   position: relative;
@@ -15,6 +16,12 @@ nav .wrapper {
   align-items: center;
   justify-content: space-between;
 }
+
+.logo > img{
+  width: 200px;
+  height: 100%;
+}
+
 .wrapper .logo a {
   color: #f2f2f2;
   font-size: 30px;
@@ -28,6 +35,7 @@ nav .wrapper {
 }
 .nav-links li{
   list-style: none;
+  color: black;
 }
 .nav-links li a{
   color: #f2f2f2;

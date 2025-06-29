@@ -11,6 +11,7 @@
   const { t } = useI18n();
   const lastName = defineModel('lastName', { required: true, type: String });
   const firstName = defineModel('firstName', { required: true, type: String });
+  const phoneNumber = defineModel('phoneNumber', { required: false, type: String });
   const email = defineModel('email', { required: true, type: String });
   const { errors = {}, avatar } = defineProps<{
     errors: any;
@@ -45,4 +46,11 @@
       <IconMail />
     </template>
   </form-input>
+  <form-input
+    v-model="phoneNumber"
+    name="phone-number"
+    :label="t('users.phone_number.label')"
+    :error="errors.phone_number"
+    is-inline
+  />
 </template>

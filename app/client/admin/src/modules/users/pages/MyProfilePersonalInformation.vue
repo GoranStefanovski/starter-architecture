@@ -36,6 +36,7 @@
         email: formData.value.email,
         first_name: formData.value.first_name,
         last_name: formData.value.last_name,
+        phone_number: formData.value.phone_number,
       });
     }
   }, [formData]);
@@ -43,6 +44,7 @@
   const [lastName] = defineField('last_name');
   const [firstName] = defineField('first_name');
   const [email] = defineField('email');
+  const [phoneNumber] = defineField('phone_number');
 </script>
 
 <template>
@@ -58,6 +60,7 @@
           v-model:lastName="lastName"
           v-model:email="email"
           v-model:firstName="firstName"
+          v-model:phoneNumber="phoneNumber"
           :avatar="formData?.avatar_thumbnail"
           @upload-avatar="uploadAvatarHandler"
           :errors="errors"

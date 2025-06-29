@@ -12,6 +12,9 @@
   "last_name": {
     "label": "Last name"
   },
+  "phone_number": {
+    "label": "Phone number"
+  },
   "first_name": {
     "label": "First name"
   },

@@ -50,6 +50,7 @@
         email: formData.value.email,
         first_name: formData.value.first_name,
         last_name: formData.value.last_name,
+        phone_number: formData.value.phone_number,
         role: formData.value.role,
         is_disabled: formData.value.is_disabled,
       });
@@ -58,6 +59,7 @@
 
   const [lastName] = defineField('last_name');
   const [firstName] = defineField('first_name');
+  const [phoneNumber] = defineField('phone_number');
   const [email] = defineField('email');
   const [isDisabled] = defineField('is_disabled');
   const [role] = defineField('role');
@@ -96,6 +98,7 @@
               v-model:lastName="lastName"
               v-model:email="email"
               v-model:firstName="firstName"
+              v-model:phoneNumber="phoneNumber"
               :avatar="formData?.avatar_thumbnail"
               @upload-avatar="uploadAvatarHandler"
               :errors="errors"

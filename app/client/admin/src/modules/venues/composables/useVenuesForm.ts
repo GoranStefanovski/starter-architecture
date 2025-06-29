@@ -34,7 +34,7 @@ export const useVenuesForm = (venueId?: number) => {
       return data.data as GetVenueResponse;
     },
     onSuccess: async () => {
-      toast.success('User saved!');
+      toast.success('Venue saved!');
     },
     onError: (error) => {
       toast.error(error.message);
@@ -48,7 +48,7 @@ export const useVenuesForm = (venueId?: number) => {
     },
     onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: [USER_CACHE_KEY, venueId] });
-      toast.success('User updated!');
+      toast.success('Venue updated!');
     },
     onError: (error) => {
       toast.error(error.message);

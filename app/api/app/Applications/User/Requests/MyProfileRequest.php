@@ -22,6 +22,7 @@ class MyProfileRequest extends ApiFormRequest
         return [
             'first_name' => 'required|string|min:2|max:255',
             'last_name'  => 'required|string|min:2|max:255',
+            'phone_number' => 'nullable|string|max:25',
         ];
     }
 
