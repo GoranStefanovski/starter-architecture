@@ -19,42 +19,65 @@ class EventFactory extends Factory
         $admin ??= User::where('email', 'admin@example.com')->first();
 
         $startHour = $this->faker->numberBetween(20, 23); // between 8 PM and 11 PM
-        $startMinute = $this->faker->randomElement([0, 15, 30, 45]); // quarter intervals
+        $startMinute = $this->faker->randomElement([0, 15, 30, 45]);
 
         $start = $this->faker->dateTimeBetween('+1 day', '+10 days')->setTime($startHour, $startMinute);
-
         $durationMinutes = $this->faker->numberBetween(120, 300); // 2–5 hours
         $end = (clone $start)->modify("+{$durationMinutes} minutes");
 
-        // Randomly decide: held in venue or outdoor
-        $heldInVenue = $this->faker->boolean(70); // 70% chance it's held inside a venue
+        $city = $this->faker->randomElement(['Bitola', 'Skopje', 'Ohrid']);
 
-        if ($heldInVenue && $venue = Venue::inRandomOrder()->first()) {
-            // Use venue's location
+        switch ($city) {
+            case 'Skopje':
+                $lat = $this->faker->latitude(41.990, 42.020);
+                $lng = $this->faker->longitude(21.390, 21.470);
+                $street = $this->faker->randomElement([
+                    'Boulevard Partizanski Odredi', 'Macedonia Street', 'Nikola Karev', 'Debarca', 'Leninova'
+                ]);
+                break;
+            case 'Ohrid':
+                $lat = $this->faker->latitude(41.105, 41.125);
+                $lng = $this->faker->longitude(20.785, 20.825);
+                $street = $this->faker->randomElement([
+                    'Kej Makedonija', 'Car Samoil', 'Turisticka', 'Partizanska', 'St. Naum Ohridski'
+                ]);
+                break;
+            case 'Bitola':
+            default:
+                $lat = $this->faker->latitude(41.025, 41.060);
+                $lng = $this->faker->longitude(21.300, 21.350);
+                $street = $this->faker->randomElement([
+                'Shirok Sokak', 'Partizanska', 'Ruzveltova', 'Goce Delchev', 'Ivan Milutinovic'
+                ]);
+                break;
+        }
+
+        // 🎲 70% chance to use a venue in the same city
+        $venue = null;
+        $venueId = null;
+        if ($this->faker->boolean(70)) {
+            $venue = Venue::where('city', $city)->inRandomOrder()->first();
+        }
+        $address = $street . ' ' . $this->faker->buildingNumber . ', ' . $city . ', Macedonia';
+        if ($venue) {
             $address = $venue->address;
             $lat = $venue->lat;
             $lng = $venue->lng;
             $venueId = $venue->id;
-        } else {
-            // Random outdoor event
-            $address = $this->faker->optional()->address(); // Sometimes address, sometimes null
-            $lat = $this->faker->latitude(41.020, 41.060);
-            $lng = $this->faker->longitude(21.300, 21.370);
-            $venueId = null;
         }
 
         return [
             'name' => $this->faker->sentence(3),
             'description' => $this->faker->paragraph(),
             'country' => 'mk',
-            'city' => 'Bitola',
+            'city' => $city,
             'address' => $address,
             'lat' => $lat,
             'lng' => $lng,
             'event_start' => $start,
             'event_end' => $end,
             'slug' => Str::slug($this->faker->unique()->sentence(3)),
-            'user_id' => $admin->id, // override in seeder or factory call
+            'user_id' => $admin->id,
             'venue_id' => $venueId,
         ];
     }

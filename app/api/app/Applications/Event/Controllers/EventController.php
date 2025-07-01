@@ -3,6 +3,7 @@
 namespace App\Applications\Event\Controllers;
 
 use App\Applications\Event\DTO\EventDTO;
+use App\Applications\Event\Model\Event;
 use App\Applications\Event\Services\EventServiceInterface;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
@@ -159,5 +160,27 @@ class EventController extends Controller
                 'message' => 'An error occurred while uploading the avatar. Please try again later.',
             ], 500);
         }
+    }
+
+    /**
+     * Draw nearby events based on the user's current location and his selected distance ( in meters )
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function nearByEvents(Request $request){
+//        dd($request->get('lat'));
+        $lat = $request->get('lat');
+        $lng = $request->get('lng');
+        $radiusInMeters = $request->get('radiusInMeters', 1000);
+        $deg = $radiusInMeters / 1000 / 111;
+
+        return Event::whereBetween('lat', [$lat - $deg, $lat + $deg])
+            ->whereBetween('lng', [$lng - $deg, $lng + $deg])
+            ->nearby($lat, $lng, $radiusInMeters)
+            ->get();
+        //TODO IDEA: maybe after selecting the 100 events, do some business logic to not return all of them, based on
+        //TODO: subscription level / Venue points etc.
+//        dd($events);
     }
 }

@@ -5,6 +5,7 @@ namespace App\Applications\Event\Model;
 use App\Applications\Common\Pivot\EventUserStatus;
 use App\Applications\Ticket\Model\Ticket;
 use Database\Factories\EventFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -127,5 +128,17 @@ class Event extends Model implements HasMedia
     {
 //        return $this->belongsTo(\App\Applications\Common\Model\EventType::class, 'event_type_id');
         return;
+    }
+
+    public function scopeNearby(Builder $query, float $lat, float $lng, float $radiusInMeters = 1): Builder
+    {
+        $haversine = "(6371 * acos(cos(radians(?)) * cos(radians(lat)) * cos(radians(lng) - radians(?)) + sin(radians(?)) * sin(radians(lat))))";
+        $radiusInKm = $radiusInMeters / 1000;
+        return $query
+            ->select('*')
+            ->selectRaw("$haversine AS distance", [$lat, $lng, $lat])
+            ->whereRaw("$haversine < ?", [$lat, $lng, $lat, $radiusInKm])
+            ->orderBy('distance')
+            ->limit(100);
     }
 }

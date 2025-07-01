@@ -32,5 +32,7 @@ Route::group([
 
         // User avatars
         Route::post('avatar/{id}', [EventController::class, 'uploadAvatar']);
+        //TODO: should be transfered to public routes
+        Route::post('nearby', [EventController::class, 'nearByEvents']);
     });
 });

@@ -22,8 +22,9 @@ return new class extends Migration
 
             $table->float('lng');
             $table->float('lat');
+            $table->index(['lat', 'lng']);
 
-            $table->timestamp('event_start');
+            $table->timestamp('event_start')->index();
             $table->timestamp('event_end')->nullable();
 
             $table->string('slug', 100)->unique();
