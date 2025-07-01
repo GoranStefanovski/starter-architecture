@@ -47,6 +47,19 @@ class User extends Authenticatable implements HasMedia
         'phone_number',
         'password',
         'is_disabled',
+        'username',
+        'instagram_link',
+        'instagram_video',
+        'facebook_link',
+        'facebook_video',
+        'soundcloud_link',
+        'soundcloud_track',
+        'spotify_link',
+        'spotify_track',
+        'youtube_link',
+        'youtube_video',
+        'contact_phone',
+        'contact_email',
     ];
 
     protected $hidden = [
@@ -74,15 +87,25 @@ class User extends Authenticatable implements HasMedia
         $this
             ->addMediaCollection('avatars')
             ->singleFile();
+        $this
+            ->addMediaCollection('gallery')
+            ->withResponsiveImages();
     }
 
     public function registerMediaConversions(?Media $media = null): void
     {
-        $this
-            ->addMediaConversion('thumb')
-            ->fit(Fit::Contain, 100, 100)
-            ->sharpen(10)
-            ->nonQueued();
+        if ($media && $media->collection_name === 'avatars') {
+            $this->addMediaConversion('thumb')
+                ->fit(Fit::Contain, 100, 100)
+                ->sharpen(10)
+                ->nonQueued();
+        }
+
+        if ($media && $media->collection_name === 'gallery') {
+            $this->addMediaConversion('large')
+                ->fit(Fit::Contain, 800, 600)
+                ->nonQueued();
+        }
     }
 
     /**

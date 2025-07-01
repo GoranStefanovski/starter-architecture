@@ -11,6 +11,7 @@
   const { t } = useI18n();
   const lastName = defineModel('lastName', { required: true, type: String });
   const firstName = defineModel('firstName', { required: true, type: String });
+  const username = defineModel('username', { required: false, type: String });
   const phoneNumber = defineModel('phoneNumber', { required: false, type: String });
   const email = defineModel('email', { required: true, type: String });
   const { errors = {}, avatar } = defineProps<{
@@ -34,6 +35,7 @@
   </div>
   <form-input v-model="firstName" name="first-name" :label="t('users.first_name.label')" is-inline />
   <form-input v-model="lastName" name="last-name" :label="t('users.last_name.label')" :error="errors.last_name" is-inline />
+  <form-input v-model="username" name="username" label="Username" is-inline />
   <form-input
     v-model="email"
     name="email"

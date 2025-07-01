@@ -38,6 +38,9 @@
   "personal-information": {
     "label": "Personal information"
   },
+  "contact-information": {
+    "label": "Contact & Social Media information"
+  },
   "my-profile": {
     "label": "My profile"
   }

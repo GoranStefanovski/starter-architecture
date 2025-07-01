@@ -26,8 +26,28 @@ return new class extends Migration
             $table->string('phone_number', 25)->nullable();
 
             $table->string('password');
-//            $table->string('role')->nullable(); // optional enum later?
+
             $table->boolean('is_disabled')->default(false);
+
+            $table->string('username', 100)->unique()->nullable();
+
+            $table->string('instagram_link')->nullable();
+            $table->string('instagram_video')->nullable();
+
+            $table->string('facebook_link')->nullable();
+            $table->string('facebook_video')->nullable();
+
+            $table->string('soundcloud_link')->nullable();
+            $table->string('soundcloud_track')->nullable();
+
+            $table->string('spotify_link')->nullable();
+            $table->string('spotify_track')->nullable();
+
+            $table->string('youtube_link')->nullable();
+            $table->string('youtube_video')->nullable();
+
+            $table->string('contact_phone', 25)->nullable();
+            $table->string('contact_email', 150)->nullable();
 
             $table->rememberToken();
             $table->softDeletes();

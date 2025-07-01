@@ -24,6 +24,7 @@ class UserPermissions
 
     // Public Users
     public const WRITE_PUBLIC = 'write_public';
+    public const WRITE_CONTACT_INFO = 'write_contact_info';
 
     // Navigation module
     public const READ_NAVIGATION = 'read_navigation';

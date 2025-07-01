@@ -10,6 +10,7 @@ export const USER_PERMISSIONS = {
   writeEvents: 'write_events',
   deleteEvents: 'delete_events',
   writePublic: 'write_public',
+  writeContactInfo: 'write_contact_info',
 } as const;
 
 export const USER_ROLES = {

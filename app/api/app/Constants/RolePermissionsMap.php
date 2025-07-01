@@ -20,6 +20,7 @@ class RolePermissionsMap
             UserPermissions::WRITE_EVENTS,
             UserPermissions::DELETE_EVENTS,
             UserPermissions::WRITE_PUBLIC,
+            UserPermissions::WRITE_CONTACT_INFO,
         ],
         //Venue owner and Event owner
         UserRoles::COLLABORATOR => [
@@ -38,11 +39,13 @@ class RolePermissionsMap
             UserPermissions::WRITE_EVENTS,
             UserPermissions::DELETE_EVENTS,
             UserPermissions::WRITE_PUBLIC,
+            UserPermissions::WRITE_CONTACT_INFO,
         ],
         // Manage artist profile
         UserRoles::ARTIST => [
             UserPermissions::DASHBOARD_VIEW,
             UserPermissions::WRITE_PUBLIC,
+            UserPermissions::WRITE_CONTACT_INFO,
         ],
         //Registered user, can comment, vote etc.
         UserRoles::PUBLIC => [
