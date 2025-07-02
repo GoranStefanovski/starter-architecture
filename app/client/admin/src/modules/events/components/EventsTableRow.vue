@@ -1,14 +1,14 @@
 <script setup lang="ts">
   import { IconTrash, IconEdit } from '@starter-core/icons';
   import { computed } from 'vue';
-  import type { GetEventResponse } from '../types';
+  import type { GetEventDataRowResponse } from '../types';
   import EventStatusBadge from './EventStatusBadge.vue';
   import { USER_PERMISSIONS } from '@/modules/events/constants';
   import { useUserCheck } from '@/modules/users/composables';
   import { DashButton, DashLink, TableColumn, TableRow } from '@starter-core/dash-ui/src';
 
   interface EventsTableRowProps {
-    event: GetEventResponse;
+    event: GetEventDataRowResponse;
     isEvenRow: boolean;
   }
 

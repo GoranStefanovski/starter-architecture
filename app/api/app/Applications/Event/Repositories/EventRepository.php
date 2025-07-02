@@ -34,7 +34,7 @@ class EventRepository implements EventRepositoryInterface{
 
     public function get($id): Event
     {
-        return $this->event::with('musicGenres')->findOrFail($id);
+        return $this->event::with('musicGenres','media')->findOrFail($id);
     }
 
     public function create(EventDTO $eventDTO): Event
@@ -83,7 +83,10 @@ class EventRepository implements EventRepositoryInterface{
 
     public function draw(array $data): StarterPaginator
     {
-        $query = $this->event->query();
+//        dd($data);
+        //TODO: maybe pull music genres,city when filtration for those is added in the dashboard
+        $query = $this->event
+            ->select(['id', 'user_id', 'name', 'address', 'event_start']);
 
         if (!empty($data['user_only'])) {
             $query->where('user_id', $data['user_only']);
@@ -120,13 +123,22 @@ class EventRepository implements EventRepositoryInterface{
         return $query->paginate($data['length']);
     }
 
-    public function clearVenueAvatars(Event $event): void
+    /**
+     * Clear the avatar collection for a given user.
+     *
+     * @param User $user
+     * @return void
+     */
+    public function clearEventImage($eventId): void
     {
-        // TODO: Implement clearVenueAvatars() method.
+        $this->get($eventId)->clearMediaCollection('event_image');
     }
 
-    public function uploadAvatar(Event $event, \Illuminate\Http\UploadedFile $file): Media
+    public function uploadEventImage($eventId, UploadedFile $file): Event
     {
-        // TODO: Implement uploadAvatar() method.
+        $event = $this->get($eventId);
+        $event->addMedia($file)->toMediaCollection('event_image');
+        return $event;
+//        return $this->get($eventId)->addMedia($file)->toMediaCollection('event_image');
     }
 }

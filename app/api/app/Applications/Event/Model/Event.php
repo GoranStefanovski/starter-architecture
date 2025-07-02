@@ -48,16 +48,28 @@ class Event extends Model implements HasMedia
     public function registerMediaCollections(): void
     {
         $this
-            ->addMediaCollection('event_images')
+            ->addMediaCollection('event_image')
             ->singleFile();
     }
 
     public function registerMediaConversions(?Media $media = null): void
     {
         $this
-            ->addMediaConversion('thumb')
-            ->fit(Fit::Contain, 100, 100)
-            ->sharpen(10)
+            ->addMediaConversion('thumbnail') // map popup or compact card
+            ->fit(Fit::Contain, 320, 180)
+            ->withResponsiveImages()
+            ->nonQueued();
+
+        $this
+            ->addMediaConversion('card') // card list or grid
+            ->fit(Fit::Crop, 640, 360)
+            ->withResponsiveImages()
+            ->nonQueued();
+
+        $this
+            ->addMediaConversion('banner') // full width display
+            ->fit(Fit::Crop, 1280, 720)
+            ->withResponsiveImages()
             ->nonQueued();
     }
 

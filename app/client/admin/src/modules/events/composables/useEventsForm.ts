@@ -2,16 +2,16 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/vue-query';
 import axios from 'axios';
 import { computed } from 'vue';
 import { useToast } from 'vue-toastification';
-import { USER_API_ENDPOINTS } from '../constants';
-import type { UserFormItem, GetEventResponse, MusicGenreResponse, TicketTypesResponse } from '../types';
-import { useUploadAvatar } from './useUploadAvatar';
+import { EVENT_API_ENDPOINTS } from '../constants';
+import type { EventFormItem, GetEventResponse, GetEventDataRowResponse, MusicGenreResponse, TicketTypesResponse } from '../types';
+import { useUploadEventImage } from './useUploadEventImage';
 
 const USER_CACHE_KEY = 'user';
 
 export const useEventsForm = (eventId?: number) => {
   const queryClient = useQueryClient();
   const toast = useToast();
-  const { uploadAvatar, isLoading: isUploadingAvatar } = useUploadAvatar({
+  const { uploadEventImage, isLoading: isUploadingEventImage } = useUploadEventImage({
     eventId,
     onSuccess: async () => {
       void queryClient.invalidateQueries({ queryKey: [USER_CACHE_KEY, eventId] });
@@ -22,15 +22,15 @@ export const useEventsForm = (eventId?: number) => {
   const { isLoading: isFetching, data: queryData } = useQuery({
     queryKey: [USER_CACHE_KEY, eventId],
     queryFn: async (): Promise<GetEventResponse> => {
-      const data = await axios.get(USER_API_ENDPOINTS.get(eventId ?? 0));
+      const data = await axios.get(EVENT_API_ENDPOINTS.get(eventId ?? 0));
       return data.data as GetEventResponse;
     },
     enabled: !!eventId,
   });
 
   const { mutate: createEvent, isPending: isCreating } = useMutation({
-    mutationFn: async (newUserData: UserFormItem): Promise<GetEventResponse> => {
-      const data = await axios.post(USER_API_ENDPOINTS.create, newUserData);
+    mutationFn: async (newUserData: EventFormItem): Promise<GetEventResponse> => {
+      const data = await axios.post(EVENT_API_ENDPOINTS.create, newUserData);
       return data.data as GetEventResponse;
     },
     onSuccess: async () => {
@@ -42,8 +42,8 @@ export const useEventsForm = (eventId?: number) => {
   });
 
   const { mutate: updateEvent, isPending: isUpdating } = useMutation({
-    mutationFn: async (data: UserFormItem): Promise<GetEventResponse> => {
-      const response = await axios.patch(USER_API_ENDPOINTS.patch(eventId ?? 0), data);
+    mutationFn: async (data: EventFormItem): Promise<GetEventResponse> => {
+      const response = await axios.patch(EVENT_API_ENDPOINTS.patch(eventId ?? 0), data);
       return response.data as GetEventResponse;
     },
     onSuccess: async () => {
@@ -58,7 +58,7 @@ export const useEventsForm = (eventId?: number) => {
   const { data: musicGenresRaw, isLoading: isLoadingMusicGenres } = useQuery({
     queryKey: ['music-genres'],
     queryFn: async () => {
-      const response = await axios.get<MusicGenreResponse[]>(USER_API_ENDPOINTS.getMusicGenres);
+      const response = await axios.get<MusicGenreResponse[]>(EVENT_API_ENDPOINTS.getMusicGenres);
       return response.data;
     },
   });
@@ -66,7 +66,7 @@ export const useEventsForm = (eventId?: number) => {
   const { data: ticketTypesRaw, isLoading: isLoadingTicketTypes } = useQuery({
     queryKey: ['ticket-types'],
     queryFn: async () => {
-      const response = await axios.get<TicketTypesResponse>(USER_API_ENDPOINTS.getTicketTypes);
+      const response = await axios.get<TicketTypesResponse>(EVENT_API_ENDPOINTS.getTicketTypes);
       return response.data;
     },
   });
@@ -91,9 +91,9 @@ export const useEventsForm = (eventId?: number) => {
     data,
     createEvent,
     updateEvent,
-    uploadAvatar,
+    uploadEventImage,
     musicGenres,
     ticketTypes,
-    isLoading: isFetching || isUpdating || isCreating || isUploadingAvatar || isLoadingMusicGenres || isLoadingTicketTypes,
+    isLoading: isFetching || isUpdating || isCreating || isUploadingEventImage || isLoadingMusicGenres || isLoadingTicketTypes,
   };
 };

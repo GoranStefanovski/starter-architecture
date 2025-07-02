@@ -54,8 +54,7 @@ interface EventServiceInterface
      *
      * @param int $eventId
      * @param Request $request
-     * @param EventDTO $event
      * @return EventDTO
      */
-    public function uploadAvatar(int $eventId, Request $request, Event $event): EventDTO;
+    public function uploadAvatar(int $eventId, Request $request): EventDTO;
 }

@@ -75,9 +75,9 @@ class EventService implements EventServiceInterface{
         $data['draw'] = $data['draw'] ?? 1;
 
         $eventsCollection = $this->eventRepository->draw($data);
-
+//        dd($eventsCollection);
         $eventsDTOs = $eventsCollection->getCollection()->map(function ($event) {
-            return EventDTO::fromModel($event);
+            return EventDTO::fromModelForTable($event);
         });
 
         return [
@@ -86,8 +86,14 @@ class EventService implements EventServiceInterface{
         ];
     }
 
-    public function uploadAvatar(int $eventId, Request $request, Event $event): EventDTO
+    public function uploadAvatar(int $eventId, Request $request): EventDTO
     {
-        // TODO: Implement uploadAvatar() method.
+        $request->validate([
+            'event_image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+        // Clear the existing 'event_image' collection and upload the new event image.
+        $this->eventRepository->clearEventImage($eventId);
+        $event =$this->eventRepository->uploadEventImage($eventId, $request->file('event_image'));
+        return EventDTO::fromModel($event);
     }
 }

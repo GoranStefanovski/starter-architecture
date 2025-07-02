@@ -27,6 +27,8 @@ class EventDTO
     public array $tickets = [];
     /** @var int[] */
     public array $genreIds = [];
+    /** @var array<string, string> */
+    public array $images = []; // keyed by conversion name (e.g. 'thumbnail', 'card', 'banner')
     private ?Event $model = null;
 
     public function __construct(
@@ -99,8 +101,7 @@ class EventDTO
     {
         $tickets = $event->tickets->map(fn($ticket) => TicketDTO::fromModel($ticket))->all();
         $genreIds = $event->musicGenres->pluck('id')->toArray();
-
-        return new self(
+        $dto = new self(
             $event->user_id,
             $event->venue_id,
             $event->name,
@@ -116,8 +117,41 @@ class EventDTO
             $tickets,
             $genreIds,
             $event,
-            $event->id, // event_id
+            $event->id,
         );
+
+        $media = $event->getFirstMedia('event_image');
+        if(!$event->media->isEmpty()) {
+            $dto->images = [
+                'thumbnail' => [
+                    'url'     => $media->getUrl('thumbnail'),
+                    'srcset' => $media->getSrcset('thumbnail') ?? null,
+                    'webp'    => $media->getResponsiveImageUrls('thumbnail') ?? null,
+                ],
+                'card' => [
+                    'url'     => $media->getUrl('card'),
+                    'srcset' => $media->getSrcset('card') ?? null,
+                    'webp'    => $media->getResponsiveImageUrls('card') ?? null,
+                ],
+                'banner' => [
+                    'url'     => $media->getUrl('banner'),
+                    'srcset' => $media->getSrcset('banner') ?? null,
+                    'webp'    => $media->getResponsiveImageUrls('banner') ?? null,
+                ],
+            ];
+        }
+        return $dto;
+    }
+
+    public static function fromModelForTable(Event $event): array
+    {
+        return [
+            'id' => $event->id,
+            'user_id' => $event->user_id,
+            'name' => $event->name,
+            'event_start' => $event->event_start,
+            'address' => $event->address,
+        ];
     }
 
     public function model(): Event
@@ -147,6 +181,7 @@ class EventDTO
             'event_end' => $this->event_end,
             'tickets' => array_map(fn(TicketDTO $ticket) => $ticket->toArray(), $this->tickets),
             'genreIds' => $this->genreIds,
+            'images' => $this->images,
         ];
     }
 

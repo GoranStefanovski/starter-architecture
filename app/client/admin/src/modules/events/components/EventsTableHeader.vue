@@ -10,6 +10,6 @@
 </script>
 <template>
   <DashLink v-if="isUserAllowedToCreate" :to="{ name: 'add.event' }" :icon="IconAdduser" theme="secondary">
-    {{ $t('admin.event.add') }}
+    {{ $t('admin.events.add') }}
   </DashLink>
 </template>

@@ -1,4 +1,4 @@
-export interface UserFormItem {
+export interface EventFormItem {
   id?: number;
   user_id: number;
   venue_id?: number | null;
@@ -13,6 +13,7 @@ export interface UserFormItem {
   event_end: Date;
   tickets: Array<TicketFormItem>[];
   genreIds: [];
+  images: [banner: {}, card: {}, thumbnail: {}];
 }
 
 export interface TicketFormItem {

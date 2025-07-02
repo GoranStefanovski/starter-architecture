@@ -1,23 +1,23 @@
 import { useMutation } from '@tanstack/vue-query';
 import axios from 'axios';
 import { useToast } from 'vue-toastification';
-import { USER_API_ENDPOINTS } from '../constants';
+import { EVENT_API_ENDPOINTS } from '../constants';
 import type { GetEventResponse } from '../types';
 
-interface UseUploadAvatarProps {
+interface UseUploadEventImageProps {
   eventId?: number;
   onSuccess?: () => Promise<void>;
 }
 
-export const useUploadAvatar = ({ eventId, onSuccess }: UseUploadAvatarProps) => {
+export const useUploadEventImage = ({ eventId, onSuccess }: UseUploadEventImageProps) => {
   const toast = useToast();
 
-  const { mutate: uploadAvatar, isPending: isUploadingAvatar } = useMutation({
+  const { mutate: uploadEventImage, isPending: isUploadingEventImage } = useMutation({
     mutationFn: async (file: File): Promise<GetEventResponse> => {
       const formData = new FormData();
-      formData.append('avatar', file);
+      formData.append('event_image', file);
 
-      const response = await axios.post(USER_API_ENDPOINTS.uploadAvatar(eventId ?? 0), formData, {
+      const response = await axios.post(EVENT_API_ENDPOINTS.uploadEventImage(eventId ?? 0), formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -31,7 +31,7 @@ export const useUploadAvatar = ({ eventId, onSuccess }: UseUploadAvatarProps) =>
   });
 
   return {
-    uploadAvatar,
-    isLoading: isUploadingAvatar,
+    uploadEventImage,
+    isLoading: isUploadingEventImage,
   };
 };

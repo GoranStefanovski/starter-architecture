@@ -74,7 +74,14 @@
         ).value
       "
     >
-      <img alt="Avatar" v-if="preview || src" :src="preview ?? src ?? ''" :class="element('image').value" />
+      <img
+        alt="Avatar"
+        v-if="preview || src"
+        :src="preview ?? src ?? ''"
+        :srcset="src ?? ''"
+        :class="element('image').value"
+        sizes="120px"
+      />
     </div>
 
     <label

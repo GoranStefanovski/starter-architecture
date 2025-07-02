@@ -7,11 +7,11 @@
   import useAuth from '../../../composables/useAuth';
   import { EventFormBasicInfo } from '../components';
   import { useEventsForm } from '../composables';
-  import type { UserFormItem } from '../types';
+  import type { EventFormItem } from '../types';
   import { TabbedContent, TabbedContentTab, PageWrapper, PAGE_WRAPPER_SLOTS, SubheaderTitle, SkSection } from '@/components';
   import { DashButton, DashLink } from '@starter-core/dash-ui/src';
   const { t } = useI18n();
-  const personalInformationLabel = t('users.personal-information.label');
+  const eventInformationLabel = t('events.event-information.label');
   const route = useRoute();
   const isEditPage = computed(() => route.name == 'edit.event');
   const eventId = Number(route.params.eventId);
@@ -24,9 +24,17 @@
     },
   };
 
-  const { isLoading, data: formData, createEvent, updateEvent, musicGenres, ticketTypes } = useEventsForm(eventId);
+  const {
+    isLoading,
+    data: formData,
+    createEvent,
+    updateEvent,
+    musicGenres,
+    ticketTypes,
+    uploadEventImage,
+  } = useEventsForm(eventId);
 
-  const { handleSubmit, errors, setValues, defineField } = useForm<UserFormItem>({
+  const { handleSubmit, errors, setValues, defineField } = useForm<EventFormItem>({
     validationSchema,
   });
 
@@ -42,6 +50,10 @@
       createEvent(payload);
     }
   });
+
+  const uploadEventImageHandler = (file: File) => {
+    uploadEventImage(file);
+  };
 
   watch(
     formData,
@@ -96,8 +108,8 @@
     </template>
     <form autocomplete="off" enctype="multipart/form-data" @submit.prevent="submitHandler">
       <TabbedContent :isLoading="isLoading">
-        <TabbedContentTab :label="personalInformationLabel" id="basic-info">
-          <SkSection title="Customer Info">
+        <TabbedContentTab :label="eventInformationLabel" id="basic-info">
+          <SkSection title="Event Info">
             <EventFormBasicInfo
               v-if="!isLoading"
               v-model:venue_id="venue_id"
@@ -115,6 +127,8 @@
               :music-genres="musicGenres"
               :ticket-types="ticketTypes"
               :errors="errors"
+              :eventImage="formData?.images.thumbnail.srcset ?? null"
+              @uploadEventImage="uploadEventImageHandler"
             />
           </SkSection>
         </TabbedContentTab>

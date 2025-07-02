@@ -4,20 +4,18 @@
   import { useI18n } from 'vue-i18n';
   import type { TicketFormItem } from '../../types/form.ts';
   import TicketForm from '@/modules/events/components/forms/TicketForm.vue';
-  import { USER_API_ENDPOINTS } from '@/modules/events/constants';
-  import type { TicketTypesResponse } from '@/modules/events/types';
+  import { EVENT_API_ENDPOINTS } from '@/modules/events/constants';
   import { loadGoogleMaps } from '@/plugins/googleMaps';
   import { FormDropdown, FormInput, FormMultiSelect } from '@starter-core/dash-ui/src';
   import '@vuepic/vue-datepicker/dist/main.css';
-  import { useQuery } from '@tanstack/vue-query';
   import axios from 'axios';
+  import UserFormAvatar from '@/modules/events/components/UserFormAvatar.vue';
 
   type EmitsType = {
-    (event: 'uploadAvatar', file: File): void;
+    (event: 'uploadEventImage', file: File): void;
   };
 
   const { t } = useI18n();
-  // const event_id = defineModel('event_id', { required: true, type: Number });
   const venue_id = defineModel('venue_id', { required: true, type: [String, null], default: null });
   const name = defineModel('name', { required: true, type: String });
   const description = defineModel('description', { required: false, type: String });
@@ -66,14 +64,14 @@
     ticketTypes,
   } = defineProps<{
     errors: any;
-    avatar?: string | null;
+    eventImage?: string | null;
     musicGenres: any[];
     ticketTypes: any[];
   }>();
   const emit = defineEmits<EmitsType>();
 
-  const uploadAvatar = (file: File) => {
-    emit('uploadAvatar', file);
+  const uploadEventImage = (file: File) => {
+    emit('uploadEventImage', file);
   };
 
   const availableTicketTypes = computed(() => {
@@ -137,7 +135,7 @@
     }
     try {
       const fallbackCity = city.value ?? 'Bitola';
-      const { data } = await axios.get(USER_API_ENDPOINTS.getVenueFromCity(fallbackCity));
+      const { data } = await axios.get(EVENT_API_ENDPOINTS.getVenueFromCity(fallbackCity));
       availableVenues.value = data;
     } catch (error) {
       availableVenues.value = [];
@@ -185,7 +183,7 @@
       marker.setPosition(loc);
 
       try {
-        const { data } = await axios.get(USER_API_ENDPOINTS.getVenueFromCity(place.name));
+        const { data } = await axios.get(EVENT_API_ENDPOINTS.getVenueFromCity(place.name));
         availableVenues.value = data;
       } catch (error) {
         console.error('Failed to fetch venues', error);
@@ -208,12 +206,12 @@
 </script>
 <template>
   <div class="form-group form-input form-group--inline">
-    <!-- <div class="form-group__column form-group__column--left form-group__column--inline">
-      <label class="form-group__label" for="avatar">{{ t('users.avatar') }}</label>
+    <div class="form-group__column form-group__column--left form-group__column--inline">
+      <label class="form-group__label" for="avatar">{{ t('events.image') }}</label>
     </div>
     <div class="form-group__column form-group__column--left form-group__column--inline">
-      <user-form-avatar :src="avatar" @change="uploadAvatar" is-circle is-outline />
-    </div> -->
+      <user-form-avatar :src="eventImage ?? ''" @change="uploadEventImage" is-outline />
+    </div>
   </div>
   <form-input v-model="name" name="name" :label="t('events.name.label')" is-inline />
   <form-input v-model="description" name="description" :label="t('events.desc.label')" is-inline />

@@ -11,7 +11,7 @@
   "music_genre": {
     "label": "Music genres"
   },
-  "avatar": "Avatar",
+  "image": "Event Image",
   "address": {
     "label": "Address",
     "lat": "Latitude",
@@ -56,8 +56,8 @@
       "current_invalid": "Your current password is incorrect."
     }
   },
-  "personal-information": {
-    "label": "Personal information"
+  "event-information": {
+    "label": "Basic information"
   },
   "my-profile": {
     "label": "My profile"

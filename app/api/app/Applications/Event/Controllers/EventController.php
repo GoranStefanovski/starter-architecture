@@ -129,15 +129,12 @@ class EventController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
-    public function uploadAvatar(Request $request): JsonResponse
+    public function uploadEventImage(Request $request): JsonResponse
     {
+//        dd($request->all());
         try {
-            $userId = Route::current()->parameter('id');
-            $userId = (is_numeric($userId) && (int)$userId > 0)
-                ? (int)$userId
-                : Auth::id();
-
-            $EventDTO = $this->eventService->uploadAvatar($userId, $request, Auth::user());
+            $eventId = Route::current()->parameter('id');
+            $EventDTO = $this->eventService->uploadAvatar($eventId, $request);
 
             return response()->json($EventDTO, 200);
         } catch (ValidationException $e) {
@@ -147,17 +144,17 @@ class EventController extends Controller
             ], 422);
         } catch (\Symfony\Component\HttpKernel\Exception\NotFoundHttpException $e) {
             return response()->json([
-                'message' => 'Venue not found.',
+                'message' => 'Event not found.',
             ], 404);
         } catch (AuthorizationException $e) {
             return response()->json([
                 'message' => $e->getMessage(),
             ], 403);
         } catch (\Exception $e) {
-            Log::error('Error uploading avatar: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Error uploading event image: ' . $e->getMessage(), ['exception' => $e]);
 
             return response()->json([
-                'message' => 'An error occurred while uploading the avatar. Please try again later.',
+                'message' => 'An error occurred while uploading the event image. Please try again later.',
             ], 500);
         }
     }

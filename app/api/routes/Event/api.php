@@ -31,7 +31,7 @@ Route::group([
         Route::delete('delete/{id}', [EventController::class, 'delete']);
 
         // User avatars
-        Route::post('avatar/{id}', [EventController::class, 'uploadAvatar']);
+        Route::post('image/{id}', [EventController::class, 'uploadEventImage']);
         //TODO: should be transfered to public routes
         Route::post('nearby', [EventController::class, 'nearByEvents']);
     });

@@ -50,19 +50,19 @@ interface EventRepositoryInterface{
     public function draw(array $data): StarterPaginator;
 
     /**
-     * Clear the avatar collection for a given user.
+     * Clear the event_image collection for a given event.
      *
-     * @param Event $event
+     * @param integer $eventId
      * @return void
      */
-    public function clearVenueAvatars(Event $event): void;
+    public function clearEventImage(int $eventId): void;
 
     /**
-     * Upload a new avatar for a given user.
+     * Upload a new event_image for a given Event.
      *
-     * @param Event $event
+     * @param integer $eventId
      * @param UploadedFile $file
-     * @return Media
+     * @return Event
      */
-    public function uploadAvatar(Event $event, UploadedFile $file): Media;
+    public function uploadEventImage(int $eventId, UploadedFile $file): Event;
 }

@@ -15,6 +15,15 @@ export interface GetEventResponse {
   event_end: Date;
   tickets: [];
   genreIds: [];
+  images: EventImages;
+}
+
+export interface GetEventDataRowResponse {
+  id: number;
+  user_id: number;
+  name: string;
+  address: string;
+  event_start: Date;
 }
 
 export interface GetMusicGenreResponse {
@@ -29,7 +38,7 @@ export interface GetTicketTypesResponse {
 }
 
 export interface EventsTableResponse {
-  data: GetEventResponse[];
+  data: GetEventDataRowResponse[];
   pagination: PaginationObject;
 }
 
@@ -39,6 +48,18 @@ export interface MusicGenreResponse {
 
 export interface TicketTypesResponse {
   types: GetTicketTypesResponse[];
+}
+
+export interface ImageVariant {
+  url: string;
+  srcset: string | null;
+  webp: string[] | null;
+}
+
+export interface EventImages {
+  banner: ImageVariant;
+  card: ImageVariant;
+  thumbnail: ImageVariant;
 }
 
 export type AuthUser = Omit<GetEventResponse, 'updated_at'>;
