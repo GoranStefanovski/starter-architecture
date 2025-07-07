@@ -16,7 +16,7 @@
 
   const { checkUser } = useUserCheck();
   const { user, isEvenRow } = defineProps<VenuesTableRowProps>();
-  const { deleteVenue } = useVenuesForm(user.id);
+  const { deleteVenue } = useVenuesForm();
   const showConfirmDialog = ref(false);
 
   const avatarSource = computed(() => {
@@ -49,7 +49,7 @@
     </TableColumn>
 
     <TableColumn>
-      <VenueStatusBadge :is-disabled="user.is_disabled" />
+      <VenueStatusBadge :is-activated="user.is_active" />
     </TableColumn>
 
     <TableColumn>

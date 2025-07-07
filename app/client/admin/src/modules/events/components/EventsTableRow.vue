@@ -16,7 +16,7 @@
 
   const { checkUser } = useUserCheck();
   const { event, isEvenRow } = defineProps<EventsTableRowProps>();
-  const { deleteEvent } = useEventsForm(event.id);
+  const { deleteEvent } = useEventsForm();
   const showConfirmDialog = ref(false);
 
   const avatarSource = computed(() => {

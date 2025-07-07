@@ -15,6 +15,7 @@ export interface GetVenueResponse {
   country: string;
   updated_at: string;
   images: VenueImage[];
+  is_active: boolean;
 }
 
 export interface GetVenueTypeResponse {

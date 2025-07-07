@@ -9,7 +9,9 @@
   import { useVenuesForm } from '../composables';
   import type { UserFormItem } from '../types';
   import { TabbedContent, TabbedContentTab, PageWrapper, PAGE_WRAPPER_SLOTS, SubheaderTitle, SkSection } from '@/components';
-  import { DashButton, DashLink } from '@starter-core/dash-ui/src';
+  import { DashButton, DashLink, FormSwitch } from '@starter-core/dash-ui/src';
+  import { useUserCheck } from '@/modules/users/composables';
+  import { USER_PERMISSIONS } from '@/modules/users/constants';
   import { EventFormBasicInfo } from '@/modules/events/components';
   const { t } = useI18n();
   const personalInformationLabel = t('venues.personal-information.label');
@@ -17,6 +19,7 @@
   const isEditPage = computed(() => route.name == 'edit.venue');
   const venueId = Number(route.params.venueId);
   const auth = useAuth();
+  const { checkUser } = useUserCheck();
 
   const validationSchema = {
     name(value: string) {
@@ -76,6 +79,7 @@
           venue_type_id: newValue.venue_type_id,
           country: newValue.country,
           city: newValue.city,
+          is_active: newValue.is_active,
         });
       }
     },
@@ -91,6 +95,7 @@
   const [phone_number] = defineField('phone_number');
   const [city] = defineField('city');
   const [country] = defineField('country');
+  const [isActive] = defineField('is_active');
 </script>
 
 <template>
@@ -110,6 +115,15 @@
       <TabbedContent :isLoading="isLoading">
         <TabbedContentTab :label="personalInformationLabel" id="basic-info">
           <SkSection title="Customer Info">
+            <form-switch
+              v-if="checkUser('permissions', USER_PERMISSIONS.deleteVenues)"
+              v-model="isActive"
+              id="enabled"
+              theme="success"
+              type="outline"
+              :label="t('venues.status.label')"
+              :helper-text="`Venue is  ${isActive ? 'enabled' : 'disabled'}`"
+            />
             <VenueFormBasicInfo
               v-model:name="name"
               v-model:venue_type_id="venueTypeId"

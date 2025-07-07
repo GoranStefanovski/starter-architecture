@@ -1,7 +1,7 @@
 {
-  "user_status": "User status",
+  "user_status": "Venue status",
   "status": {
-    "label": "Disable user",
+    "label": "Disable venue",
     "enabled": "Enabled",
     "disabled": "Disabled"
   },
