@@ -67,9 +67,10 @@ interface VenueRepositoryInterface
      *
      * @param integer $venueId
      * @param UploadedFile $file
+     * @param string $imageType
      * @return Venue
      */
-    public function uploadVenueImage(int $venueId, UploadedFile $file): Venue;
+    public function uploadVenueImage(int $venueId, UploadedFile $file, string $imageType): Venue;
 
     /**
      * Upload a new event_image for a given Event.

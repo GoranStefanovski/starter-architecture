@@ -8,14 +8,18 @@ interface UseUploadAvatarProps {
   venueId?: number;
   onSuccess?: () => Promise<void>;
 }
+interface UploadVenueImageInput {
+  file: File;
+  image_type: string;
+}
 
 export const useUploadVenueImage = ({ venueId, onSuccess }: UseUploadAvatarProps) => {
   const toast = useToast();
 
   const { mutate: uploadVenueImage, isPending: isUploadingAvatar } = useMutation({
-    mutationFn: async (file: File): Promise<GetVenueResponse> => {
+    mutationFn: async ({ file, image_type }: UploadVenueImageInput): Promise<GetVenueResponse> => {
       const formData = new FormData();
-      formData.append('venue_image', file);
+      formData.append(image_type, file);
 
       const response = await axios.post(VENUE_API_ENDPOINTS.uploadVenueImage(venueId ?? 0), formData, {
         headers: {

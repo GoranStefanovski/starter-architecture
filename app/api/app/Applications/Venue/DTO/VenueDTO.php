@@ -25,6 +25,7 @@ class VenueDTO
     //TODO: might have to be null
     public int $user_id;
     public array $images = [];
+    public ?array $logo = [];
 
 
     private ?Venue $model = null;
@@ -152,6 +153,15 @@ class VenueDTO
                     ],
                 ];
             }
+        }
+        $logo = $venue->getFirstMedia('venue_logo');
+        if($logo){
+            $dto->logo = [
+                'id' => $logo->id,
+                'url'     => $logo->getUrl('logo'),
+                'srcset'  => $logo->getSrcset('logo') ?? null,
+                'webp'    => $logo->getResponsiveImageUrls('logo') ?? null,
+            ];
         }
 
         return $dto;

@@ -13,6 +13,7 @@ export interface UserFormItem {
   country: string;
   images: [];
   is_active: boolean;
+  logo: [];
 }
 
 export type UserMyProfileForm = Pick<UserFormItem, 'name' | 'address' | 'bio'>;

@@ -78,10 +78,11 @@ class VenueService implements VenueServiceInterface
 
     public function uploadVenueImage(int $venueId, Request $request): VenueDTO
     {
+        $imageType = array_key_first($request->file());
         $request->validate([
-            'venue_image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            $imageType => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-        $venue = $this->venueRepository->uploadVenueImage($venueId, $request->file('venue_image'));
+        $venue = $this->venueRepository->uploadVenueImage($venueId, $request->file($imageType), $imageType);
         return VenueDTO::fromModel($venue);
     }
 

@@ -16,6 +16,7 @@ export interface GetVenueResponse {
   updated_at: string;
   images: VenueImage[];
   is_active: boolean;
+  logo: ImageVariant;
 }
 
 export interface GetVenueTypeResponse {
@@ -33,6 +34,7 @@ export interface VenueTypeResponse {
 }
 
 export interface ImageVariant {
+  id: number;
   url: string;
   srcset: string | null;
   webp: string[] | null;

@@ -54,8 +54,8 @@
     }
   });
 
-  const uploadVenueImageHandler = (file: File) => {
-    uploadVenueImage(file);
+  const uploadVenueImageHandler = (file: File, image_type: string) => {
+    uploadVenueImage({ file, image_type });
   };
 
   const deleteVenueImageHandler = (imgId: number) => {
@@ -138,6 +138,7 @@
               :venue-types="venueTypes"
               :venueImages="formData?.images ?? []"
               :errors="errors"
+              :venueLogo="formData?.logo ?? null"
               @uploadVenueImage="uploadVenueImageHandler"
               @delete-venue-image="deleteVenueImageHandler"
             />

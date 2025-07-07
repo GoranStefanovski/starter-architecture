@@ -20,7 +20,8 @@
     "country": "Country"
   },
   "image": {
-    "label": "Image"
+    "label": "Images",
+    "logo": "Venue logo"
   },
   "bio": {
     "label": "Bio"

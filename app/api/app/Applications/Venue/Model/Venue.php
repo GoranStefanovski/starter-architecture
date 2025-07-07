@@ -81,6 +81,7 @@ class Venue extends Model implements HasMedia
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('venue_image');
+        $this->addMediaCollection('venue_logo');
     }
     /**
      * Media collections for venue.
@@ -91,18 +92,28 @@ class Venue extends Model implements HasMedia
             ->addMediaConversion('thumbnail') // map popup or compact card
             ->fit(Fit::Contain, 320, 180)
             ->withResponsiveImages()
-            ->nonQueued();
+            ->nonQueued()
+            ->performOnCollections('venue_image');
 
         $this
             ->addMediaConversion('card') // card list or grid
             ->fit(Fit::Crop, 640, 360)
             ->withResponsiveImages()
-            ->nonQueued();
+            ->nonQueued()
+            ->performOnCollections('venue_image');
 
         $this
             ->addMediaConversion('banner') // full width display
             ->fit(Fit::Crop, 1280, 720)
             ->withResponsiveImages()
-            ->nonQueued();
+            ->nonQueued()
+            ->performOnCollections('venue_image');
+
+        $this
+            ->addMediaConversion('logo')
+            ->fit(Fit::Contain, 300, 300)
+            ->withResponsiveImages()
+            ->nonQueued()
+            ->performOnCollections('venue_logo');
     }
 }

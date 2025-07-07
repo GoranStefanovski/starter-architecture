@@ -107,10 +107,10 @@ class VenueRepository implements VenueRepositoryInterface
         $venue->clearMediaCollection('avatars');
     }
 
-    public function uploadVenueImage($venueId, UploadedFile $file): Venue
+    public function uploadVenueImage($venueId, UploadedFile $file, $imageType): Venue
     {
         $venue = $this->get($venueId);
-        $venue->addMedia($file)->toMediaCollection('venue_image');
+        $venue->addMedia($file)->toMediaCollection($imageType);
         return $venue;
     }
 
@@ -118,7 +118,7 @@ class VenueRepository implements VenueRepositoryInterface
     {
         $venue = $this->get($venueId);
 
-        $media = $venue->media('venue_image')->where('id', $imageId)->first();
+        $media = $venue->media()->where('id', $imageId)->first();
 
         if ($media) {
             $media->delete();
