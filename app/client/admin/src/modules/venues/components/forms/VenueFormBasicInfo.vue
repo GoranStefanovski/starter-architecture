@@ -131,7 +131,7 @@
   <div class="form-group form-input form-group--inline">
     <div class="form-group form-input form-group--inline">
       <div class="form-group__column form-group__column--left form-group__column--inline">
-        <label class="form-group__label" for="avatar">{{ t('venues.image') }}</label>
+        <label class="form-group__label" for="avatar">{{ t('venues.image.label') }}</label>
       </div>
       <div class="form-group__column form-group__column--left form-group__column--inline">
         <user-form-avatar

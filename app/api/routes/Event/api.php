@@ -28,7 +28,7 @@ Route::group([
         Route::get('get/{id}', [EventController::class, 'get']);
         //TODO: might need to be changed to a POST method
         Route::patch('update/{id}', [EventController::class, 'update']);
-        Route::delete('delete/{id}', [EventController::class, 'delete']);
+        Route::post('delete/{id}', [EventController::class, 'delete']);
 
         // Event images
         Route::post('image/{id}', [EventController::class, 'uploadEventImage']);

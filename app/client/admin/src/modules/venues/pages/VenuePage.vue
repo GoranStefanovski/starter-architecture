@@ -12,7 +12,7 @@
   import { DashButton, DashLink } from '@starter-core/dash-ui/src';
   import { EventFormBasicInfo } from '@/modules/events/components';
   const { t } = useI18n();
-  const personalInformationLabel = t('users.personal-information.label');
+  const personalInformationLabel = t('venues.personal-information.label');
   const route = useRoute();
   const isEditPage = computed(() => route.name == 'edit.venue');
   const venueId = Number(route.params.venueId);

@@ -19,6 +19,9 @@
     "city": "City",
     "country": "Country"
   },
+  "image": {
+    "label": "Image"
+  },
   "bio": {
     "label": "Bio"
   },
@@ -44,7 +47,7 @@
     }
   },
   "personal-information": {
-    "label": "Personal information"
+    "label": "Venue Information"
   },
   "my-profile": {
     "label": "My profile"

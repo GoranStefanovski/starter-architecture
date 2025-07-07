@@ -78,12 +78,11 @@ class EventRepository implements EventRepositoryInterface{
 
     public function delete(int $id)
     {
-        // TODO: Implement delete() method.
+        return $this->event::findOrFail($id)->delete();
     }
 
     public function draw(array $data): StarterPaginator
     {
-//        dd($data);
         //TODO: maybe pull music genres,city when filtration for those is added in the dashboard
         $query = $this->event
             ->select(['id', 'user_id', 'name', 'address', 'event_start']);

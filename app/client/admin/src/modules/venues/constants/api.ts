@@ -4,6 +4,7 @@ export const VENUE_API_ENDPOINTS = {
   patch: (venueId: number) => `/venue/${venueId}`,
   uploadVenueImage: (venueId: number) => `/venue/image/${venueId}`,
   deleteVenueImage: (venueId: number, imageId: number) => `/venue/${venueId}/delete-image/${imageId}`,
+  delete: (venueId: number) => `/venue/delete/${venueId}`,
   table: 'venue/draw',
   getVenueTypes: '/taxonomies/venue-types',
 };

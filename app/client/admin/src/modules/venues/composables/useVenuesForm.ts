@@ -6,7 +6,7 @@ import { VENUE_API_ENDPOINTS } from '../constants';
 import type { UserFormItem, GetVenueResponse, VenueTypeResponse } from '../types';
 import { useUploadVenueImage } from './useUploadVenueImage';
 
-const USER_CACHE_KEY = 'user';
+const VENUE_CACHE_KEY = 'venue';
 
 export const useVenuesForm = (venueId?: number) => {
   const queryClient = useQueryClient();
@@ -14,7 +14,7 @@ export const useVenuesForm = (venueId?: number) => {
   const { uploadVenueImage, isLoading: isUploadingAvatar } = useUploadVenueImage({
     venueId,
     onSuccess: async () => {
-      void queryClient.invalidateQueries({ queryKey: [USER_CACHE_KEY, venueId] });
+      void queryClient.invalidateQueries({ queryKey: [VENUE_CACHE_KEY, venueId] });
       toast.success('Image has been updated!');
     },
   });
@@ -25,7 +25,7 @@ export const useVenuesForm = (venueId?: number) => {
       return response.data;
     },
     onSuccess: async () => {
-      void queryClient.invalidateQueries({ queryKey: [USER_CACHE_KEY, venueId] });
+      void queryClient.invalidateQueries({ queryKey: [VENUE_CACHE_KEY, venueId] });
       toast.success('Image has been deleted!');
     },
     onError: (error) => {
@@ -34,7 +34,7 @@ export const useVenuesForm = (venueId?: number) => {
   });
 
   const { isLoading: isFetching, data: queryData } = useQuery({
-    queryKey: [USER_CACHE_KEY, venueId],
+    queryKey: [VENUE_CACHE_KEY, venueId],
     queryFn: async (): Promise<GetVenueResponse> => {
       const data = await axios.get(VENUE_API_ENDPOINTS.get(venueId ?? 0));
       return data.data as GetVenueResponse;
@@ -61,11 +61,24 @@ export const useVenuesForm = (venueId?: number) => {
       return response.data as GetVenueResponse;
     },
     onSuccess: async () => {
-      queryClient.invalidateQueries({ queryKey: [USER_CACHE_KEY, venueId] });
+      queryClient.invalidateQueries({ queryKey: [VENUE_CACHE_KEY, venueId] });
       toast.success('Venue updated!');
     },
     onError: (error) => {
       toast.error(error.message);
+    },
+  });
+
+  const { mutate: deleteVenue, isPending: isDeleting } = useMutation({
+    mutationFn: async (venueId: number) => {
+      await axios.post(VENUE_API_ENDPOINTS.delete(venueId));
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['venue/draw'] });
+      toast.success('Venue deleted!');
+    },
+    onError: () => {
+      toast.error('Error deleting venue!');
     },
   });
 
@@ -92,7 +105,8 @@ export const useVenuesForm = (venueId?: number) => {
     updateVenue,
     uploadVenueImage,
     deleteVenueImage,
+    deleteVenue,
     venueTypes,
-    isLoading: isFetching || isUpdating || isCreating || isUploadingAvatar || isLoadingVenueTypes,
+    isLoading: isFetching || isUpdating || isCreating || isUploadingAvatar || isLoadingVenueTypes || isDeleting,
   };
 };

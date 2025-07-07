@@ -29,7 +29,7 @@ Route::group([
         Route::get('by-city/{city}', [VenueController::class, 'getByCity']);
         //TODO: change to update/{id} for clarity, handle route for the frontend(dashboard) aswell
         Route::patch('{id}', [VenueController::class, 'update']);
-        Route::delete('delete/{id}', [VenueController::class, 'delete']);
+        Route::post('delete/{id}', [VenueController::class, 'delete']);
 
         // Venue images
         Route::post('image/{id}', [VenueController::class, 'uploadVenueImage']);

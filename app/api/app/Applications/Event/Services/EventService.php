@@ -56,7 +56,7 @@ class EventService implements EventServiceInterface{
 
     public function delete(int $id)
     {
-        // TODO: Implement delete() method.
+        return $this->eventRepository->delete($id);
     }
 
     public function draw(array $data): array

@@ -1,11 +1,13 @@
 <script setup lang="ts">
   import { IconTrash, IconEdit } from '@starter-core/icons';
-  import { computed } from 'vue';
+  import { computed, ref } from 'vue';
   import type { GetEventDataRowResponse } from '../types';
   import EventStatusBadge from './EventStatusBadge.vue';
   import { USER_PERMISSIONS } from '@/modules/events/constants';
   import { useUserCheck } from '@/modules/users/composables';
   import { DashButton, DashLink, TableColumn, TableRow } from '@starter-core/dash-ui/src';
+  import { useEventsForm } from '../composables';
+  import ConfirmDialog from '@/components/ConfirmDialog/ConfirmDialog.vue';
 
   interface EventsTableRowProps {
     event: GetEventDataRowResponse;
@@ -14,6 +16,8 @@
 
   const { checkUser } = useUserCheck();
   const { event, isEvenRow } = defineProps<EventsTableRowProps>();
+  const { deleteEvent } = useEventsForm(event.id);
+  const showConfirmDialog = ref(false);
 
   const avatarSource = computed(() => {
     // if (event.avatar_thumbnail) {
@@ -21,6 +25,11 @@
     // }
     return new URL(`@/../assets/images/placeholders/avatar-placeholder.jpg`, import.meta.url).href;
   });
+
+  const confirmDelete = () => {
+    deleteEvent(event.id);
+    showConfirmDialog.value = false;
+  };
 </script>
 
 <template>
@@ -61,10 +70,16 @@
         :icon="IconTrash"
         theme="danger"
         size="sm"
-        onclick="deleteUser(event, user.id)"
+        @click="showConfirmDialog = true"
         is-pill
         is-icon
       />
     </TableColumn>
   </TableRow>
+  <ConfirmDialog
+    :show="showConfirmDialog"
+    message="Are you sure you want to delete this event?"
+    @confirm="confirmDelete"
+    @close="showConfirmDialog = false"
+  />
 </template>

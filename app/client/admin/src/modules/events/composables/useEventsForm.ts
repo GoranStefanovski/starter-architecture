@@ -55,6 +55,19 @@ export const useEventsForm = (eventId?: number) => {
     },
   });
 
+  const { mutate: deleteEvent, isPending: isDeleting } = useMutation({
+    mutationFn: async (eventId: number) => {
+      await axios.post(EVENT_API_ENDPOINTS.delete(eventId));
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['event/draw'] });
+      toast.success('Event deleted!');
+    },
+    onError: () => {
+      toast.error('Error deleting event!');
+    },
+  });
+
   const { data: musicGenresRaw, isLoading: isLoadingMusicGenres } = useQuery({
     queryKey: ['music-genres'],
     queryFn: async () => {
@@ -92,6 +105,7 @@ export const useEventsForm = (eventId?: number) => {
     createEvent,
     updateEvent,
     uploadEventImage,
+    deleteEvent,
     musicGenres,
     ticketTypes,
     isLoading: isFetching || isUpdating || isCreating || isUploadingEventImage || isLoadingMusicGenres || isLoadingTicketTypes,

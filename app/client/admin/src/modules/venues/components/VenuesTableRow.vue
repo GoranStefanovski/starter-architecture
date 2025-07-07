@@ -1,11 +1,13 @@
 <script setup lang="ts">
   import { IconTrash, IconEdit } from '@starter-core/icons';
-  import { computed } from 'vue';
+  import { ref, computed } from 'vue';
   import type { GetVenueResponse } from '../types';
   import VenueStatusBadge from './VenueStatusBadge.vue';
   import { useUserCheck } from '@/modules/users/composables';
   import { USER_PERMISSIONS } from '@/modules/venues/constants';
   import { DashButton, DashLink, TableColumn, TableRow } from '@starter-core/dash-ui/src';
+  import { useVenuesForm } from '../composables';
+  import ConfirmDialog from '@/components/ConfirmDialog/ConfirmDialog.vue';
 
   interface VenuesTableRowProps {
     user: GetVenueResponse;
@@ -14,6 +16,8 @@
 
   const { checkUser } = useUserCheck();
   const { user, isEvenRow } = defineProps<VenuesTableRowProps>();
+  const { deleteVenue } = useVenuesForm(user.id);
+  const showConfirmDialog = ref(false);
 
   const avatarSource = computed(() => {
     if (user.avatar_thumbnail) {
@@ -21,6 +25,11 @@
     }
     return new URL(`@/../assets/images/placeholders/avatar-placeholder.jpg`, import.meta.url).href;
   });
+
+  const confirmDelete = () => {
+    deleteVenue(user.id);
+    showConfirmDialog.value = false;
+  };
 </script>
 
 <template>
@@ -61,10 +70,16 @@
         :icon="IconTrash"
         theme="danger"
         size="sm"
-        onclick="deleteUser(user, user.id)"
+        @click="showConfirmDialog = true"
         is-pill
         is-icon
       />
     </TableColumn>
   </TableRow>
+  <ConfirmDialog
+    :show="showConfirmDialog"
+    message="Are you sure you want to delete this venue?"
+    @confirm="confirmDelete"
+    @close="showConfirmDialog = false"
+  />
 </template>

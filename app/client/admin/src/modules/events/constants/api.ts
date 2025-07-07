@@ -3,6 +3,7 @@ export const EVENT_API_ENDPOINTS = {
   create: '/event/create',
   patch: (eventId: number) => `/event/update/${eventId}`,
   uploadEventImage: (eventId: number) => `/event/image/${eventId}`,
+  delete: (eventId: number) => `/event/delete/${eventId}`,
   table: 'event/draw',
   getMusicGenres: '/taxonomies/music-genres',
   getTicketTypes: '/taxonomies/ticket-types',
