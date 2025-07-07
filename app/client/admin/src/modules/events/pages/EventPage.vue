@@ -127,7 +127,7 @@
               :music-genres="musicGenres"
               :ticket-types="ticketTypes"
               :errors="errors"
-              :eventImage="formData?.images.thumbnail.srcset ?? null"
+              :eventImage="formData?.images?.thumbnail?.srcset ?? null"
               @uploadEventImage="uploadEventImageHandler"
             />
           </SkSection>

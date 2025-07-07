@@ -4,7 +4,7 @@
   const artistTag = defineModel('artistTag', { required: false, type: String });
   const bio = defineModel('bio', { required: false, type: String });
   const cityFrom = defineModel('cityFrom', { required: false, type: String });
-  const countryFrom = defineModel('countryFrom', { required: false, type: String});
+  const countryFrom = defineModel('countryFrom', { required: false, type: String });
   const instagramLink = defineModel('instagramLink', { required: false, type: String });
   const facebookLink = defineModel('facebookLink', { required: false, type: String });
   const soundcloudLink = defineModel('soundcloudLink', { required: false, type: String });
