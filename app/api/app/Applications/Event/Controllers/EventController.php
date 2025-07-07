@@ -131,7 +131,6 @@ class EventController extends Controller
      */
     public function uploadEventImage(Request $request): JsonResponse
     {
-//        dd($request->all());
         try {
             $eventId = Route::current()->parameter('id');
             $EventDTO = $this->eventService->uploadAvatar($eventId, $request);

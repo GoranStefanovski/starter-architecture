@@ -24,6 +24,8 @@ class VenueDTO
     public ?string $type_label = null;
     //TODO: might have to be null
     public int $user_id;
+    public array $images = [];
+
 
     private ?Venue $model = null;
 
@@ -111,7 +113,7 @@ class VenueDTO
 
     public static function fromModel(Venue $venue): self
     {
-        return new self(
+        $dto = new self(
             $venue->name,
             $venue->address,
             $venue->bio,
@@ -129,6 +131,30 @@ class VenueDTO
             $venue->id,
             $venue
         );
+        if (!$venue->getMedia('venue_image')->isEmpty()) {
+            foreach ($venue->getMedia('venue_image') as $media) {
+                $dto->images[] = [
+                    'id'       => $media->id,
+                    'thumbnail' => [
+                        'url'     => $media->getUrl('thumbnail'),
+                        'srcset'  => $media->getSrcset('thumbnail') ?? null,
+                        'webp'    => $media->getResponsiveImageUrls('thumbnail') ?? null,
+                    ],
+                    'card' => [
+                        'url'     => $media->getUrl('card'),
+                        'srcset'  => $media->getSrcset('card') ?? null,
+                        'webp'    => $media->getResponsiveImageUrls('card') ?? null,
+                    ],
+                    'banner' => [
+                        'url'     => $media->getUrl('banner'),
+                        'srcset'  => $media->getSrcset('banner') ?? null,
+                        'webp'    => $media->getResponsiveImageUrls('banner') ?? null,
+                    ],
+                ];
+            }
+        }
+
+        return $dto;
 
     }
 
@@ -159,6 +185,7 @@ class VenueDTO
             'venue_type_id' => $this->venue_type_id,
             'type_label' => $this->type_label,
             'user_id' => $this->user_id,
+            'images' => $this->images,
         ];
     }
 

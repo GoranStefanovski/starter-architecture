@@ -119,16 +119,9 @@ class EventRepository implements EventRepositoryInterface{
             });
         }
 
-//        $query->whereNull('deleted_at');
         return $query->paginate($data['length']);
     }
 
-    /**
-     * Clear the avatar collection for a given user.
-     *
-     * @param User $user
-     * @return void
-     */
     public function clearEventImage($eventId): void
     {
         $this->get($eventId)->clearMediaCollection('event_image');
@@ -139,6 +132,5 @@ class EventRepository implements EventRepositoryInterface{
         $event = $this->get($eventId);
         $event->addMedia($file)->toMediaCollection('event_image');
         return $event;
-//        return $this->get($eventId)->addMedia($file)->toMediaCollection('event_image');
     }
 }

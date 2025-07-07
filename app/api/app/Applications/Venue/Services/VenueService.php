@@ -76,28 +76,21 @@ class VenueService implements VenueServiceInterface
         ];
     }
 
-    /**
-     * Handle the avatar upload for a venue.
-     *
-     * @param int $venueId
-     * @param Request $request
-     * @param Venue $venue
-     * @return VenueDTO
-     */
-    public function uploadAvatar(int $venueId, Request $request, Venue $venue): VenueDTO
+    public function uploadVenueImage(int $venueId, Request $request): VenueDTO
     {
-        // Validate the uploaded file
         $request->validate([
-            'avatar' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'venue_image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-
-        // Clear the existing 'avatars' collection and upload the new avatar
-        $this->venueRepository->clearVenueAvatars($venue);
-        $this->venueRepository->uploadAvatar($venue, $request->file('avatar'));
-
-        // Return the updated VenueDTO
+        $venue = $this->venueRepository->uploadVenueImage($venueId, $request->file('venue_image'));
         return VenueDTO::fromModel($venue);
     }
+
+    public function deleteVenueImage(int $venueId, int $imageId): VenueDTO
+    {
+        $venue = $this->venueRepository->deleteVenueImage($venueId,$imageId);
+        return VenueDTO::fromModel($venue);
+    }
+
 
     public function getAllVenuesFromCity(String $city): array
     {

@@ -1,13 +1,14 @@
 <script lang="ts" setup>
-  import { IconMail } from '@starter-core/icons';
   import { ref, watch, onMounted } from 'vue';
   import { useI18n } from 'vue-i18n';
   import UserFormAvatar from '../UserFormAvatar.vue';
-  import { FormDropdown, FormInput } from '@starter-core/dash-ui/src';
+  import type { VenueImage } from '@/modules/venues/types';
   import { loadGoogleMaps } from '@/plugins/googleMaps';
+  import { FormDropdown, FormInput } from '@starter-core/dash-ui/src';
 
   type EmitsType = {
-    (event: 'uploadAvatar', file: File): void;
+    (event: 'uploadVenueImage', file: File): void;
+    (event: 'deleteVenueImage', imgId: number): void;
   };
 
   const { t } = useI18n();
@@ -40,11 +41,16 @@
     errors: any;
     avatar?: string | null;
     venueTypes: any[];
+    venueImages?: VenueImage[];
   }>();
   const emit = defineEmits<EmitsType>();
 
-  const uploadAvatar = (file: File) => {
-    emit('uploadAvatar', file);
+  const uploadVenueImage = (file: File) => {
+    emit('uploadVenueImage', file);
+  };
+
+  const deleteVenueImage = (imgId: number) => {
+    emit('deleteVenueImage', imgId);
   };
 
   //TODO: should be put in a seperate component, having trouble doing so, map not rendering
@@ -123,12 +129,24 @@
 </script>
 <template>
   <div class="form-group form-input form-group--inline">
-    <!-- <div class="form-group__column form-group__column--left form-group__column--inline">
-      <label class="form-group__label" for="avatar">{{ t('users.avatar') }}</label>
+    <div class="form-group form-input form-group--inline">
+      <div class="form-group__column form-group__column--left form-group__column--inline">
+        <label class="form-group__label" for="avatar">{{ t('venues.image') }}</label>
+      </div>
+      <div class="form-group__column form-group__column--left form-group__column--inline">
+        <user-form-avatar
+          v-for="image in venueImages"
+          :key="image.id"
+          :img-id="image.id"
+          :src="image.thumbnail.srcset"
+          @change="(file) => emit('uploadVenueImage', file)"
+          @delete="(imgId) => emit('deleteVenueImage', imgId)"
+        />
+      </div>
+      <div class="form-group__column form-group__column--left form-group__column--inline">
+        <user-form-avatar :src="null" :img-id="null" @change="(file) => emit('uploadVenueImage', file)" />
+      </div>
     </div>
-    <div class="form-group__column form-group__column--left form-group__column--inline">
-      <user-form-avatar :src="avatar" @change="uploadAvatar" is-circle is-outline />
-    </div> -->
   </div>
   <form-input v-model="name" name="name" :label="t('venues.name.label')" is-inline />
   <form-dropdown

@@ -2,16 +2,16 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/vue-query';
 import axios from 'axios';
 import { computed } from 'vue';
 import { useToast } from 'vue-toastification';
-import { USER_API_ENDPOINTS } from '../constants';
+import { VENUE_API_ENDPOINTS } from '../constants';
 import type { UserFormItem, GetVenueResponse, VenueTypeResponse } from '../types';
-import { useUploadAvatar } from './useUploadAvatar';
+import { useUploadVenueImage } from './useUploadVenueImage';
 
 const USER_CACHE_KEY = 'user';
 
 export const useVenuesForm = (venueId?: number) => {
   const queryClient = useQueryClient();
   const toast = useToast();
-  const { uploadAvatar, isLoading: isUploadingAvatar } = useUploadAvatar({
+  const { uploadVenueImage, isLoading: isUploadingAvatar } = useUploadVenueImage({
     venueId,
     onSuccess: async () => {
       void queryClient.invalidateQueries({ queryKey: [USER_CACHE_KEY, venueId] });
@@ -19,10 +19,24 @@ export const useVenuesForm = (venueId?: number) => {
     },
   });
 
+  const { mutate: deleteVenueImage, isPending: isDeletingAvatar } = useMutation({
+    mutationFn: async (imgId: number): Promise<GetVenueResponse> => {
+      const response = await axios.delete(VENUE_API_ENDPOINTS.deleteVenueImage(venueId ?? 0, imgId));
+      return response.data;
+    },
+    onSuccess: async () => {
+      void queryClient.invalidateQueries({ queryKey: [USER_CACHE_KEY, venueId] });
+      toast.success('Image has been deleted!');
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+
   const { isLoading: isFetching, data: queryData } = useQuery({
     queryKey: [USER_CACHE_KEY, venueId],
     queryFn: async (): Promise<GetVenueResponse> => {
-      const data = await axios.get(USER_API_ENDPOINTS.get(venueId ?? 0));
+      const data = await axios.get(VENUE_API_ENDPOINTS.get(venueId ?? 0));
       return data.data as GetVenueResponse;
     },
     enabled: !!venueId,
@@ -30,7 +44,7 @@ export const useVenuesForm = (venueId?: number) => {
 
   const { mutate: createVenue, isPending: isCreating } = useMutation({
     mutationFn: async (newUserData: UserFormItem): Promise<GetVenueResponse> => {
-      const data = await axios.post(USER_API_ENDPOINTS.create, newUserData);
+      const data = await axios.post(VENUE_API_ENDPOINTS.create, newUserData);
       return data.data as GetVenueResponse;
     },
     onSuccess: async () => {
@@ -43,7 +57,7 @@ export const useVenuesForm = (venueId?: number) => {
 
   const { mutate: updateVenue, isPending: isUpdating } = useMutation({
     mutationFn: async (data: UserFormItem): Promise<GetVenueResponse> => {
-      const response = await axios.patch(USER_API_ENDPOINTS.patch(venueId ?? 0), data);
+      const response = await axios.patch(VENUE_API_ENDPOINTS.patch(venueId ?? 0), data);
       return response.data as GetVenueResponse;
     },
     onSuccess: async () => {
@@ -58,7 +72,7 @@ export const useVenuesForm = (venueId?: number) => {
   const { data: venueTypesRaw, isLoading: isLoadingVenueTypes } = useQuery({
     queryKey: ['venue-types'],
     queryFn: async () => {
-      const response = await axios.get<VenueTypeResponse[]>(USER_API_ENDPOINTS.getVenueTypes);
+      const response = await axios.get<VenueTypeResponse[]>(VENUE_API_ENDPOINTS.getVenueTypes);
       return response.data;
     },
   });
@@ -76,7 +90,8 @@ export const useVenuesForm = (venueId?: number) => {
     data,
     createVenue,
     updateVenue,
-    uploadAvatar,
+    uploadVenueImage,
+    deleteVenueImage,
     venueTypes,
     isLoading: isFetching || isUpdating || isCreating || isUploadingAvatar || isLoadingVenueTypes,
   };

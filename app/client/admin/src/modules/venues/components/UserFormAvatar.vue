@@ -7,15 +7,17 @@
 
   interface UserFormAvatarProps {
     src: string | null;
+    imgId: number | null;
     isOutline?: boolean;
     isCircle?: boolean;
   }
 
   type EmitsType = {
     (event: 'change', file: File): void;
+    (event: 'delete', imgId: number): void;
   };
 
-  const { src, isOutline, isCircle } = defineProps<UserFormAvatarProps>();
+  const { src, imgId = null, isOutline, isCircle } = defineProps<UserFormAvatarProps>();
   const [block, element] = useBEMBuilder(
     'user-form-avatar',
     ref({
@@ -51,6 +53,7 @@
   const deleteHandler = () => {
     preview.value = null;
     file.value = null;
+    emit('delete', imgId);
   };
 
   const saveHandler = () => {
@@ -74,7 +77,14 @@
         ).value
       "
     >
-      <img alt="Avatar" v-if="preview || src" :src="preview ?? src ?? ''" :class="element('image').value" />
+      <img
+        alt="Avatar"
+        v-if="preview || src"
+        :src="preview ?? src ?? ''"
+        :srcset="src ?? ''"
+        :class="element('image').value"
+        sizes="120px"
+      />
     </div>
 
     <label
@@ -111,7 +121,7 @@
     </button>
 
     <button
-      v-if="preview"
+      v-if="src"
       @click.prevent="deleteHandler"
       type="button"
       :class="

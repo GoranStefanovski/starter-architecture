@@ -41,7 +41,7 @@ class VenueRepository implements VenueRepositoryInterface
 
     public function get($id): Venue
     {
-        return $this->venue::findOrFail($id);
+        return $this->venue::with('media')->findOrFail($id);
     }
 
     public function create(VenueDTO $venueDTO): Venue
@@ -107,17 +107,28 @@ class VenueRepository implements VenueRepositoryInterface
         $venue->clearMediaCollection('avatars');
     }
 
-    /**
-     * Upload a new avatar for a given venue.
-     *
-     * @param Venue $venue
-     * @param UploadedFile $file
-     * @return Media
-     */
-    public function uploadAvatar(Venue $venue, UploadedFile $file): Media
+    public function uploadVenueImage($venueId, UploadedFile $file): Venue
     {
-        return $venue->addMedia($file)->toMediaCollection('avatars');
+        $venue = $this->get($venueId);
+        $venue->addMedia($file)->toMediaCollection('venue_image');
+        return $venue;
     }
+
+    public function deleteVenueImage(int $venueId, int $imageId): Venue
+    {
+        $venue = $this->get($venueId);
+
+        $media = $venue->media('venue_image')->where('id', $imageId)->first();
+
+        if ($media) {
+            $media->delete();
+        } else {
+            abort(404, 'Image not found.');
+        }
+
+        return $venue->fresh();
+    }
+
 
     //TODO: smart to cache these in redis after they've been fetched once, no reason for multiple fetches, they wont be changed,
     //TODO: unless a new venue is added(look into this)

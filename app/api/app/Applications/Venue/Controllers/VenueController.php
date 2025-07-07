@@ -142,20 +142,16 @@ class VenueController extends Controller
     }
 
     /**
-     * Handle the avatar upload for the authenticated user.
+     * Handle images upload for a Venue
      *
      * @param Request $request
      * @return JsonResponse
      */
-    public function uploadAvatar(Request $request): JsonResponse
+    public function uploadVenueImage(Request $request): JsonResponse
     {
         try {
-            $userId = Route::current()->parameter('id');
-            $userId = (is_numeric($userId) && (int)$userId > 0)
-                ? (int)$userId
-                : Auth::id();
-
-            $venueDTO = $this->venueService->uploadAvatar($userId, $request, Auth::user());
+            $venueId = Route::current()->parameter('id');
+            $venueDTO = $this->venueService->uploadVenueImage($venueId, $request);
 
             return response()->json($venueDTO, 200);
         } catch (ValidationException $e) {
@@ -172,13 +168,18 @@ class VenueController extends Controller
                 'message' => $e->getMessage(),
             ], 403);
         } catch (\Exception $e) {
-            Log::error('Error uploading avatar: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Error uploading venue image: ' . $e->getMessage(), ['exception' => $e]);
 
             return response()->json([
-                'message' => 'An error occurred while uploading the avatar. Please try again later.',
+                'message' => 'An error occurred while uploading the venue image. Please try again later.',
             ], 500);
         }
     }
+
+    public function deleteVenueImage($venueId,$imageId): JsonResponse{
+        return response()->json($this->venueService->deleteVenueImage((int)$venueId,(int)$imageId));
+    }
+
 
     /**
      * Get a JSON with venues in a city

@@ -50,15 +50,21 @@ interface VenueServiceInterface
     public function draw(array $data): array;
 
     /**
-     * Handle the avatar upload for a venue.
+     * Handle the image upload for a venue.
      *
      * @param int $venueId
      * @param Request $request
-     * @param Venue $venue
      * @return VenueDTO
      */
-    public function uploadAvatar(int $venueId, Request $request, Venue $venue): VenueDTO;
-
+    public function uploadVenueImage(int $venueId, Request $request): VenueDTO;
+    /**
+     * Handle the image deletion for a venue.
+     *
+     * @param int $venueId
+     * @param Request $request
+     * @return VenueDTO
+     */
+    public function deleteVenueImage(int $venueId, int $imageId): VenueDTO;
 
     /**
      * @return array

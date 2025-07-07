@@ -14,6 +14,7 @@ export interface GetVenueResponse {
   city: string;
   country: string;
   updated_at: string;
+  images: VenueImage[];
 }
 
 export interface GetVenueTypeResponse {
@@ -28,6 +29,19 @@ export interface VenuesTableResponse {
 
 export interface VenueTypeResponse {
   data: GetVenueTypeResponse[];
+}
+
+export interface ImageVariant {
+  url: string;
+  srcset: string | null;
+  webp: string[] | null;
+}
+
+export interface VenueImage {
+  id: number;
+  banner: ImageVariant;
+  card: ImageVariant;
+  thumbnail: ImageVariant;
 }
 
 export type AuthUser = Omit<GetVenueResponse, 'updated_at'>;

@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/vue-query';
 import axios from 'axios';
 import { useToast } from 'vue-toastification';
-import { USER_API_ENDPOINTS } from '../constants';
+import { VENUE_API_ENDPOINTS } from '../constants';
 import type { GetVenueResponse } from '../types';
 
 interface UseUploadAvatarProps {
@@ -9,15 +9,15 @@ interface UseUploadAvatarProps {
   onSuccess?: () => Promise<void>;
 }
 
-export const useUploadAvatar = ({ venueId, onSuccess }: UseUploadAvatarProps) => {
+export const useUploadVenueImage = ({ venueId, onSuccess }: UseUploadAvatarProps) => {
   const toast = useToast();
 
-  const { mutate: uploadAvatar, isPending: isUploadingAvatar } = useMutation({
+  const { mutate: uploadVenueImage, isPending: isUploadingAvatar } = useMutation({
     mutationFn: async (file: File): Promise<GetVenueResponse> => {
       const formData = new FormData();
-      formData.append('avatar', file);
+      formData.append('venue_image', file);
 
-      const response = await axios.post(USER_API_ENDPOINTS.uploadAvatar(venueId ?? 0), formData, {
+      const response = await axios.post(VENUE_API_ENDPOINTS.uploadVenueImage(venueId ?? 0), formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -31,7 +31,7 @@ export const useUploadAvatar = ({ venueId, onSuccess }: UseUploadAvatarProps) =>
   });
 
   return {
-    uploadAvatar,
+    uploadVenueImage,
     isLoading: isUploadingAvatar,
   };
 };

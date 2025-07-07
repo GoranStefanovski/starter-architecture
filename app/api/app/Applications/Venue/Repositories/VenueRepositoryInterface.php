@@ -63,13 +63,22 @@ interface VenueRepositoryInterface
     public function clearVenueAvatars(Venue $venue): void;
 
     /**
-     * Upload a new avatar for a given user.
+     * Upload a new event_image for a given Event.
      *
-     * @param Venue $venue
+     * @param integer $venueId
      * @param UploadedFile $file
-     * @return Media
+     * @return Venue
      */
-    public function uploadAvatar(Venue $venue, UploadedFile $file): Media;
+    public function uploadVenueImage(int $venueId, UploadedFile $file): Venue;
+
+    /**
+     * Upload a new event_image for a given Event.
+     *
+     * @param integer $venueId
+     * @param UploadedFile $file
+     * @return Venue
+     */
+    public function deleteVenueImage(int $venueId, int $imageId): Venue;
 
     /**
      * Fetch venues for an event based on if the user is an Organizator or Collaborator

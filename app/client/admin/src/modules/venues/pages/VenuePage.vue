@@ -10,6 +10,7 @@
   import type { UserFormItem } from '../types';
   import { TabbedContent, TabbedContentTab, PageWrapper, PAGE_WRAPPER_SLOTS, SubheaderTitle, SkSection } from '@/components';
   import { DashButton, DashLink } from '@starter-core/dash-ui/src';
+  import { EventFormBasicInfo } from '@/modules/events/components';
   const { t } = useI18n();
   const personalInformationLabel = t('users.personal-information.label');
   const route = useRoute();
@@ -24,7 +25,15 @@
     },
   };
 
-  const { isLoading, data: formData, createVenue, updateVenue, venueTypes } = useVenuesForm(venueId);
+  const {
+    isLoading,
+    data: formData,
+    createVenue,
+    updateVenue,
+    venueTypes,
+    uploadVenueImage,
+    deleteVenueImage,
+  } = useVenuesForm(venueId);
 
   const { handleSubmit, errors, setValues, defineField } = useForm<UserFormItem>({
     validationSchema,
@@ -41,6 +50,14 @@
       createVenue(payload);
     }
   });
+
+  const uploadVenueImageHandler = (file: File) => {
+    uploadVenueImage(file);
+  };
+
+  const deleteVenueImageHandler = (imgId: number) => {
+    deleteVenueImage(imgId); // 🎯 pass imgId to mutationFn
+  };
 
   watch(
     formData,
@@ -105,7 +122,10 @@
               v-model:city="city"
               v-model:country="country"
               :venue-types="venueTypes"
+              :venueImages="formData?.images ?? []"
               :errors="errors"
+              @uploadVenueImage="uploadVenueImageHandler"
+              @delete-venue-image="deleteVenueImageHandler"
             />
           </SkSection>
         </TabbedContentTab>

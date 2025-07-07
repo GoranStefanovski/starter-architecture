@@ -11,6 +11,7 @@ export interface UserFormItem {
   phone_number: string;
   city: string;
   country: string;
+  images: [];
 }
 
 export type UserMyProfileForm = Pick<UserFormItem, 'name' | 'address' | 'bio'>;

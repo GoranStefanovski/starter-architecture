@@ -30,7 +30,7 @@ Route::group([
         Route::patch('update/{id}', [EventController::class, 'update']);
         Route::delete('delete/{id}', [EventController::class, 'delete']);
 
-        // User avatars
+        // Event images
         Route::post('image/{id}', [EventController::class, 'uploadEventImage']);
         //TODO: should be transfered to public routes
         Route::post('nearby', [EventController::class, 'nearByEvents']);
