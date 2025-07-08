@@ -17,6 +17,7 @@
   const { errors = {}, avatar } = defineProps<{
     errors: any;
     avatar: string | null;
+    hasEmailPermissions?: boolean;
   }>();
   const emit = defineEmits<EmitsType>();
 
@@ -42,7 +43,7 @@
     :label="t('users.email.label')"
     helper-text="You can't update your email."
     is-inline
-    readonly
+    :readonly="!hasEmailPermissions"
   >
     <template v-slot:prependContent>
       <IconMail />

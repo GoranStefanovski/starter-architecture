@@ -10,6 +10,8 @@
   import { TabbedContent, TabbedContentTab, PageWrapper, PAGE_WRAPPER_SLOTS, SubheaderTitle, SkSection } from '@/components';
   import UserRolesDropdown from '@/modules/users/components/UserRolesDropdown.vue';
   import { DashButton, DashLink, FormSwitch } from '@starter-core/dash-ui/src';
+  import { USER_PERMISSIONS } from '@/modules/users/constants';
+  import { useUserCheck } from '@/modules/users/composables';
 
   const { t } = useI18n();
   const personalInformationLabel = t('users.personal-information.label');
@@ -18,6 +20,7 @@
   const route = useRoute();
   const isEditPage = computed(() => route.name == 'edit.user');
   const userId = Number(route.params.userId);
+  const { checkUser } = useUserCheck();
 
   const validationSchema = {
     last_name(value: string) {
@@ -138,6 +141,7 @@
               :avatar="formData?.avatar_thumbnail"
               @upload-avatar="uploadAvatarHandler"
               :errors="errors"
+              :hasEmailPermissions="checkUser('permissions', USER_PERMISSIONS.deleteVenues)"
             />
           </SkSection>
         </TabbedContentTab>

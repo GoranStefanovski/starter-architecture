@@ -78,6 +78,11 @@ class UserController extends Controller
             $userId,
             $dto
         );
+
+        if ($request['password']) {
+            $this->userService->updatePassword($request->id, $request->all());
+        }
+
         return response()->json($userDTO);
     }
 

@@ -102,6 +102,7 @@
           :avatar="formData?.avatar_thumbnail"
           @upload-avatar="uploadAvatarHandler"
           :errors="errors"
+          :hasEmailPermissions="checkUser('permissions', USER_PERMISSIONS.deleteVenues)"
         />
         <UserFormContactInfo
           v-if="checkUser('permissions', USER_PERMISSIONS.writeContactInfo)"
