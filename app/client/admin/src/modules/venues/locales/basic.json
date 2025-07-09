@@ -52,5 +52,22 @@
   },
   "my-profile": {
     "label": "My profile"
+  },
+  "working_hours": {
+    "label": "Working Hours",
+    "monday": "Monday",
+    "tuesday": "Tuesday",
+    "wednesday": "Wednesday",
+    "thursday": "Thursday",
+    "friday": "Friday",
+    "saturday": "Saturday",
+    "sunday": "Sunday",
+    "open": "Opened",
+    "closed": "Closed",
+    "status": "Status",
+    "messages": {
+      "required": "Working hours are required.",
+      "invalid_format": "Invalid working hours format."
+    }
   }
 }

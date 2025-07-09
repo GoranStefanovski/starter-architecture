@@ -5,7 +5,7 @@
   import { useI18n } from 'vue-i18n';
   import { useRoute } from 'vue-router';
   import useAuth from '../../../composables/useAuth';
-  import { VenueFormBasicInfo } from '../components';
+  import { VenueFormBasicInfo, VenueFormWorkingHours } from '../components';
   import { useVenuesForm } from '../composables';
   import type { UserFormItem } from '../types';
   import { TabbedContent, TabbedContentTab, PageWrapper, PAGE_WRAPPER_SLOTS, SubheaderTitle, SkSection } from '@/components';
@@ -80,6 +80,7 @@
           country: newValue.country,
           city: newValue.city,
           is_active: newValue.is_active,
+          working_hours: newValue.working_hours,
         });
       }
     },
@@ -93,6 +94,7 @@
   const [lat] = defineField('lat');
   const [email] = defineField('email');
   const [phone_number] = defineField('phone_number');
+  const [working_hours] = defineField('working_hours');
   const [city] = defineField('city');
   const [country] = defineField('country');
   const [isActive] = defineField('is_active');
@@ -142,6 +144,11 @@
               @uploadVenueImage="uploadVenueImageHandler"
               @delete-venue-image="deleteVenueImageHandler"
             />
+          </SkSection>
+        </TabbedContentTab>
+        <TabbedContentTab :label="t('venues.working_hours.label')" id="working-hours">
+          <SkSection title="Working Hours">
+            <VenueFormWorkingHours v-model:working_hours="working_hours" />
           </SkSection>
         </TabbedContentTab>
       </TabbedContent>

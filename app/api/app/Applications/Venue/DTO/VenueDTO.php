@@ -26,8 +26,7 @@ class VenueDTO
     public int $user_id;
     public array $images = [];
     public ?array $logo = [];
-
-
+    public array $working_hours;
     private ?Venue $model = null;
 
     public function __construct(
@@ -46,6 +45,7 @@ class VenueDTO
         bool $is_active,
         int $user_id,
         int $id = 0,
+        array $working_hours = [],
         ?Venue $model = null
     ) {
         $this->name = $name;
@@ -63,6 +63,7 @@ class VenueDTO
         $this->is_active = $is_active;
         $this->user_id = $user_id;
         $this->id = $id;
+        $this->working_hours = $working_hours;
         $this->model = $model;
     }
 
@@ -86,7 +87,8 @@ class VenueDTO
             self::generateSlug($name, $id), // venue_slug
             $request->boolean('is_active'),
             $request->integer('user_id'),
-            $request->input('id', 0)
+            $request->input('id', 0),
+            $request->input('working_hours', self::defaultWorkingHours()),
         );
     }
 
@@ -109,6 +111,8 @@ class VenueDTO
             self::generateSlug($name, $id), // slug
             $request->boolean('is_active'),
             $request->integer('user_id'),
+            $id,
+            $request->input('working_hours', self::defaultWorkingHours())
         );
     }
 
@@ -130,6 +134,7 @@ class VenueDTO
             $venue->is_active,
             $venue->user_id,
             $venue->id,
+            $venue->working_hours ?? self::defaultWorkingHours(),
             $venue
         );
         if (!$venue->getMedia('venue_image')->isEmpty()) {
@@ -196,6 +201,7 @@ class VenueDTO
             'type_label' => $this->type_label,
             'user_id' => $this->user_id,
             'images' => $this->images,
+            'working_hours' => $this->working_hours,
         ];
     }
 
@@ -216,5 +222,18 @@ class VenueDTO
     {
         $slug = Str::slug($name);
         return $id ? "$slug-$id" : $slug;
+    }
+    
+    public static function defaultWorkingHours(): array
+    {
+        return [
+            'monday'    => ['open' => false, 'from' => null, 'to' => null],
+            'tuesday'   => ['open' => false, 'from' => null, 'to' => null],
+            'wednesday' => ['open' => false, 'from' => null, 'to' => null],
+            'thursday'  => ['open' => false, 'from' => null, 'to' => null],
+            'friday'    => ['open' => false, 'from' => null, 'to' => null],
+            'saturday'  => ['open' => false, 'from' => null, 'to' => null],
+            'sunday'    => ['open' => false, 'from' => null, 'to' => null],
+        ];
     }
 }

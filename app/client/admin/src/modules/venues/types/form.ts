@@ -14,6 +14,23 @@ export interface UserFormItem {
   images: [];
   is_active: boolean;
   logo: [];
+  working_hours: WorkingHours;
+}
+
+export interface WorkingHoursDay {
+  open: boolean;
+  from: string | null; // e.g., "09:00"
+  to: string | null;   // e.g., "17:00"
+}
+
+export interface WorkingHours {
+  monday: WorkingHoursDay;
+  tuesday: WorkingHoursDay;
+  wednesday: WorkingHoursDay;
+  thursday: WorkingHoursDay;
+  friday: WorkingHoursDay;
+  saturday: WorkingHoursDay;
+  sunday: WorkingHoursDay;
 }
 
 export type UserMyProfileForm = Pick<UserFormItem, 'name' | 'address' | 'bio'>;

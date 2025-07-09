@@ -43,6 +43,7 @@ class Venue extends Model implements HasMedia
     protected $casts = [
         'lng' => 'float',
         'lat' => 'float',
+        'working_hours' => 'array',
     ];
 
     /**
