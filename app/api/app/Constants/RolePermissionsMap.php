@@ -15,6 +15,9 @@ class RolePermissionsMap
             UserPermissions::READ_NAVIGATION,
             UserPermissions::WRITE_NAVIGATION,
             UserPermissions::DELETE_NAVIGATION,
+            UserPermissions::READ_STORE,
+            UserPermissions::WRITE_STORE,
+            UserPermissions::DELETE_STORE,
         ],
         UserRoles::EDITOR => [
             UserPermissions::READ_USERS,
@@ -23,6 +26,8 @@ class RolePermissionsMap
         ],
         UserRoles::COLLABORATOR => [
             UserPermissions::READ_NAVIGATION,
+            UserPermissions::READ_STORE,
+            UserPermissions::WRITE_STORE,
         ],
     ];
 }

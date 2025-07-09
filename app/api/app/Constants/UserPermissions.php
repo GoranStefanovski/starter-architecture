@@ -13,4 +13,9 @@ class UserPermissions
     public const READ_NAVIGATION = 'read_navigation';
     public const WRITE_NAVIGATION = 'write_navigation';
     public const DELETE_NAVIGATION = 'delete_navigation';
+
+    // Navigation module
+    public const READ_STORE = 'read_store';
+    public const WRITE_STORE = 'write_store';
+    public const DELETE_STORE = 'delete_store';
 }
