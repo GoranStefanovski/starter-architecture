@@ -134,24 +134,6 @@
       />
     </div>
   </div>
-  <div class="form-group form-input form-group--inline">
-    <div class="form-group__column form-group__column--left form-group__column--inline">
-      <label class="form-group__label" for="avatar">{{ t('venues.image.label') }}</label>
-    </div>
-    <div class="form-group__column form-group__column--left form-group__column--inline">
-      <user-form-avatar
-        v-for="image in venueImages"
-        :key="image.id"
-        :img-id="image.id"
-        :src="image.thumbnail.srcset"
-        @change="(file) => emit('uploadVenueImage', file, 'venue_image')"
-        @delete="(imgId) => emit('deleteVenueImage', imgId)"
-      />
-    </div>
-    <div class="form-group__column form-group__column--left form-group__column--inline">
-      <user-form-avatar :src="null" :img-id="null" @change="(file) => emit('uploadVenueImage', file)" />
-    </div>
-  </div>
   <form-input v-model="name" name="name" :label="t('venues.name.label')" is-inline />
   <form-dropdown
     v-model="venueTypeId"

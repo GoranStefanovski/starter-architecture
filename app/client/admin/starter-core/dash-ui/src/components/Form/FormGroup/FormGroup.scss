@@ -11,6 +11,10 @@ $label-config: kt-get($form-config, label);
         flex-direction: row;
     }
 
+    &--gallery-image {
+        justify-content: flex-start;
+    }
+
     &__label {
         display: block;
         font-size: kt-get($form-config, 'font-size');

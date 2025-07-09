@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { BadgeComponent } from '@starter-core/dash-ui/src';
 
-  const { isDisabled } = defineProps<{ isDisabled: boolean }>();
+  const { isDisabled } = defineProps<{ isDisabled: boolean | null | undefined }>();
 </script>
 <template>
   <span>

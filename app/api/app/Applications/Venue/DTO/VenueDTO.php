@@ -20,6 +20,7 @@ class VenueDTO
     public string $phone_number;
     public ?string $slug = null;
     public bool $is_active;
+    public bool $is_boosted;
     public int $venue_type_id;
     public ?string $type_label = null;
     //TODO: might have to be null
@@ -44,6 +45,7 @@ class VenueDTO
         ?string $type_label,
         ?string $slug,
         bool $is_active,
+        bool $is_boosted,
         int $user_id,
         int $id = 0,
         ?Venue $model = null
@@ -61,6 +63,7 @@ class VenueDTO
         $this->type_label = $type_label;
         $this->slug = $slug;
         $this->is_active = $is_active;
+        $this->is_boosted = $is_boosted;
         $this->user_id = $user_id;
         $this->id = $id;
         $this->model = $model;
@@ -85,6 +88,7 @@ class VenueDTO
             $request->input('type_label'),
             self::generateSlug($name, $id), // venue_slug
             $request->boolean('is_active'),
+            $request->boolean('is_boosted'),
             $request->integer('user_id'),
             $request->input('id', 0)
         );
@@ -108,6 +112,7 @@ class VenueDTO
             $request->input('type_label'),
             self::generateSlug($name, $id), // slug
             $request->boolean('is_active'),
+            $request->boolean('is_boosted'),
             $request->integer('user_id'),
         );
     }
@@ -128,6 +133,7 @@ class VenueDTO
             $venue->type?->name,
             $venue->slug,
             $venue->is_active,
+            $venue->is_boosted,
             $venue->user_id,
             $venue->id,
             $venue
@@ -192,6 +198,7 @@ class VenueDTO
             'phone_number' => $this->phone_number,
             'slug' => $this->slug,
             'is_active' => $this->is_active,
+            'is_boosted' => $this->is_boosted,
             'venue_type_id' => $this->venue_type_id,
             'type_label' => $this->type_label,
             'user_id' => $this->user_id,

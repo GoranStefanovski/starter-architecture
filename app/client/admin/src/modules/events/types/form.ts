@@ -13,6 +13,8 @@ export interface EventFormItem {
   event_end: Date;
   tickets: Array<TicketFormItem>[];
   genreIds: [];
+  is_boosted?: boolean;
+  is_active?: boolean;
   images: [banner: {}, card: {}, thumbnail: {}];
 }
 

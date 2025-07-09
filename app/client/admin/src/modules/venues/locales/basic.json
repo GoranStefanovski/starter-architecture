@@ -52,5 +52,23 @@
   },
   "my-profile": {
     "label": "My profile"
+  },
+  "boosted": {
+    "label": "Is Boosted"
+  },
+  "gallery": {
+    "label": "Gallery"
+  },
+  "working_hours": {
+    "label": "Working Hours",
+    "monday": "Monday",
+    "tuesday": "Tuesday",
+    "wednesday": "Wednesday",
+    "thursday": "Thursday",
+    "friday": "Friday",
+    "saturday": "Saturday",
+    "sunday": "Sunday",
+    "open": "Open",
+    "close": "Close"
   }
 }

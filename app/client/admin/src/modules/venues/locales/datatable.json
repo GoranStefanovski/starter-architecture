@@ -2,8 +2,9 @@
   "datatable": {
     "name": "Name",
     "address": "Address",
+    "boosted": "Boosted",
     "user_role": "User role",
-    "status": "Status",
+    "status": "Active",
     "avatar": "Logo"
   }
 }

@@ -16,6 +16,7 @@ export interface GetVenueResponse {
   updated_at: string;
   images: VenueImage[];
   is_active: boolean;
+  is_boosted: boolean;
   logo: ImageVariant;
 }
 

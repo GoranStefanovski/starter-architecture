@@ -21,6 +21,8 @@ class EventDTO
     public float $lng;
     public float $lat;
     public string $slug;
+    public bool $is_boosted;
+    public bool $is_active;
     public string $event_start;
     public ?string $event_end;
     /** @var TicketDTO[] */
@@ -42,6 +44,8 @@ class EventDTO
         float $lng,
         float $lat,
         string $slug,
+        bool $is_boosted,
+        bool $is_active,
         string $event_start,
         ?string $event_end = null,
         array $tickets = [],
@@ -59,6 +63,8 @@ class EventDTO
         $this->lng = $lng;
         $this->lat = $lat;
         $this->slug = $slug;
+        $this->is_boosted = $is_boosted;
+        $this->is_active = $is_active;
         $this->event_start = $event_start;
         $this->event_end = $event_end;
         $this->tickets = $tickets;
@@ -88,6 +94,8 @@ class EventDTO
             $request->float('lng'),
             $request->float('lat'),
             $slug,
+            $request->boolean('is_boosted'),
+            $request->boolean('is_active'),
             $request->input('event_start'),
             $request->input('event_end'),
             $tickets,
@@ -112,6 +120,8 @@ class EventDTO
             $event->lng,
             $event->lat,
             $event->slug,
+            $event->is_boosted,
+            $event->is_active,
             $event->event_start,
             $event->event_end,
             $tickets,
@@ -177,6 +187,8 @@ class EventDTO
             'lng' => $this->lng,
             'lat' => $this->lat,
             'slug' => $this->slug,
+            'is_boosted' => $this->is_boosted,
+            'is_active' => $this->is_active,
             'event_start' => $this->event_start,
             'event_end' => $this->event_end,
             'tickets' => array_map(fn(TicketDTO $ticket) => $ticket->toArray(), $this->tickets),

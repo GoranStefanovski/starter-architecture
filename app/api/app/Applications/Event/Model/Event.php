@@ -38,6 +38,8 @@ class Event extends Model implements HasMedia
         'slug',
         'user_id',
         'venue_id',
+        'is_boosted',
+        'is_active',
     ];
 
     protected $casts = [

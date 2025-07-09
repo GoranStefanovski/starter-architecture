@@ -3,7 +3,8 @@
   "status": {
     "label": "Disable user",
     "enabled": "Enabled",
-    "disabled": "Disabled"
+    "disabled": "Disabled",
+    "expired": "Expired"
   },
   "roles": {
     "label": "Roles"
@@ -61,5 +62,9 @@
   },
   "my-profile": {
     "label": "My profile"
-  }
+  },
+  "select_venue": "Select a venue",
+  "manual_address": "Manual address",
+  "address_mode": "Manual address mode",
+  "venue_mode": "Venue mode"
 }

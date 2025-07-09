@@ -13,6 +13,7 @@ export interface UserFormItem {
   country: string;
   images: [];
   is_active: boolean;
+  is_boosted: boolean;
   logo: [];
 }
 

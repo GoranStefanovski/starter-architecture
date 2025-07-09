@@ -26,6 +26,9 @@ return new class extends Migration
 
             $table->timestamp('event_start')->index();
             $table->timestamp('event_end')->nullable();
+            
+            $table->boolean('is_active')->default(false);
+            $table->boolean('is_boosted')->default(false);
 
             $table->string('slug', 100)->unique();
 

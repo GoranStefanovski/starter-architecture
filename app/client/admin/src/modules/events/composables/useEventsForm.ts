@@ -6,7 +6,7 @@ import { EVENT_API_ENDPOINTS } from '../constants';
 import type { EventFormItem, GetEventResponse, GetEventDataRowResponse, MusicGenreResponse, TicketTypesResponse } from '../types';
 import { useUploadEventImage } from './useUploadEventImage';
 
-const USER_CACHE_KEY = 'user';
+const EVENT_CACHE_KEY = 'event';
 
 export const useEventsForm = (eventId?: number) => {
   const queryClient = useQueryClient();
@@ -14,13 +14,13 @@ export const useEventsForm = (eventId?: number) => {
   const { uploadEventImage, isLoading: isUploadingEventImage } = useUploadEventImage({
     eventId,
     onSuccess: async () => {
-      void queryClient.invalidateQueries({ queryKey: [USER_CACHE_KEY, eventId] });
+      void queryClient.invalidateQueries({ queryKey: [EVENT_CACHE_KEY, eventId] });
       toast.success('Image has been updated!');
     },
   });
 
   const { isLoading: isFetching, data: queryData } = useQuery({
-    queryKey: [USER_CACHE_KEY, eventId],
+    queryKey: [EVENT_CACHE_KEY, eventId],
     queryFn: async (): Promise<GetEventResponse> => {
       const data = await axios.get(EVENT_API_ENDPOINTS.get(eventId ?? 0));
       return data.data as GetEventResponse;
@@ -47,7 +47,7 @@ export const useEventsForm = (eventId?: number) => {
       return response.data as GetEventResponse;
     },
     onSuccess: async () => {
-      queryClient.invalidateQueries({ queryKey: [USER_CACHE_KEY, eventId] });
+      queryClient.invalidateQueries({ queryKey: [EVENT_CACHE_KEY, eventId] });
       toast.success('User updated!');
     },
     onError: (error) => {

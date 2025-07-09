@@ -3,7 +3,9 @@
     "name": "Name",
     "address": "Address",
     "user_role": "User role",
-    "status": "Status",
-    "avatar": "Logo"
+    "status": "Active",
+    "avatar": "Poster",
+    "boosted": "Boosted",
+    "expired": "Ended"
   }
 }

@@ -22,15 +22,20 @@ export const VENUES_DATATABLE_COLUMNS: DatatableColumns = [
   {
     id: 3,
     label: 'venues.datatable.status',
-    name: 'status',
+    name: 'is_active',
   },
   {
     id: 4,
+    label: 'venues.datatable.boosted',
+    name: 'status',
+  },
+  {
+    id: 5,
     label: 'strings.actions',
     name: 'actions',
   },
   {
-    id: 5,
+    id: 6,
     label: 'strings.delete',
     name: 'delete',
   },

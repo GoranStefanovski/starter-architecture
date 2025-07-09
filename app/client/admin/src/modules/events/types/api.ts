@@ -15,6 +15,8 @@ export interface GetEventResponse {
   event_end: Date;
   tickets: [];
   genreIds: [];
+  is_boosted?: boolean;
+  is_active?: boolean;
   images: EventImages;
 }
 
@@ -24,6 +26,8 @@ export interface GetEventDataRowResponse {
   name: string;
   address: string;
   event_start: Date;
+  is_active?: boolean;
+  is_boosted?: boolean;
 }
 
 export interface GetMusicGenreResponse {

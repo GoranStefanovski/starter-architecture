@@ -21,16 +21,26 @@ export const EVENTS_DATATABLE_COLUMNS: DatatableColumns = [
   },
   {
     id: 3,
+    label: 'events.datatable.boosted',
+    name: 'boosted',
+  },
+  {
+    id: 4,
     label: 'events.datatable.status',
     name: 'status',
   },
   {
-    id: 4,
+    id: 5,
+    label: 'events.datatable.expired',
+    name: 'expired',
+  },
+  {
+    id: 6,
     label: 'strings.actions',
     name: 'actions',
   },
   {
-    id: 5,
+    id: 7,
     label: 'strings.delete',
     name: 'delete',
   },

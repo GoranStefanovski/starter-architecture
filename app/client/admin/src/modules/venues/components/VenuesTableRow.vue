@@ -10,24 +10,24 @@
   import ConfirmDialog from '@/components/ConfirmDialog/ConfirmDialog.vue';
 
   interface VenuesTableRowProps {
-    user: GetVenueResponse;
+    venue: GetVenueResponse;
     isEvenRow: boolean;
   }
 
   const { checkUser } = useUserCheck();
-  const { user, isEvenRow } = defineProps<VenuesTableRowProps>();
+  const { venue, isEvenRow } = defineProps<VenuesTableRowProps>();
   const { deleteVenue } = useVenuesForm();
   const showConfirmDialog = ref(false);
 
   const avatarSource = computed(() => {
-    if (user.avatar_thumbnail) {
-      return user.avatar_thumbnail;
+    if (venue.avatar_thumbnail) {
+      return venue.avatar_thumbnail;
     }
     return new URL(`@/../assets/images/placeholders/avatar-placeholder.jpg`, import.meta.url).href;
   });
 
   const confirmDelete = () => {
-    deleteVenue(user.id);
+    deleteVenue(venue.id);
     showConfirmDialog.value = false;
   };
 </script>
@@ -41,21 +41,25 @@
     </TableColumn>
 
     <TableColumn>
-      {{ user.name }}
+      {{ venue.name }}
     </TableColumn>
 
     <TableColumn>
-      {{ user.address }}
+      {{ venue.address }}
     </TableColumn>
 
     <TableColumn>
-      <VenueStatusBadge :is-activated="user.is_active" />
+      <VenueStatusBadge :is-activated="venue.is_active" />
+    </TableColumn>
+
+    <TableColumn>
+      <VenueStatusBadge :is-activated="venue.is_boosted" />
     </TableColumn>
 
     <TableColumn>
       <dash-link
         v-if="checkUser('permissions', USER_PERMISSIONS.writeVenues)"
-        :to="{ name: 'edit.venue', params: { venueId: user.id } }"
+        :to="{ name: 'edit.venue', params: { venueId: venue.id } }"
         theme="primary"
         theme-mod="outline-hover"
         :icon="IconEdit"

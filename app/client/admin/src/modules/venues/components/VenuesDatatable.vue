@@ -37,7 +37,7 @@
         v-for="(venue, index) in venues"
         :key="venue.id"
         :columns="VENUES_DATATABLE_COLUMNS"
-        :user="venue"
+        :venue="venue"
         :is-even-row="index % 2 === 0"
       />
     </template>

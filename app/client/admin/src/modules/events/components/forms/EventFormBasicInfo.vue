@@ -3,13 +3,14 @@
   import { ref, watch, onMounted, computed } from 'vue';
   import { useI18n } from 'vue-i18n';
   import type { TicketFormItem } from '../../types/form.ts';
+  import UserFormAvatar from '@/modules/events/components/UserFormAvatar.vue';
   import TicketForm from '@/modules/events/components/forms/TicketForm.vue';
   import { EVENT_API_ENDPOINTS } from '@/modules/events/constants';
   import { loadGoogleMaps } from '@/plugins/googleMaps';
   import { FormDropdown, FormInput, FormMultiSelect } from '@starter-core/dash-ui/src';
   import '@vuepic/vue-datepicker/dist/main.css';
   import axios from 'axios';
-  import UserFormAvatar from '@/modules/events/components/UserFormAvatar.vue';
+  import './EventFormBasicInfo.scss';
 
   type EmitsType = {
     (event: 'uploadEventImage', file: File): void;
@@ -30,7 +31,7 @@
   const genreIds = defineModel('genreIds', { required: true, type: Array<Number>, default: () => [] });
 
   const availableVenues = ref<any[]>([]);
-
+  const isVenue = ref(false);
   const mapContainer = ref<HTMLElement | null>(null);
   const cityInput = ref<HTMLElement | null>(null);
   let map: any = null;
@@ -94,6 +95,7 @@
   };
 
   const selectedVenue = computed((): any => {
+    console.log('asdasdasdasdadasda');
     return availableVenues.value.find((v) => v.id === venue_id.value);
   });
 
@@ -102,6 +104,8 @@
       lat.value = venue.lat;
       lng.value = venue.lng;
       address.value = venue.address;
+      city.value = venue.city;
+      country.value = venue.country;
     }
   });
 
@@ -203,6 +207,18 @@
       }
     });
   });
+
+  watch(isVenue, (val) => {
+    if (val) {
+      country.value = '';
+      city.value = '';
+      address.value = '';
+      lat.value = 0;
+      lng.value = 0;
+    } else {
+      venue_id.value = '';
+    }
+  });
 </script>
 <template>
   <div class="form-group form-input form-group--inline">
@@ -215,14 +231,6 @@
   </div>
   <form-input v-model="name" name="name" :label="t('events.name.label')" is-inline />
   <form-input v-model="description" name="description" :label="t('events.desc.label')" is-inline />
-  <form-dropdown
-    id="venue_id"
-    v-model="venue_id"
-    name="venue_id"
-    :label="t('events.venue.label')"
-    :options="availableVenues"
-    is-inline
-  />
   <form-multi-select
     v-model="genreIds"
     id="music_genres_id"
@@ -245,18 +253,38 @@
   </label>
   <VueDatePicker :name="t('events.event_time.end')" v-model="event_end" :min-date="new Date()" :placeholder="'Choose end date'" />
   <TicketForm v-for="(ticket, i) in tickets" :key="i" :ticket="ticket" :ticket-types="adjustedTicketTypes(ticket.type)" />
-
+  <hr />
+  <div class="form-group form-input form-group--inline">
+    <div class="event_venue-mode">
+      <label style="margin-left: 1rem">
+        <input type="radio" v-model="isVenue" :value="false" /> {{ t('events.manual_address') }}
+      </label>
+      <label> <input type="radio" v-model="isVenue" :value="true" /> {{ t('events.select_venue') }} </label>
+    </div>
+    <label class="form-group__label">| {{ isVenue ? t('events.venue_mode') : t('events.address_mode') }}</label>
+  </div>
   <form-dropdown
-    id="country"
-    v-model="country"
-    name="country"
-    :label="t('events.address.country')"
-    :options="allowedCountries"
+    v-if="isVenue"
+    id="venue_id"
+    v-model="venue_id"
+    name="venue_id"
+    :label="t('events.venue.label')"
+    :options="availableVenues"
     is-inline
   />
-  <form-input ref="cityInput" v-model="city" name="city" :label="t('events.address.city')" is-inline />
-  <form-input v-model="address" name="address" :label="t('events.address.label')" is-inline />
-  <form-input v-model="lat" type="number" name="lat" :label="t('events.address.lat')" is-inline />
-  <form-input v-model="lng" type="number" name="lng" :label="t('events.address.lng')" is-inline />
-  <div ref="mapContainer" style="width: 100%; height: 400px; margin-top: 1rem" />
+  <div v-else>
+    <form-dropdown
+      id="country"
+      v-model="country"
+      name="country"
+      :label="t('events.address.country')"
+      :options="allowedCountries"
+      is-inline
+    />
+    <form-input ref="cityInput" v-model="city" name="city" :label="t('events.address.city')" is-inline />
+    <form-input v-model="address" name="address" :label="t('events.address.label')" is-inline />
+    <form-input v-model="lat" type="number" name="lat" :label="t('events.address.lat')" is-inline />
+    <form-input v-model="lng" type="number" name="lng" :label="t('events.address.lng')" is-inline />
+  </div>
+  <div v-show="!isVenue" ref="mapContainer" style="width: 100%; height: 400px; margin-top: 1rem" />
 </template>

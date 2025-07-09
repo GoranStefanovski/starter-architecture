@@ -1,13 +1,14 @@
 <script setup lang="ts">
   import { IconTrash, IconEdit } from '@starter-core/icons';
   import { computed, ref } from 'vue';
+  import { useEventsForm } from '../composables';
   import type { GetEventDataRowResponse } from '../types';
   import EventStatusBadge from './EventStatusBadge.vue';
+  import EventExpireBadge from './EventExpireBadge.vue';
+  import ConfirmDialog from '@/components/ConfirmDialog/ConfirmDialog.vue';
   import { USER_PERMISSIONS } from '@/modules/events/constants';
   import { useUserCheck } from '@/modules/users/composables';
   import { DashButton, DashLink, TableColumn, TableRow } from '@starter-core/dash-ui/src';
-  import { useEventsForm } from '../composables';
-  import ConfirmDialog from '@/components/ConfirmDialog/ConfirmDialog.vue';
 
   interface EventsTableRowProps {
     event: GetEventDataRowResponse;
@@ -49,7 +50,15 @@
     </TableColumn>
 
     <TableColumn>
-      <EventStatusBadge :is-disabled="event.event_start < new Date()" />
+      <EventStatusBadge :is-disabled="!event.is_boosted" />
+    </TableColumn>
+
+    <TableColumn>
+      <EventStatusBadge :is-disabled="!event.is_active" />
+    </TableColumn>
+
+    <TableColumn>
+      <EventExpireBadge :is-expired="event.event_start < new Date()" />
     </TableColumn>
 
     <TableColumn>

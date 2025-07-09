@@ -36,6 +36,7 @@ class Venue extends Model implements HasMedia
         'phone_number',
         'slug',
         'is_active',
+        'is_boosted',
         'venue_type_id',
         'user_id',
     ];

@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('phone_number', 25)->nullable();
             $table->string('slug', 100)->unique();
             $table->boolean('is_active')->default(false);
+            $table->boolean('is_boosted')->default(false);
 
             $table->unsignedBigInteger('venue_type_id')->nullable();
             $table->unsignedBigInteger('user_id');

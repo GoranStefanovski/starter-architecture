@@ -9,13 +9,17 @@
   import { useEventsForm } from '../composables';
   import type { EventFormItem } from '../types';
   import { TabbedContent, TabbedContentTab, PageWrapper, PAGE_WRAPPER_SLOTS, SubheaderTitle, SkSection } from '@/components';
-  import { DashButton, DashLink } from '@starter-core/dash-ui/src';
+  import { DashButton, DashLink, FormSwitch } from '@starter-core/dash-ui/src';
+  import { useUserCheck } from '@/modules/users/composables';
+  import { USER_PERMISSIONS } from '@/modules/users/constants';
+
   const { t } = useI18n();
   const eventInformationLabel = t('events.event-information.label');
   const route = useRoute();
   const isEditPage = computed(() => route.name == 'edit.event');
   const eventId = Number(route.params.eventId);
   const auth = useAuth();
+  const { checkUser } = useUserCheck();
 
   const validationSchema = {
     name(value: string) {
@@ -74,6 +78,8 @@
           event_end: newValue.event_end,
           tickets: newValue.tickets ?? [],
           genreIds: newValue.genreIds,
+          is_boosted: newValue.is_boosted,
+          is_active: newValue.is_active,
         });
       }
     },
@@ -91,6 +97,8 @@
   const [event_end] = defineField('event_end');
   const [tickets] = defineField('tickets');
   const [genreIds] = defineField('genreIds');
+  const [isBoosted] = defineField('is_boosted');
+  const [isActive] = defineField('is_active');
 </script>
 
 <template>
@@ -110,6 +118,23 @@
       <TabbedContent :isLoading="isLoading">
         <TabbedContentTab :label="eventInformationLabel" id="basic-info">
           <SkSection title="Event Info">
+            <form-switch
+              v-if="checkUser('permissions', USER_PERMISSIONS.deleteEvents)"
+              v-model="isBoosted"
+              id="boosted"
+              theme="success"
+              type="outline"
+              :label="t('venues.boosted.label')"
+              :helper-text="`Venue is  ${isBoosted ? 'boosted' : 'not boosted'}`"
+            />
+            <form-switch
+              v-model="isActive"
+              id="boosted"
+              theme="danger"
+              type="outline"
+              :label="t('venues.status.label')"
+              :helper-text="`Venue is  ${isActive ? 'active' : 'disabled'}`"
+            />
             <EventFormBasicInfo
               v-if="!isLoading"
               v-model:venue_id="venue_id"

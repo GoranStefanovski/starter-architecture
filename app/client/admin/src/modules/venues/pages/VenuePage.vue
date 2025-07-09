@@ -5,14 +5,13 @@
   import { useI18n } from 'vue-i18n';
   import { useRoute } from 'vue-router';
   import useAuth from '../../../composables/useAuth';
-  import { VenueFormBasicInfo } from '../components';
+  import { VenueFormBasicInfo, VenueFormGallery, VenueFormWorkingHours } from '../components';
   import { useVenuesForm } from '../composables';
   import type { UserFormItem } from '../types';
   import { TabbedContent, TabbedContentTab, PageWrapper, PAGE_WRAPPER_SLOTS, SubheaderTitle, SkSection } from '@/components';
   import { DashButton, DashLink, FormSwitch } from '@starter-core/dash-ui/src';
   import { useUserCheck } from '@/modules/users/composables';
   import { USER_PERMISSIONS } from '@/modules/users/constants';
-  import { EventFormBasicInfo } from '@/modules/events/components';
   const { t } = useI18n();
   const personalInformationLabel = t('venues.personal-information.label');
   const route = useRoute();
@@ -80,6 +79,7 @@
           country: newValue.country,
           city: newValue.city,
           is_active: newValue.is_active,
+          is_boosted: newValue.is_boosted,
         });
       }
     },
@@ -96,6 +96,7 @@
   const [city] = defineField('city');
   const [country] = defineField('country');
   const [isActive] = defineField('is_active');
+  const [isBoosted] = defineField('is_boosted');
 </script>
 
 <template>
@@ -117,9 +118,18 @@
           <SkSection title="Customer Info">
             <form-switch
               v-if="checkUser('permissions', USER_PERMISSIONS.deleteVenues)"
+              v-model="isBoosted"
+              id="boosted"
+              theme="success"
+              type="outline"
+              :label="t('venues.boosted.label')"
+              :helper-text="`Venue is  ${isBoosted ? 'boosted' : 'not boosted'}`"
+            />
+            <form-switch
+              v-if="checkUser('permissions', USER_PERMISSIONS.deleteVenues)"
               v-model="isActive"
               id="enabled"
-              theme="success"
+              theme="danger"
               type="outline"
               :label="t('venues.status.label')"
               :helper-text="`Venue is  ${isActive ? 'enabled' : 'disabled'}`"
@@ -142,6 +152,20 @@
               @uploadVenueImage="uploadVenueImageHandler"
               @delete-venue-image="deleteVenueImageHandler"
             />
+          </SkSection>
+        </TabbedContentTab>
+        <TabbedContentTab :label="t('venues.gallery.label')" id="gallery">
+          <SkSection title="Gallery">
+            <VenueFormGallery
+              :venueImages="formData?.images ?? []"
+              @uploadVenueImage="uploadVenueImageHandler"
+              @delete-venue-image="deleteVenueImageHandler"
+            />
+          </SkSection>
+        </TabbedContentTab>
+        <TabbedContentTab :label="t('venues.working_hours.label')" id="working_hours">
+          <SkSection title="Working Hours">
+            <VenueFormWorkingHours :errors="errors" />
           </SkSection>
         </TabbedContentTab>
       </TabbedContent>
