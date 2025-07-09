@@ -4,7 +4,6 @@
     "address": "Address",
     "user_role": "User role",
     "status": "Active",
-    "avatar": "Poster",
     "boosted": "Boosted",
     "expired": "Ended"
   }

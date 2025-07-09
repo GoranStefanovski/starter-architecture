@@ -39,10 +39,7 @@
   let autocomplete: any;
   let sessionToken: any;
   const allowedCountries = [
-    { id: 'mk', name: 'North Macedonia' },
-    { id: 'de', name: 'Germany' },
-    { id: 'fr', name: 'France' },
-    { id: 'us', name: 'USA' },
+    { id: 'mk', name: 'North Macedonia' }
   ];
   let isUserDragging = false;
 
@@ -256,10 +253,10 @@
   <hr />
   <div class="form-group form-input form-group--inline">
     <div class="event_venue-mode">
+      <label> <input type="radio" v-model="isVenue" :value="true" /> {{ t('events.select_venue') }} </label>
       <label style="margin-left: 1rem">
         <input type="radio" v-model="isVenue" :value="false" /> {{ t('events.manual_address') }}
       </label>
-      <label> <input type="radio" v-model="isVenue" :value="true" /> {{ t('events.select_venue') }} </label>
     </div>
     <label class="form-group__label">| {{ isVenue ? t('events.venue_mode') : t('events.address_mode') }}</label>
   </div>

@@ -30,10 +30,7 @@
   let autocomplete: any;
   let sessionToken: any;
   const allowedCountries = [
-    { id: 'mk', name: 'North Macedonia' },
-    { id: 'de', name: 'Germany' },
-    { id: 'fr', name: 'France' },
-    { id: 'us', name: 'USA' },
+    { id: 'mk', name: 'North Macedonia' }
   ];
   let isUserDragging = false;
 
