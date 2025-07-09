@@ -1,6 +1,7 @@
 <script lang="ts" setup>
   import VueDatePicker from '@vuepic/vue-datepicker';
-  import { ref, watch, onMounted, computed } from 'vue';
+  import axios from 'axios';
+  import { ref, watch, onMounted, computed, nextTick } from 'vue';
   import { useI18n } from 'vue-i18n';
   import type { TicketFormItem } from '../../types/form.ts';
   import UserFormAvatar from '@/modules/events/components/UserFormAvatar.vue';
@@ -9,7 +10,6 @@
   import { loadGoogleMaps } from '@/plugins/googleMaps';
   import { FormDropdown, FormInput, FormMultiSelect } from '@starter-core/dash-ui/src';
   import '@vuepic/vue-datepicker/dist/main.css';
-  import axios from 'axios';
   import './EventFormBasicInfo.scss';
 
   type EmitsType = {
@@ -90,7 +90,6 @@
   };
 
   const selectedVenue = computed((): any => {
-    console.log('asdasdasdasdadasda');
     return availableVenues.value.find((v) => v.id === venue_id.value);
   });
 
@@ -203,7 +202,7 @@
     });
   });
 
-  watch(isVenue, (val) => {
+  watch(isVenue, async (val) => {
     if (val) {
       country.value = '';
       city.value = '';
@@ -212,6 +211,40 @@
       lng.value = 0;
     } else {
       venue_id.value = '';
+
+      await nextTick();
+
+      // Reattach Google Autocomplete to the new city input
+      const maps = await loadGoogleMaps();
+      const inputEl = (cityInput.value as any)?.$el?.querySelector('input');
+      if (!inputEl) return;
+
+      sessionToken = new maps.places.AutocompleteSessionToken();
+      autocomplete = new maps.places.Autocomplete(inputEl, {
+        types: ['(cities)'],
+        componentRestrictions: { country: (country.value || 'mk').toLowerCase() },
+        sessionToken,
+      });
+
+      // Add listeners again
+      inputEl.addEventListener('input', () => {
+        sessionToken = new maps.places.AutocompleteSessionToken();
+        autocomplete.setOptions({ sessionToken });
+      });
+
+      autocomplete.addListener('place_changed', async () => {
+        const place = autocomplete.getPlace();
+        if (!place.geometry) return;
+
+        const loc = place.geometry.location;
+        city.value = place.name;
+        lat.value = loc.lat();
+        lng.value = loc.lng();
+
+        isUserDragging = false;
+        map.setCenter(loc);
+        marker.setPosition(loc);
+      });
     }
   });
 </script>
