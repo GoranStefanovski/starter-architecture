@@ -38,9 +38,7 @@
   let marker: any = null;
   let autocomplete: any;
   let sessionToken: any;
-  const allowedCountries = [
-    { id: 'mk', name: 'North Macedonia' }
-  ];
+  const allowedCountries = [{ id: 'mk', name: 'North Macedonia' }];
   let isUserDragging = false;
 
   const createEmptyTicket = (): TicketFormItem => {
