@@ -25,7 +25,7 @@ useHead({
           <h2 class="subtitle">Your personalized nightlife experience starts here</h2>
           <h3 class="subheading">Browse by Genre or Location</h3>
           <h4 class="cta">Be an early insider — unlock exclusive venues and events.</h4>
-          <h5><NuxtLink to="mailto:tevidma@gmail.com" class="md-min-hidden" style="color: white;">contact@beat.com</NuxtLink></h5>
+          <h5><NuxtLink to="mailto:contact@be-at-it.com" class="md-min-hidden" style="color: white;">contact@beat.com</NuxtLink></h5>
         </div>
       </div>
     </div>

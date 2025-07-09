@@ -8,7 +8,7 @@ import "./Header.css";
       <input type="radio" name="slider" id="menu-btn" />
       <input type="radio" name="slider" id="close-btn" />
       <ul class="nav-links">
-        <li><nuxt-link to="mailto:tevidma@gmail.com">Contact Us</nuxt-link></li>
+        <li><nuxt-link to="mailto:contact@be-at-it.com">Contact Us</nuxt-link></li>
       </ul>
       <label for="menu-btn" class="btn menu-btn"
         ><i class="fas fa-bars"></i
