@@ -31,7 +31,7 @@
       />
     </div>
     <div class="form-group__column form-group__column--left form-group__column--inline">
-      <venue-form-gallery-image :src="null" :img-id="null" @change="(file) => emit('uploadVenueImage', file)" />
+      <venue-form-gallery-image :src="null" :img-id="null" @change="(file) => emit('uploadVenueImage', file, 'venue_image')" />
     </div>
   </div>
 </template>
