@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Collection;
 use App\Applications\Pagination\StarterPaginator;
 use App\Applications\User\Model\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Auth\Access\AuthorizationException;
 
 /**
  * @property Store $store
@@ -71,11 +72,19 @@ class StoreRepository implements StoreRepositoryInterface
     public function update(int $storeId, array $data): Store
     {
         $store = $this->store->findOrFail($storeId);
+
+        $user = Auth::user();
+
+        // 🔥 Check if user is admin or owner
+        if (!$user->hasRole(User::ADMIN) && $store->user_id !== $user->id) {
+            throw new AuthorizationException('You are not authorized to update this store.');
+        }
+
         $store->update($data);
+
         return $store;
     }
-
-    /**
+        /**
      * Delete an existing store.
      *
      * @param  Store  $store
