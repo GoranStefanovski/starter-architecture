@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Applications\Common\Model\VenueType;
 use App\Applications\User\Model\User;
 use App\Applications\Venue\Model\Venue;
+use App\Applications\WorkingHours\Enum\DayOfWeek;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -67,6 +68,37 @@ class VenueFactory extends Factory
             'collaborator_id' => null,
             'venue_type_id' => $venueTypeId,
         ];
+    }
+
+    public function configure(): static
+    {
+        return $this->afterCreating(function (Venue $venue) {
+            // Add working hours for each day of the week
+            foreach (DayOfWeek::cases() as $day) {
+                $isClosed = $this->faker->boolean(15);
+                if ($isClosed) {
+                    $venue->workingHours()->create([
+                        'day_of_week' => $day,
+                        'opens_at' => null,
+                        'closes_at' => null,
+                    ]);
+                } else {
+                    $opensAt = $this->faker->time('H:i', $this->faker->dateTimeBetween('10:00', '14:00'));
+
+                    if ($this->faker->boolean(50)) {
+                        $closesAt = $this->faker->time('H:i', $this->faker->dateTimeBetween('00:00', '02:00'));
+                    } else {
+                        $closesAt = $this->faker->time('H:i', $this->faker->dateTimeBetween('20:00', '23:59'));
+                    }
+
+                    $venue->workingHours()->create([
+                        'day_of_week' => $day,
+                        'opens_at' => $opensAt,
+                        'closes_at' => $closesAt,
+                    ]);
+                }
+            }
+        });
     }
 
 }

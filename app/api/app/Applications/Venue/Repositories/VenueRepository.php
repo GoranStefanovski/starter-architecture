@@ -99,7 +99,7 @@ class VenueRepository implements VenueRepositoryInterface
             ->groupBy('model_id');
 
         $venues->getCollection()->transform(function ($venue) use ($media) {
-            $venue->logo = optional(optional($media->get($venue->id))->first());
+            $venue->logo = optional($media->get($venue->id))->first();
             return $venue;
         });
 

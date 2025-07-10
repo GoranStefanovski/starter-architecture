@@ -2,6 +2,7 @@
 
 namespace App\Applications\Venue\Model;
 
+use App\Applications\WorkingHours\Model\WorkingHour;
 use Database\Factories\VenueFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -78,6 +79,15 @@ class Venue extends Model implements HasMedia
     {
         return $this->hasMany(UserVenueAttendance::class);
     }
+
+    /**
+     *  Working hours for a venue trough out the week
+     */
+    public function workingHours()
+    {
+        return $this->hasMany(WorkingHour::class);
+    }
+
 
 
     public function registerMediaCollections(): void

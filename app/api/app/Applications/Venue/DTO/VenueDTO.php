@@ -3,6 +3,7 @@
 namespace App\Applications\Venue\DTO;
 
 use App\Applications\Venue\Model\Venue;
+use App\Applications\WorkingHours\DTO\WorkingHourDTO;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -28,6 +29,7 @@ class VenueDTO
     public ?int $collaborator_id;
     public array $images = [];
     public array $logo = [];
+    public array $working_hours = [];
 
 
     private ?Venue $model = null;
@@ -166,6 +168,7 @@ class VenueDTO
                 ];
             }
         }
+
         $logo = $venue->getFirstMedia('venue_logo');
         if($logo){
             $dto->logo = [
@@ -175,6 +178,14 @@ class VenueDTO
                 'webp'    => $logo->getResponsiveImageUrls('logo') ?? null,
             ];
         }
+
+        $dto->working_hours = $venue->workingHours
+            ->map(fn ($hour) => new WorkingHourDTO(
+                $hour->day_of_week,
+                $hour->opens_at,
+                $hour->closes_at,
+            ))
+            ->toArray();
 
         return $dto;
 
@@ -224,6 +235,10 @@ class VenueDTO
             'user_id' => $this->user_id,
             'collaborator_id' => $this->collaborator_id,
             'images' => $this->images,
+            'working_hours' => array_map(
+                fn (WorkingHourDTO $workingHdto) => $workingHdto->toArray(),
+                $this->working_hours
+            ),
         ];
     }
 
