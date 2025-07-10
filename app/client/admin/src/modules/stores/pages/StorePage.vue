@@ -19,15 +19,15 @@
   const isEditPage = computed(() => route.name == 'edit.store');
   const storeId = Number(route.params.storeId);
 
-  const { isLoading, data: formData, createUser, updateUser, uploadAvatar } = useStoresForm(storeId);
+  const { isLoading, data: formData, createStore, updateStore, uploadAvatar } = useStoresForm(storeId);
 
   const { handleSubmit, errors, setValues, defineField } = useForm<StoreFormItem>();
 
   const submitHandler = handleSubmit((values) => {
     if (isEditPage.value) {
-      updateUser(values);
+      updateStore(values);
     } else {
-      createUser(values);
+      createStore(values);
     }
   });
 

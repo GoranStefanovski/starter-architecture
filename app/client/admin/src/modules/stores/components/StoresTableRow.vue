@@ -15,7 +15,7 @@
 
   const { checkUser } = useUserCheck();
   const { store, isEvenRow } = defineProps<UsersTableRowProps>();
-  const { deleteUser } = useStoresForm(store.id);
+  const { deleteStore } = useStoresForm(store.id);
 
   const avatarSource = computed(() => {
     return new URL(`@/../assets/images/placeholders/avatar-placeholder.jpg`, import.meta.url).href;
@@ -27,7 +27,7 @@
   };
 
   const confirmDelete = () => {
-    deleteUser(store.id);
+    deleteStore(store.id);
   };
 </script>
 

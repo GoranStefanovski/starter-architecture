@@ -6,7 +6,7 @@ import { USER_API_ENDPOINTS, USERS_TABLE_QUERY_KEY } from '../constants';
 import type { StoreFormItem, GetStoreResponse } from '../types';
 import { useUploadAvatar } from './useUploadAvatar';
 
-const USER_CACHE_KEY = 'user';
+const STORE_CACHE_KEY = 'user';
 
 export const useStoresForm = (storeId?: number) => {
   const queryClient = useQueryClient();
@@ -15,13 +15,13 @@ export const useStoresForm = (storeId?: number) => {
   const { uploadAvatar, isLoading: isUploadingAvatar } = useUploadAvatar({
     storeId,
     onSuccess: async () => {
-      queryClient.invalidateQueries({ queryKey: [USER_CACHE_KEY, storeId] });
+      queryClient.invalidateQueries({ queryKey: [STORE_CACHE_KEY, storeId] });
       toast.success('Image has been updated!');
     },
   });
 
   const { isLoading: isFetching, data: queryData } = useQuery({
-    queryKey: [USER_CACHE_KEY, storeId],
+    queryKey: [STORE_CACHE_KEY, storeId],
     queryFn: async (): Promise<GetStoreResponse> => {
       const data = await axios.get(USER_API_ENDPOINTS.get(storeId ?? 0));
       return data.data;
@@ -29,40 +29,40 @@ export const useStoresForm = (storeId?: number) => {
     enabled: !!storeId,
   });
 
-  const { mutate: createUser, isPending: isCreating } = useMutation({
+  const { mutate: createStore, isPending: isCreating } = useMutation({
     mutationFn: async (newUserData: StoreFormItem): Promise<GetStoreResponse> => {
       const data = await axios.post(USER_API_ENDPOINTS.create, newUserData);
       return data.data;
     },
     onSuccess: async () => {
-      toast.success('User saved!');
+      toast.success('Store saved!');
     },
     onError: (error) => {
       toast.error(error.message);
     },
   });
 
-  const { mutate: updateUser, isPending: isUpdating } = useMutation({
+  const { mutate: updateStore, isPending: isUpdating } = useMutation({
     mutationFn: async (data: StoreFormItem): Promise<GetStoreResponse> => {
       const response = await axios.patch(USER_API_ENDPOINTS.patch(storeId ?? 0), data);
       return response.data;
     },
     onSuccess: async () => {
-      queryClient.invalidateQueries({ queryKey: [USER_CACHE_KEY, storeId] });
-      toast.success('User updated!');
+      queryClient.invalidateQueries({ queryKey: [STORE_CACHE_KEY, storeId] });
+      toast.success('Store updated!');
     },
     onError: (error) => {
       toast.error(error.message);
     },
   });
-  const { mutate: deleteUser, isPending: isDeleting } = useMutation({
+  const { mutate: deleteStore, isPending: isDeleting } = useMutation({
     mutationFn: async (data: StoreFormItem): Promise<GetStoreResponse> => {
       const response = await axios.delete(USER_API_ENDPOINTS.delete(storeId ?? 0));
       return response.data;
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: [USERS_TABLE_QUERY_KEY] });
-      toast.success('User deleted!');
+      toast.success('Store deleted!');
     },
     onError: (error) => {
       toast.error(error.message);
@@ -73,10 +73,10 @@ export const useStoresForm = (storeId?: number) => {
 
   return {
     data,
-    createUser,
-    updateUser,
+    createStore,
+    updateStore,
     uploadAvatar,
-    deleteUser,
+    deleteStore,
     isLoading: isFetching || isUpdating || isCreating || isUploadingAvatar || isDeleting,
   };
 };
