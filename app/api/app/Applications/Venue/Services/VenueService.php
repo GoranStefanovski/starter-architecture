@@ -53,8 +53,8 @@ class VenueService implements VenueServiceInterface
     {
         $user = auth()->user();
         // VenuePolicy
-        if ($user->cannot('viewAllVenues', User::class)) {
-            $data['user_only'] = $user->id;
+        if ($user->cannot('viewAllVenues', Venue::class)) {
+            $data['collaborator_id'] = $user->id;
         }
 
         $data['columns'] = ['venues.name', 'venues.address'];
@@ -67,7 +67,7 @@ class VenueService implements VenueServiceInterface
         $venuesCollection = $this->venueRepository->draw($data);
 
         $venuesDTOs = $venuesCollection->getCollection()->map(function ($venue) {
-            return VenueDTO::fromModel($venue);
+            return VenueDTO::fromModelForTable($venue);
         });
 
         return [
@@ -93,8 +93,13 @@ class VenueService implements VenueServiceInterface
     }
 
 
-    public function getAllVenuesFromCity(String $city): array
+    public function getAllVenuesFromCityOrOwner(String $city): array
     {
-       return  $this->venueRepository->getAllVenuesFromCity($city);
+        $user = auth()->user();
+        $venue_owner_id = null;
+        if ($user->can('getOwnVenuesForEvent', Venue::class)) {
+            $venue_owner_id = $user->id;
+        }
+        return  $this->venueRepository->getAllVenuesFromCityOrOwner($city, $venue_owner_id);
     }
 }

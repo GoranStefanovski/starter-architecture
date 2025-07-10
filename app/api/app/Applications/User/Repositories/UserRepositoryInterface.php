@@ -96,4 +96,11 @@ interface UserRepositoryInterface
      * @return Media
      */
     public function uploadAvatar(User $user, UploadedFile $file): Media;
+
+    /**
+     * Get app's collaborators
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function getCollaborators(): \Illuminate\Support\Collection;
 }

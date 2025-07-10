@@ -246,4 +246,9 @@ class UserController extends Controller
             return response()->json(['message' => 'An error occurred while updating the password.'], 500);
         }
     }
+
+    public function getCollaborators(): JsonResponse{
+        $collaborators = $this->userService->getCollaborators();
+        return response()->json($collaborators);
+    }
 }

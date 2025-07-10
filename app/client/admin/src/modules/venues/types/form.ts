@@ -14,6 +14,7 @@ export interface UserFormItem {
   images: [];
   is_active: boolean;
   is_boosted: boolean;
+  collaborator_id?: number;
   logo: [];
 }
 

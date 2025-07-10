@@ -43,7 +43,6 @@
   });
 
   const submitHandler = handleSubmit((values) => {
-    console.log(values);
     const payload = {
       ...values,
       user_id: auth.user.id,

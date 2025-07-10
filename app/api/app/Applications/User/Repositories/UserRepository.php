@@ -5,6 +5,7 @@ namespace App\Applications\User\Repositories;
 use App\Applications\User\DTO\UserDTO;
 use App\Applications\Pagination\StarterPaginator;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\UploadedFile;
 use App\Applications\User\Model\User;
@@ -176,5 +177,15 @@ class UserRepository implements UserRepositoryInterface
     public function uploadAvatar(User $user, UploadedFile $file): Media
     {
         return $user->addMedia($file)->toMediaCollection('avatars');
+    }
+
+    public function getCollaborators(): \Illuminate\Support\Collection
+    {
+        $collaborators = DB::table('users')
+            ->join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
+            ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
+            ->where('roles.name', 'collaborator')
+            ->select(['users.id', 'users.email']);
+        return $collaborators->get();
     }
 }

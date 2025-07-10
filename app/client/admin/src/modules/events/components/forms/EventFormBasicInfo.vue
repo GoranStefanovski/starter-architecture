@@ -7,10 +7,13 @@
   import UserFormAvatar from '@/modules/events/components/UserFormAvatar.vue';
   import TicketForm from '@/modules/events/components/forms/TicketForm.vue';
   import { EVENT_API_ENDPOINTS } from '@/modules/events/constants';
+  import { useUserCheck } from '@/modules/users/composables';
+  import { USER_ROLES } from '@/modules/users/constants';
   import { loadGoogleMaps } from '@/plugins/googleMaps';
   import { FormDropdown, FormInput, FormMultiSelect } from '@starter-core/dash-ui/src';
   import '@vuepic/vue-datepicker/dist/main.css';
   import './EventFormBasicInfo.scss';
+  const { checkUser } = useUserCheck();
 
   type EmitsType = {
     (event: 'uploadEventImage', file: File): void;
@@ -209,8 +212,37 @@
       address.value = '';
       lat.value = 0;
       lng.value = 0;
+      const maps = await loadGoogleMaps();
+      const inputEl = (cityInput.value as any)?.$el?.querySelector('input');
+      if (!inputEl) return;
+
+      sessionToken = new maps.places.AutocompleteSessionToken();
+      autocomplete = new maps.places.Autocomplete(inputEl, {
+        types: ['(cities)'],
+        componentRestrictions: { country: (country.value || 'mk').toLowerCase() },
+        sessionToken,
+      });
+
+      // Add listeners again
+      inputEl.addEventListener('input', () => {
+        sessionToken = new maps.places.AutocompleteSessionToken();
+        autocomplete.setOptions({ sessionToken });
+      });
+
+      autocomplete.addListener('place_changed', async () => {
+        const place = autocomplete.getPlace();
+        if (!place.geometry) return;
+        city.value = place.name;
+        try {
+          const { data } = await axios.get(EVENT_API_ENDPOINTS.getVenueFromCity(place.name));
+          availableVenues.value = data;
+        } catch (error) {
+          console.error('Failed to fetch venues', error);
+          availableVenues.value = [];
+        }
+      });
     } else {
-      venue_id.value = '';
+      venue_id.value = null;
 
       await nextTick();
 
@@ -291,6 +323,14 @@
     </div>
     <label class="form-group__label">| {{ isVenue ? t('events.venue_mode') : t('events.address_mode') }}</label>
   </div>
+  <form-input
+    v-if="isVenue && !checkUser('roles', USER_ROLES.collaborator)"
+    ref="cityInput"
+    v-model="city"
+    name="city"
+    :label="t('events.address.city')"
+    is-inline
+  />
   <form-dropdown
     v-if="isVenue"
     id="venue_id"

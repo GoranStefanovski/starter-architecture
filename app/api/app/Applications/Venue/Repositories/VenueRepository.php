@@ -69,14 +69,11 @@ class VenueRepository implements VenueRepositoryInterface
 
     public function draw($data): StarterPaginator
     {
-        //        $paginatedVenues = $this->prepareDatatableQuery($data, [Venue::ADMIN, Venue::EDITOR, Venue::COLLABORATOR]);
+        $query = $this->venue->query()
+            ->select(['id', 'user_id', 'collaborator_id', 'name', 'address', 'is_active', 'is_boosted']);
 
-        $query = $this->venue->query();
-
-        // $query->whereIn('roles.name', $roles);
-
-        if (!empty($data['user_only'])) {
-            $query->where('user_id', $data['user_only']);
+        if (!empty($data['collaborator_id'])) {
+            $query->where('collaborator_id', $data['collaborator_id']);
         }
 
         if (array_key_exists($data['column'], self::COLUMNS_MAP)) {
@@ -92,7 +89,21 @@ class VenueRepository implements VenueRepositoryInterface
         }
 
         $query->whereNull('deleted_at');
-        return $query->paginate($data['length']);
+
+        $venues = $query->paginate($data['length']);
+
+        $media = Media::whereIn('model_id', $venues->pluck('id'))
+            ->where('model_type', Venue::class)
+            ->where('collection_name', 'venue_logo')
+            ->get()
+            ->groupBy('model_id');
+
+        $venues->getCollection()->transform(function ($venue) use ($media) {
+            $venue->logo = optional(optional($media->get($venue->id))->first());
+            return $venue;
+        });
+
+        return $venues;
     }
 
 
@@ -145,11 +156,19 @@ class VenueRepository implements VenueRepositoryInterface
         return new Collection();
     }
 
-    public function getAllVenuesFromCity(string $city): array
+    public function getAllVenuesFromCityOrOwner(string $city, ?int $venue_owner_id = null): array
     {
         $query = DB::table('venues')
-            ->select('venues.id', 'venues.name', 'venues.address', 'venues.city', 'venues.country', 'venues.lat','venues.lng',)
-            ->where('venues.city', $city);
+            ->select('venues.id', 'venues.name', 'venues.address', 'venues.city', 'venues.country', 'venues.lat', 'venues.lng');
+
+        if ($venue_owner_id !== null) {
+            // Collaborator: fetch only their venues, ignore city
+            $query->where('venues.collaborator_id', $venue_owner_id);
+        } else {
+            // Admin/Org/Artist: fetch all venues from the specified city
+            $query->where('venues.city', $city);
+        }
+
         return $query->get()->toArray();
     }
 

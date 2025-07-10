@@ -166,4 +166,9 @@ class UserService implements UserServiceInterface
         $user->password = Hash::make($data['password']);
         $user->save();
     }
+
+    public function getCollaborators(): array
+    {
+        return $this->userRepository->getCollaborators()->toArray();
+    }
 }

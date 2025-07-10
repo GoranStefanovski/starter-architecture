@@ -9,9 +9,9 @@
   import { useVenuesForm } from '../composables';
   import type { UserFormItem } from '../types';
   import { TabbedContent, TabbedContentTab, PageWrapper, PAGE_WRAPPER_SLOTS, SubheaderTitle, SkSection } from '@/components';
-  import { DashButton, DashLink, FormSwitch } from '@starter-core/dash-ui/src';
   import { useUserCheck } from '@/modules/users/composables';
   import { USER_PERMISSIONS } from '@/modules/users/constants';
+  import { DashButton, DashLink, FormDropdown, FormSwitch } from '@starter-core/dash-ui/src';
   const { t } = useI18n();
   const personalInformationLabel = t('venues.personal-information.label');
   const route = useRoute();
@@ -35,6 +35,7 @@
     venueTypes,
     uploadVenueImage,
     deleteVenueImage,
+    collaborators,
   } = useVenuesForm(venueId);
 
   const { handleSubmit, errors, setValues, defineField } = useForm<UserFormItem>({
@@ -80,6 +81,7 @@
           city: newValue.city,
           is_active: newValue.is_active,
           is_boosted: newValue.is_boosted,
+          collaborator_id: newValue.collaborator_id,
         });
       }
     },
@@ -97,6 +99,7 @@
   const [country] = defineField('country');
   const [isActive] = defineField('is_active');
   const [isBoosted] = defineField('is_boosted');
+  const [collaborator_id] = defineField('collaborator_id');
 </script>
 
 <template>
@@ -134,6 +137,16 @@
               :label="t('venues.status.label')"
               :helper-text="`Venue is  ${isActive ? 'enabled' : 'disabled'}`"
             />
+            <form-dropdown
+              v-if="checkUser('permissions', USER_PERMISSIONS.deleteVenues)"
+              v-model="collaborator_id"
+              id="collaborator_id"
+              name="collaborator_id"
+              :options="collaborators"
+              label="Collaborator"
+              is-inline
+            />
+            <hr v-if="checkUser('permissions', USER_PERMISSIONS.deleteVenues)" />
             <VenueFormBasicInfo
               v-model:name="name"
               v-model:venue_type_id="venueTypeId"

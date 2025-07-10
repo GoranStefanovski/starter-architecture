@@ -72,10 +72,9 @@ class VenueController extends Controller
      */
     public function update(Request $request): JsonResponse
     {
-        $userId = Route::current()->parameter('id');
         $dto = VenueDTO::fromRequest($request);
         $venueDTO = $this->venueService->update(
-            $userId,
+            $dto->id,
             $dto
         );
         return response()->json($venueDTO);
@@ -186,9 +185,9 @@ class VenueController extends Controller
      *
      * @return JsonResponse
      */
-    public function getByCity(String $city): JsonResponse
+    public function getByCityAndOwner(String $city): JsonResponse
     {
-        $venueDTOs = $this->venueService->getAllVenuesFromCity($city);
+        $venueDTOs = $this->venueService->getAllVenuesFromCityOrOwner($city);
         return response()->json($venueDTOs);
     }
 

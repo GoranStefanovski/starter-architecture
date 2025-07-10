@@ -64,6 +64,7 @@ class VenueFactory extends Factory
             'phone_number' => $this->faker->phoneNumber(),
             'slug' => Str::slug($name) . '-' . Str::random(4),
             'user_id' => $admin->id,
+            'collaborator_id' => null,
             'venue_type_id' => $venueTypeId,
         ];
     }

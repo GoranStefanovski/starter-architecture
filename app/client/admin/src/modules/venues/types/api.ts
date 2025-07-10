@@ -17,6 +17,7 @@ export interface GetVenueResponse {
   images: VenueImage[];
   is_active: boolean;
   is_boosted: boolean;
+  collaborator_id?: number;
   logo: ImageVariant;
 }
 
@@ -46,6 +47,15 @@ export interface VenueImage {
   banner: ImageVariant;
   card: ImageVariant;
   thumbnail: ImageVariant;
+}
+
+export interface CollaboratorsResponse {
+  data: GetCollaboratorsResponse[];
+}
+
+export interface GetCollaboratorsResponse {
+  collaborator_id: number;
+  email: string;
 }
 
 export type AuthUser = Omit<GetVenueResponse, 'updated_at'>;

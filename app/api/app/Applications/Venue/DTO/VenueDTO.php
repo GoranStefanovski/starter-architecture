@@ -25,8 +25,9 @@ class VenueDTO
     public ?string $type_label = null;
     //TODO: might have to be null
     public int $user_id;
+    public ?int $collaborator_id;
     public array $images = [];
-    public ?array $logo = [];
+    public array $logo = [];
 
 
     private ?Venue $model = null;
@@ -47,6 +48,7 @@ class VenueDTO
         bool $is_active,
         bool $is_boosted,
         int $user_id,
+        ?int $collaborator_id,
         int $id = 0,
         ?Venue $model = null
     ) {
@@ -65,6 +67,7 @@ class VenueDTO
         $this->is_active = $is_active;
         $this->is_boosted = $is_boosted;
         $this->user_id = $user_id;
+        $this->collaborator_id = $collaborator_id;
         $this->id = $id;
         $this->model = $model;
     }
@@ -90,6 +93,7 @@ class VenueDTO
             $request->boolean('is_active'),
             $request->boolean('is_boosted'),
             $request->integer('user_id'),
+            $request->integer('collaborator_id'),
             $request->input('id', 0)
         );
     }
@@ -114,6 +118,7 @@ class VenueDTO
             $request->boolean('is_active'),
             $request->boolean('is_boosted'),
             $request->integer('user_id'),
+            $request->integer('collaborator_id') ?: null
         );
     }
 
@@ -135,6 +140,7 @@ class VenueDTO
             $venue->is_active,
             $venue->is_boosted,
             $venue->user_id,
+            $venue->collaborator_id,
             $venue->id,
             $venue
         );
@@ -174,6 +180,20 @@ class VenueDTO
 
     }
 
+    public static function fromModelForTable(Venue $venue): array
+    {
+        return [
+            'id'            => $venue->id,
+            'user_id'       => $venue->user_id,
+            'collaborator_id' => $venue->collaborator_id,
+            'name'          => $venue->name,
+            'address'       => $venue->address,
+            'is_active'     => $venue->is_active,
+            'is_boosted'    => $venue->is_boosted,
+            'logo' => optional($venue->logo)->getSrcset('logo') ?? null,
+        ];
+    }
+
     public function model(): Venue
     {
         if (!$this->model) {
@@ -202,6 +222,7 @@ class VenueDTO
             'venue_type_id' => $this->venue_type_id,
             'type_label' => $this->type_label,
             'user_id' => $this->user_id,
+            'collaborator_id' => $this->collaborator_id,
             'images' => $this->images,
         ];
     }

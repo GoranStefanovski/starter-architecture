@@ -39,6 +39,7 @@ class Venue extends Model implements HasMedia
         'is_boosted',
         'venue_type_id',
         'user_id',
+        'collaborator_id',
     ];
 
     protected $casts = [

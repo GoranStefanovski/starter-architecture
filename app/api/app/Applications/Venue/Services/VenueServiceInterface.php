@@ -69,6 +69,6 @@ interface VenueServiceInterface
     /**
      * @return array
      */
-    public function getAllVenuesFromCity(String $city): array;
+    public function getAllVenuesFromCityOrOwner(String $city): array;
 
 }

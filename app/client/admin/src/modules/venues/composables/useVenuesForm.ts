@@ -3,7 +3,7 @@ import axios from 'axios';
 import { computed } from 'vue';
 import { useToast } from 'vue-toastification';
 import { VENUE_API_ENDPOINTS } from '../constants';
-import type { UserFormItem, GetVenueResponse, VenueTypeResponse } from '../types';
+import type { UserFormItem, GetVenueResponse, VenueTypeResponse, CollaboratorsResponse } from '../types';
 import { useUploadVenueImage } from './useUploadVenueImage';
 
 const VENUE_CACHE_KEY = 'venue';
@@ -90,10 +90,25 @@ export const useVenuesForm = (venueId?: number) => {
     },
   });
 
+  const { data: collaboratorsRaw, isLoading: isLoadingUsers } = useQuery({
+    queryKey: ['collaborators'],
+    queryFn: async () => {
+      const response = await axios.get<CollaboratorsResponse[]>(VENUE_API_ENDPOINTS.getCollaborators);
+      return response.data;
+    },
+  });
+
   const venueTypes = computed(() =>
     (venueTypesRaw.value || []).map((type: any) => ({
       id: type.id,
       name: type.name,
+    }))
+  );
+
+  const collaborators = computed(() =>
+    (collaboratorsRaw.value || []).map((collaborator: any) => ({
+      id: collaborator.id,
+      name: collaborator.email,
     }))
   );
 
@@ -107,6 +122,7 @@ export const useVenuesForm = (venueId?: number) => {
     deleteVenueImage,
     deleteVenue,
     venueTypes,
-    isLoading: isFetching || isUpdating || isCreating || isUploadingAvatar || isLoadingVenueTypes || isDeleting,
+    collaborators,
+    isLoading: isFetching || isUpdating || isCreating || isUploadingAvatar || isLoadingVenueTypes || isDeleting || isLoadingUsers,
   };
 };

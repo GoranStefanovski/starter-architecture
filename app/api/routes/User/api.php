@@ -20,6 +20,8 @@ Route::group([
     Route::group([
         'prefix' => 'user',
     ], function () {
+        Route::get('get-collaborators', [UserController::class, 'getCollaborators']);
+
         Route::get('all', [UserController::class, 'getAll']);
         Route::get('draw', [UserController::class, 'draw']);
         Route::get('permissions-roles', [UserController::class, 'getUserPermissionsRoles']);

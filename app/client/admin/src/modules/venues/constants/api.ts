@@ -7,6 +7,7 @@ export const VENUE_API_ENDPOINTS = {
   delete: (venueId: number) => `/venue/delete/${venueId}`,
   table: 'venue/draw',
   getVenueTypes: '/taxonomies/venue-types',
+  getCollaborators: '/user/get-collaborators',
 };
 
 export const VENUES_TABLE_QUERY_KEY = 'venues-table';

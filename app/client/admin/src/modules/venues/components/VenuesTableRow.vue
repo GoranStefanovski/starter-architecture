@@ -19,9 +19,9 @@
   const { deleteVenue } = useVenuesForm();
   const showConfirmDialog = ref(false);
 
-  const avatarSource = computed(() => {
-    if (venue.avatar_thumbnail) {
-      return venue.avatar_thumbnail;
+  const venueLogo = computed(() => {
+    if (venue.logo) {
+      return venue.logo;
     }
     return new URL(`@/../assets/images/placeholders/avatar-placeholder.jpg`, import.meta.url).href;
   });
@@ -37,7 +37,7 @@
     <!--kt-datatable__row&#45;&#45;even-->
 
     <TableColumn>
-      <img :style="{ width: '50px' }" :src="avatarSource" />
+      <img :style="{ width: '50px' }" :srcset="venueLogo" />
     </TableColumn>
 
     <TableColumn>

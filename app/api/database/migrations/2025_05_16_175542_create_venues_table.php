@@ -29,12 +29,14 @@ return new class extends Migration
 
             $table->unsignedBigInteger('venue_type_id')->nullable();
             $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('collaborator_id')->nullable();
 
             $table->softDeletes();
             $table->timestamps();
 
             $table->foreign('venue_type_id')->references('id')->on('venue_types')->nullOnDelete();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('collaborator_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

@@ -96,8 +96,9 @@ interface VenueRepositoryInterface
      * Organization = all venues
      * Collaborator = only his venues
      *
-     * @param User $user
+     * @param String $city
+     * @param ?int $venue_owner_id
      * @return Collection
      */
-    public function getAllVenuesFromCity(String $city): array;
+    public function getAllVenuesFromCityOrOwner(String $city, ?int $venue_owner_id): array;
 }

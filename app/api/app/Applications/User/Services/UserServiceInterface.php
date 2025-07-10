@@ -89,4 +89,11 @@ interface UserServiceInterface
      * @return void
      */
     public function updatePassword(int $userId, array $data): void;
+
+    /**
+     * Get app's collaborators
+     *
+     * @return array
+     */
+    public function getCollaborators(): array;
 }
