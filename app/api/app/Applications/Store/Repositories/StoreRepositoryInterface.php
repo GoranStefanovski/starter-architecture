@@ -4,6 +4,7 @@ namespace App\Applications\Store\Repositories;
 
 use App\Applications\Store\Model\Store;
 use Illuminate\Database\Eloquent\Collection;
+use App\Applications\Pagination\StarterPaginator;
 
 interface StoreRepositoryInterface
 {
@@ -46,6 +47,12 @@ interface StoreRepositoryInterface
      * @return bool|null
      */
     public function delete(Store $store): ?bool;
+
+    /**
+     * @param array $data
+     * @return StarterPaginator
+     */
+    public function draw(array $data): StarterPaginator;
 
     /**
      * Find all visible stores that are currently live.

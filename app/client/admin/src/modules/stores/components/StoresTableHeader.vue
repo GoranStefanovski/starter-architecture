@@ -6,10 +6,10 @@
 
   const auth = useAuth();
 
-  const isUserAllowedToCreate = computed(() => auth.user().permissions_array.includes('write_users'));
+  const isUserAllowedToCreate = computed(() => auth.user().permissions_array.includes('write_store'));
 </script>
 <template>
-  <DashLink v-if="isUserAllowedToCreate" :to="{ name: 'add.user' }" :icon="IconAdduser" theme="secondary">
-    {{ $t('admin.users.add') }}
+  <DashLink v-if="isUserAllowedToCreate" :to="{ name: 'add.store' }" :icon="IconAdduser" theme="secondary">
+    {{ $t('admin.stores.add') }}
   </DashLink>
 </template>

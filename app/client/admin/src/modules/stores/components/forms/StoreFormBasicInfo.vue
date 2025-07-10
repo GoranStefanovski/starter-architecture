@@ -2,15 +2,18 @@
   import { IconMail } from '@starter-core/icons';
   import { useI18n } from 'vue-i18n';
   import { FormInput } from '@starter-core/dash-ui/src';
+  import StoreFormAvatar from '../StoreFormAvatar.vue';
 
   type EmitsType = {
     (event: 'uploadAvatar', file: File): void;
   };
 
   const { t } = useI18n();
-  const lastName = defineModel('lastName', { required: true, type: String });
-  const firstName = defineModel('firstName', { required: true, type: String });
+  const name = defineModel('name', { required: true, type: String });
   const email = defineModel('email', { required: true, type: String });
+  const website = defineModel('website', { required: true, type: String });
+  const domain = defineModel('domain', { required: true, type: String });
+  const phone = defineModel('phone', { required: true, type: String });
   const {
     errors = {},
     avatar,
@@ -29,19 +32,21 @@
 <template>
   <div class="form-group form-input form-group--inline">
     <div class="form-group__column form-group__column--left form-group__column--inline">
-      <label class="form-group__label" for="avatar">{{ t('users.avatar') }}</label>
+      <label class="form-group__label" for="avatar">{{ t('stores.logo') }}</label>
     </div>
     <div class="form-group__column form-group__column--left form-group__column--inline">
-      <user-form-avatar :src="avatar" @change="uploadAvatar" is-circle is-outline />
+      <store-form-avatar :src="avatar" @change="uploadAvatar" is-circle is-outline />
     </div>
   </div>
-  <form-input v-model="firstName" name="first-name" :label="t('users.first_name.label')" is-inline />
-  <form-input v-model="lastName" name="last-name" :label="t('users.last_name.label')" :error="errors.last_name" is-inline />
+  <form-input v-model="name" name="first-name" :label="t('stores.name.label')" :error="errors.name" is-inline />
+  <form-input v-model="website" name="website" :label="t('stores.website.label')" :error="errors.website" is-inline />
+  <form-input v-model="domain" name="domain" :label="t('stores.domain.label')" :error="errors.domain" is-inline />
+  <form-input v-model="phone" name="phone" :label="t('stores.phone.label')" :error="errors.phone" is-inline />
   <form-input
     v-if="isEditPage"
     v-model="email"
     name="email"
-    :label="t('users.email.label')"
+    :label="t('stores.email.label')"
     helper-text="You can't update your email."
     is-inline
     readonly
@@ -50,7 +55,7 @@
       <IconMail />
     </template>
   </form-input>
-  <form-input v-else v-model="email" name="email" :label="t('users.email.label')" is-inline>
+  <form-input v-else v-model="email" name="email" :label="t('stores.email.label')" is-inline>
     <template v-slot:prependContent>
       <IconMail />
     </template>

@@ -18,7 +18,7 @@ class StoreDTO
     public ?string $email;
     public ?string $website;
     public ?string $description;
-
+    public ?bool $is_active;
     public function __construct(
         int $id,
         string $name,
@@ -28,7 +28,8 @@ class StoreDTO
         ?string $phone = null,
         ?string $email = null,
         ?string $website = null,
-        ?string $description = null
+        ?string $description = null,
+        bool $is_active = false
     ) {
         $this->id = $id;
         $this->name = $name;
@@ -39,6 +40,7 @@ class StoreDTO
         $this->email = $email;
         $this->website = $website;
         $this->description = $description;
+        $this->is_active = $is_active;
     }
 
     /**
@@ -51,7 +53,7 @@ class StoreDTO
     {
         $rules = [
             'name' => 'required|string|max:255',
-            'slug' => 'required|string|max:255|unique:stores,slug,' . ($data['id'] ?? '0'),
+            'slug' => 'nullable|string|max:255|unique:stores,slug,' . ($data['id'] ?? '0'),
             'domain' => 'required|string|max:255|unique:stores,domain,' . ($data['id'] ?? '0'),
             'address' => 'nullable|string|max:255',
             'phone' => 'nullable|string|max:20',
@@ -78,13 +80,14 @@ class StoreDTO
         return new self(
             id: $data['id'] ?? 0,
             name: $data['name'],
-            slug: $data['slug'],
+            slug: $data['slug'] ?? strtolower($data['name']),
             domain: $data['domain'],
             address: $data['address'] ?? null,
             phone: $data['phone'] ?? null,
             email: $data['email'] ?? null,
             website: $data['website'] ?? null,
-            description: $data['description'] ?? null
+            description: $data['description'] ?? null,
+            is_active: $data['is_active'] ?? false
         );
     }
 
@@ -105,7 +108,8 @@ class StoreDTO
             phone: $store->phone,
             email: $store->email,
             website: $store->website,
-            description: $store->description
+            description: $store->description,
+            is_active: $store->is_active
         );
     }
 
@@ -126,6 +130,7 @@ class StoreDTO
             'email' => $this->email,
             'website' => $this->website,
             'description' => $this->description,
+            'is_active' => $this->is_active,
         ];
     }
 

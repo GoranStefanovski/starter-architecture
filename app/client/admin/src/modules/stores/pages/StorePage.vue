@@ -4,32 +4,23 @@
   import { watch, computed } from 'vue';
   import { useI18n } from 'vue-i18n';
   import { useRoute } from 'vue-router';
-  import { UserFormBasicInfo } from '../components';
-  import { useUsersForm } from '../composables';
+  import { StoreFormBasicInfo } from '../components';
+  import { useStoresForm, useUserCheck } from '../composables';
   import type { StoreFormItem } from '../types';
   import { TabbedContent, TabbedContentTab, PageWrapper, PAGE_WRAPPER_SLOTS, SubheaderTitle, SkSection } from '@/components';
-  import UserRolesDropdown from '@/modules/users/components/UserRolesDropdown.vue';
+  import { USER_PERMISSIONS } from '@/modules/users/constants';
   import { DashButton, DashLink, FormSwitch } from '@starter-core/dash-ui/src';
+  const { checkUser } = useUserCheck();
 
   const { t } = useI18n();
   const personalInformationLabel = t('users.personal-information.label');
-  const changePasswordLabel = t('users.password.change');
   const route = useRoute();
-  const isEditPage = computed(() => route.name == 'edit.user');
-  const userId = Number(route.params.userId);
+  const isEditPage = computed(() => route.name == 'edit.store');
+  const storeId = Number(route.params.storeId);
 
-  const validationSchema = {
-    last_name(value: string) {
-      if (value?.length >= 5) return true;
-      return 'Name needs to be at least 5 characters.';
-    },
-  };
+  const { isLoading, data: formData, createUser, updateUser, uploadAvatar } = useStoresForm(storeId);
 
-  const { isLoading, data: formData, createUser, updateUser, uploadAvatar } = useUsersForm(userId);
-
-  const { handleSubmit, errors, setValues, defineField } = useForm<StoreFormItem>({
-    validationSchema,
-  });
+  const { handleSubmit, errors, setValues, defineField } = useForm<StoreFormItem>();
 
   const submitHandler = handleSubmit((values) => {
     if (isEditPage.value) {
@@ -48,29 +39,30 @@
       setValues({
         id: formData.value.id,
         email: formData.value.email,
-        first_name: formData.value.first_name,
-        last_name: formData.value.last_name,
-        role: formData.value.role,
-        is_disabled: formData.value.is_disabled,
+        name: formData.value.name,
+        website: formData.value.website,
+        domain: formData.value.domain,
+        is_active: formData.value.is_active,
+        phone: formData.value.phone,
       });
     }
   }, [formData]);
 
-  const [lastName] = defineField('last_name');
-  const [firstName] = defineField('first_name');
+  const [name] = defineField('name');
+  const [isActive] = defineField('is_active');
   const [email] = defineField('email');
-  const [isDisabled] = defineField('is_disabled');
-  const [role] = defineField('role');
-  const [password] = defineField('password');
+  const [website] = defineField('website');
+  const [domain] = defineField('domain');
+  const [phone] = defineField('phone');
 </script>
 
 <template>
   <PageWrapper size="large" justify-content="center">
     <template #[PAGE_WRAPPER_SLOTS.subheaderMain]>
-      <SubheaderTitle :title="isEditPage ? 'Edit user' : 'Add user'" :description="`${firstName} ${lastName}`" />
+      <SubheaderTitle :title="isEditPage ? 'Edit store' : 'Add store'" :description="`${name ? name : ''}`" />
     </template>
     <template #[PAGE_WRAPPER_SLOTS.subheaderToolbox]>
-      <DashLink to="/admin/users" :icon="IconArrowleft" theme="clean">
+      <DashLink to="/admin/stores" :icon="IconArrowleft" theme="clean">
         {{ t('buttons.back') }}
       </DashLink>
       <DashButton type="submit" :icon="IconSave" :loading="isLoading" @click="submitHandler">
@@ -80,31 +72,31 @@
     <form autocomplete="off" enctype="multipart/form-data" @submit.prevent="submitHandler">
       <TabbedContent :isLoading="isLoading">
         <TabbedContentTab :label="personalInformationLabel" id="basic-info">
-          <SkSection :title="t('users.user_status')">
-            <user-roles-dropdown v-model:role="role" />
+          <SkSection :title="t('stores.store_status')">
             <form-switch
-              v-model="isDisabled"
+              v-if="checkUser('permissions', USER_PERMISSIONS.deleteStore)"
+              v-model="isActive"
               id="enabled"
-              theme="danger"
+              theme="success"
               type="outline"
-              :label="t('users.status.label')"
-              :helper-text="`User is  ${isDisabled ? 'disabled' : 'enabled'}`"
+              :label="t('stores.status.label')"
+              :helper-text="`Store is  ${!isActive ? 'disabled' : 'enabled'}`"
             />
           </SkSection>
-          <SkSection title="Customer Info">
-            <UserFormBasicInfo
-              v-model:lastName="lastName"
+          <hr />
+          <SkSection title="Store Info">
+            <StoreFormBasicInfo
+              v-model:name="name"
               v-model:email="email"
-              v-model:firstName="firstName"
+              v-model:website="website"
+              v-model:phone="phone"
+              v-model:domain="domain"
               :isEditPage="isEditPage"
               :avatar="formData?.avatar_thumbnail"
               @upload-avatar="uploadAvatarHandler"
               :errors="errors"
             />
           </SkSection>
-        </TabbedContentTab>
-        <TabbedContentTab :label="changePasswordLabel" id="change-password">
-          <UserFormPasswordTab v-model:password="password" />
         </TabbedContentTab>
       </TabbedContent>
     </form>

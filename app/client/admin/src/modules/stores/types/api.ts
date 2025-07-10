@@ -10,7 +10,7 @@ export interface GetStoreResponse {
   email?: string | null;
   website?: string | null;
   description?: string | null;
-  is_disabled: boolean;
+  is_active: boolean;
   created_at: string;
   updated_at: string;
 }

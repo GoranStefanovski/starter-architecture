@@ -1,27 +1,23 @@
 <script setup lang="ts">
   import { IconTrash, IconEdit } from '@starter-core/icons';
   import { computed, ref } from 'vue';
-  import { useUsersForm, useUserCheck } from '../composables';
-  import type { GetUserResponse } from '../types';
-  import UserRoleBadge from './UserRoleBadge.vue';
-  import UserStatusBadge from './UserStatusBadge.vue';
+  import { useStoresForm, useUserCheck } from '../composables';
+  import type { GetStoreResponse } from '../types';
   import { USER_PERMISSIONS } from '@/modules/users/constants';
 
   import { DashButton, DashLink, ModalComponent, TableColumn, TableRow } from '@starter-core/dash-ui/src';
+  import StoreStatusBadge from './StoreStatusBadge.vue';
 
   interface UsersTableRowProps {
-    user: GetUserResponse;
+    store: GetStoreResponse;
     isEvenRow: boolean;
   }
 
   const { checkUser } = useUserCheck();
-  const { user, isEvenRow } = defineProps<UsersTableRowProps>();
-  const { deleteUser } = useUsersForm(user.id);
+  const { store, isEvenRow } = defineProps<UsersTableRowProps>();
+  const { deleteUser } = useStoresForm(store.id);
 
   const avatarSource = computed(() => {
-    if (user.avatar_thumbnail) {
-      return user.avatar_thumbnail;
-    }
     return new URL(`@/../assets/images/placeholders/avatar-placeholder.jpg`, import.meta.url).href;
   });
   const deleteModalRef = ref<InstanceType<typeof ModalComponent> | null>(null);
@@ -31,7 +27,7 @@
   };
 
   const confirmDelete = () => {
-    deleteUser(user.id);
+    deleteUser(store.id);
   };
 </script>
 
@@ -44,29 +40,29 @@
     </TableColumn>
 
     <TableColumn>
-      {{ user.first_name }}
+      {{ store.name }}
     </TableColumn>
 
     <TableColumn>
-      {{ user.last_name }}
+      {{ store.domain }}
     </TableColumn>
 
     <TableColumn>
-      {{ user.email }}
+      {{ store.email }}
     </TableColumn>
 
     <TableColumn>
-      <UserRoleBadge :user-role-id="user.role" />
+      {{ store.phone }}
     </TableColumn>
 
     <TableColumn>
-      <UserStatusBadge :is-disabled="user.is_disabled" />
+      <StoreStatusBadge :is-active="store.is_active" />
     </TableColumn>
 
     <TableColumn>
       <dash-link
-        v-if="checkUser('permissions', USER_PERMISSIONS.writeUsers)"
-        :to="{ name: 'edit.user', params: { userId: user.id } }"
+        v-if="checkUser('permissions', USER_PERMISSIONS.writeStore)"
+        :to="{ name: 'edit.store', params: { storeId: store.id } }"
         theme="primary"
         theme-mod="outline-hover"
         :icon="IconEdit"
@@ -77,7 +73,7 @@
 
     <TableColumn>
       <DashButton
-        v-if="checkUser('permissions', USER_PERMISSIONS.deleteUsers)"
+        v-if="checkUser('permissions', USER_PERMISSIONS.deleteStore)"
         :icon="IconTrash"
         theme="danger"
         size="sm"
@@ -88,7 +84,7 @@
     </TableColumn>
     <ModalComponent
       ref="deleteModalRef"
-      :title="`Delete ${user.first_name} ${user.last_name}`"
+      :title="`Delete ${store.name}`"
       confirm-text="Delete"
       cancel-text="Cancel"
       show-cancel
@@ -96,7 +92,7 @@
       @cancel="() => {}"
     >
       <template #default>
-        <p>Are you sure you want to delete this user?</p>
+        <p>Are you sure you want to delete this store?</p>
       </template>
     </ModalComponent>
   </TableRow>

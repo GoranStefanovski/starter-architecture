@@ -47,4 +47,10 @@ interface StoreServiceInterface
      * @return bool|null
      */
     public function deleteStore(Store $store): ?bool;
+
+    /**
+     * @param array $data
+     * @return array
+     */
+    public function draw(array $data): array;
 }

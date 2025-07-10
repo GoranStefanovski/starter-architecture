@@ -4,12 +4,21 @@ namespace App\Applications\Store\Repositories;
 
 use App\Applications\Store\Model\Store;
 use Illuminate\Database\Eloquent\Collection;
+use App\Applications\Pagination\StarterPaginator;
 
 /**
  * @property Store $store
  */
 class StoreRepository implements StoreRepositoryInterface
 {
+    private const COLUMNS_MAP = [
+        'name' => 'stores.name',
+        'domain' => 'stores.domain',
+        'website' => 'stores.website',
+        'phone' => 'stores.phone',
+        'status' => 'stores.is_active'
+    ];
+
     public function __construct(
         Store $store
     ) {
@@ -36,7 +45,7 @@ class StoreRepository implements StoreRepositoryInterface
     public function findById(int $id): Store
     {
         // Eager-load the content relationship
-        return $this->store::with('content')->findOrFail($id);
+        return $this->store::findOrFail($id);
     }
 
     /**
@@ -73,6 +82,32 @@ class StoreRepository implements StoreRepositoryInterface
     public function delete(Store $store): ?bool
     {
         return $store->delete();
+    }
+
+    public function draw($data): StarterPaginator
+    {
+        //        $paginatedUsers = $this->prepareDatatableQuery($data, [User::ADMIN, User::EDITOR, User::COLLABORATOR]);
+
+        $query = $this->store->query();
+
+        // $query->whereIn('roles.name', $roles);
+
+        if (array_key_exists($data['column'], self::COLUMNS_MAP)) {
+            $query->orderBy(self::COLUMNS_MAP[$data['column']], $data['dir']);
+        }
+
+        $search = $data['search'];
+        if ($search) {
+            $query->where(function ($subquery) use ($search) {
+                $subquery->where('stores.name', 'like', '%' . $search . '%');
+                $subquery->orWhere('stores.website', 'like', '%' . $search . '%');
+                $subquery->orWhere('stores.domain', 'like', '%' . $search . '%');
+            });
+        }
+
+        $query->whereNull('deleted_at');
+
+        return $query->paginate($data['length']);
     }
 
     public function findWithAncestors(int $id): Store

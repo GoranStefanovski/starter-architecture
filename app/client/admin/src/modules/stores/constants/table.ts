@@ -3,14 +3,14 @@ import type { DatatableColumns } from '@starter-core/dash-ui/src';
 export const STORES_DATATABLE_COLUMNS: DatatableColumns = [
   {
     id: 0,
-    label: 'stores.datatable.name',
-    name: 'name',
+    label: 'stores.datatable.logo',
+    name: 'avatar',
     sortable: true,
   },
   {
     id: 1,
-    label: 'stores.datatable.slug',
-    name: 'slug',
+    label: 'stores.datatable.name',
+    name: 'name',
     sortable: true,
   },
   {

@@ -4,20 +4,29 @@ import { computed } from 'vue';
 import { useToast } from 'vue-toastification';
 import { USER_API_ENDPOINTS, USERS_TABLE_QUERY_KEY } from '../constants';
 import type { StoreFormItem, GetStoreResponse } from '../types';
+import { useUploadAvatar } from './useUploadAvatar';
 
 const USER_CACHE_KEY = 'user';
 
-export const useUsersForm = (userId?: number) => {
+export const useStoresForm = (storeId?: number) => {
   const queryClient = useQueryClient();
   const toast = useToast();
 
+  const { uploadAvatar, isLoading: isUploadingAvatar } = useUploadAvatar({
+    storeId,
+    onSuccess: async () => {
+      queryClient.invalidateQueries({ queryKey: [USER_CACHE_KEY, storeId] });
+      toast.success('Image has been updated!');
+    },
+  });
+
   const { isLoading: isFetching, data: queryData } = useQuery({
-    queryKey: [USER_CACHE_KEY, userId],
+    queryKey: [USER_CACHE_KEY, storeId],
     queryFn: async (): Promise<GetStoreResponse> => {
-      const data = await axios.get(USER_API_ENDPOINTS.get(userId ?? 0));
+      const data = await axios.get(USER_API_ENDPOINTS.get(storeId ?? 0));
       return data.data;
     },
-    enabled: !!userId,
+    enabled: !!storeId,
   });
 
   const { mutate: createUser, isPending: isCreating } = useMutation({
@@ -35,11 +44,11 @@ export const useUsersForm = (userId?: number) => {
 
   const { mutate: updateUser, isPending: isUpdating } = useMutation({
     mutationFn: async (data: StoreFormItem): Promise<GetStoreResponse> => {
-      const response = await axios.patch(USER_API_ENDPOINTS.patch(userId ?? 0), data);
+      const response = await axios.patch(USER_API_ENDPOINTS.patch(storeId ?? 0), data);
       return response.data;
     },
     onSuccess: async () => {
-      queryClient.invalidateQueries({ queryKey: [USER_CACHE_KEY, userId] });
+      queryClient.invalidateQueries({ queryKey: [USER_CACHE_KEY, storeId] });
       toast.success('User updated!');
     },
     onError: (error) => {
@@ -48,7 +57,7 @@ export const useUsersForm = (userId?: number) => {
   });
   const { mutate: deleteUser, isPending: isDeleting } = useMutation({
     mutationFn: async (data: StoreFormItem): Promise<GetStoreResponse> => {
-      const response = await axios.delete(USER_API_ENDPOINTS.delete(userId ?? 0));
+      const response = await axios.delete(USER_API_ENDPOINTS.delete(storeId ?? 0));
       return response.data;
     },
     onSuccess: async () => {

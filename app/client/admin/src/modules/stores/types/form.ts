@@ -8,6 +8,7 @@ export interface StoreFormItem {
   email?: string | null;    // Optional
   website?: string | null;  // Optional
   description?: string | null; // Optional
+  is_active?: boolean;    // Optional, default false
 }
 
 export type StoreBasicInfoForm = Pick<

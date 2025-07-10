@@ -5,5 +5,9 @@
     "admin": "Admin Users",
     "public": "Public Users",
     "add": "Add user"
+  },
+  "stores": {
+    "main": "Stores",
+    "add": "Add Store"
   }
 }

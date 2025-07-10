@@ -1,16 +1,22 @@
 {
-  "user_status": "User status",
+  "store_status": "Store status",
   "status": {
-    "label": "Disable user",
+    "label": "Disable store",
     "enabled": "Enabled",
     "disabled": "Disabled"
   },
-  "roles": {
-    "label": "Roles"
+  "name": {
+    "label": "Name"
   },
-  "avatar": "Avatar",
-  "last_name": {
-    "label": "Last name"
+  "logo": "Logo",
+  "domain": {
+    "label": "Domain"
+  },
+  "website": {
+    "label": "Website"
+  },
+  "phone": {
+    "label": "Phone"
   },
   "first_name": {
     "label": "First name"

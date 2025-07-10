@@ -139,6 +139,27 @@ class StoreService implements StoreServiceInterface
         return $store;
     }
 
+    public function draw(array $data): array
+    {
+        $data['columns'] = ['stores.name', 'website', 'email', 'domain', 'stores.is_active'];
+        $data['length'] = $data['length'] ?? 10;
+        $data['column'] = $data['column'] ?? 'stores.name';
+        $data['dir'] = $data['dir'] ?? 'asc';
+        $data['search'] = $data['search'] ?? '';
+        $data['draw'] = $data['draw'] ?? 1;
+
+        $storesCollection = $this->repository->draw($data);
+
+        $storesDTO = $storesCollection->getCollection()->map(function ($store) {
+            return StoreDTO::fromModel($store);
+        });
+
+        return [
+            'data' => $storesDTO,
+            'pagination' => $storesCollection->toArray()['pagination'],
+        ];
+    }
+
     public function getAncestors(int $id): Collection
     {
         $ancestors = $this->repository->findAncestors($id);

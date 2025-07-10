@@ -20,6 +20,7 @@ class Store extends Model
         'email',
         'website',
         'description',
+        'is_active'
     ];
 
     /**

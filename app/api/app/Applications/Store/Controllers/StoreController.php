@@ -52,6 +52,35 @@ class StoreController extends Controller
         return response()->json(null, 204);
     }
 
+    public function draw(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $storesDTO = $this->storeService->draw($data);
+
+            return response()->json($storesDTO);
+        } catch (\InvalidArgumentException $e) {
+            // Handle specific exceptions like InvalidArgumentException
+            return response()->json([
+                'error' => 'Invalid Argument',
+                'message' => $e->getMessage(),
+            ], 400); // Bad Request status code
+        } catch (\ValidationException $e) {
+            // Handle validation exceptions
+            return response()->json([
+                'error' => 'Validation Error',
+                'message' => $e->getMessage(),
+                'errors' => $e->errors(),
+            ], 422); // Unprocessable Entity status code
+        } catch (\Exception $e) {
+            // Handle any other general exceptions
+            return response()->json([
+                'error' => 'Server Error',
+                'message' => $e->getMessage(),
+            ], 500); // Internal Server Error status code
+        }
+    }
+
     /**
      * Attach a store entry to another model (morph it).
      *

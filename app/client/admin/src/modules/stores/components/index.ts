@@ -1,2 +1,3 @@
-export { default as UsersDatatable } from './UsersDatatable.vue';
+export { default as StoresDatatable } from './StoresDatatable.vue';
+export { default as StoreFormAvatar } from './StoreFormAvatar.vue';
 export * from './forms';

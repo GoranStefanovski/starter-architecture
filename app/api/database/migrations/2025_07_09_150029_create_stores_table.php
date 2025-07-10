@@ -19,7 +19,10 @@ return new class extends Migration
             $table->string('phone')->nullable();
             $table->string('email')->nullable();
             $table->string('domain')->unique()->nullable();
+            $table->string('website')->unique()->nullable();
+            $table->boolean('is_active')->default(false);
             $table->text('description')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

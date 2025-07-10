@@ -4,6 +4,7 @@ export const USER_API_ENDPOINTS = {
   create: '/store/create',
   patch: (storeId: number) => `/store/${storeId}`,
   delete: (storeId: number) => `/store/${storeId}`,
+  uploadAvatar: (storeId: number) => `/store/avatar/${storeId}`,
   table: 'store/draw',
 };
 
