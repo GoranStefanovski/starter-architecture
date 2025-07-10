@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import { IconSave, IconArrowleft } from '@starter-core/icons';
   import { useForm } from 'vee-validate';
-  import { watch, computed } from 'vue';
+  import { watch, computed, ref, onMounted } from 'vue';
   import { useI18n } from 'vue-i18n';
   import { useRoute } from 'vue-router';
   import { StoreFormBasicInfo } from '../components';
@@ -9,7 +9,8 @@
   import type { StoreFormItem } from '../types';
   import { TabbedContent, TabbedContentTab, PageWrapper, PAGE_WRAPPER_SLOTS, SubheaderTitle, SkSection } from '@/components';
   import { USER_PERMISSIONS } from '@/modules/users/constants';
-  import { DashButton, DashLink, FormSwitch } from '@starter-core/dash-ui/src';
+  import { DashButton, DashLink, FormSwitch, FormDropdown } from '@starter-core/dash-ui/src';
+  import axios from 'axios';
   const { checkUser } = useUserCheck();
 
   const { t } = useI18n();
@@ -34,6 +35,24 @@
     uploadAvatar(file);
   };
 
+  const userOptions = ref<{ id: number; label: string }[]>([]);
+
+  // 👇 Fetch all users from API
+  const fetchUsers = async () => {
+    try {
+      const response = await axios.get('/user/all'); // Adjust API path
+      userOptions.value = response.data.map((user: any) => ({
+        id: user.id,
+        label: `${user.first_name} (${user.last_name})`,
+        name: `${user.first_name} ${user.last_name}`,
+      }));
+    } catch (error) {
+      console.error('Failed to fetch users:', error);
+    }
+  };
+
+  onMounted(fetchUsers);
+
   watch(() => {
     if (formData.value) {
       setValues({
@@ -44,6 +63,7 @@
         domain: formData.value.domain,
         is_active: formData.value.is_active,
         phone: formData.value.phone,
+        user_id: formData.value.user_id,
       });
     }
   }, [formData]);
@@ -54,6 +74,7 @@
   const [website] = defineField('website');
   const [domain] = defineField('domain');
   const [phone] = defineField('phone');
+  const [userId] = defineField('user_id');
 </script>
 
 <template>
@@ -72,9 +93,8 @@
     <form autocomplete="off" enctype="multipart/form-data" @submit.prevent="submitHandler">
       <TabbedContent :isLoading="isLoading">
         <TabbedContentTab :label="personalInformationLabel" id="basic-info">
-          <SkSection :title="t('stores.store_status')">
+          <SkSection v-if="checkUser('permissions', USER_PERMISSIONS.deleteStore)" :title="t('stores.store_status')">
             <form-switch
-              v-if="checkUser('permissions', USER_PERMISSIONS.deleteStore)"
               v-model="isActive"
               id="enabled"
               theme="success"
@@ -83,7 +103,19 @@
               :helper-text="`Store is  ${!isActive ? 'disabled' : 'enabled'}`"
             />
           </SkSection>
-          <hr />
+          <SkSection v-if="checkUser('permissions', USER_PERMISSIONS.deleteStore)" title="Store Owner">
+            <FormDropdown
+              v-model="userId"
+              id="user_id"
+              :options="userOptions"
+              label="Store Owner"
+              :errors="[errors?.user_id]"
+              placeholder="Select a user"
+              is-inline
+              readonly
+            />
+          </SkSection>
+          <hr v-if="checkUser('permissions', USER_PERMISSIONS.deleteStore)" />
           <SkSection title="Store Info">
             <StoreFormBasicInfo
               v-model:name="name"

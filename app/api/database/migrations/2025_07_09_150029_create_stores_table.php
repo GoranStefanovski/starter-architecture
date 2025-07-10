@@ -22,6 +22,12 @@ return new class extends Migration
             $table->string('website')->unique()->nullable();
             $table->boolean('is_active')->default(false);
             $table->text('description')->nullable();
+            // 👇 Add user_id foreign key
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('cascade'); // if user is deleted, delete their stores
             $table->softDeletes();
             $table->timestamps();
         });

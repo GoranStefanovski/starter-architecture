@@ -5,6 +5,8 @@ namespace App\Applications\Store\Repositories;
 use App\Applications\Store\Model\Store;
 use Illuminate\Database\Eloquent\Collection;
 use App\Applications\Pagination\StarterPaginator;
+use App\Applications\User\Model\User;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * @property Store $store
@@ -89,7 +91,10 @@ class StoreRepository implements StoreRepositoryInterface
         //        $paginatedUsers = $this->prepareDatatableQuery($data, [User::ADMIN, User::EDITOR, User::COLLABORATOR]);
 
         $query = $this->store->query();
-
+        $user = Auth::user();
+        if (!$user->hasRole(User::ADMIN)) {
+            $query->where('user_id', $user->id);
+        }
         // $query->whereIn('roles.name', $roles);
 
         if (array_key_exists($data['column'], self::COLUMNS_MAP)) {

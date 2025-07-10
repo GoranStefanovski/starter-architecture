@@ -6,7 +6,7 @@
 
   const auth = useAuth();
 
-  const isUserAllowedToCreate = computed(() => auth.user().permissions_array.includes('write_store'));
+  const isUserAllowedToCreate = computed(() => auth.user().permissions_array.includes('write_stores'));
 </script>
 <template>
   <DashLink v-if="isUserAllowedToCreate" :to="{ name: 'add.store' }" :icon="IconAdduser" theme="secondary">

@@ -10,6 +10,7 @@ use Illuminate\Validation\ValidationException;
 class StoreDTO
 {
     public int $id;
+    public int $user_id;
     public string $name;
     public string $slug;
     public string $domain;
@@ -21,6 +22,7 @@ class StoreDTO
     public ?bool $is_active;
     public function __construct(
         int $id,
+        int $user_id = 0,
         string $name,
         string $slug,
         string $domain,
@@ -32,6 +34,7 @@ class StoreDTO
         bool $is_active = false
     ) {
         $this->id = $id;
+        $this->user_id = $user_id;
         $this->name = $name;
         $this->slug = $slug;
         $this->domain = $domain;
@@ -79,6 +82,7 @@ class StoreDTO
 
         return new self(
             id: $data['id'] ?? 0,
+            user_id: $data['user_id'] ?? 0,
             name: $data['name'],
             slug: $data['slug'] ?? strtolower($data['name']),
             domain: $data['domain'],
@@ -101,6 +105,7 @@ class StoreDTO
     {
         return new self(
             id: $store->id,
+            user_id: $store->user_id ?? 0,
             name: $store->name,
             slug: $store->slug,
             domain: $store->domain,
@@ -122,6 +127,7 @@ class StoreDTO
     {
         return [
             'id' => $this->id,
+            'user_id' => $this->user_id,
             'name' => $this->name,
             'slug' => $this->slug,
             'domain' => $this->domain,

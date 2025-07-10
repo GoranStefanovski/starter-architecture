@@ -9,6 +9,7 @@ export interface GetStoreResponse {
   phone?: string | null;
   email?: string | null;
   website?: string | null;
+  user_id: number;
   description?: string | null;
   is_active: boolean;
   created_at: string;

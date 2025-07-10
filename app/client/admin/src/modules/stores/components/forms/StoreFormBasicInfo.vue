@@ -3,11 +3,13 @@
   import { useI18n } from 'vue-i18n';
   import { FormInput } from '@starter-core/dash-ui/src';
   import StoreFormAvatar from '../StoreFormAvatar.vue';
+  import { useUserCheck } from '../../composables';
+  import { USER_PERMISSIONS } from '@/modules/users/constants';
 
   type EmitsType = {
     (event: 'uploadAvatar', file: File): void;
   };
-
+  const { checkUser } = useUserCheck();
   const { t } = useI18n();
   const name = defineModel('name', { required: true, type: String });
   const email = defineModel('email', { required: true, type: String });
@@ -43,7 +45,18 @@
   <form-input v-model="domain" name="domain" :label="t('stores.domain.label')" :error="errors.domain" is-inline />
   <form-input v-model="phone" name="phone" :label="t('stores.phone.label')" :error="errors.phone" is-inline />
   <form-input
-    v-if="isEditPage"
+    v-if="checkUser('permissions', USER_PERMISSIONS.writeStore)"
+    v-model="email"
+    name="email"
+    :label="t('stores.email.label')"
+    is-inline
+  >
+    <template v-slot:prependContent>
+      <IconMail />
+    </template>
+  </form-input>
+  <form-input
+    v-else
     v-model="email"
     name="email"
     :label="t('stores.email.label')"
@@ -51,11 +64,6 @@
     is-inline
     readonly
   >
-    <template v-slot:prependContent>
-      <IconMail />
-    </template>
-  </form-input>
-  <form-input v-else v-model="email" name="email" :label="t('stores.email.label')" is-inline>
     <template v-slot:prependContent>
       <IconMail />
     </template>

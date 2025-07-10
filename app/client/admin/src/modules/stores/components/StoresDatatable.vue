@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { computed } from 'vue';
-  import { useUsersTable } from '../composables';
+  import { useUsersTable, useUserCheck } from '../composables';
   import { STORES_DATATABLE_COLUMNS } from '../constants';
   import StoresTableHeader from './StoresTableHeader.vue';
   import StoresTableRow from './StoresTableRow.vue';
@@ -11,8 +11,10 @@
     DatatableHeader,
     PaginationComponent,
   } from '@starter-core/dash-ui/src';
+  import { USER_PERMISSIONS } from '@/modules/users/constants';
 
   const { query, onPaginationChange } = useDatatable();
+  const { checkUser } = useUserCheck();
 
   const { data, isLoading, isFetching, error } = useUsersTable(query);
 
@@ -28,9 +30,8 @@
   >
     <template #header>
       <DatatableHeader title="Stores" subtitle="List of stores">
-        <StoresTableHeader />
+        <StoresTableHeader v-if="checkUser('permissions', USER_PERMISSIONS.deleteStore)" />
       </DatatableHeader>
-      <DatatableFilters />
     </template>
     <template v-if="stores" #default>
       <StoresTableRow

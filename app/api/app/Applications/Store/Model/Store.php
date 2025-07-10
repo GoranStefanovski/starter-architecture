@@ -5,6 +5,7 @@ namespace App\Applications\Store\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Applications\User\Model\User;
 
 class Store extends Model
 {
@@ -20,7 +21,8 @@ class Store extends Model
         'email',
         'website',
         'description',
-        'is_active'
+        'is_active',
+        'user_id'
     ];
 
     /**
@@ -33,4 +35,9 @@ class Store extends Model
         'updated_at' => 'datetime',
         'deleted_at' => 'datetime',
     ];
+
+    public function owner()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }
