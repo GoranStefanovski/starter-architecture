@@ -6,10 +6,10 @@
 
   const auth = useAuth();
 
-  const isUserAllowedToCreate = computed(() => auth.user().permissions_array.includes('delete_store'));
+  const isUserAllowedToCreate = computed(() => auth.user().permissions_array.includes('write_store'));
 </script>
 <template>
-  <DashLink v-if="isUserAllowedToCreate" :to="{ name: 'add.store' }" :icon="IconAdduser" theme="secondary">
-    {{ $t('admin.stores.add') }}
+  <DashLink v-if="isUserAllowedToCreate" :to="{ name: 'add.category' }" :icon="IconAdduser" theme="secondary">
+    {{ $t('admin.categories.add') }}
   </DashLink>
 </template>

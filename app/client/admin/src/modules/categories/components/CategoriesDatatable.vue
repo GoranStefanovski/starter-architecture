@@ -2,8 +2,8 @@
   import { computed } from 'vue';
   import { useUsersTable, useUserCheck } from '../composables';
   import { STORES_DATATABLE_COLUMNS } from '../constants';
-  import StoresTableHeader from './StoresTableHeader.vue';
-  import StoresTableRow from './StoresTableRow.vue';
+  import CategoriesTableHeader from './CategoriesTableHeader.vue';
+  import CategoriesTableRow from './CategoriesTableRow.vue';
   import {
     useDatatable,
     DatatableComponent,
@@ -11,15 +11,13 @@
     DatatableHeader,
     PaginationComponent,
   } from '@starter-core/dash-ui/src';
-  import { USER_PERMISSIONS } from '@/modules/users/constants';
 
   const { query, onPaginationChange } = useDatatable();
-  const { checkUser } = useUserCheck();
 
   const { data, isLoading, isFetching, error } = useUsersTable(query);
 
   const pagination = computed(() => data.value?.pagination ?? null);
-  const stores = computed(() => data.value?.data ?? null);
+  const categories = computed(() => data.value?.data ?? null);
 </script>
 <template>
   <DatatableComponent
@@ -29,16 +27,16 @@
     :error="error?.message"
   >
     <template #header>
-      <DatatableHeader title="Stores" subtitle="List of stores">
-        <StoresTableHeader />
+      <DatatableHeader title="Categories" subtitle="List of categories">
+        <CategoriesTableHeader />
       </DatatableHeader>
     </template>
-    <template v-if="stores" #default>
-      <StoresTableRow
-        v-for="(store, index) in stores"
-        :key="store.id"
+    <template v-if="categories" #default>
+      <CategoriesTableRow
+        v-for="(category, index) in categories"
+        :key="category.id"
         :columns="STORES_DATATABLE_COLUMNS"
-        :store="store"
+        :category="category"
         :is-even-row="index % 2 === 0"
       />
     </template>

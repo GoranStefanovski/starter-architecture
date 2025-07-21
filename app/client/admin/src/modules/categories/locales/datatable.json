@@ -1,0 +1,11 @@
+{
+  "datatable": {
+    "logo": "Logo",
+    "name": "name",
+    "domain": "Domain",
+    "email": "Email",
+    "phone": "Phone",
+    "status": "Status",
+    "avatar": "Avatar"
+  }
+}

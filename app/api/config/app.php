@@ -173,7 +173,7 @@ return [
         App\Applications\User\Providers\UserServiceProvider::class,
         App\Applications\Store\Providers\StoreServiceProvider::class,
         App\Applications\Navigation\Providers\NavigationServiceProvider::class,
-
+        App\Applications\Common\Providers\CommonServiceProvider::class,
         // Load the RouteServiceProvider last because it has the any route redirect
         App\Providers\RouteServiceProvider::class,
     ])->toArray(),

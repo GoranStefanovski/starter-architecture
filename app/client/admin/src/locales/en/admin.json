@@ -9,5 +9,9 @@
   "stores": {
     "main": "Stores",
     "add": "Add Store"
+  },
+  "categories": {
+    "main": "Categories",
+    "add": "Add Category"
   }
 }

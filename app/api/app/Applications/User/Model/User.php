@@ -125,4 +125,9 @@ class User extends Authenticatable implements HasMedia
     {
         return $this->hasMany(Store::class, 'user_id');
     }
+
+    public function categories()
+    {
+        return $this->hasMany(\App\Common\Category::class);
+    }
 }

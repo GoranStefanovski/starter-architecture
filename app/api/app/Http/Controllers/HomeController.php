@@ -40,6 +40,12 @@ class HomeController extends Controller
                 'route' => 'stores',
                 'permission' => UserPermissions::READ_STORE,
             ],
+            [
+                'label' => 'admin.categories.main',
+                'name' => 'item_categories',
+                'route' => 'categories',
+                'permission' => UserPermissions::READ_STORE,
+            ],
         ];
 
         $pagesItems = [
