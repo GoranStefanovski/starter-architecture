@@ -24,7 +24,10 @@ services:
     environment:
       APACHE_DOCUMENT_ROOT: ${APACHE_DOCUMENT_ROOT-/var/www/html}
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-    network_mode: host
+    networks:
+      main:
+        aliases:
+          - ${PROJECT_NAME}.test
 
   # This container is the MySql database
   database:
