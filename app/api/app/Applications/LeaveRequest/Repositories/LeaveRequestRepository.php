@@ -167,7 +167,7 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
 
         $this->sendRequestConfirmationEmail($leaveRequest, $isUpdate);
         $this->sendConfirmationAccountentsEmail($leaveRequest);
-        $this->createRedmineIssueOnConfirm($leaveRequest);
+        // $this->createRedmineIssueOnConfirm($leaveRequest);
         return $leaveRequest;
     }
 
