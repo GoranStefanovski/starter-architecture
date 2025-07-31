@@ -12,13 +12,15 @@ class LeaveRequestNotificationUpdate extends Mailable
     use Queueable, SerializesModels;
 
     public LeaveRequest $leaveRequest;
+    public ?string $pdfPath;
 
     /**
      * Create a new message instance.
      */
-    public function __construct(LeaveRequest $leaveRequest)
+    public function __construct(LeaveRequest $leaveRequest, ?string $pdfPath = null)
     {
         $this->leaveRequest = $leaveRequest;
+        $this->pdfPath = $pdfPath;
     }
 
     /**
@@ -32,11 +34,20 @@ class LeaveRequestNotificationUpdate extends Mailable
             : null;
 
         $subject =$this->leaveRequest->user->first_name . ' ' . $this->leaveRequest->user->last_name . ': ' . $this->leaveRequest->leaveType->name .  ': ' . $this->leaveRequest->days . ' days: ' . $formattedStartDate . ($this->leaveRequest->end_date ? ' to ' . $formattedEndDate : '');
-        return $this->subject($subject . ' (Update)')
+        $email = $this->subject($subject . ' (Update)')
                     ->view('emails.leave_request_notification')
                     ->with([
                         'leaveRequest' => $this->leaveRequest,
                         'status' => 'Update'
                     ]);
+
+        if ($this->pdfPath && file_exists($this->pdfPath)) {
+            $email->attach($this->pdfPath, [
+                'as' => basename($this->pdfPath),
+                'mime' => 'application/pdf',
+            ]);
+        }
+
+        return $email;
     }
 }
