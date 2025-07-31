@@ -233,21 +233,19 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
     private function sendRequestConfirmationEmail(LeaveRequest $leaveRequest, bool $isUpdate)
     {
         $recipients = $this->getRecipients($leaveRequest);
+        $document = Document::where('leave_request_id', $leaveRequest->id)->first();
+        $documentPath = $document ? Storage::disk('public')->path($document->file_path) : null;
 
         if ($isUpdate) {
-            $mailClass = LeaveRequestNotificationUpdate::class;
-        } else {
-            $mailClass = match ($leaveRequest->is_confirmed) {
-                1 => LeaveRequestDeclining::class,
-                2 => LeaveRequestConfirmation::class,
-                default => null,
-            };
+            Mail::to($recipients)->send(new LeaveRequestNotificationUpdate($leaveRequest, $documentPath));
+            return;
         }
 
-
-        if ($mailClass) {
-            Mail::to($recipients)->send(new $mailClass($leaveRequest));
-        }
+        match ($leaveRequest->is_confirmed) {
+            1 => Mail::to($recipients)->send(new LeaveRequestDeclining($leaveRequest)),
+            2 => Mail::to($recipients)->send(new LeaveRequestConfirmation($leaveRequest, $documentPath)), // With attachment
+            default => null,
+        };
     }
 
     private function sendRequestCancelationEmail(LeaveRequest $leaveRequest)
