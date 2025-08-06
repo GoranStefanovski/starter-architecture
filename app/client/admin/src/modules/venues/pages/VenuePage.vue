@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import { IconSave, IconArrowleft } from '@starter-core/icons';
   import { useForm } from 'vee-validate';
-  import { watch, computed } from 'vue';
+  import { watch, computed, onMounted } from 'vue';
   import { useI18n } from 'vue-i18n';
   import { useRoute } from 'vue-router';
   import useAuth from '../../../composables/useAuth';
@@ -16,7 +16,6 @@
   const personalInformationLabel = t('venues.personal-information.label');
   const route = useRoute();
   const isEditPage = computed(() => route.name == 'edit.venue');
-  const venueId = Number(route.params.venueId);
   const auth = useAuth();
   const { checkUser } = useUserCheck();
 
@@ -27,6 +26,7 @@
     },
   };
 
+  const venueId = Number(route.params.venueId);
   const {
     isLoading,
     data: formData,
@@ -40,6 +40,17 @@
 
   const { handleSubmit, errors, setValues, defineField } = useForm<UserFormItem>({
     validationSchema,
+  });
+
+  onMounted(() => {
+    if (!working_hours.value || working_hours.value.length === 0) {
+      working_hours.value = Array.from({ length: 7 }, (_, index) => ({
+        day_of_week: index,
+        opens_at: { hours: 9, minutes: 0 },
+        closes_at: { hours: 17, minutes: 0 },
+        is_closed: false,
+      }));
+    }
   });
 
   const submitHandler = handleSubmit((values) => {
@@ -82,6 +93,7 @@
           is_active: newValue.is_active,
           is_boosted: newValue.is_boosted,
           collaborator_id: newValue.collaborator_id,
+          working_hours: newValue.working_hours,
         });
       }
     },
@@ -100,6 +112,7 @@
   const [isActive] = defineField('is_active');
   const [isBoosted] = defineField('is_boosted');
   const [collaborator_id] = defineField('collaborator_id');
+  const [working_hours] = defineField('working_hours');
 </script>
 
 <template>
@@ -178,7 +191,7 @@
         </TabbedContentTab>
         <TabbedContentTab :label="t('venues.working_hours.label')" id="working_hours">
           <SkSection title="Working Hours">
-            <VenueFormWorkingHours :errors="errors" />
+            <VenueFormWorkingHours :errors="errors" v-model:working_hours="working_hours" />
           </SkSection>
         </TabbedContentTab>
       </TabbedContent>

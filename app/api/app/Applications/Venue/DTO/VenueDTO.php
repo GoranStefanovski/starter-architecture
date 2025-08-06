@@ -78,6 +78,11 @@ class VenueDTO
     {
         $name = $request->input('name');
         $id = $request->integer('id', 0);
+        $collaboratorId = $request->input('collaborator_id');
+        $collaboratorId = $collaboratorId === null || $collaboratorId === ''
+            ? null
+            : (int) $collaboratorId;
+
 
         return new self(
             $request->input('name'),
@@ -95,7 +100,7 @@ class VenueDTO
             $request->boolean('is_active'),
             $request->boolean('is_boosted'),
             $request->integer('user_id'),
-            $request->integer('collaborator_id'),
+            $collaboratorId,
             $request->input('id', 0)
         );
     }
@@ -233,7 +238,7 @@ class VenueDTO
             'venue_type_id' => $this->venue_type_id,
             'type_label' => $this->type_label,
             'user_id' => $this->user_id,
-            'collaborator_id' => $this->collaborator_id,
+            'collaborator_id' => $this->collaborator_id ?? null,
             'images' => $this->images,
             'working_hours' => array_map(
                 fn (WorkingHourDTO $workingHdto) => $workingHdto->toArray(),

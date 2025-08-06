@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 class VenueService implements VenueServiceInterface
 {
     public function __construct(
-        VenueRepositoryInterface $venueRepository
+        VenueRepositoryInterface $venueRepository,
     ) {
         $this->venueRepository = $venueRepository;
     }
@@ -34,7 +34,6 @@ class VenueService implements VenueServiceInterface
     public function create(VenueDTO $venueData): VenueDTO
     {
         $venue = $this->venueRepository->create($venueData);
-
         return VenueDTO::fromModel($venue);
     }
 

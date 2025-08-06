@@ -3,6 +3,7 @@
 namespace App\Applications\Venue\Controllers;
 
 use App\Applications\Venue\DTO\VenueDTO;
+use App\Applications\WorkingHours\Services\WorkingHoursServiceInterface;
 use Illuminate\Http\Request;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\Log;
@@ -18,13 +19,17 @@ use function PHPUnit\Framework\isNull;
 
 /**
  * @property VenueServiceInterface $venueService
+ * @property WorkingHoursServiceInterface $workingHoursService
  */
 class VenueController extends Controller
 {
     public function __construct(
-        VenueServiceInterface $venueService
+        VenueServiceInterface $venueService,
+        WorkingHoursServiceInterface $workingHoursService,
+
     ) {
         $this->venueService = $venueService;
+        $this->workingHoursService = $workingHoursService;
     }
 
     /**
@@ -59,7 +64,8 @@ class VenueController extends Controller
     public function create(Request $request): JsonResponse
     {
         $venueDTO = VenueDTO::fromRequestForCreate($request);
-        $newVenueDTO = $this->venueService->create($venueDTO);
+        $newVenueDTO = $this->venueService->create($venueDTO,);
+        $this->workingHoursService->createOrUpdateForVenue($venueDTO->id,$request->input('working_hours'));
 
         return response()->json($newVenueDTO);
     }
@@ -75,8 +81,10 @@ class VenueController extends Controller
         $dto = VenueDTO::fromRequest($request);
         $venueDTO = $this->venueService->update(
             $dto->id,
-            $dto
+            $dto,
         );
+        $this->workingHoursService->createOrUpdateForVenue($venueDTO->id,$request->input('working_hours'));
+
         return response()->json($venueDTO);
     }
 

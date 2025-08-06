@@ -12,6 +12,7 @@ return new class extends Migration {
             $table->unsignedTinyInteger('day_of_week');
             $table->time('opens_at')->nullable();
             $table->time('closes_at')->nullable();
+            $table->boolean('is_closed')->default(false);
             $table->timestamps();
 
             $table->unique(['venue_id', 'day_of_week']);

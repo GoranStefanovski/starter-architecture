@@ -1,3 +1,4 @@
+import type { WorkingHour, WorkingHourUI } from '@/modules/venues/types/form';
 import type { PaginationObject } from '@starter-core/dash-ui/src/components';
 
 export interface GetVenueResponse {
@@ -19,6 +20,7 @@ export interface GetVenueResponse {
   is_boosted: boolean;
   collaborator_id?: number;
   logo: ImageVariant;
+  working_hours: WorkingHourUI[];
 }
 
 export interface GetVenueTypeResponse {

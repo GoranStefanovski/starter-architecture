@@ -61,7 +61,7 @@ export const useVenuesForm = (venueId?: number) => {
       return response.data as GetVenueResponse;
     },
     onSuccess: async () => {
-      queryClient.invalidateQueries({ queryKey: [VENUE_CACHE_KEY, venueId] });
+      // queryClient.invalidateQueries({ queryKey: [VENUE_CACHE_KEY, venueId] });
       toast.success('Venue updated!');
     },
     onError: (error) => {

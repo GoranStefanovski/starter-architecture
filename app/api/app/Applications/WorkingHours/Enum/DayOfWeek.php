@@ -32,4 +32,18 @@ enum DayOfWeek: int
             self::cases()
         );
     }
+
+    public static function fromName(string $name): self
+    {
+        return match (strtolower($name)) {
+            'monday' => self::Monday,
+            'tuesday' => self::Tuesday,
+            'wednesday' => self::Wednesday,
+            'thursday' => self::Thursday,
+            'friday' => self::Friday,
+            'saturday' => self::Saturday,
+            'sunday' => self::Sunday,
+            default => throw new \InvalidArgumentException("Invalid day name: $name"),
+        };
+    }
 }

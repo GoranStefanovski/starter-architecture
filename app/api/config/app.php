@@ -175,6 +175,7 @@ return [
         App\Applications\Venue\Providers\VenueServiceProvider::class,
         App\Applications\Common\Providers\CommonServiceProvider::class,
         App\Applications\Event\Providers\EventServiceProvider::class,
+        App\Applications\WorkingHours\Providers\WorkingHoursServiceProvider::class,
 
         // Load the RouteServiceProvider last because it has the any route redirect
         App\Providers\RouteServiceProvider::class,
