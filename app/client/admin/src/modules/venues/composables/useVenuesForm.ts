@@ -2,7 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/vue-query';
 import axios from 'axios';
 import { computed } from 'vue';
 import { useToast } from 'vue-toastification';
-import { VENUE_API_ENDPOINTS } from '../constants';
+import { VENUE_API_ENDPOINTS, VENUES_TABLE_QUERY_KEY } from '../constants';
 import type { UserFormItem, GetVenueResponse, VenueTypeResponse, CollaboratorsResponse } from '../types';
 import { useUploadVenueImage } from './useUploadVenueImage';
 
@@ -61,7 +61,6 @@ export const useVenuesForm = (venueId?: number) => {
       return response.data as GetVenueResponse;
     },
     onSuccess: async () => {
-      // queryClient.invalidateQueries({ queryKey: [VENUE_CACHE_KEY, venueId] });
       toast.success('Venue updated!');
     },
     onError: (error) => {
@@ -73,8 +72,8 @@ export const useVenuesForm = (venueId?: number) => {
     mutationFn: async (venueId: number) => {
       await axios.post(VENUE_API_ENDPOINTS.delete(venueId));
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['venue/draw'] });
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: [VENUES_TABLE_QUERY_KEY] });
       toast.success('Venue deleted!');
     },
     onError: () => {

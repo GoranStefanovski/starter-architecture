@@ -2,7 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/vue-query';
 import axios from 'axios';
 import { computed } from 'vue';
 import { useToast } from 'vue-toastification';
-import { EVENT_API_ENDPOINTS } from '../constants';
+import { EVENT_API_ENDPOINTS, EVENTS_TABLE_QUERY_KEY } from '../constants';
 import type { EventFormItem, GetEventResponse, GetEventDataRowResponse, MusicGenreResponse, TicketTypesResponse } from '../types';
 import { useUploadEventImage } from './useUploadEventImage';
 
@@ -59,8 +59,8 @@ export const useEventsForm = (eventId?: number) => {
     mutationFn: async (eventId: number) => {
       await axios.post(EVENT_API_ENDPOINTS.delete(eventId));
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['event/draw'] });
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: [EVENTS_TABLE_QUERY_KEY] });
       toast.success('Event deleted!');
     },
     onError: () => {
