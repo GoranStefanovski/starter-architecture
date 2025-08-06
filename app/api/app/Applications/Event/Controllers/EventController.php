@@ -165,7 +165,7 @@ class EventController extends Controller
      * @return JsonResponse
      */
     public function nearByEvents(Request $request){
-//        dd($request->get('lat'));
+
         $lat = $request->get('lat');
         $lng = $request->get('lng');
         $radiusInMeters = $request->get('radiusInMeters', 1000);

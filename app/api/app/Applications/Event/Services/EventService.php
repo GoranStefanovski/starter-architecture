@@ -63,7 +63,7 @@ class EventService implements EventServiceInterface{
     {
         $user = auth()->user();
         // EventPolicy
-        if ($user->cannot('viewAllEvents', User::class)) {
+        if ($user->cannot('viewAllEvents', Event::class)) {
             $data['user_only'] = $user->id;
         }
 
@@ -75,7 +75,7 @@ class EventService implements EventServiceInterface{
         $data['draw'] = $data['draw'] ?? 1;
 
         $eventsCollection = $this->eventRepository->draw($data);
-//        dd($eventsCollection);
+
         $eventsDTOs = $eventsCollection->getCollection()->map(function ($event) {
             return EventDTO::fromModelForTable($event);
         });
