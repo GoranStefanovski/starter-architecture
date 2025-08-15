@@ -1,0 +1,14 @@
+{
+  "status": {
+    "label": "Disable Post Slot",
+    "enabled": "Enabled",
+    "disabled": "Disabled",
+    "expired": "Expired"
+  },
+  "name": {
+    "label": "Post Slot Name (ID tag)"
+  },
+    "post-slot-information": {
+      "label": "Basic information"
+  }
+}

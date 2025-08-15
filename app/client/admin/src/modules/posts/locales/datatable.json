@@ -1,0 +1,9 @@
+{
+  "datatable": {
+    "name": "Name",
+    "address": "Address",
+    "user_role": "User role",
+    "status": "Active",
+    "boosted": "Boosted"
+  }
+}

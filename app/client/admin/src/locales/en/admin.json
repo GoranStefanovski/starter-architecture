@@ -17,5 +17,17 @@
     "admin": "Admin Events",
     "public": "Public Events",
     "add": "Add Event"
+  },
+  "post_slots": {
+    "main": "Post Slots",
+    "admin": "Admin Post Slots",
+    "public": "Public Post Slots",
+    "add": "Add Post Slot"
+  },
+  "posts": {
+    "main": "Posts",
+    "admin": "Admin Posts",
+    "public": "Public Posts",
+    "add": "Add Post"
   }
 }

@@ -19,10 +19,14 @@ class RolePermissionsMap
             UserPermissions::READ_EVENTS,
             UserPermissions::WRITE_EVENTS,
             UserPermissions::DELETE_EVENTS,
+            UserPermissions::READ_POSTS,
+            UserPermissions::WRITE_POSTS,
+            UserPermissions::DELETE_POSTS,
             UserPermissions::WRITE_PUBLIC,
             UserPermissions::WRITE_CONTACT_INFO,
             UserPermissions::READ_EVENTS_PUBLIC,
             UserPermissions::READ_VENUES_PUBLIC,
+            UserPermissions::READ_POSTS_PUBLIC,
         ],
         //Venue owner and Event owner
         UserRoles::COLLABORATOR => [

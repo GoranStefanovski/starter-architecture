@@ -22,11 +22,17 @@ class UserPermissions
     public const WRITE_EVENTS = 'write_events';
     public const DELETE_EVENTS = 'delete_events';
 
+    // Events Posts/Ads module
+    public const READ_POSTS = 'read_posts';
+    public const WRITE_POSTS = 'write_posts';
+    public const DELETE_POSTS = 'delete_posts';
+
     // Public Users
     public const WRITE_PUBLIC = 'write_public';
     public const WRITE_CONTACT_INFO = 'write_contact_info';
     public const READ_VENUES_PUBLIC = 'read_venues_public';
     public const READ_EVENTS_PUBLIC = 'read_events_public';
+    public const READ_POSTS_PUBLIC = 'read_posts_public';
 
     // Navigation module
     public const READ_NAVIGATION = 'read_navigation';

@@ -5,5 +5,6 @@ import { events } from '@/modules/events/locales';
 import { navigation } from '@/modules/navigation/locales';
 import { users } from '@/modules/users/locales';
 import { venues } from '@/modules/venues/locales';
+import { post_slots } from '@/modules/post-slots/locales';
 
-export { strings, buttons, users, venues, admin, navigation, events };
+export { strings, buttons, users, venues, admin, navigation, events, post_slots };

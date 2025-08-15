@@ -46,6 +46,18 @@ class HomeController extends Controller
                 'route' => 'events',
                 'permission' => UserPermissions::READ_EVENTS,
             ],
+            [
+                'label' => 'admin.post_slots.main',
+                'name' => 'item_post_slots',
+                'route' => 'post-slots',
+                'permission' => UserPermissions::READ_POSTS,
+            ],
+            [
+                'label' => 'admin.posts.main',
+                'name' => 'item_posts',
+                'route' => 'posts',
+                'permission' => UserPermissions::READ_POSTS,
+            ],
         ];
 
         $pagesItems = [
