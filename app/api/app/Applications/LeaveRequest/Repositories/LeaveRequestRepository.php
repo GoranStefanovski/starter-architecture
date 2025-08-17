@@ -12,6 +12,7 @@ use App\Applications\LeaveRequest\Mail\{
     LeaveRequestDeclining,
     LeaveRequestCancelation,
     LeaveRequestConfirmationPDF,
+    LeaveRequestConfirmationUpdate
 };
 use App\Applications\Pagination\StarterPaginator;
 use App\Applications\LeaveRequest\Model\LeaveRequest;
@@ -237,7 +238,7 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
         $documentPath = $document ? Storage::disk('public')->path($document->file_path) : null;
 
         if ($isUpdate) {
-            Mail::to($recipients)->send(new LeaveRequestNotificationUpdate($leaveRequest, $documentPath));
+            Mail::to($recipients)->send(new LeaveRequestConfirmationUpdate($leaveRequest, $documentPath));
             return;
         }
 
