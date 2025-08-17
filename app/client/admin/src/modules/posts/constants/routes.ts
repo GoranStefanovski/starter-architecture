@@ -7,9 +7,9 @@ export const POSTS_ROUTES = {
   edit: 'edit',
 } as const;
 
-type eventsRoutes = (typeof POSTS_ROUTES)[keyof typeof POSTS_ROUTES];
+type postsRoutes = (typeof POSTS_ROUTES)[keyof typeof POSTS_ROUTES];
 
-export const POST_ROUTES_DATA: ModulesRoutesData<eventsRoutes> = {
+export const POST_ROUTES_DATA: ModulesRoutesData<postsRoutes> = {
   main: {
     path: 'posts',
     name: 'posts',

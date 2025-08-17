@@ -14,22 +14,24 @@ class PostDTO
     public int|null $venue_id;
     public string $name;
     public string $description;
+    public string $post_slot;
     public bool $is_boosted;
     public bool $is_active;
-
+    public array $images = [];
+    
     public function __construct(
-        int $user_id,
         int|null $venue_id,
         string $name,
         string $description,
+        string $post_slot,
         bool $is_boosted,
         bool $is_active,
         int $id = 0, // post_id
     ) {
-        $this->user_id = $user_id;
         $this->venue_id = $venue_id;
         $this->name = $name;
         $this->description = $description;
+        $this->post_slot = $post_slot;
         $this->is_boosted = $is_boosted;
         $this->is_active = $is_active;
         $this->id = $id;
@@ -40,57 +42,50 @@ class PostDTO
         $name = $request->input('name');
         $request->integer('venue_id') > 0 ? $venueId = $request->integer('venue_id') : $venueId = null;
         return new self(
-            $request->integer('user_id'),
             $venueId,
             $name,
             $request->input('description'),
+            $request->input('post_slot'),
             $request->boolean('is_boosted'),
             $request->boolean('is_active'),
             $request->integer('id', 0), // post_id
         );
     }
 
-    public static function fromModel(Post $event): self
+    public static function fromModel(Post $post): self
     {
         $dto = new self(
-            $event->user_id,
-            $event->venue_id,
-            $event->name,
-            $event->description,
-            $event->is_boosted,
-            $event->is_active,
-            $event->id,
+            $post->venue_id,
+            $post->name,
+            $post->description,
+            $post->post_slot,
+            $post->is_boosted,
+            $post->is_active,
+            $post->id,
         );
 
-        $media = $event->getFirstMedia('event_image');
-        if(!$event->media->isEmpty()) {
+        $media = $post->getFirstMedia('post_image');
+        if(!$post->media->isEmpty()) {
             $dto->images = [
                 'thumbnail' => [
                     'url'     => $media->getUrl('thumbnail'),
                     'srcset' => $media->getSrcset('thumbnail') ?? null,
                     'webp'    => $media->getResponsiveImageUrls('thumbnail') ?? null,
                 ],
-                'card' => [
-                    'url'     => $media->getUrl('card'),
-                    'srcset' => $media->getSrcset('card') ?? null,
-                    'webp'    => $media->getResponsiveImageUrls('card') ?? null,
-                ],
-                'banner' => [
-                    'url'     => $media->getUrl('banner'),
-                    'srcset' => $media->getSrcset('banner') ?? null,
-                    'webp'    => $media->getResponsiveImageUrls('banner') ?? null,
-                ],
             ];
         }
         return $dto;
     }
 
-    public static function fromModelForTable(Post $event): array
+    public static function fromModelForTable(Post $post): array
     {
         return [
-            'id' => $event->id,
-            'name' => $event->name,
-            'description' => $event->description,
+            'id' => $post->id,
+            'name' => $post->name,
+            'description' => $post->description,
+            'is_boosted' => $post->is_boosted,
+            'is_active' => $post->is_active,
+            'post_slot' => $post->post_slot,
         ];
     }
 
@@ -112,6 +107,7 @@ class PostDTO
             'description' => $this->description,
             'is_boosted' => $this->is_boosted,
             'is_active' => $this->is_active,
+            'post_slot' => $this->post_slot,
             'images' => $this->images,
         ];
     }
@@ -121,11 +117,11 @@ class PostDTO
         return $this->toArray();
     }
 
-    public static function fromCollection(iterable $events): array
+    public static function fromCollection(iterable $posts): array
     {
         return array_map(
-            fn(Post $event) => self::fromModel($event),
-            $events instanceof \Illuminate\Support\Collection ? $events->all() : iterator_to_array($events)
+            fn(Post $post) => self::fromModel($post),
+            $posts instanceof \Illuminate\Support\Collection ? $posts->all() : iterator_to_array($posts)
         );
     }
 }

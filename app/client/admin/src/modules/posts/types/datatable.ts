@@ -3,4 +3,6 @@ export interface PostRecord {
   name: string;
   is_boosted: boolean;
   is_active: boolean;
+  post_slot: string;
+  description: string;
 }

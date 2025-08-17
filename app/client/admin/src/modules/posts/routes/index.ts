@@ -5,14 +5,14 @@ const { t } = i18n.global;
 
 const Posts = () =>
   import(
-    /* webpackChunkName: "events" */
+    /* webpackChunkName: "posts" */
     /* webpackPrefetch: true */
     '../pages/PostsList.vue'
   );
 
 const PostPage = () =>
   import(
-    /* webpackChunkName: "event-page" */
+    /* webpackChunkName: "post-page" */
     /* webpackPrefetch: true */
     '../pages/PostPage.vue'
   );

@@ -18,10 +18,10 @@ class Post extends Model implements HasMedia
     protected $fillable = [
         'name',
         'description',
-        'user_id',
         'venue_id',
         'is_boosted',
         'is_active',
+        'post_slot'
     ];
 
     protected $casts = [
@@ -61,25 +61,6 @@ class Post extends Model implements HasMedia
     public function venue(): BelongsTo
     {
         return $this->belongsTo(\App\Applications\Venue\Model\Venue::class);
-    }
-
-    /**
-     * Genres assigned to this post.
-     */
-    public function musicGenres(): BelongsToMany
-    {
-        return $this->belongsToMany(
-            \App\Applications\Common\Model\MusicGenre::class,
-            'post_music_genre'
-        );
-    }
-
-    /**
-     * Tickets for this post.
-     */
-    public function tickets()
-    {
-        return $this->hasMany(Ticket::class);
     }
 
     /**

@@ -16,7 +16,7 @@
 
   const { checkUser } = useUserCheck();
   const { post, isEvenRow } = defineProps<PostsTableRowProps>();
-  const { deleteEvent } = usePostsForm();
+  const { deletePost } = usePostsForm();
   const showConfirmDialog = ref(false);
 
   const avatarSource = computed(() => {
@@ -24,7 +24,7 @@
   });
 
   const confirmDelete = () => {
-    deleteEvent(post.id);
+    deletePost(post.id);
     showConfirmDialog.value = false;
   };
 </script>
@@ -38,6 +38,10 @@
     </TableColumn>
 
     <TableColumn>
+      {{ post.post_slot }}
+    </TableColumn>
+
+    <TableColumn>
       <PostStatusBadge :is-active="post.is_boosted" />
     </TableColumn>
 
@@ -48,7 +52,7 @@
     <TableColumn>
       <dash-link
         v-if="checkUser('permissions', USER_PERMISSIONS.writePosts)"
-        :to="{ name: 'edit.post', params: { post: post.id } }"
+        :to="{ name: 'edit.post', params: { postId: post.id } }"
         theme="primary"
         theme-mod="outline-hover"
         :icon="IconEdit"

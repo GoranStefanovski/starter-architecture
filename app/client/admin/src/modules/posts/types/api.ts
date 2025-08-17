@@ -8,6 +8,7 @@ export interface GetPostResponse {
   description?: string;
   is_boosted?: boolean;
   is_active?: boolean;
+  post_slot?: string;
 }
 
 export interface GetPostDataRowResponse {
@@ -16,6 +17,7 @@ export interface GetPostDataRowResponse {
   name: string;
   is_active?: boolean;
   is_boosted?: boolean;
+  post_slot?: string;
 }
 
 

@@ -70,7 +70,7 @@
             <form-switch
               v-model="isActive"
               id="is_active"
-              theme="danger"
+              theme="success"
               type="outline"
               :label="t('post_slots.status.label')"
               :helper-text="`Post Slot is  ${isActive ? 'active' : 'disabled'}`"

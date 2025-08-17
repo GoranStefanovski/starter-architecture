@@ -35,8 +35,6 @@ class PostService implements PostServiceInterface{
         // Create and save the post
         $newPost = $this->postRepository->create($postDTO);
 
-        // Create and save the attached genres
-        $newPost->musicGenres()->sync($postDTO->genreIds);
 
         return PostDTO::fromModel($newPost);
     }
@@ -54,13 +52,7 @@ class PostService implements PostServiceInterface{
 
     public function draw(array $data): array
     {
-        $user = auth()->user();
-        // PostPolicy
-        if ($user->cannot('viewAllPosts', Post::class)) {
-            $data['user_only'] = $user->id;
-        }
-
-        $data['columns'] = ['posts.name', 'posts.address'];
+        $data['columns'] = ['posts.name', 'posts.post_slot', 'posts.description'];
         $data['length'] = $data['length'] ?? 10;
         $data['column'] = $data['column'] ?? 'posts.name';
         $data['dir'] = $data['dir'] ?? 'asc';

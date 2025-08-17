@@ -3,7 +3,8 @@
     "name": "Name",
     "address": "Address",
     "user_role": "User role",
-    "status": "Active",
-    "boosted": "Boosted"
+    "status": "Is Active",
+    "boosted": "Is Boosted",
+    "post_slot": "Post Slot"
   }
 }

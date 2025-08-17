@@ -1,17 +1,14 @@
 {
-  "user_status": "User status",
+  "user_status": "Post status",
   "status": {
-    "label": "Disable user",
+    "label": "Disable post",
     "enabled": "Enabled",
     "disabled": "Disabled"
   },
   "roles": {
     "label": "Roles"
   },
-  "music_genre": {
-    "label": "Music genres"
-  },
-  "image": "Event Image",
+  "image": "Post Image",
   "address": {
     "label": "Address",
     "lat": "Latitude",
@@ -21,10 +18,6 @@
   },
   "desc": {
     "label": "Description"
-  },
-  "event_time": {
-    "start": "Event start",
-    "end": "Event end"
   },
   "tickets": {
     "add": "Add tickets",
@@ -36,7 +29,13 @@
     "label": "Held at"
   },
   "name": {
-    "label": "Event name"
+    "label": "Post Title"
+  },
+  "post_slot": {
+    "label": "Post Slot"
+  },
+  "boosted": {
+    "label": "Is Post Boosted"
   },
   "contact": {
     "email": "E-mail",
@@ -56,7 +55,7 @@
       "current_invalid": "Your current password is incorrect."
     }
   },
-  "event-information": {
+  "post-information": {
     "label": "Basic information"
   },
   "my-profile": {

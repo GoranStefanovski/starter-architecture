@@ -45,7 +45,7 @@
 </script>
 
 <template>
-  <AuthBase title="Login 1.3">
+  <AuthBase title="BeAtIt Admin Dashboard">
     <form class="kt-form auth-base__form" @submit.prevent="submitHandler">
       <FormInput id="email" v-model="email" name="Email" placeholder="admin@example.com" :error="errors['email']" />
       <FormInput

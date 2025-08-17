@@ -19,8 +19,10 @@ class PostRepository implements PostRepositoryInterface{
 
     private const COLUMNS_MAP = [
         'name' => 'posts.name',
-        'address' => 'posts.address',
-        'status' => 'posts.is_disabled'
+        'description' => 'posts.description',
+        'status' => 'posts.is_disabled',
+        'boosted' => 'posts.is_boosted',
+        'post_slot' => 'posts.post_slot'
     ];
 
     public function getAll(): array
@@ -30,14 +32,12 @@ class PostRepository implements PostRepositoryInterface{
 
     public function get($id): Post
     {
-        return $this->post::with('musicGenres','media')->findOrFail($id);
+        return $this->post::with('media')->findOrFail($id);
     }
 
     public function create(PostDTO $postDTO): Post
     {
         $attributes = $postDTO->toArray();
-        //Safe Hydration (tickets and genreIds are not fillable on the Post Eloquent model)
-        unset($attributes['genreIds']);
         $post = new Post($attributes);
         $post->save();
         return $post;
@@ -47,28 +47,8 @@ class PostRepository implements PostRepositoryInterface{
     {
         $post = $this->post->findOrFail($postId);
         $attributes = $postDTO->toArray();
-        unset($attributes['tickets']);
         $post->update($attributes);
-        $post->musicGenres()->sync($postDTO->genreIds);
 
-        $existingTicketIds = [];
-        foreach ($postDTO->tickets as $ticketDTO) {
-            if ($ticketDTO->id) {
-                // update existing ticket
-                $ticket = $post->tickets()->find($ticketDTO->id);
-                if ($ticket) {
-                    $ticket->update($ticketDTO->toArray());
-                    $existingTicketIds[] = $ticket->id;
-                }
-            } else {
-                // create new ticket
-                $newTicket = $post->tickets()->create($ticketDTO->toArray());
-                $existingTicketIds[] = $newTicket->id;
-            }
-        }
-
-        //delete tickets not in current payload
-        $post->tickets()->whereNotIn('id', $existingTicketIds)->delete();
         return $post;
     }
 
@@ -79,38 +59,20 @@ class PostRepository implements PostRepositoryInterface{
 
     public function draw(array $data): StarterPaginator
     {
-        //TODO: maybe pull music genres,city when filtration for those is added in the dashboard
         $query = $this->post
-            ->select(['id', 'user_id', 'name', 'address', 'post_start']);
-
-        if (!empty($data['user_only'])) {
-            $query->where('user_id', $data['user_only']);
-        }
+            ->select(['id', 'name', 'is_active', 'is_boosted', 'post_slot']);
 
         if (array_key_exists($data['column'], self::COLUMNS_MAP)) {
             $query->orderBy(self::COLUMNS_MAP[$data['column']], $data['dir']);
         }
 
-        if (!empty($data['music_genre'])) {
-            $genreIds = is_array($data['music_genre']) ? $data['music_genre'] : [$data['music_genre']];
-            $query->whereHas('musicGenres', function ($q) use ($genreIds) {
-                $q->whereIn('music_genres.id', $genreIds);
-            });
-        }
-
-        if (!empty($data['city'])) {
-            $query->where('city', $data['city']);
-        }
-
-        if (!empty($data['start_date'])) {
-            $query->whereDate('post_start', '=', $data['start_date']);
-        }
 
         $search = $data['search'];
         if ($search) {
             $query->where(function ($subquery) use ($search) {
                 $subquery->where('posts.name', 'like', '%' . $search . '%');
-                $subquery->orWhere('posts.address', 'like', '%' . $search . '%');
+                $subquery->orWhere('posts.description', 'like', '%' . $search . '%');
+                $subquery->orWhere('posts.post_slot', 'like', '%' . $search . '%');
             });
         }
 

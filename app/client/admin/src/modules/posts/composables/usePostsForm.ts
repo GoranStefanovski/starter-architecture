@@ -28,7 +28,7 @@ export const usePostsForm = (postId?: number) => {
     enabled: !!postId,
   });
 
-  const { mutate: createEvent, isPending: isCreating } = useMutation({
+  const { mutate: createPost, isPending: isCreating } = useMutation({
     mutationFn: async (newUserData: PostFormItem): Promise<GetPostResponse> => {
       const data = await axios.post(POST_API_ENDPOINTS.create, newUserData);
       return data.data as GetPostResponse;
@@ -41,7 +41,7 @@ export const usePostsForm = (postId?: number) => {
     },
   });
 
-  const { mutate: updateEvent, isPending: isUpdating } = useMutation({
+  const { mutate: updatePost, isPending: isUpdating } = useMutation({
     mutationFn: async (data: PostFormItem): Promise<GetPostResponse> => {
       const response = await axios.patch(POST_API_ENDPOINTS.patch(postId ?? 0), data);
       return response.data as GetPostResponse;
@@ -55,7 +55,7 @@ export const usePostsForm = (postId?: number) => {
     },
   });
 
-  const { mutate: deleteEvent, isPending: isDeleting } = useMutation({
+  const { mutate: deletePost, isPending: isDeleting } = useMutation({
     mutationFn: async (postId: number) => {
       await axios.post(POST_API_ENDPOINTS.delete(postId));
     },
@@ -72,10 +72,10 @@ export const usePostsForm = (postId?: number) => {
 
   return {
     data,
-    createEvent,
-    updateEvent,
+    createPost,
+    updatePost,
     uploadEventImage,
-    deleteEvent,
+    deletePost,
     isLoading: isFetching || isUpdating || isCreating || isUploadingEventImage,
   };
 };
