@@ -31,6 +31,7 @@
           'form-dropdown__input',
           {
             'form-dropdown__input--error': errors?.length,
+            'form-dropdown__input--disabled': readonly,
           },
         ]"
         :disabled="isDisabled"
@@ -54,3 +55,9 @@
     </template>
   </form-group>
 </template>
+<style scoped>
+.form-dropdown__input--disabled {
+  pointer-events: none;
+}
+
+</style>

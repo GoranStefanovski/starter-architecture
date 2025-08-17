@@ -10,6 +10,7 @@
   const leaveTypes = ref([]);
   const managers = ref([]);
   const admins = ref([]);
+  const users = ref([]);
   const userId = defineModel("userId", { required: true, type: Number });
   const leaveTypeId = defineModel("leaveTypeId", {
     required: true,
@@ -26,7 +27,7 @@
   const minDate = computed(() => today.toISOString().split("T")[0]);
   const maxDate = computed(() => `${currentYear}-12-31`);
 
-  const props = defineProps(["user"]);
+  const props = defineProps(["user", "isEditPage"]);
 
   const fetchLeaveTypes = async () => {
     try {
@@ -59,17 +60,42 @@
     }
   };
 
+  const fetchAllUsers = async () => {
+    try {
+      const response = await axios.get("/user/draw");
+      users.value = response.data.data.filter(
+        (u: any) => u.role !== 3 && u.role !== 4
+      );
+    } catch (error) {
+      console.error("Error fetching admins:", error);
+    }
+  };
+
   onMounted(() => {
     fetchLeaveTypes();
     fetchAdmins();
     fetchManagers();
+    fetchAllUsers();
   });
 </script>
 <template>
   <div class="kt-section">
     <div class="kt-section__body">
       <leave-requests-dropdown
-        v-if="user.role == 1 || user.role == 2"
+        v-if="isEditPage"
+        v-model:model="requestTo"
+        :optionsData="users"
+        :readonly="
+          userId == props.user.id ||
+          requestTo == props.user.id ||
+          props.user.role == 1
+            ? false
+            : true
+        "
+      />
+
+      <leave-requests-dropdown
+        v-else-if="user.role == 1 || user.role == 2"
         v-model:model="requestTo"
         :optionsData="admins"
         :readonly="false"

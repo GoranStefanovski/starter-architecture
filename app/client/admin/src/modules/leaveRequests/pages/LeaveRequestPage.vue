@@ -52,7 +52,7 @@
       createLeaveRequest(values);
     }
   });
-  
+
   const approveUpdate = handleSubmit((values) => {
     approveUpdateLeaveRequest(values);
   });
@@ -98,6 +98,14 @@
   const [reason] = defineField("reason");
   const [requestTo] = defineField("request_to");
   const [isConfirmed] = defineField("is_confirmed");
+
+  const isUserAllowedToUpdate = computed(
+    () =>
+      !(
+        isConfirmed.value == 2 &&
+        (auth.user().id !== userId.value || auth.user().id !== requestTo.value)
+      ),
+  );
 </script>
 
 <template>
@@ -115,6 +123,7 @@
         {{ t("buttons.back") }}
       </DashLink>
       <DashButton
+        v-if="isUserAllowedToUpdate"
         type="submit"
         :icon="IconSave"
         :loading="isLoading"
@@ -143,6 +152,7 @@
             v-model:requestTo="requestTo"
             :errors="errors"
             :user="myUser"
+            :isEditPage="isEditPage"
           />
         </TabbedContentTab>
         <TabbedContentTab
@@ -160,7 +170,12 @@
             :user="auth.user()"
           />
         </TabbedContentTab>
-        <div v-if="auth.user().id == requestTo || (isConfirmed == 2 && auth.user().role == 1)">
+        <div
+          v-if="
+            auth.user().id == requestTo ||
+            (isConfirmed == 2 && auth.user().role == 1)
+          "
+        >
           <div v-if="isConfirmed == 0 && isApprovePage">
             <div class="confirmation_btn_wrapper">
               <span class="req_btn approve" @click="approve"> Approve </span>
@@ -170,7 +185,9 @@
           <!-- <div v-else-if="isConfirmed == 2 && (auth.user().role == 1 || (auth.user().role == 2 && auth.user().id == requestTo))"> -->
           <div v-else-if="isConfirmed == 2 && auth.user().role == 1">
             <div class="confirmation_btn_wrapper">
-              <span class="req_btn approve" @click="approveUpdate"> Approve </span>
+              <span class="req_btn approve" @click="approveUpdate">
+                Update
+              </span>
             </div>
           </div>
         </div>
