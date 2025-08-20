@@ -30,11 +30,11 @@ interface NationalHolidayServiceInterface
     public function create(NationalHolidayDTO $nationalHolidayData): NationalHolidayDTO;
 
     /**
-     * @param int $leaveTypeId
+     * @param int $nationalHolidayId
      * @param NationalHolidayDTO $nationalHolidayData
      * @return NationalHolidayDTO
      */
-    public function update(int $leaveTypeId, NationalHolidayDTO $nationalHolidayData): NationalHolidayDTO;
+    public function update(int $nationalHolidayId, NationalHolidayDTO $nationalHolidayData): NationalHolidayDTO;
 
     /**
      * @param integer $id

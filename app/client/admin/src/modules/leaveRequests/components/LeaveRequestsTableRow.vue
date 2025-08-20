@@ -35,6 +35,13 @@
   const getFileUrl = (fileName: string) => {
     return `${window.location.origin}/storage/${fileName}`;
   };
+
+  const formatDateEU = (val: string | null | undefined) => {
+    if (!val) return '';
+    const s = String(val).slice(0, 10); // handles 'YYYY-MM-DD' or 'YYYY-MM-DDTHH:mm:ss...'
+    const [y, m, d] = s.split('-');
+    return (y && m && d) ? `${d}/${m}/${y}` : s; // fallback to raw if unexpected
+  };
 </script>
 
 <template>
@@ -65,11 +72,11 @@
       </TableColumn>
 
       <TableColumn>
-        {{ leaveRequest.start_date }}
+        {{ formatDateEU(leaveRequest.start_date) }}
       </TableColumn>
 
       <TableColumn>
-        {{ leaveRequest.end_date ? leaveRequest.end_date : "Single Day" }}
+        {{ leaveRequest.end_date ? formatDateEU(leaveRequest.end_date) : "Single Day" }}
       </TableColumn>
 
       <TableColumn>

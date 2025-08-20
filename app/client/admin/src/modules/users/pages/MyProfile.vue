@@ -70,6 +70,8 @@
         paid_leaves_left: formData.value.paid_leaves_left,
         country: formData.value.country,
         is_office_based: formData.value.is_office_based,
+        private_id: formData.value.private_id,
+        position: formData.value.position,
       });
     }
   }, [formData]);
@@ -85,6 +87,8 @@
   const [paidLeavesLeft] = defineField("paid_leaves_left");
   const [country] = defineField("country");
   const [isOfficeBased] = defineField("is_office_based");
+  const [privateId] = defineField("private_id");
+  const [position] = defineField("position");
 </script>
 
 <template>
@@ -120,6 +124,8 @@
             v-model:email="email"
             v-model:firstName="firstName"
             v-model:country="country"
+            v-model:privateId="privateId"
+            v-model:position="position"
             :isEdit="true"
             :isMyProfile="true"
             :errors="errors"

@@ -26,5 +26,11 @@
   },
   "basic": {
     "information": "Basic information"
+  },
+   "privateId": {
+    "label": "Private ID"
+  },
+  "position": {
+    "label": "Position"
   }
 }

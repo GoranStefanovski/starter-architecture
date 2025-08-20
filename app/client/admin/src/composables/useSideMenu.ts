@@ -7,7 +7,8 @@ import {
   IconClipboardlist,
   IconLayoutgrid,
   IconEarth,
-  IconPlus
+  IconPlus,
+  IconTicket
 } from "@starter-core/icons";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
@@ -42,6 +43,8 @@ const getItemIcon = (link: string) => {
       return IconEarth;
     case "add.leave_request":
       return IconPlus;
+    case "national_holidays":
+      return IconTicket;
     default:
       return IconArrowright;
   }

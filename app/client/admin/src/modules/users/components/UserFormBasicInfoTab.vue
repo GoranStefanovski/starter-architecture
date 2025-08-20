@@ -22,6 +22,8 @@
   const role = defineModel("role", { required: true, type: Number });
   const lastName = defineModel("lastName", { required: true, type: String });
   const firstName = defineModel("firstName", { required: true, type: String });
+  const privateId = defineModel("privateId", { required: true, type: String });
+  const position = defineModel("position", { required: true, type: String });
   const country = defineModel("country", { required: true, type: Number });
   const email = defineModel("email", { required: true, type: String });
   const { errors = {}, avatar } = defineProps<{
@@ -118,6 +120,22 @@
           <IconMail />
         </template>
       </form-input>
+      <form-input
+        v-if="isMyProfile"
+        v-model="privateId"
+        name="private-id"
+        :label="t('users.privateId.label')"
+        :error="errors.private_id"
+        is-inline
+      />
+      <form-input
+        v-if="isMyProfile"
+        v-model="position"
+        name="position"
+        :label="t('users.position.label')"
+        :error="errors.position"
+        is-inline
+      />
     </div>
   </div>
 </template>

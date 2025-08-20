@@ -14,6 +14,10 @@
     setBackUrl("/");
   });
 
+  const props = defineProps<{
+    leaveRequestsPending?: Array<any>;
+  }>();
+
   // Reactive References
   const leaveDays = ref([]);
   const nationalHolidays = ref([]);
@@ -52,6 +56,21 @@
     return leaveType ? leaveType.color : "Unknown Leave Type";
   };
 
+  const hexToRgba = (hex: string, alpha = 1) => {
+    const m = hex?.trim().match(/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i);
+    if (!m) return hex || "#999999";
+    const r = parseInt(m[1], 16);
+    const g = parseInt(m[2], 16);
+    const b = parseInt(m[3], 16);
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+  };
+
+  const addDays = (isoDate: string, days: number) => {
+    const d = new Date(isoDate + "T00:00:00Z");
+    d.setUTCDate(d.getUTCDate() + days);
+    return d.toISOString().slice(0, 10);
+  };
+
   const calendarEvents = computed(() => {
     const leaveEvents = leaveDays.value.map((leave: any) => ({
       title: leave.user.first_name + " " + leave.user.last_name,
@@ -75,7 +94,26 @@
       textColor: "white",
     }));
 
-    return [...leaveEvents, ...holidayEvents];
+    const pendingEvents = computed(() =>
+    (props.leaveRequestsPending || []).map((leave: any) => {
+      // use nested leave_type.color if present, else lookup by id
+      const baseHex = leave.leave_type?.color || getLeaveTypeColor(leave.leave_type_id);
+      const bg = hexToRgba(baseHex, 0.35); // semi-transparent
+      const border = hexToRgba(baseHex, 0.9); // stronger border line
+      return {
+        title: `${leave.user.first_name} ${leave.user.last_name} (pending)`,
+        start: leave.start_date,
+        end: leave.end_date ? addDays(leave.end_date, 1) : leave.start_date,
+        backgroundColor: bg,
+        borderColor: border,
+        textColor: "black",
+        extendedProps: { kind: "pending", leaveId: leave.id, status: leave.status },
+      };
+    })
+  );
+
+
+    return [...leaveEvents, ...holidayEvents, ...pendingEvents.value];
   });
 
   // Calendar Options

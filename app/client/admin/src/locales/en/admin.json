@@ -11,6 +11,10 @@
     "main": "Leave Types",
     "add": "Add Leave Type"
   },
+  "national_holidays": {
+    "main": "Holidays",
+    "add": "Add Holidaty"
+  },
   "leave_requests": {
     "mine": "My Leave Requests",
     "main": "Leave Requests",

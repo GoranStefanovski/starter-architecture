@@ -33,6 +33,7 @@ class LeaveRequestDeclining extends Mailable
 
         $subject = $this->leaveRequest->leaveType->name .  ': ' . $formattedStartDate . ($this->leaveRequest->end_date ? ' to ' . $formattedEndDate : '');  
         return $this->subject($subject . ' (Declined)')
+                    ->replyTo($this->leaveRequest->user->email, $this->leaveRequest->user->first_name . ' ' . $this->leaveRequest->user->last_name)
                     ->view('emails.leave_request_decline')
                     ->with([
                         'leaveRequest' => $this->leaveRequest,

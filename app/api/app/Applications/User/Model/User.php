@@ -41,7 +41,9 @@ class User extends Authenticatable implements HasMedia
         'paid_leaves_max',
         'paid_leaves_left',
         'country',
-        'is_office_based'
+        'is_office_based',
+        'private_id',
+        'position'
     ];
 
     /**
