@@ -27,6 +27,6 @@ Route::group([
         Route::post('create', [NationalHolidayController::class, 'create']);
         Route::get('{id}', [NationalHolidayController::class, 'get']);
         Route::patch('{id}', [NationalHolidayController::class, 'update']);
-        Route::delete('{id}', [NationalHolidayController::class, 'delete']);
+        Route::post('{id}/delete', [NationalHolidayController::class, 'delete']);
     });
 });

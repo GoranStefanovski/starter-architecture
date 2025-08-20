@@ -10,7 +10,7 @@ class NationalHolidayDTO
     public string $date;
     public string $country;
     public int $year;
-    public int $leave_type_id;
+    public int $leave_type_id = 5;
     public int $id;
 
     public function __construct(
@@ -33,7 +33,7 @@ class NationalHolidayDTO
             $request->input('date'),
             $request->input('country'),
             $request->input('year'),
-            $request->input('leave_type_id'),
+            5,
             $request->input('id', 0),
         );
     }
@@ -55,7 +55,7 @@ class NationalHolidayDTO
             $leaveType->date,
             $leaveType->country,
             $leaveType->year,
-            $leaveType->leave_type_id,
+            5,
             $leaveType->id,
 
         );
@@ -69,10 +69,10 @@ class NationalHolidayDTO
     public function toArray(): array
     {
         return [
-            'name' => $this->date,
-            'slug' => $this->country,
-            'color' => $this->year,
-            'is_paid' => $this->leave_type_id,
+            'date' => $this->date,
+            'country' => $this->country,
+            'year' => $this->year,
+            'leave_type_id' => 5,
             'id' => $this->id,
         ];
     }

@@ -10,6 +10,8 @@ class UserDTO
     public string $first_name;
     public string $last_name;
     public string $email;
+    public ?string $private_id;
+    public ?string $position;
     public ?string $avatar_url;
     public ?string $avatar_thumbnail;
     public int $role;
@@ -25,6 +27,8 @@ class UserDTO
         string $first_name,
         string $last_name,
         string $email,
+        string $private_id = null,
+        string $position = null,
         ?string $avatar_url,
         ?string $avatar_thumbnail,
         int $role,
@@ -39,6 +43,8 @@ class UserDTO
         $this->first_name = $first_name;
         $this->last_name = $last_name;
         $this->email = $email;
+        $this->private_id = $private_id;
+        $this->position = $position;
         $this->avatar_url = $avatar_url;
         $this->avatar_thumbnail = $avatar_thumbnail;
         $this->role = $role;
@@ -57,6 +63,8 @@ class UserDTO
             $request->input('first_name'),
             $request->input('last_name'),
             $request->input('email'),
+            $request->input('private_id'),
+            $request->input('position'),
             null,
             null,
             $request->input('role'),
@@ -76,6 +84,8 @@ class UserDTO
             $request->input('first_name'),
             $request->input('last_name'),
             $request->input('email'),
+            $request->input('private_id'),
+            $request->input('position'),
             null,
             null,
             $request->input('role'),
@@ -95,6 +105,8 @@ class UserDTO
             $user->first_name,
             $user->last_name,
             $user->email,
+            $user->private_id,
+            $user->position,
             $user->avatar_url,
             $user->avatar_thumbnail,
             $user->role,
@@ -119,6 +131,8 @@ class UserDTO
             'first_name' => $this->first_name,
             'last_name' => $this->last_name,
             'email' => $this->email,
+            'private_id' => $this->private_id,
+            'position' => $this->position,
             'avatar_url' => $this->avatar_url,
             'avatar_thumbnail' => $this->avatar_thumbnail,
             'role' => $this->role,

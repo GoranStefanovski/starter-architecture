@@ -1,10 +1,12 @@
 <script lang="ts" setup>
-  import axios from "axios";
+  import axios, { all } from "axios";
   import { ref, onMounted, computed } from "vue";
   import { useI18n } from "vue-i18n";
   import LeaveRequestsDropdown from "./LeaveRequestsDropdown.vue";
   import LeaveRequestsDropdownTypes from "./LeaveRequestsDropdownTypes.vue";
   import { FormInput } from "@starter-core/dash-ui/src";
+  import FlatPickr from 'vue-flatpickr-component'
+  import 'flatpickr/dist/flatpickr.css'
 
   const { t } = useI18n();
   const leaveTypes = ref([]);
@@ -77,6 +79,26 @@
     fetchManagers();
     fetchAllUsers();
   });
+
+  const baseConfig = computed(() => ({
+  dateFormat: 'Y-m-d',   // value bound to v-model
+  altInput: true,
+  altFormat: 'd/m/Y',    // what the user sees
+  locale: { firstDayOfWeek: 1 }, // Monday
+  allowInput: true,
+  }))
+
+  const startConfig = computed(() => ({
+    ...baseConfig.value,
+    minDate: minDate.value,
+    maxDate: maxDate.value,
+  }))
+
+  const endConfig = computed(() => ({
+    ...baseConfig.value,
+    minDate: startDate.value || minDate.value,
+    maxDate: maxDate.value,
+  }))
 </script>
 <template>
   <div class="kt-section">
@@ -119,28 +141,26 @@
         label="Reason (optional)"
         is-inline
       />
-      <div class="dates_wrapper">
-        <div class="dates_from">
+      <div class="dates_wrapper" lang="en-GB">
+        <div class="dates_from" lang="en-GB">
           <label class="form-group__label" for="startDate">Start date:</label>
-          <input
-            type="date"
+          <FlatPickr
             id="startDate"
             name="startDate"
             v-model="startDate"
-            :min="minDate"
-            :max="maxDate"
+            :config="startConfig"
+            placeholder="dd/mm/yyyy"
           />
         </div>
 
         <div>
           <label class="form-group__label" for="endDate">End date:</label>
-          <input
-            type="date"
+          <FlatPickr
             id="endDate"
             name="endDate"
             v-model="endDate"
-            :min="startDate || minDate"
-            :max="maxDate"
+            :config="endConfig"
+            placeholder="dd/mm/yyyy"
           />
         </div>
       </div>

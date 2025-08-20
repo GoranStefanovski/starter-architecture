@@ -19,10 +19,9 @@ class NationalHolidayRepository implements NationalHolidayRepositoryInterface
     }
 
     private const COLUMNS_MAP = [
-        'slug' => 'leave_types.slug',
-        'name' => 'leave_types.name',
-        'color' => 'leave_types.color',
-        'is_paid' => 'leave_types.is_paid'
+        'date' => 'national_holidays.date',
+        'country' => 'national_holidays.country',
+        'year' => 'national_holidays.year',
     ];
 
     public function getAll(): array
@@ -71,8 +70,9 @@ class NationalHolidayRepository implements NationalHolidayRepositoryInterface
         $search = $data['search'];
         if ($search) {
             $query->where(function ($subquery) use ($search) {
-                $subquery->where('leave_types.slug', 'like', '%' . $search . '%');
-                $subquery->orWhere('leave_types.name', 'like', '%' . $search . '%');
+                $subquery->where('national_holidays.country', 'like', '%' . $search . '%');
+                $subquery->orWhere('national_holidays.date', 'like', '%' . $search . '%');
+                $subquery->orWhere('national_holidays.year', 'like', '%' . $search . '%');
             });
         }
 

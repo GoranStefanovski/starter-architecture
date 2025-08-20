@@ -170,7 +170,7 @@
         </PortletComponent>
       </div>
     </div>
-    <LeaveCalendarPage/>
+    <LeaveCalendarPage :leaveRequestsPending="leaveRequests"/>
   </PageWrapper>
 </template>
 <style>

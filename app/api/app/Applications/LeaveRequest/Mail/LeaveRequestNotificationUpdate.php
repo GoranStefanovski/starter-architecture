@@ -35,6 +35,7 @@ class LeaveRequestNotificationUpdate extends Mailable
 
         $subject =$this->leaveRequest->user->first_name . ' ' . $this->leaveRequest->user->last_name . ': ' . $this->leaveRequest->leaveType->name .  ': ' . $this->leaveRequest->days . ' days: ' . $formattedStartDate . ($this->leaveRequest->end_date ? ' to ' . $formattedEndDate : '');
         $email = $this->subject($subject . ' (Update)')
+                    ->replyTo($this->leaveRequest->user->email, $this->leaveRequest->user->first_name . ' ' . $this->leaveRequest->user->last_name)
                     ->view('emails.leave_request_notification')
                     ->with([
                         'leaveRequest' => $this->leaveRequest,

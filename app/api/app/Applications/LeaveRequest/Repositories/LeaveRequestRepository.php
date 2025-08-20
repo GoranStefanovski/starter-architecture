@@ -23,6 +23,7 @@ use DateTime, DateInterval, DatePeriod;
 use setasign\Fpdi\Fpdi;
 use Storage;
 use Illuminate\Support\Facades\Route;
+use setasign\Fpdi\Tcpdf\Fpdi as TcpdfFpdi;
 
 /**
  * @property LeaveRequest $leaveRequest
@@ -167,7 +168,9 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
         }
 
         $this->sendRequestConfirmationEmail($leaveRequest, $isUpdate);
-        $this->sendConfirmationAccountentsEmail($leaveRequest);
+        if ($leaveRequestUser->country == 1) {
+            $this->sendConfirmationAccountentsEmail($leaveRequest);
+        }
         // $this->createRedmineIssueOnConfirm($leaveRequest);
         return $leaveRequest;
     }
@@ -271,19 +274,18 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
 
     private function getRecipients(LeaveRequest $leaveRequest)
     {
-        $manager = $this->user->find($leaveRequest->request_to);
         $requestedUser = $leaveRequest->user;
-
+        $requestToUserEmail = $leaveRequest->requestToUser->email;
         if ($leaveRequest->is_confirmed == 2) {
             return array_filter([
                 $requestedUser?->email,
-                ...User::role(User::MANAGER)->pluck('email')->toArray(),
+                $requestToUserEmail,
                 ...User::role(User::ADMIN)->pluck('email')->toArray()
             ]);
         } else if ($leaveRequest->is_confirmed == 1) {
             return $requestedUser->email;
         } else if ($leaveRequest->is_confirmed == 0) {
-            return $manager->email;
+            return $requestToUserEmail;
         }
 
         
@@ -291,81 +293,102 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
     
     private function createLeaveRequestPDF(User $user, LeaveRequest $leaveRequest): void
     {
+        // 1) Transliterate to Cyrillic (requires PHP intl)
+        $toCyr = function (string $s): string {
+            if (class_exists(\Transliterator::class)) {
+                // You can try 'Latin-Cyrillic/BGN' for Bulgarian,
+                // or just 'Latin-Cyrillic' which works well for mk/bg.
+                return \Transliterator::create('Latin-Cyrillic')->transliterate($s);
+            }
+            return $s; // fallback: leave as-is
+        };
+
+        $fullNameCyr = $toCyr($user->first_name).' '.$toCyr($user->last_name);
+        $positionCyr = $toCyr((string)($user->position ?? ''));
+        $fullNameRequestCyr = $toCyr($leaveRequest->requestToUser->first_name).' '.$toCyr($leaveRequest->requestToUser->last_name);
+
         $isSingleDay = $leaveRequest->end_date === null;
-        $nowDate = $this->formatDate(now());
-        // Cannot print in PDF
-        // Create a Cyrilyc Data for each user on create in a separate table, with foreign user_id
-        $fullNameCyrilic = transliterator_transliterate('Latin-Cyrillic', $user->first_name) . ' ' . transliterator_transliterate('Latin-Cyrillic', $user->last_name);
-        $start_date = $this->formatDate($leaveRequest->start_date);
-        $end_date = $leaveRequest->end_date !== null ? $this->formatDate($leaveRequest->end_date) : $this->formatDate($leaveRequest->start_date);
+        $nowDate     = $this->formatDate(now());
+        $start_date  = $this->formatDate($leaveRequest->start_date);
+        $end_date    = $leaveRequest->end_date ? $this->formatDate($leaveRequest->end_date) : $start_date;
 
-        if ($isSingleDay) {
-            $leaveDays = 1;
-        } else {
-            $leaveDays = $this->calculateDays($leaveRequest, $user);
-        }
-        $userCountry = $leaveRequest->user->country;
-        
-        $pdf = new Fpdi();
+        $leaveDays = $isSingleDay ? 1 : $this->calculateDays($leaveRequest, $user);
+        $userCountry = (int) $leaveRequest->user->country;
+
+        // 2) Use TCPDF-backed FPDI
+        $pdf = new TcpdfFpdi();
+
+        // optional: remove TCPDF default header/footer
+        $pdf->setPrintHeader(false);
+        $pdf->setPrintFooter(false);
+
         $pdf->AddPage();
-        if ($userCountry == 1) {
-            if ($leaveRequest->leave_type_id == 3) {
-                $pdf->setSourceFile(public_path('MK_template_paid.pdf'));
-            } else {
-                $pdf->setSourceFile(public_path('MK_template_unpaid.pdf'));
-            }
-        } else {
-            if ($leaveRequest->leave_type_id == 3) {
-                $pdf->setSourceFile(public_path('BG_template_paid.pdf'));
-            } else {
-                $pdf->setSourceFile(public_path('BG_template_unpaid.pdf'));
-            }
-        }
 
+        // 3) Import your existing PDF template as before
+        if ($userCountry === 1) {
+            $pdf->setSourceFile(public_path($leaveRequest->leave_type_id == 3 ? 'MK_template_paid.pdf' : 'MK_template_unpaid.pdf'));
+        } else {
+            $pdf->setSourceFile(public_path($leaveRequest->leave_type_id == 3 ? 'BG_template_paid.pdf' : 'BG_template_unpaid.pdf'));
+        }
         $tplIdx = $pdf->importPage(1);
         $pdf->useTemplate($tplIdx, 0, 0, 210);
-        $pdf->SetFont('Arial', '', 11);
+
+        // 4) Set a Unicode font that includes Cyrillic
+        // TCPDF ships 'dejavusans' & 'dejavusanscondensed'
+        $pdf->SetFont('dejavusans', '', 11, '', true); // <- UTF-8 + Cyrillic OK
+
+        // 5) Write text (now Cyrillic works)
         if ($userCountry !== 1) {
-            $pdf->SetXY(111, 79);
-            $pdf->Write(0, $user->first_name . " " . $user->last_name);
-            $pdf->SetXY($leaveRequest->leave_type_id == 3 ? 92 : 80, 135);
-            $pdf->Write(0, $leaveDays ?? 'N/A');
-            $pdf->SetXY(44, 141);
-            $pdf->Write(0,  $start_date ?? 'N/A');
-            $pdf->SetXY(44, 147);
-            $pdf->Write(0,  $end_date ?? '');
-            $pdf->SetXY(24,215);
+            $pdf->SetXY(111, 76);
+            $pdf->Write(0, $fullNameCyr);   
+            $pdf->SetXY(129, 82);
+            $pdf->Write(0, $positionCyr); 
+            $pdf->SetXY(115, 88);
+            $pdf->Write(0, $leaveRequest->user->private_id);                // ← Cyrillic
+            $pdf->SetXY($leaveRequest->leave_type_id == 3 ? 92 : 80, 132);
+            $pdf->Write(0, (string)($leaveDays ?? 'N/A'));
+            $pdf->SetXY(44, 138);
+            $pdf->Write(0, $start_date ?? 'N/A');
+            $pdf->SetXY(44, 145);
+            $pdf->Write(0, $end_date ?? '');
+            $pdf->SetXY(24, 210);
+            $pdf->Write(0, $nowDate ?? 'N/A');
+            $pdf->SetXY(96, 236);
+            $pdf->Write(0, $fullNameRequestCyr ?? 'N/A');
+            $pdf->SetXY(24, 241);
             $pdf->Write(0, $nowDate ?? 'N/A');
         } else {
             $pdf->SetXY(111, 77);
-            $pdf->Write(0, $user->first_name . " " . $user->last_name);
+            $pdf->Write(0, $fullNameCyr);                // ← Cyrillic
             $pdf->SetXY(65, 118);
-            $pdf->Write(0, $leaveDays ?? 'N/A');
+            $pdf->Write(0, (string)($leaveDays ?? 'N/A'));
             $pdf->SetXY(124, 118);
-            $pdf->Write(0,  $start_date ?? 'N/A');
+            $pdf->Write(0, $start_date ?? 'N/A');
             $pdf->SetXY(150, 118);
-            $pdf->Write(0,  $end_date ?? '');
-            $pdf->SetXY(24,193);
+            $pdf->Write(0, $end_date ?? '');
+            $pdf->SetXY(24, 193);
             $pdf->Write(0, $nowDate ?? 'N/A');
         }
 
+        // Save file (same as before)
         $pdfDirectory = storage_path("app/public/");
         if (!file_exists($pdfDirectory)) {
             mkdir($pdfDirectory, 0777, true);
         }
-
-        $fileName = $user->first_name . "_" . $user->last_name ."_" .str_replace('-', '_', $leaveRequest->start_date) . ".pdf";
-        $pdfPath = $fileName;
-        $fullPath = storage_path("app/public/" . $pdfPath);
+        $fileName = $user->first_name . "_" . $user->last_name ."_" . str_replace('-', '_', $leaveRequest->start_date) . ".pdf";
+        $pdfPath  = $fileName;
+        $fullPath = $pdfDirectory . $pdfPath;
 
         $pdf->Output($fullPath, 'F');
+
         Document::create([
-            'user_id' => $leaveRequest->user_id,
+            'user_id'          => $leaveRequest->user_id,
             'leave_request_id' => $leaveRequest->id,
-            'file_path' => $pdfPath,
-            'file_name' => $fileName
+            'file_path'        => $pdfPath,
+            'file_name'        => $fileName
         ]);
     }
+
     
     private function formatDate(string $date): string
     {

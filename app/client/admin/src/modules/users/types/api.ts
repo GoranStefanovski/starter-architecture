@@ -16,6 +16,8 @@ export interface GetUserResponse {
   paid_leaves_left: number;
   country: number;
   is_office_based: boolean;
+  private_id: string;
+  position: string;
 }
 
 export interface UsersTableResponse {

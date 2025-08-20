@@ -52,6 +52,12 @@ class HomeController extends Controller
                 'route' => 'countries',
                 'permission' => UserPermissions::DELETE_USERS,
             ],
+            [
+                'label' => 'admin.national_holidays.main',
+                'name' => 'national_holidays',
+                'route' => 'national_holidays',
+                'permission' => UserPermissions::DELETE_USERS,
+            ],
             // QUICK ACCESS NEW LEAVE REQUEST
             [
                 'label' => 'admin.leave_requests.new',

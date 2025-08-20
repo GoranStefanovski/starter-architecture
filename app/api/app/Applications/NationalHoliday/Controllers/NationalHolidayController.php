@@ -11,14 +11,14 @@ use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
- * @property NationalHolidayServiceInterface $leaveTypeService
+ * @property NationalHolidayServiceInterface $nationalHolidayService
  */
 class NationalHolidayController extends Controller
 {
     public function __construct(
-        NationalHolidayServiceInterface $leaveTypeService
+        NationalHolidayServiceInterface $nationalHolidayService
     ) {
-        $this->leaveTypeService = $leaveTypeService;
+        $this->nationalHolidayService = $nationalHolidayService;
     }
 
     /**
@@ -28,7 +28,7 @@ class NationalHolidayController extends Controller
      */
     public function getAll(): JsonResponse
     {
-        $leaveTypeDTOs = $this->leaveTypeService->getAll();
+        $leaveTypeDTOs = $this->nationalHolidayService->getAll();
         return response()->json($leaveTypeDTOs);
     }
 
@@ -40,7 +40,7 @@ class NationalHolidayController extends Controller
      */
     public function get(int $id): JsonResponse
     {
-        $leaveTypeDTO = $this->leaveTypeService->get($id);
+        $leaveTypeDTO = $this->nationalHolidayService->get($id);
         return response()->json($leaveTypeDTO);
     }
 
@@ -53,7 +53,7 @@ class NationalHolidayController extends Controller
     public function create(Request $request): JsonResponse
     {
         $leaveTypeDTO = NationalHolidayDTO::fromRequestForCreate($request);
-        $newLeaveTypeDTO = $this->leaveTypeService->create($leaveTypeDTO);
+        $newLeaveTypeDTO = $this->nationalHolidayService->create($leaveTypeDTO);
 
         return response()->json($newLeaveTypeDTO);
     }
@@ -66,10 +66,10 @@ class NationalHolidayController extends Controller
      */
     public function update(Request $request): JsonResponse
     {
-        $leaveTypeId = Route::current()->parameter('id');
+        $nationalHolidayId = Route::current()->parameter('id');
         $dto = NationalHolidayDTO::fromRequest($request);
-        $leaveTypeDTO = $this->leaveTypeService->update(
-            $leaveTypeId,
+        $leaveTypeDTO = $this->nationalHolidayService->update(
+            $nationalHolidayId,
             $dto
         );
         return response()->json($leaveTypeDTO);
@@ -82,8 +82,8 @@ class NationalHolidayController extends Controller
      */
     public function delete()
     {
-        $leaveTypeId = Route::current()->parameter('id');
-        return $this->leaveTypeService->delete($leaveTypeId);
+        $nationalHolidayId = Route::current()->parameter('id');
+        return $this->nationalHolidayService->delete($nationalHolidayId);
     }
 
     /**
@@ -97,7 +97,7 @@ class NationalHolidayController extends Controller
     {
         try {
             $data = $request->all();
-            $leaveTypesDTO = $this->leaveTypeService->draw($data);
+            $leaveTypesDTO = $this->nationalHolidayService->draw($data);
 
             return response()->json($leaveTypesDTO);
         } catch (\InvalidArgumentException $e) {

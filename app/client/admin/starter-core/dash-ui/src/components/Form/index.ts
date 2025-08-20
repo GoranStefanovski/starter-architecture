@@ -5,4 +5,5 @@ export { default as FormInputRadio } from './FormInputRadio/FormInputRadio.vue';
 export { default as FormDropdown } from './FormDropdown/FormDropdown.vue';
 export { default as FormDropdownManagers } from './FormDropdownManagers/FormDropdownManagers.vue';
 export { default as FormDropdownLeaveTypes } from './FormDropdownLeaveTypes/FormDropdownLeaveTypes.vue';
+export { default as FormDropdownCountries } from './FormDropdownCountries/FormDropdownCountries.vue';
 export { default as FormSwitch } from './FormSwitch/FormSwitch.vue';

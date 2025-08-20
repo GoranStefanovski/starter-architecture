@@ -5,8 +5,9 @@
   import { useI18n } from "vue-i18n";
   import LeaveRequestsDropdown from "./LeaveRequestsDropdown.vue";
   import LeaveRequestsDropdownTypes from "./LeaveRequestsDropdownTypes.vue";
-  import { FormInput } from "@starter-core/dash-ui/src";
-
+  import FlatPickr from "vue-flatpickr-component";
+  import "flatpickr/dist/flatpickr.css";
+  
   const { t } = useI18n();
   const leaveTypes = ref([]);
   const managers = ref([]);
@@ -59,6 +60,15 @@
     return [...admins.value, ...managers.value];
   });
 
+
+  const baseConfig = {
+    dateFormat: "Y-m-d",        // bound to v-model
+    altInput: true,
+    altFormat: "d/m/Y",         // shown to user: 24.09.2025
+    locale: { firstDayOfWeek: 1 },
+    allowInput: false           // prevent manual typing
+  };
+
   onMounted(() => {
     auth.fetch();
     fetchLeaveTypes();
@@ -107,23 +117,25 @@
       <div class="dates_wrapper">
         <div class="dates_from">
           <label class="form-group__label" for="startDate">Start date:</label>
-          <input
-            readonly
-            type="date"
+          <FlatPickr
             id="startDate"
             name="startDate"
             v-model="startDate"
+            :config="baseConfig"
+            placeholder="dd/mm/yyyy"
+            disabled
           />
         </div>
 
         <div>
           <label class="form-group__label" for="endDate">End date:</label>
-          <input
-            readonly
-            type="date"
+          <FlatPickr
             id="endDate"
             name="endDate"
             v-model="endDate"
+            :config="baseConfig"
+            placeholder="dd/mm/yyyy"
+            disabled
           />
         </div>
       </div>
