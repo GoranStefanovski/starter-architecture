@@ -392,7 +392,7 @@ class LeaveRequestRepository implements LeaveRequestRepositoryInterface
     
     private function formatDate(string $date): string
     {
-        return date('d m Y', strtotime($date));
+        return date('d.m.Y', strtotime($date));
     }
 
     private function calculateDays($leaveRequest, $user) {
