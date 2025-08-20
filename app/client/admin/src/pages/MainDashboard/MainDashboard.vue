@@ -182,5 +182,12 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
+
+  /* make it scroll */
+  max-height: 100vh;   /* or calc(100vh - headerHeight) if you have a fixed header */
+  overflow-y: auto;
+  padding-right: 8px;  /* optional: space for scrollbar */
 }
+
+
 </style>
