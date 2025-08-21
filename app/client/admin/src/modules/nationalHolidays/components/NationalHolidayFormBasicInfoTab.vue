@@ -1,10 +1,9 @@
 <script lang="ts" setup>
-  import { computed, ref, onMounted } from "vue";
+  import { computed, ref, onMounted, watch } from "vue";
   import axios from "axios";
   import { useI18n } from "vue-i18n";
-  import { FormInput } from "@starter-core/dash-ui/src";
-  import FlatPickr from 'vue-flatpickr-component'
-  import 'flatpickr/dist/flatpickr.css'
+  import FlatPickr from "vue-flatpickr-component";
+  import "flatpickr/dist/flatpickr.css";
   import { FormDropdownCountries } from "@starter-core/dash-ui/src";
 
   const { t } = useI18n();
@@ -14,12 +13,23 @@
   const countryOptions = ref<{ label: string; name: string }[]>([]);
 
   const baseConfig = computed(() => ({
-    dateFormat: 'Y-m-d',   // value bound to v-model
+    dateFormat: "Y-m-d", // value bound to v-model
     altInput: true,
-    altFormat: 'd/m/Y',    // what the user sees
+    altFormat: "d/m/Y", // what the user sees
     locale: { firstDayOfWeek: 1 }, // Monday
     allowInput: true,
-  }))
+  }));
+
+  // Watch date and set year
+  watch(date, (newVal) => {
+    if (newVal) {
+      const parsed = new Date(newVal);
+      if (!isNaN(parsed.getTime())) {
+        year.value = parsed.getFullYear();
+      }
+    }
+  });
+
   const fetchCountries = async () => {
     try {
       const response = await axios.get("/country/all");
@@ -34,6 +44,7 @@
 
   onMounted(fetchCountries);
 </script>
+
 <template>
   <div class="kt-section">
     <div class="kt-section__body">
@@ -44,16 +55,20 @@
         :label="'Country'"
         is-inline
       />
-      <form-input v-model="year" type="number" name="year" label="Year" is-inline />
+      <!-- Removed manual year input -->
       <div>
         <label class="form-group__label" for="date">Date</label>
         <FlatPickr
-            id="date"
-            name="date"
-            v-model="date"
-            :config="baseConfig"
-            placeholder="dd/mm/yyyy"
-          />
+          id="date"
+          name="date"
+          v-model="date"
+          :config="baseConfig"
+          placeholder="dd/mm/yyyy"
+        />
+      </div>
+      <div>
+        <label class="form-group__label">Year</label>
+        <div>{{ year }}</div>
       </div>
     </div>
   </div>
