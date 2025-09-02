@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Controller;
+use App\Applications\Event\Requests\EventRequest;
 
 
 /**
@@ -51,10 +52,10 @@ class EventController extends Controller
     /**
      * Store user and get JSON with a user response
      *
-     * @param  Request  $request
+     * @param  EventRequest  $request
      * @return JsonResponse
      */
-    public function create(Request $request): JsonResponse
+    public function create(EventRequest $request): JsonResponse
     {
         $EventDTO = EventDTO::fromRequest($request);
         $newEventDTO = $this->eventService->create($EventDTO);
@@ -65,10 +66,10 @@ class EventController extends Controller
     /**
      * Update user
      *
-     * @param  Request  $request
+     * @param  EventRequest  $request
      * @return JsonResponse
      */
-    public function update(Request $request,$eventId): JsonResponse
+    public function update(EventRequest $request,$eventId): JsonResponse
     {
         $dto = EventDTO::fromRequest($request);
         $EventDTO = $this->eventService->update($eventId,$dto);

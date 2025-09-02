@@ -3,54 +3,70 @@
 namespace App\Applications\Venue\Requests;
 
 use App\Http\Requests\ApiFormRequest;
+use Illuminate\Validation\Rule;
 
 class VenueRequest extends ApiFormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
+    public function authorize(): bool
     {
-        // we will handle this with middleware
+        // handled by middleware / policies
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
-    public function rules()
+    public function rules(): array
     {
-        $rules = [
-            'name' => 'required|max:255|min:2',
-            'email' => 'required|email|min:2|max:255|unique:users,email,'.$this->segment(3),
-//            'roles' => 'required|exists:roles,id',
-        ];
+        $venueIdToIgnore = optional($this->route('venue'))->id ?? null;
 
-        return $rules;
-    }
-    public function messages(){
         return [
-            'first_name.required' => 'users.first_name.required',
-            'first_name.max' => 'users.first_name.max',
-            'first_name.min' => 'users.first_name.min',
-            'last_name.required' => 'users.last_name.required',
-            'last_name.max' => 'users.last_name.max',
-            'last_name.min' => 'users.last_name.min',
-            'email.required' => 'users.email.required',
-            'email.email' => 'users.email.invalid',
-            'email.max' => 'users.email.max',
-            'email.min' => 'users.email.min',
-            'email.unique' => 'users.email.unique',
-//            'roles.required' => 'users.roles.required',
-//            'roles.exists' => 'users.roles.exists',
-            'password.required_with' => 'users.password.required',
-            'password_confirmation.required_with' => 'users.password_confirmation.required',
-            'password.between' => 'users.password.between',
-            'password.confirmed' => 'users.password.confirmed',
+            // Basic info
+            'name'            => ['required', 'string', 'min:2', 'max:255'],
+            'email'           => ['required', 'email:rfc,dns', 'min:3', 'max:255'],
+            'address'         => ['required', 'string', 'min:2', 'max:255'],
+            'bio'             => ['nullable', 'string', 'max:2000'],
+            'city'            => ['required', 'string', 'min:2', 'max:255'],
+            'country'         => ['required', 'string', 'size:2'], // e.g. "mk"
+
+            // Contacts & coordinates
+            'phone_number'    => ['nullable', 'string', 'max:30'],
+            'lat'             => ['nullable', 'numeric', 'between:-90,90'],
+            'lng'             => ['nullable', 'numeric', 'between:-180,180'],
+
+            // Relations
+            'user_id'         => ['required', 'integer', 'exists:users,id'],
+            'collaborator_id' => ['required', 'integer', 'exists:users,id'],
+            'venue_type_id'   => ['required', 'integer', 'exists:venue_types,id'],
         ];
+    }
+
+    // Removed withValidator(): no working_hours checks
+
+    public function prepareForValidation(): void
+    {
+        // Normalize country to lowercase 2-letter code
+        if ($this->has('country') && is_string($this->country)) {
+            $this->merge(['country' => strtolower($this->country)]);
+        }
+    }
+
+    public function attributes(): array
+    {
+        return [
+            'name'             => 'venue name',
+            'email'            => 'email',
+            'address'          => 'address',
+            'city'             => 'city',
+            'country'          => 'country code',
+            'phone_number'     => 'phone number',
+            'lat'              => 'latitude',
+            'lng'              => 'longitude',
+            'user_id'          => 'owner user',
+            'collaborator_id'  => 'collaborator',
+            'venue_type_id'    => 'venue type',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [];
     }
 }

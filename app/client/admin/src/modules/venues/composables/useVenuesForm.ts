@@ -51,7 +51,9 @@ export const useVenuesForm = (venueId?: number) => {
       toast.success('Venue saved!');
     },
     onError: (error) => {
-      toast.error(error.message);
+      // @ts-ignore
+      const firstErrorMessage = error.errors ? Object.values(error.errors)[0][0] : 'An unexpected error occurred';
+      toast.error(firstErrorMessage || error.message);
     },
   });
 
@@ -64,7 +66,9 @@ export const useVenuesForm = (venueId?: number) => {
       toast.success('Venue updated!');
     },
     onError: (error) => {
-      toast.error(error.message);
+      // @ts-ignore
+      const firstErrorMessage = error.errors ? Object.values(error.errors)[0][0] : 'An unexpected error occurred';
+      toast.error(firstErrorMessage || error.message);
     },
   });
 

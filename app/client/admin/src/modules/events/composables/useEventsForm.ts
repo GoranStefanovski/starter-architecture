@@ -34,10 +34,12 @@ export const useEventsForm = (eventId?: number) => {
       return data.data as GetEventResponse;
     },
     onSuccess: async () => {
-      toast.success('User saved!');
+      toast.success('Event saved!');
     },
     onError: (error) => {
-      toast.error(error.message);
+      // @ts-ignore
+      const firstErrorMessage = error.errors ? Object.values(error.errors)[0][0] : 'An unexpected error occurred';
+      toast.error(firstErrorMessage || error.message);
     },
   });
 
@@ -48,10 +50,12 @@ export const useEventsForm = (eventId?: number) => {
     },
     onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: [EVENT_CACHE_KEY, eventId] });
-      toast.success('User updated!');
+      toast.success('Event updated!');
     },
     onError: (error) => {
-      toast.error(error.message);
+      // @ts-ignore
+      const firstErrorMessage = error.errors ? Object.values(error.errors)[0][0] : 'An unexpected error occurred';
+      toast.error(firstErrorMessage || error.message);
     },
   });
 

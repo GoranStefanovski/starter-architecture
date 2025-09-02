@@ -1,7 +1,7 @@
 {
-  "user_status": "User status",
+  "user_status": "Event status",
   "status": {
-    "label": "Disable user",
+    "label": "Disable Event",
     "enabled": "Enabled",
     "disabled": "Disabled",
     "expired": "Expired"

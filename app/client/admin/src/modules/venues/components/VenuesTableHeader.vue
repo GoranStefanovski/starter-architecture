@@ -6,7 +6,7 @@
 
   const auth = useAuth();
 
-  const isUserAllowedToCreate = computed(() => auth.user().permissions_array.includes('write_venues'));
+  const isUserAllowedToCreate = computed(() => auth.user().permissions_array.includes('delete_venues'));
 </script>
 <template>
   <DashLink v-if="isUserAllowedToCreate" :to="{ name: 'add.venue' }" :icon="IconAdduser" theme="secondary">

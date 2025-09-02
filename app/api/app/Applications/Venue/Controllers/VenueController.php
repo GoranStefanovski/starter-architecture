@@ -10,12 +10,10 @@ use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Applications\Venue\Services\VenueServiceInterface;
-use App\Applications\Venue\Requests\MyProfileRequest;
-use App\Applications\Venue\Requests\UpdatePasswordRequest;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use function PHPUnit\Framework\isNull;
+use App\Applications\Venue\Requests\VenueRequest;
 
 /**
  * @property VenueServiceInterface $venueService
@@ -58,10 +56,10 @@ class VenueController extends Controller
     /**
      * Store user and get JSON with a user response
      *
-     * @param  Request  $request
+     * @param  VenueRequest  $request
      * @return JsonResponse
      */
-    public function create(Request $request): JsonResponse
+    public function create(VenueRequest $request): JsonResponse
     {
         $venueDTO = VenueDTO::fromRequestForCreate($request);
         $newVenueDTO = $this->venueService->create($venueDTO,);
@@ -73,10 +71,10 @@ class VenueController extends Controller
     /**
      * Update user
      *
-     * @param  Request  $request
+     * @param  VenueRequest  $request
      * @return JsonResponse
      */
-    public function update(Request $request): JsonResponse
+    public function update(VenueRequest $request): JsonResponse
     {
         $dto = VenueDTO::fromRequest($request);
         $venueDTO = $this->venueService->update(

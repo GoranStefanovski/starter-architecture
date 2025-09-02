@@ -133,7 +133,7 @@
         <TabbedContentTab :label="personalInformationLabel" id="basic-info">
           <SkSection title="Customer Info">
             <form-switch
-              v-if="checkUser('permissions', USER_PERMISSIONS.deleteVenues)"
+              v-if="checkUser('role', 'admin')"
               v-model="isBoosted"
               id="boosted"
               theme="success"
@@ -142,16 +142,15 @@
               :helper-text="`Venue is  ${isBoosted ? 'boosted' : 'not boosted'}`"
             />
             <form-switch
-              v-if="checkUser('permissions', USER_PERMISSIONS.deleteVenues)"
               v-model="isActive"
               id="enabled"
-              theme="danger"
+              theme="success"
               type="outline"
               :label="t('venues.status.label')"
               :helper-text="`Venue is  ${isActive ? 'enabled' : 'disabled'}`"
             />
             <form-dropdown
-              v-if="checkUser('permissions', USER_PERMISSIONS.deleteVenues)"
+              v-if="checkUser('role', 'admin')"
               v-model="collaborator_id"
               id="collaborator_id"
               name="collaborator_id"
@@ -159,7 +158,7 @@
               label="Collaborator"
               is-inline
             />
-            <hr v-if="checkUser('permissions', USER_PERMISSIONS.deleteVenues)" />
+            <hr />
             <VenueFormBasicInfo
               v-model:name="name"
               v-model:venue_type_id="venueTypeId"

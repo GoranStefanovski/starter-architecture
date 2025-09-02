@@ -118,20 +118,20 @@
         <TabbedContentTab :label="eventInformationLabel" id="basic-info">
           <SkSection title="Event Info">
             <form-switch
-              v-if="checkUser('permissions', USER_PERMISSIONS.deleteEvents)"
+              v-if="checkUser('role', 'admin')"
               v-model="isBoosted"
               id="boosted"
               theme="success"
               type="outline"
-              :label="t('venues.boosted.label')"
+              :label="t('events.boosted.label')"
               :helper-text="`Venue is  ${isBoosted ? 'boosted' : 'not boosted'}`"
             />
             <form-switch
               v-model="isActive"
               id="boosted"
-              theme="danger"
+              theme="success"
               type="outline"
-              :label="t('venues.status.label')"
+              :label="t('events.status.label')"
               :helper-text="`Venue is  ${isActive ? 'active' : 'disabled'}`"
             />
             <EventFormBasicInfo
